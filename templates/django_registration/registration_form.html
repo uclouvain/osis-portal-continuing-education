@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% comment "License" %}
+ * OSIS stands for Open Student Information System. It's an application
+ * designed to manage the core business of higher education institutions,
+ * such as universities, faculties, institutes and professional schools.
+ * The core business involves the administration of students, teachers,
+ * courses, programs and so on.
+ *
+ * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * A copy of this license - GNU General Public License - is available
+ * at the root of the source code of this program.  If not,
+ * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block title %}User Registration{% endblock %}
+
+{% block content %}
+    <h1>{% trans 'registration' %}</h1>
+    <br>
+    <div class="panel panel-default">
+        <form id="form" method="POST" class="post-form">
+            {% csrf_token %}
+            <div class="panel panel-body">
+                {% bootstrap_field form.username %}
+                {% bootstrap_field form.email %}
+                {% bootstrap_field form.password1 %}
+                {% bootstrap_field form.password2 %}
+            </div>
+            <div class="panel panel-body">
+                <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}" id="bt_submit_registration">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
+                </button>
+                <a class="btn btn-default" href="{% url 'continuing_education' %}" id="bt_cancel_registration">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'cancel' %}
+                </a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

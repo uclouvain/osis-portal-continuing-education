@@ -26,9 +26,10 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from continuing_education.models.admission import find_by_student, Admission
+from continuing_education.models.admission import find_by_student
 
-@login_required
+
+@login_required(login_url='authentication/login')
 def main_view(request):
     admissions = find_by_student(request.user.first_name, request.user.last_name)
     registrations = admissions.filter(state="accepted")
