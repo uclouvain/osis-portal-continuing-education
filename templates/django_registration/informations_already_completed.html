@@ -1,6 +1,5 @@
 {% extends "continuing_education_layout.html" %}
 {% load i18n %}
-{% load bootstrap3 %}
 
 {% comment "License" %}
  * OSIS stands for Open Student Information System. It's an application
@@ -9,7 +8,7 @@
  * The core business involves the administration of students, teachers,
  * courses, programs and so on.
  *
- * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+ * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,25 +25,10 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block title %}User Registration{% endblock %}
-
+{% block title %}Info already completed{% endblock %}
 {% block content %}
-    <h2>{% trans 'registration' %}</h2>
-    {% include "template_messages.html" %}
-    <div class="panel panel-default">
-        <form id="form" method="POST" class="post-form">
-            {% csrf_token %}
-            <div class="panel panel-body">
-                {% bootstrap_form form %}
-            </div>
-            <div class="panel panel-body">
-                <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}" id="bt_submit_registration">
-                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
-                </button>
-                <a class="btn btn-default" href="{% url 'continuing_education' %}" id="bt_cancel_registration">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'cancel' %}
-                </a>
-            </div>
-        </form>
+    <h2>{% trans 'continuing_education_informations_already_completed' %}</h2>
+    <div class="panel panel-body">
+        {% trans 'continuing_education_informations_already_completed_message' %}
     </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "continuing_education_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 {% load bootstrap3 %}
@@ -28,7 +28,6 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}">{% trans 'studies' %}</a></li>
     <li><a href="{% url 'continuing_education' %}">{% trans 'continuing_education' %}</a></li>
     <li><a class="text-capitalize" href="{% url 'continuing_education' %}">{% trans 'student' %}</a></li>
     <li class="active">{% trans 'admission' %}</li>

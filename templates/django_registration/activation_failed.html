@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "continuing_education_layout.html" %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -25,10 +25,11 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block title %}Activation Failed{% endblock %}
+
 {% block content %}
-    <h1>{% trans 'continuing_education_activation_failed' %}</h1>
-    <div>
+    <h2>{% trans 'continuing_education_activation_failed' %}</h2>
+    <div class="panel panel-body">
         {% trans 'continuing_education_activation_failed_message' %}
-        <br/>
     </div>
 {% endblock %}

@@ -26,16 +26,29 @@
 from django.conf.urls import url, include
 
 from continuing_education.views import (home, admission, registration, common)
+from continuing_education.views import account_activation
 
 urlpatterns = [
     url(r'^$', home.main_view, name='continuing_education'),
-    url(r'^authentication/login$', common.login, name='continuing_education_login'),
-    url(r'^authentication/logout$', common.log_out, name='continuing_education_logout'),
-    url(r'^authentication/logged_out$', common.logged_out, name='continuing_education_logged_out'),
-    url(r'^signup/', include('django_registration.backends.activation.urls')),
+    url(r'^authentication/', include([
+        url(r'^login$', common.login, name='continuing_education_login'),
+        url(r'^logout$', common.log_out, name='continuing_education_logout'),
+        url(r'^logged_out$', common.logged_out, name='continuing_education_logged_out')])),
+    url(r'^account/', include([
+        url(r'^activate/(?P<activation_key>[-:\w]+)/$', account_activation.ContinuingEducationActivationView.as_view(),
+            name='django_registration_activate'),
+        url(r'^complete_activation/$', account_activation.complete_activation,
+            name='complete_activation_post'),
+        url(r'^complete_activation/(?P<user_id>[0-9]+)$', account_activation.complete_activation,
+            name='complete_activation_get'),
+        url(r'^register/$',
+            account_activation.ContinuingEducationRegistrationView.as_view(),
+            name='django_registration_register'),
+        url(r'^', include('django_registration.backends.activation.urls'))])),
     url(r'^admission_new/', admission.admission_new, name='admission_new'),
     url(r'^admission_edit/(?P<admission_id>[0-9]+)$', admission.admission_edit, name='admission_edit'),
     url(r'^admission_detail/(?P<admission_id>[0-9]+)$', admission.admission_detail, name='admission_detail'),
     url(r'^registration_edit/(?P<admission_id>[0-9]+)$', registration.registration_edit, name='registration_edit'),
-    url(r'^registration_detail/(?P<admission_id>[0-9]+)$', registration.registration_detail, name='registration_detail'),
+    url(r'^registration_detail/(?P<admission_id>[0-9]+)$', registration.registration_detail,
+        name='registration_detail')
 ]

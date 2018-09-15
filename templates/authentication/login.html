@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "continuing_education_layout.html" %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -29,6 +29,7 @@
 
 {% block content %}
     <h1>{% trans 'log-in' %}</h1>
+    {% include 'template_messages.html' %}
     {% if form.errors %}
         <p class="text-danger">
             {% trans 'msg_error_username_password_not_matching' %}
@@ -41,7 +42,7 @@
             <div class="form-group">
                 <label class="control-label" for="username">{% trans 'user' %}</label>
                 <input id="id_username" maxlength="254" name="username" type="text" class="form-control"
-                       placeholder="utilisateur">
+                       placeholder="utilisateur" value="{{ username }}"/>
             </div>
             <div class="form-group">
                 <label class="control-label" for="password">{% trans 'password' %}</label>

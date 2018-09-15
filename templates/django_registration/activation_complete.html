@@ -1,5 +1,6 @@
-{% extends "layout.html" %}
+{% extends "continuing_education_layout.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 
 {% comment "License" %}
  * OSIS stands for Open Student Information System. It's an application
@@ -8,7 +9,7 @@
  * The core business involves the administration of students, teachers,
  * courses, programs and so on.
  *
- * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+ * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,13 +25,27 @@
  * at the root of the source code of this program.  If not,
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
+
 {% block title %}Activation Complete{% endblock %}
 
 {% block content %}
-    <h1>{% trans 'continuing_education_activation_complete' %}</h1>
-    <div>
+    <h2>{% trans 'continuing_education_activation_complete' %}</h2>
+    {% include "template_messages.html" %}
+    <div class="panel panel-body">
         {% trans 'continuing_education_activation_complete_message' %}
-        <br/>
-        <a href="{% url 'continuing_education' %}" class="alert-link">{% trans 'login' %}</a>
+    </div>
+    <div class="panel panel-default">
+        <form id="form" method="POST" class="post-form" action="{% url 'complete_activation_post' %}">
+            {% csrf_token %}
+            <div class="panel panel-body">
+                {% bootstrap_form root_person_form %}
+                {% bootstrap_form ce_person_form %}
+            </div>
+            <div class="panel panel-body text-center">
+                <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}" id="bt_submit_account_information">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
+                </button>
+            </div>
+        </form>
     </div>
 {% endblock %}
