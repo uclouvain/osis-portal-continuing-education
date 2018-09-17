@@ -23,10 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from random import choice
+from string import ascii_lowercase
+from unittest import mock
+
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-
 
 class ViewHomeTestCase(TestCase):
     def setUp(self):
@@ -34,7 +37,22 @@ class ViewHomeTestCase(TestCase):
         self.client.force_login(self.user)
 
     def test_main_view(self):
-        url = reverse('continuing_education')
+        url = reverse('continuing_education_home')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'continuing_education/home.html')
+
+class FormationsListTestCase(TestCase):
+    @mock.patch('continuing_education.views.home._fetch_example_data')
+    def test_sorted_formations_list(self, mock_fetch_example_data):
+        mock_fetch_example_data.return_value = [{
+            'acronym': ''.join([choice(ascii_lowercase) for _ in range(4)]),
+            'title': 'title-{}'.format(i)
+        } for i in range(11)]
+        sorted_formations = sorted(mock_fetch_example_data.return_value, key=lambda k: k['acronym'])
+        url = reverse('formations_list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['formations'].paginator.num_pages, 2)
+        self.assertEqual(response.context['formations'].object_list, sorted_formations[:10])
+        self.assertTemplateUsed(response, 'continuing_education/formations.html')

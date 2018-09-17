@@ -22,3 +22,16 @@
 *
 * OSIS Custom layout
 */
+
+.selected td{
+    background-color: #337ab7 !important;
+    color: white;
+}
+
+.formation-item{
+    cursor: pointer;
+}
+
+#formation-continue-button{
+    margin-top: 20px;
+}
