@@ -56,7 +56,7 @@ def login(request):
                 translation.activate(user_language)
                 request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         django_login(request)
-        return redirect(reverse('continuing_education'))
+        return redirect(reverse('continuing_education_home'))
     else:
         return render(request, "authentication/login.html", locals())
 

@@ -66,7 +66,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         convert_dates(admission_dict)
         response = self.client.post(reverse('admission_new'), data=admission_dict)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('continuing_education'))
+        self.assertRedirects(response, reverse('continuing_education_home'))
 
     def test_admission_save_with_error(self):
         admission = AdmissionFactory()

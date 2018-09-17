@@ -42,7 +42,7 @@ def admission_new(request):
     errors = []
     if form.is_valid():
         admission = form.save()
-        return redirect(reverse('continuing_education'))
+        return redirect(reverse('continuing_education_home'))
     else:
         errors.append(form.errors)
         display_errors(request, errors)
