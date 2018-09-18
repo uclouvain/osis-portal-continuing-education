@@ -54,6 +54,11 @@ class UrlsTestCase(TestCase):
                 pattern_name='continuing_education_home',
             ),
             dict(
+                url_path='/continuing_education/home/1',
+                pattern_name='continuing_education_home',
+                kwargs={'formation_id': 1}
+            ),
+            dict(
                 url_path="/continuing_education/admission_new/",
                 pattern_name='admission_new',
             ),

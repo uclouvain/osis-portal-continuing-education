@@ -56,15 +56,14 @@
                             <tr>
                                 <td colspan="6">
                                     {% bootstrap_pagination formations extra=request.GET.urlencode %}
-                                    <a id="formation-continue-button" class="btn btn-primary pull-right"
-                                    href="{% url 'continuing_education_home' %}">
+                                    <a id="formation-continue-button" class="btn btn-primary pull-right" disabled>
                                         Continue
                                     </a>
                                 </td>
                             </tr>
                         </tfoot>
                         {% for formation in formations %}
-                        <tr class="formation-item" onclick="select(this)">
+                        <tr id="{{ formation.id }}" class="formation-item" onclick="select(this)">
                             <td>{{ formation.acronym }}</td>
                             <td>{{ formation.title }}</td>
                         </tr>
@@ -86,12 +85,33 @@
                 selectedElem.classList.remove("selected");
             }
             selectedElem = elem;
+            enableLink();
         }
         else {
             elem.classList.remove("selected");
             selectedElem = null;
+            disableLink();
         }
     }
+
+    function enableLink(){
+        let url = "{% url 'continuing_education_home' %}";
+        url += selectedElem.id;
+        let continue_button = $("#formation-continue-button");
+        continue_button.attr({
+            "href": url,
+            "disabled": false
+        });
+    }
+
+    function disableLink(){
+        let continue_button = $("#formation-continue-button");
+        continue_button.attr({
+            "href": null,
+            "disabled": true
+        });
+    }
+
     </script>
 {% endblock %}
 

@@ -30,6 +30,7 @@ from continuing_education.views import (home, admission, registration, common)
 urlpatterns = [
     url(r'^$', home.formations_list, name='formations_list'),
     url(r'^home/$', home.main_view, name='continuing_education_home'),
+    url(r'^home/(?P<formation_id>[0-9]+)$', home.main_view, name='continuing_education_home'),
     url(r'^authentication/login$', common.login, name='continuing_education_login'),
     url(r'^authentication/logout$', common.log_out, name='continuing_education_logout'),
     url(r'^authentication/logged_out$', common.logged_out, name='continuing_education_logged_out'),
