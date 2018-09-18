@@ -29,10 +29,13 @@ import os
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
 from continuing_education.models.admission import find_by_student
 
 def formations_list(request):
+    if request.user.is_authenticated():
+        return redirect(main_view)
     formations = sorted(_fetch_example_data(), key=lambda k: k['acronym'])
     paginator = Paginator(formations, 10)
     page = request.GET.get('page')

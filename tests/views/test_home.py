@@ -43,6 +43,9 @@ class ViewHomeTestCase(TestCase):
         self.assertTemplateUsed(response, 'continuing_education/home.html')
 
 class FormationsListTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+
     @mock.patch('continuing_education.views.home._fetch_example_data')
     def test_sorted_formations_list(self, mock_fetch_example_data):
         mock_fetch_example_data.return_value = [{
@@ -56,3 +59,10 @@ class FormationsListTestCase(TestCase):
         self.assertEqual(response.context['formations'].paginator.num_pages, 2)
         self.assertEqual(response.context['formations'].object_list, sorted_formations[:10])
         self.assertTemplateUsed(response, 'continuing_education/formations.html')
+
+    def test_bypass_formations_list_when_logged_in(self):
+        self.client.force_login(self.user)
+        url = reverse('formations_list')
+        response = self.client.get(url)
+        self.assertTrue(self.user.is_authenticated)
+        self.assertRedirects(response, "/continuing_education/home/")
