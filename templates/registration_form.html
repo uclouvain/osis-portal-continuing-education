@@ -53,10 +53,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">{% trans 'billing' %}</div>
                             <div class="panel panel-body">
-                            {% bootstrap_field form.billing_location %}
-                            {% bootstrap_field form.billing_postal_code %}
-                            {% bootstrap_field form.billing_city %}
-                            {% bootstrap_field form.billing_country %}
+                            {% bootstrap_field form.billing_address %}
                             </div>
                     </div>
                     {% bootstrap_field form.head_office_name %}
@@ -74,10 +71,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">{% trans 'post' %}</div>
                             <div class="panel panel-body">
-                    {% bootstrap_field form.residence_location %}
-                    {% bootstrap_field form.residence_postal_code %}
-                    {% bootstrap_field form.residence_city %}
-                    {% bootstrap_field form.residence_country %}
+                    {% bootstrap_field form.residence_address %}
                         </div>
                     </div>
                     {% bootstrap_field form.residence_phone %}

@@ -42,20 +42,19 @@ class TestAdmissionForm(TestCase):
         form = AdmissionForm(admission.__dict__)
         self.assertTrue(form.is_valid(), form.errors)
 
-def convert_countries(admission):
-    admission['country'] = Country.objects.get(pk=admission["country_id"])
-    admission['birth_country'] = Country.objects.get(pk=admission["birth_country_id"])
-    admission['citizenship'] = Country.objects.get(pk=admission["citizenship_id"])
-    admission['billing_country'] = Country.objects.get(pk=admission["billing_country_id"])
-    admission['residence_country'] = Country.objects.get(pk=admission["residence_country_id"])
-
 def convert_offer(admission):
-    admission['formation'] =  OfferYear.objects.get(pk=admission['formation_id'])
+    # admission['formation'] =  OfferYear.objects.get(pk=admission['formation_id'])
+    pass
 
 def convert_faculty(admission):
-    admission['faculty'] =  EntityVersion.objects.get(pk=admission['faculty_id'])
+    # admission['faculty'] =  EntityVersion.objects.get(pk=admission['faculty_id'])
+    pass
 
-def convert_dates(admission):
-    admission['birth_date'] = admission['birth_date'].strftime('%Y-%m-%d')
-    admission['high_school_graduation_year'] = admission['high_school_graduation_year'].strftime('%Y-%m-%d')
-    admission['last_degree_graduation_year'] = admission['last_degree_graduation_year'].strftime('%Y-%m-%d')
+def convert_countries(person):
+    person['birth_country'] = country.Country.objects.get(pk=person["birth_country_id"])
+    person['citizenship'] = country.Country.objects.get(pk=person["citizenship_id"])
+
+def convert_dates(person):
+    person['birth_date'] = person['birth_date'].strftime('%Y-%m-%d')
+    person['high_school_graduation_year'] = person['high_school_graduation_year'].strftime('%Y-%m-%d')
+    person['last_degree_graduation_year'] = person['last_degree_graduation_year'].strftime('%Y-%m-%d')

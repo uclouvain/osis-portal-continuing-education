@@ -23,16 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 
-from continuing_education.models.admission import find_by_person
-from continuing_education.models.person import Person
+import factory
+
+from reference.tests.factories.country import CountryFactory
 
 
-@login_required(login_url='authentication/login')
-def main_view(request):
-    person = Person.objects.filter(first_name=request.user.first_name, last_name=request.user.last_name)
-    admissions = find_by_person(person=person)
-    registrations = admissions.filter(state="accepted")
-    return render(request, "continuing_education/home.html", locals())
+class AddressFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = 'continuing_education.address'
+
+    location = factory.Faker('street_name')
+    postal_code = factory.Faker('zipcode')
+    city = factory.Faker('city')
+    country = factory.SubFactory(CountryFactory)
