@@ -26,13 +26,11 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from continuing_education.models.admission import find_by_person
-from continuing_education.models.person import Person
-
+from continuing_education import models as mdl
 
 @login_required(login_url='authentication/login')
 def main_view(request):
-    person = Person.objects.filter(first_name=request.user.first_name, last_name=request.user.last_name).first()
-    admissions = find_by_person(person=person)
-    registrations = admissions.filter(state="accepted")
+    person = mdl.person.find_by_name(first_name=request.user.first_name, last_name=request.user.last_name)
+    admissions = mdl.admission.find_by_person(person=person)
+    registrations = mdl.admission.find_by_state(state="accepted")
     return render(request, "continuing_education/home.html", locals())

@@ -4,10 +4,12 @@ from django.contrib.admin import ModelAdmin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+
 class PersonAdmin(ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'gender', 'birth_date', 'citizenship', 'email',)
     search_fields = ['first_name', 'last_name', 'email']
     list_filter = ('gender', 'citizenship')
+
 
 class Person(models.Model):
     GENDER_CHOICES = (
@@ -62,9 +64,8 @@ class Person(models.Model):
     past_professional_activities = models.TextField(blank=True)
 
     def __str__(self):
-        return "{} - {} {} - {}".format(
-            self.id,
-            self.first_name,
-            self.last_name,
-            self.email,
-        )
+        return "{} - {} {} - {}".format(self.id, self.first_name, self.last_name, self.email)
+
+
+def find_by_name(first_name, last_name):
+    return Person.objects.filter(first_name=first_name, last_name=last_name).first()

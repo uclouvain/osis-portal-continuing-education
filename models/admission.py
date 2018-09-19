@@ -106,6 +106,7 @@ class Admission(models.Model):
     #ajouter dates sessions cours suivies
     sessions = models.CharField(max_length=255, blank=True)
 
+
 def find_by_id(a_id):
     try:
         return Admission.objects.get(pk=a_id)
@@ -115,3 +116,7 @@ def find_by_id(a_id):
 #à modifier lors du lien avec une table student
 def find_by_person(person):
         return Admission.objects.filter(person=person)
+
+
+def find_by_state(state):
+        return Admission.objects.filter(state=state)
