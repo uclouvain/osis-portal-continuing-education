@@ -27,7 +27,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
+from continuing_education.forms.address import AddressForm
 from continuing_education.forms.registration import RegistrationForm
+from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.views.common import display_errors
 
@@ -38,12 +40,18 @@ def registration_detail(request, admission_id):
 
 @login_required
 def registration_edit(request, admission_id):
-    registration = get_object_or_404(Admission, pk=admission_id)
-
-    form = RegistrationForm(request.POST or None, instance=registration)
+    admission = get_object_or_404(Admission, pk=admission_id)
+    form = RegistrationForm(request.POST or None, instance=admission)
+    billing_address_form = AddressForm(request.POST or None, instance=admission.billing_address, prefix="billing")
+    residence_address_form = AddressForm(request.POST or None, instance=admission.residence_address, prefix="residence")
     errors = []
-    if form.is_valid():
-        registration = form.save()
+    if form.is_valid() and billing_address_form.is_valid() and residence_address_form.is_valid():
+        billing_address, created = Address.objects.get_or_create(**billing_address_form.cleaned_data)
+        residence_address, created = Address.objects.get_or_create(**residence_address_form.cleaned_data)
+        admission = form.save(commit=False)
+        admission.billing_address = billing_address
+        admission.residence_address = residence_address
+        admission.save()
         return redirect(reverse('registration_detail', kwargs={'admission_id':admission_id}))
     else:
         errors.append(form.errors)

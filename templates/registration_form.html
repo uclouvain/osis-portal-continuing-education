@@ -53,7 +53,10 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">{% trans 'billing' %}</div>
                             <div class="panel panel-body">
-                            {% bootstrap_field form.billing_address %}
+                                {% bootstrap_field billing_address_form.location form_group_class="form-group" label=_("location") %}
+                                {% bootstrap_field billing_address_form.postal_code form_group_class="form-group" label=_("postal_code") %}
+                                {% bootstrap_field billing_address_form.city form_group_class="form-group" label=_("city") %}
+                                {% bootstrap_field billing_address_form.country form_group_class="form-group" label=_("country") %}
                             </div>
                     </div>
                     {% bootstrap_field form.head_office_name %}
@@ -71,7 +74,10 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">{% trans 'post' %}</div>
                             <div class="panel panel-body">
-                    {% bootstrap_field form.residence_address %}
+                                {% bootstrap_field residence_address_form.location form_group_class="form-group" label=_("location") %}
+                                {% bootstrap_field residence_address_form.postal_code form_group_class="form-group" label=_("postal_code") %}
+                                {% bootstrap_field residence_address_form.city form_group_class="form-group" label=_("city") %}
+                                {% bootstrap_field residence_address_form.country form_group_class="form-group" label=_("country") %}
                         </div>
                     </div>
                     {% bootstrap_field form.residence_phone %}
@@ -93,10 +99,10 @@
     <script>
         //reuse address
         let address = {
-            location: "{{registration.location | escapejs}}",
-            postal_code: "{{registration.postal_code | escapejs}}",
-            city: "{{registration.city | escapejs}}",
-            country: "{{registration.country_id | escapejs}}",
+            location: "{{admission.person.address.location | escapejs}}",
+            postal_code: "{{admission.person.address.postal_code | escapejs}}",
+            city: "{{admission.person.address.city | escapejs}}",
+            country: "{{admission.person.address.country_id | escapejs}}",
         }
 
         $("#id_use_address_for_billing:checkbox").change(function(){
@@ -127,20 +133,21 @@
 
         function copy_address(e){
             ["location", "postal_code", "city"].forEach((field) => {
-                $("#id_"+e+"_"+field).val(address[field]);
-                $("#id_"+e+"_"+field).prop("readonly", true);
+                $("#id_"+e+"-"+field).val(address[field]);
+                $("#id_"+e+"-"+field).prop("readonly", true);
             });
-            $("#id_"+e+"_country").val(address.country);
-            $("#id_"+e+"_country").prop("disabled", true);
+            $("#id_"+e+"-country").val(address.country);
+            console.log($("#id_"+e+"-country"));
+            $("#id_"+e+"-country").prop("disabled", true);
         }
 
         function empty_address(e){
             ["location", "postal_code", "city"].forEach((field) => {
-                $("#id_"+e+"_"+field).val('');
-                $("#id_"+e+"_"+field).prop("readonly", false);
+                $("#id_"+e+"-"+field).val('');
+                $("#id_"+e+"-"+field).prop("readonly", false);
             });
-            $("#id_"+e+"_country").val('');
-            $("#id_"+e+"_country").prop("disabled", false);
+            $("#id_"+e+"-country").val('');
+            $("#id_"+e+"-country").prop("disabled", false);
         }
     </script>
 {% endblock %}
