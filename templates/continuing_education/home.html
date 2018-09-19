@@ -91,7 +91,6 @@
                         <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th class="searchable">{% trans 'program_code' %}</th>
                                 <th class="searchable">{% trans 'formation' %}</th>
                                 <th class="searchable">{% trans 'faculty' %}</th>
                                 <th class="searchable">{% trans 'registered' %}</th>
@@ -99,8 +98,7 @@
                         </thead>
                         {% for registration in registrations %}
                             <tr>
-                                <td><a href="{% url 'registration_detail' admission_id=registration.id %}">{{ registration.program_code }}</a></td>
-                                <td>{{ registration.formation.title }}</td>
+                                <td><a href="{% url 'registration_detail' admission_id=registration.id %}">{{ registration.formation }}</a></td>
                                 <td>{{ registration.faculty.acronym }} - {{ registration.faculty.title }}</td>
                                 <td style="vertical-align: middle;">
                                 {% if registration.registration_complete %}
