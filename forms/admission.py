@@ -25,8 +25,7 @@ class AdmissionForm(ModelForm):
             'motivation',
             'professional_impact',
             # Formation
-            # 'formation',
-            # 'faculty',
+            'formation',
             # Awareness
             'awareness_ucl_website',
             'awareness_formation_website',

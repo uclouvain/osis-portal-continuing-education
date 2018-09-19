@@ -32,7 +32,7 @@ from continuing_education.models.person import Person
 
 @login_required(login_url='authentication/login')
 def main_view(request):
-    person = Person.objects.filter(first_name=request.user.first_name, last_name=request.user.last_name)
+    person = Person.objects.filter(first_name=request.user.first_name, last_name=request.user.last_name).first()
     admissions = find_by_person(person=person)
     registrations = admissions.filter(state="accepted")
     return render(request, "continuing_education/home.html", locals())

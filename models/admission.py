@@ -55,6 +55,9 @@ class Admission(models.Model):
     #                                     },
     #                                     blank=True, null=True)
 
+    # temporarily simplifying getting formation
+    formation = models.CharField(max_length=255, blank=True)
+
     #Awareness
     awareness_ucl_website = models.BooleanField(default=False)
     awareness_formation_website = models.BooleanField(default=False)
