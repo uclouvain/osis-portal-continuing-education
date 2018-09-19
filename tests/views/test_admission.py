@@ -70,14 +70,14 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('continuing_education'))
 
-    # def test_admission_save_with_error(self):
-    #     admission = AdmissionFactory()
-    #     person_dict = admission.person.__dict__
-    #     convert_dates(person_dict)
-    #     person_dict["birth_date"] = "no valid date"
-    #     response = self.client.post(reverse('admission_new'), data=person_dict)
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTemplateUsed(response, 'admission_form.html')
+    def test_admission_save_with_error(self):
+        admission = AdmissionFactory()
+        person_dict = admission.person.__dict__
+        convert_dates(person_dict)
+        person_dict["birth_date"] = "no valid date"
+        response = self.client.post(reverse('admission_new'), data=person_dict)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'admission_form.html')
 
     def test_admission_edit_not_found(self):
         response = self.client.get(reverse('admission_edit', kwargs={
