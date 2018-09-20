@@ -4,6 +4,7 @@ from django.db import models
 class ContinuingEducationPerson(models.Model):
 
     person = models.OneToOneField('base.Person', on_delete=models.CASCADE)
+
     birth_location = models.CharField(max_length=255, blank=True)
     birth_country = models.ForeignKey('reference.Country', blank=True, null=True, related_name='birth_country')
     citizenship = models.ForeignKey('reference.Country', blank=True, null=True, related_name='citizenship')
