@@ -1,5 +1,6 @@
 {% extends "continuing_education_layout.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 
 {% comment "License" %}
  * OSIS stands for Open Student Information System. It's an application
@@ -8,7 +9,7 @@
  * The core business involves the administration of students, teachers,
  * courses, programs and so on.
  *
- * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+ * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,10 +26,28 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block title %}Info already completed{% endblock %}
+{% block title %}Account information completion{% endblock %}
+
 {% block content %}
-    <h2>{% trans 'continuing_education_informations_already_completed' %}</h2>
+    <h2>{% trans 'continuing_education_account_information_completion' %}</h2>
+    {% include "template_messages.html" %}
     <div class="panel panel-body">
-        {% trans 'continuing_education_informations_already_completed_message' %}
+        {% trans 'continuing_education_account_information_completion_message' %}
+    </div>
+    <div class="panel panel-default">
+        <form id="form" method="POST" class="post-form" action="{% url 'complete_account_registration' %}">
+            {% csrf_token %}
+            <div class="panel panel-body">
+                {% bootstrap_form root_person_form %}
+            </div>
+            <div class="panel panel-body">
+                {% bootstrap_form ce_person_form %}
+            </div>
+            <div class="panel panel-body text-center">
+                <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}" id="bt_submit_account_information">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
+                </button>
+            </div>
+        </form>
     </div>
 {% endblock %}

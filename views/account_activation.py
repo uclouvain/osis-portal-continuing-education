@@ -25,6 +25,7 @@
 ##############################################################################
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
@@ -43,82 +44,6 @@ from continuing_education.views.common import display_errors
 from osis_common.messaging import message_config, send_message as message_service
 
 REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
-
-
-class ContinuingEducationActivationView(ActivationView):
-    user = None
-
-    ALREADY_ACTIVATED_MESSAGE = _(
-        u'The account you tried to activate has already been activated.'
-    )
-    BAD_USERNAME_MESSAGE = _(
-        u'The account you attempted to activate is invalid.'
-    )
-    EXPIRED_MESSAGE = _(u'This account has expired.')
-    INVALID_KEY_MESSAGE = _(
-        u'The activation key you provided is invalid.'
-    )
-
-    def get_success_url(self, user=None):
-        user_id = self.user.id
-        return reverse('complete_activation_get', kwargs={'user_id': user_id})
-
-    def activate(self, *args, **kwargs):
-        username = self.validate_key(kwargs.get('activation_key'))
-        self.user = self.get_user(username)
-        self.user.is_active = True
-        self.user.save()
-        return self.user
-
-    def validate_key(self, activation_key):
-        """
-        Verify that the activation key is valid and within the
-        permitted activation time window, returning the username if
-        valid or raising ``ActivationError`` if not.
-
-        """
-        try:
-            username = signing.loads(
-                activation_key,
-                salt=REGISTRATION_SALT,
-                max_age=settings.ACCOUNT_ACTIVATION_DAYS * 86400
-            )
-            return username
-        except signing.SignatureExpired:
-            raise ActivationError(
-                self.EXPIRED_MESSAGE,
-                code='expired'
-            )
-        except signing.BadSignature:
-            raise ActivationError(
-                self.INVALID_KEY_MESSAGE,
-                code='invalid_key',
-                params={'activation_key': activation_key}
-            )
-
-    def get_user(self, username):
-        """
-        Given the verified username, look up and return the
-        corresponding user account if it exists, or raising
-        ``ActivationError`` if it doesn't.
-
-        """
-        User = get_user_model()
-        try:
-            user = User.objects.get(**{
-                User.USERNAME_FIELD: username,
-            })
-            if user.is_active:
-                raise ActivationError(
-                    self.ALREADY_ACTIVATED_MESSAGE,
-                    code='already_activated'
-                )
-            return user
-        except User.DoesNotExist:
-            raise ActivationError(
-                self.BAD_USERNAME_MESSAGE,
-                code='bad_username'
-            )
 
 
 class ContinuingEducationRegistrationView(RegistrationView):
@@ -181,41 +106,33 @@ class ContinuingEducationRegistrationView(RegistrationView):
         }
         message_content = message_config.create_message_content(self.html_template_ref, self.txt_template_ref,
                                                                 [], receivers, template_base_data, None)
-        message_service.send_messages(message_content)
+        error_message = message_service.send_messages(message_content)
 
 
-def complete_activation(request, user_id=None):
+@login_required
+def complete_account_registration(request):
     if request.POST:
-        return __post_complete_activation(request)
+        return __post_complete_account_registration(request)
     else:
-        return __get_complete_activation(request, user_id)
+        root_person_form = PersonForm(user_email=request.user.email)
+        ce_person_form = ContinuingEducationPersonForm()
+        return render(request, 'django_registration/complete_account_registration.html', locals())
 
 
-def __get_complete_activation(request, user_id):
-    user = User.objects.get(id=user_id)
-    person = mdl_person.find_by_user(user=user)
-    if person:
-        return redirect('django_registration/informations_already_completed.html')
-    root_person_form = PersonForm(user_id=user_id)
-    ce_person_form = ContinuingEducationPersonForm()
-    return render(request, 'django_registration/activation_complete.html', locals())
-
-
-def __post_complete_activation(request):
+def __post_complete_account_registration(request):
     root_person_form = PersonForm(request.POST)
     ce_person_form = ContinuingEducationPersonForm(request.POST)
     errors = []
     if root_person_form.is_valid() and ce_person_form.is_valid():
-        user = User.objects.get(id=root_person_form.cleaned_data['user_id'])
         person = root_person_form.save(commit=False)
-        person.user = user
+        person.user = request.user
         person.save()
         continuing_education_person = ce_person_form.save(commit=False)
         continuing_education_person.person = person
         continuing_education_person.save()
-        return redirect(reverse('continuing_education_login'))
+        return redirect(reverse('continuing_education'))
     else:
         errors.append(root_person_form.errors)
         errors.append(ce_person_form.errors)
         display_errors(request, errors)
-    return render(request, 'django_registration/activation_complete.html', locals())
+    return render(request, 'django_registration/complete_account_registration.html', locals())

@@ -7,15 +7,11 @@ from django.utils.translation import ugettext_lazy as _
 
 class PersonForm(ModelForm):
 
-    user_id = IntegerField(widget=HiddenInput, required=True)
-
     def __init__(self, *args, **kwargs):
-        user_id = kwargs.pop('user_id', None)
+        user_email = kwargs.pop('user_email', None)
         super(PersonForm, self).__init__(*args, **kwargs)
-        if user_id:
-            user = User.objects.get(id=user_id)
-            self.fields['user_id'].initial = int(user_id)
-            self.fields['email'].initial = user.email
+        if user_email:
+            self.fields['email'].initial = user_email
             self.fields['email'].widget.attrs['readonly'] = True
 
     class Meta:
