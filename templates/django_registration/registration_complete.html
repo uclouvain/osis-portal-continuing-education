@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "continuing_education_layout.html" %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -26,10 +26,9 @@
 {% endcomment %}
 
 {% block title %}Registration Complete{% endblock %}
-
 {% block content %}
-    <h1>{% trans 'continuing_education_registration_complete' %}</h1>
+    <h2>{% trans 'continuing_education_registration_complete' %}</h2>
+    <div class="panel panel-body">
         {% trans 'continuing_education_registration_complete_message' %}
-        <br/>
-    <p><a href="{% url 'continuing_education_home' %}" class="alert-link">{% trans 'login' %}</a></p>
+    </div>
 {% endblock %}

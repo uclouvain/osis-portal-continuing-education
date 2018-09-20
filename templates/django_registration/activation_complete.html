@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "continuing_education_layout.html" %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -24,13 +24,15 @@
  * at the root of the source code of this program.  If not,
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
+
 {% block title %}Activation Complete{% endblock %}
 
 {% block content %}
-    <h1>{% trans 'continuing_education_activation_complete' %}</h1>
-    <div>
+    <h2>{% trans 'continuing_education_activation_complete' %}</h2>
+    <div class="panel panel-body">
         {% trans 'continuing_education_activation_complete_message' %}
-        <br/>
-        <a href="{% url 'continuing_education_home' %}" class="alert-link">{% trans 'login' %}</a>
+    </div>
+    <div class="panel panel-body text-center">
+    <a class="btn btn-success" href="{% url 'continuing_education_login' %}">{% trans 'login' %}</a>
     </div>
 {% endblock %}

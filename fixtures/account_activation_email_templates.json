@@ -1,0 +1,22 @@
+[
+{
+    "model": "osis_common.messagetemplate",
+    "fields": {
+        "reference": "continuing_education_account_ativation_html",
+        "subject": "Activation de votre compte",
+        "template": "<p>MESSAGE DE TEST</p>\r\n\r\n<p>Message pour activer compte</p>\r\n\r\n<p>Lien : {{activation_link}}</p>",
+        "format": "HTML",
+        "language": "fr-be"
+    }
+},
+{
+    "model": "osis_common.messagetemplate",
+    "fields": {
+        "reference": "continuing_education_account_ativation_txt",
+        "subject": "Activation de votre compte",
+        "template": "<p>MESSAGE DE TEST</p>\r\n\r\n<p>BlahBlah, activation de votre compte : {{activation_link}}</p>",
+        "format": "PLAIN",
+        "language": "fr-be"
+    }
+}
+]

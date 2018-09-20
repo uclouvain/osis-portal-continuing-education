@@ -10,7 +10,8 @@ from base.models.enums import entity_type
 
 
 class AdmissionAdmin(ModelAdmin):
-    list_display = ('last_name', 'first_name','country','formation', 'program_code')
+    list_display = ('last_name', 'first_name', 'country', 'formation', 'program_code')
+
 
 class Admission(models.Model):
 
@@ -61,7 +62,7 @@ class Admission(models.Model):
     first_name = models.CharField(max_length=50, blank=True, db_index=True)
     last_name = models.CharField(max_length=50, blank=True, db_index=True)
     birth_date = models.DateField(blank=True, default=datetime.now)
-    birth_location =  models.CharField(max_length=255, blank=True)
+    birth_location = models.CharField(max_length=255, blank=True)
     birth_country = models.ForeignKey('reference.Country', blank=True, null=True, related_name='birth_country')
     citizenship = models.ForeignKey('reference.Country', blank=True, null=True, related_name='citizenship')
     gender = models.CharField(max_length=1, blank=True, choices=GENDER_CHOICES, default='F')
