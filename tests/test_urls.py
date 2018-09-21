@@ -47,7 +47,16 @@ class UrlsTestCase(TestCase):
         routes_to_test = [
             dict(
                 url_path='/continuing_education/',
-                pattern_name='continuing_education',
+                pattern_name='formations_list',
+            ),
+            dict(
+                url_path='/continuing_education/home/',
+                pattern_name='continuing_education_home',
+            ),
+            dict(
+                url_path='/continuing_education/home/1',
+                pattern_name='continuing_education_home',
+                kwargs={'formation_id': 1}
             ),
             dict(
                 url_path="/continuing_education/admission_new/",

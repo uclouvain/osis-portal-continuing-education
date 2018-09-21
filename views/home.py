@@ -23,14 +23,42 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render
+import json
+import os
+
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
+from django.shortcuts import render, redirect
 
 from continuing_education.models.admission import find_by_student
 
+def formations_list(request):
+    if request.user.is_authenticated():
+        return redirect(main_view)
+    formations = sorted(_fetch_example_data(), key=lambda k: k['acronym'])
+    paginator = Paginator(formations, 10)
+    page = request.GET.get('page')
+    try:
+        formations = paginator.page(page)
+    except PageNotAnInteger:
+        formations = paginator.page(1)
+    except EmptyPage:
+        formations = paginator.page(paginator.num_pages)
+    return render(request, "continuing_education/formations.html", {
+        'formations': formations
+    })
 
-@login_required(login_url='authentication/login')
+@login_required(login_url='../authentication/login')
 def main_view(request):
     admissions = find_by_student(request.user.first_name, request.user.last_name)
     registrations = admissions.filter(state="accepted")
     return render(request, "continuing_education/home.html", locals())
+
+def _fetch_example_data():
+    # get formations from temporary file
+    module_dir = os.path.dirname(__file__)
+    file_path = os.path.join(module_dir, 'example_data.json')
+    with open(file_path) as f:
+        data = json.load(f)
+    return data
