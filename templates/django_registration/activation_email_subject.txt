@@ -1,2 +1,0 @@
-{% load i18n %}
-{% trans 'continuing_education_activation_email_subject' %}

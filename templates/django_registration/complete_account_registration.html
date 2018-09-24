@@ -26,24 +26,27 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block title %}User Registration{% endblock %}
+{% block title %}Account information completion{% endblock %}
 
 {% block content %}
-    <h2>{% trans 'registration' %}</h2>
+    <h2>{% trans 'continuing_education_account_information_completion' %}</h2>
     {% include "template_messages.html" %}
+    <div class="panel panel-body">
+        {% trans 'continuing_education_account_information_completion_message' %}
+    </div>
     <div class="panel panel-default">
-        <form id="form" method="POST" class="post-form">
+        <form id="form" method="POST" class="post-form" action="{% url 'complete_account_registration' %}">
             {% csrf_token %}
             <div class="panel panel-body">
-                {% bootstrap_form form %}
+                {% bootstrap_form root_person_form %}
             </div>
             <div class="panel panel-body">
-                <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}" id="bt_submit_registration">
+                {% bootstrap_form ce_person_form %}
+            </div>
+            <div class="panel panel-body text-center">
+                <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}" id="bt_submit_account_information">
                     <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
                 </button>
-                <a class="btn btn-default" href="{% url 'continuing_education_home' %}" id="bt_cancel_registration">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'cancel' %}
-                </a>
             </div>
         </form>
     </div>

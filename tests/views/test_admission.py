@@ -31,7 +31,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from continuing_education.forms.admission import AdmissionForm
-from continuing_education.models.person import Person
+from continuing_education.models.continuing_education_person import ContinuingEducationPerson as Person
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.forms.test_admission_form import convert_dates, convert_countries, convert_offer, \
     convert_faculty
@@ -68,7 +68,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         admission_dict = admission.__dict__
         response = self.client.post(reverse('admission_new'), data=admission_dict)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('continuing_education'))
+        self.assertRedirects(response, reverse('continuing_education_home'))
 
     def test_admission_save_with_error(self):
         admission = AdmissionFactory()

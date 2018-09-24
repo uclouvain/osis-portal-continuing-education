@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "continuing_education_layout.html" %}
 {% load staticfiles %}
 {% load i18n %}
 {% load bootstrap3 %}
@@ -28,9 +28,8 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'studies' %}">{% trans 'studies' %}</a></li>
-    <li><a href="{% url 'continuing_education' %}">{% trans 'continuing_education' %}</a></li>
-    <li><a class="text-capitalize" href="{% url 'continuing_education' %}">{% trans 'student' %}</a></li>
+    <li><a href="{% url 'continuing_education_home' %}">{% trans 'continuing_education' %}</a></li>
+    <li><a class="text-capitalize" href="{% url 'continuing_education_home' %}">{% trans 'student' %}</a></li>
     <li class="active">{% trans 'admission' %}</li>
 {% endblock %}
 
@@ -51,15 +50,15 @@
                     {% bootstrap_form person_form exclude="address, phone_mobile, email, high_school_diploma,high_school_graduation_year, last_degree_level, last_degree_field, last_degree_institution, last_degree_graduation_year,other_educational_background, professional_status, current_occupation, current_employer, activity_sector,past_professional_activities" %}
                     {% bootstrap_form address_form %}
                     {% bootstrap_form person_form exclude="first_name, last_name, birth_date, birth_location, birth_country, citizenship, gender, address" %}
-                    {% bootstrap_form admission_form exclude='person, state, awareness_ucl_website, awareness_formation_website, awareness_press, awareness_facebook,awareness_linkedin, awareness_customized_mail, awareness_emailing' %}
+                    {% bootstrap_form admission_form exclude='person_information, state, awareness_ucl_website, awareness_formation_website, awareness_press, awareness_facebook,awareness_linkedin, awareness_customized_mail, awareness_emailing' %}
                     <label class="control-label">{% trans 'awareness' %}</label>
-                    {% bootstrap_form admission_form exclude='person, state, motivation, professional_impact, formation' %}
+                    {% bootstrap_form admission_form exclude='person_information, state, motivation, professional_impact, formation' %}
                 </div>
                 <div class="panel panel-body">
                     <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}">
                         <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
                     </button>
-                    <a class="btn btn-default" id="" href="{% url 'continuing_education' %}">
+                    <a class="btn btn-default" id="" href="{% url 'continuing_education_home' %}">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'cancel' %}
                     </a>
                 </div>

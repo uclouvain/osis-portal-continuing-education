@@ -10,7 +10,8 @@ from base.models.enums import entity_type
 
 
 class AdmissionAdmin(ModelAdmin):
-    list_display = ('person', 'state')
+    list_display = ('person_information', 'formation', 'state')
+
 
 class Admission(models.Model):
 
@@ -36,24 +37,11 @@ class Admission(models.Model):
         ('waiting', _('waiting')),
     )
 
-    person = models.ForeignKey('continuing_education.Person', blank=True, null=True)
+    person_information = models.ForeignKey('continuing_education.ContinuingEducationPerson', blank=True, null=True)
 
     #Motivation
     motivation = models.TextField(blank=True)
     professional_impact = models.TextField(blank=True)
-
-    #Formation
-    # formation = models.ForeignKey('base.OfferYear',
-    #                                     limit_choices_to={
-    #                                         'offer_type_id': CONTINUING_EDUCATION_TYPE,
-    #                                         'academic_year_id': current_academic_years()
-    #                                     },
-    #                                     blank=True, null=True)
-    # faculty = models.ForeignKey('base.EntityVersion',
-    #                                     limit_choices_to={
-    #                                         'entity_type': entity_type.FACULTY,
-    #                                     },
-    #                                     blank=True, null=True)
 
     # temporarily simplifying getting formation
     formation = models.CharField(max_length=255, blank=True)
@@ -115,7 +103,7 @@ def find_by_id(a_id):
 
 #à modifier lors du lien avec une table student
 def find_by_person(person):
-        return Admission.objects.filter(person=person)
+        return Admission.objects.filter(person_information=person)
 
 
 def find_by_state(state):

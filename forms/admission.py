@@ -20,7 +20,7 @@ class AdmissionForm(ModelForm):
     class Meta:
         model = Admission
         fields = [
-            'person',
+            'person_information',
             # Motivation
             'motivation',
             'professional_impact',

@@ -26,7 +26,7 @@
 import datetime
 import factory
 
-from continuing_education.models.person import Person
+from continuing_education.models.continuing_education_person import ContinuingEducationPerson as Person
 from continuing_education.tests.factories.address import AddressFactory
 from continuing_education.tests.utils.utils import _get_random_choices
 from reference.tests.factories.country import CountryFactory
