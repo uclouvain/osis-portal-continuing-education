@@ -1,12 +1,7 @@
-from datetime import datetime
-
 from django.contrib.admin import ModelAdmin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
-from base.models.academic_year import current_academic_years
-from base.models.enums import entity_type
 
 
 class AdmissionAdmin(ModelAdmin):
