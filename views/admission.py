@@ -23,18 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 
+from base.models import person as mdl_person
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
-from continuing_education.forms.person import PersonForm
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.continuing_education_person import ContinuingEducationPerson
 from continuing_education.views.common import display_errors
+
 
 @login_required
 def admission_detail(request, admission_id):
@@ -44,6 +45,7 @@ def admission_detail(request, admission_id):
 @login_required
 def admission_new(request):
     person = get_object_or_404(ContinuingEducationPerson, pk=request.GET['person_information']) if 'person_information' in request.GET else None
+    base_person = mdl_person.find_by_user(user=request.user)
     address = person.address if person else None
     admission_form = AdmissionForm(request.POST or None)
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person)
@@ -53,6 +55,7 @@ def admission_new(request):
         address = address_form.save()
         person = person_form.save(commit=False)
         person.address = address
+        person.person_id = base_person.id
         person.save()
         admission = admission_form.save(commit=False)
         admission.person = person
@@ -69,9 +72,9 @@ def admission_new(request):
 @login_required
 def admission_edit(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
-    person = get_object_or_404(ContinuingEducationPerson, pk=request.GET['person']) if 'person' in request.GET else admission.person
+    person = get_object_or_404(ContinuingEducationPerson, pk=request.GET['person']) if 'person' in request.GET else admission.person_information
     admission_form = AdmissionForm(request.POST or None, instance=admission)
-    person_form = PersonForm(request.POST or None, instance=person)
+    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person)
     address_form = AddressForm(request.POST or None, instance=person.address)
     errors = []
     if admission_form.is_valid() and person_form.is_valid() and address_form.is_valid():

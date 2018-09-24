@@ -30,7 +30,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 
-from continuing_education.models import continuing_education_person, admission
+from base.models import person as mdl_person
+from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
 
 
 def formations_list(request):
@@ -51,8 +52,9 @@ def formations_list(request):
 
 @login_required(login_url='../authentication/login')
 def main_view(request):
-    person = continuing_education_person.find_by_user(user=request.user)
-    admissions = admission.find_by_person(person=person)
+    person = mdl_person.find_by_user(request.user)
+    continuing_education_person = mdl_continuing_education_person.find_by_person(person=person)
+    admissions = admission.find_by_person(person=continuing_education_person)
     registrations = admission.find_by_state(state="accepted")
     return render(request, "continuing_education/home.html", locals())
 

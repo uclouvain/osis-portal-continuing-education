@@ -25,19 +25,17 @@
 ##############################################################################
 import datetime
 import random
+
 import factory
 
 import reference
-
 from base.models import entity_version
 from base.models.academic_year import current_academic_years
 from base.models.enums import entity_type
 from base.models.offer_year import OfferYear
-from base.tests.factories.entity_version import EntityVersionFactory
-from base.tests.factories.offer_year import OfferYearFactory
 from continuing_education.models.admission import Admission
 from continuing_education.tests.factories.address import AddressFactory
-from continuing_education.tests.factories.person import PersonFactory
+from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 from continuing_education.tests.utils.utils import _get_random_choices
 
 CONTINUING_EDUCATION_TYPE = 8
@@ -61,7 +59,7 @@ class AdmissionFactory(factory.DjangoModelFactory):
             faculty = faculty
         )
 
-    person = factory.SubFactory(PersonFactory)
+    person_information = factory.SubFactory(ContinuingEducationPersonFactory)
 
     # Motivation
     motivation = "motivation"

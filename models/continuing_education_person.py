@@ -4,7 +4,6 @@ from django.contrib.admin import ModelAdmin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from base.models import person as mdl_person
 
 class ContinuingEducationPersonAdmin(ModelAdmin):
     list_display = ('person', 'citizenship', 'email',)
@@ -65,6 +64,5 @@ class ContinuingEducationPerson(models.Model):
         return "{} - {} {} - {}".format(self.id, self.person.first_name, self.person.last_name, self.person.email)
 
 
-def find_by_user(user):
-    person = mdl_person.find_by_user(user)
-    return ContinuingEducationPerson.objects.filter(person=person)
+def find_by_person(person):
+    return ContinuingEducationPerson.objects.filter(person=person).first()

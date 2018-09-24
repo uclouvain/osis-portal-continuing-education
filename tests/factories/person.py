@@ -24,27 +24,26 @@
 #
 ##############################################################################
 import datetime
+
 import factory
 
+from base.tests.factories.person import PersonFactory
 from continuing_education.models.continuing_education_person import ContinuingEducationPerson as Person
 from continuing_education.tests.factories.address import AddressFactory
 from continuing_education.tests.utils.utils import _get_random_choices
 from reference.tests.factories.country import CountryFactory
 
 
-class PersonFactory(factory.DjangoModelFactory):
+class ContinuingEducationPersonFactory(factory.DjangoModelFactory):
     class Meta:
-        model = 'continuing_education.person'
+        model = 'continuing_education.ContinuingEducationPerson'
+
+    person = factory.SubFactory(PersonFactory)
 
    # Identification
-    first_name = factory.Faker('first_name')
-    last_name = factory.Faker('last_name')
-    birth_date = factory.LazyFunction(datetime.datetime.now)
     birth_location = factory.Faker('city')
     birth_country = factory.SubFactory(CountryFactory)
     citizenship = factory.SubFactory(CountryFactory)
-
-    gender = factory.fuzzy.FuzzyChoice(_get_random_choices(Person.GENDER_CHOICES))
 
     # Contact
     phone_mobile = factory.Faker('phone_number')

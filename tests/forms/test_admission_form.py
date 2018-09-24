@@ -23,16 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
 from django.test import TestCase
 
-from base.models import offer_year, entity_version
-from base.models.entity_version import EntityVersion
-from base.models.offer_year import OfferYear
 from continuing_education.forms.admission import AdmissionForm
 from continuing_education.tests.factories.admission import AdmissionFactory
 from reference.models import country
-from reference.models.country import Country
 
 
 class TestAdmissionForm(TestCase):
@@ -42,19 +37,10 @@ class TestAdmissionForm(TestCase):
         form = AdmissionForm(admission.__dict__)
         self.assertTrue(form.is_valid(), form.errors)
 
-def convert_offer(admission):
-    # admission['formation'] =  OfferYear.objects.get(pk=admission['formation_id'])
-    pass
-
-def convert_faculty(admission):
-    # admission['faculty'] =  EntityVersion.objects.get(pk=admission['faculty_id'])
-    pass
-
 def convert_countries(person):
     person['birth_country'] = country.Country.objects.get(pk=person["birth_country_id"])
     person['citizenship'] = country.Country.objects.get(pk=person["citizenship_id"])
 
 def convert_dates(person):
-    person['birth_date'] = person['birth_date'].strftime('%Y-%m-%d')
     person['high_school_graduation_year'] = person['high_school_graduation_year'].strftime('%Y-%m-%d')
     person['last_degree_graduation_year'] = person['last_degree_graduation_year'].strftime('%Y-%m-%d')

@@ -24,17 +24,16 @@
 #
 ##############################################################################
 import datetime
-import factory
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from base.tests.factories.person import PersonFactory
 from continuing_education.forms.admission import AdmissionForm
-from continuing_education.models.continuing_education_person import ContinuingEducationPerson as Person
+from continuing_education.models.continuing_education_person import ContinuingEducationPerson
 from continuing_education.tests.factories.admission import AdmissionFactory
-from continuing_education.tests.forms.test_admission_form import convert_dates, convert_countries, convert_offer, \
-    convert_faculty
+from continuing_education.tests.forms.test_admission_form import convert_dates, convert_countries
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -42,6 +41,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
         self.admission = AdmissionFactory()
+        self.person = PersonFactory(user=self.user)
 
     def test_admission_detail(self):
         url = reverse('admission_detail', args=[self.admission.id])
@@ -63,7 +63,7 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_admission_new_save(self):
         admission = AdmissionFactory()
-        person_dict = admission.person.__dict__
+        person_dict = admission.person_information.__dict__
         convert_dates(person_dict)
         admission_dict = admission.__dict__
         response = self.client.post(reverse('admission_new'), data=admission_dict)
@@ -72,9 +72,9 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_admission_save_with_error(self):
         admission = AdmissionFactory()
-        person_dict = admission.person.__dict__
+        person_dict = admission.person_information.__dict__
         convert_dates(person_dict)
-        person_dict["birth_date"] = "no valid date"
+        person_dict["high_school_graduation_year"] = "no valid date"
         response = self.client.post(reverse('admission_new'), data=person_dict)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
@@ -94,12 +94,10 @@ class ViewStudentAdmissionTestCase(TestCase):
     def test_edit_post_admission_found(self):
         admission = AdmissionFactory()
         admission_dict = admission.__dict__
-        person_dict = admission.person.__dict__
+        person_dict = admission.person_information.__dict__
         convert_dates(person_dict)
         convert_countries(person_dict)
-        admission_dict['person'] = Person.objects.get(pk=admission_dict['person_id'])
-        # admission_dict['formation'] = OfferYear.objects.get(pk=admission_dict['formation_id'])
-        # admission_dict['faculty'] = EntityVersion.objects.get(pk=admission_dict['faculty_id'])
+        admission_dict['person_information'] = ContinuingEducationPerson.objects.get(pk=admission_dict['person_information_id'])
         url = reverse('admission_edit', args=[self.admission.id])
         form = AdmissionForm(admission_dict)
         form.is_valid()

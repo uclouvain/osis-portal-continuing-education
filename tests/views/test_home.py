@@ -31,6 +31,9 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from base.tests.factories.person import PersonFactory
+
+
 class ViewHomeTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
@@ -45,6 +48,7 @@ class ViewHomeTestCase(TestCase):
 class FormationsListTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        self.person = PersonFactory()
 
     @mock.patch('continuing_education.views.home._fetch_example_data')
     def test_sorted_formations_list(self, mock_fetch_example_data):
