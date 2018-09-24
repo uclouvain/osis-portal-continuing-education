@@ -51,7 +51,9 @@
                     {% bootstrap_form person_form exclude="address, phone_mobile, email, high_school_diploma,high_school_graduation_year, last_degree_level, last_degree_field, last_degree_institution, last_degree_graduation_year,other_educational_background, professional_status, current_occupation, current_employer, activity_sector,past_professional_activities" %}
                     {% bootstrap_form address_form %}
                     {% bootstrap_form person_form exclude="first_name, last_name, birth_date, birth_location, birth_country, citizenship, gender, address" %}
-                    {% bootstrap_form admission_form exclude='person, state' %}
+                    {% bootstrap_form admission_form exclude='person, state, awareness_ucl_website, awareness_formation_website, awareness_press, awareness_facebook,awareness_linkedin, awareness_customized_mail, awareness_emailing' %}
+                    <label class="control-label">{% trans 'awareness' %}</label>
+                    {% bootstrap_form admission_form exclude='person, state, motivation, professional_impact, formation' %}
                 </div>
                 <div class="panel panel-body">
                     <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}">
