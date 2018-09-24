@@ -73,6 +73,9 @@ msgstr "Facturation"
 msgid "birth_country"
 msgstr "Pays de naissance"
 
+msgid "birth_date"
+msgstr "Date de naissance"
+
 msgid "birth_location"
 msgstr "Lieu de naissance"
 
@@ -91,6 +94,9 @@ msgstr "Formations Continues"
 msgid "contact"
 msgstr "Contact"
 
+msgid "country"
+msgstr "Pays"
+
 msgid "courses_formula"
 msgstr "Formule de cours"
 
@@ -107,7 +113,7 @@ msgid "education"
 msgstr "Education"
 
 msgid "faculty"
-msgstr "Faculty"
+msgstr "Faculté"
 
 msgid "first_name"
 msgstr "Prénom"
@@ -123,6 +129,9 @@ msgstr "Gestionnaire de formation"
 
 msgid "formation_title"
 msgstr "Intitulé de la formation"
+
+msgid "gender"
+msgstr "Genre"
 
 msgid "head_office_name"
 msgstr "Nom du siège social"
@@ -147,6 +156,9 @@ msgstr "Institution"
 
 msgid "last_degree_graduation_year"
 msgstr "Année d'obtention"
+
+msgid "location"
+msgstr "Rue"
 
 msgid "marital_status"
 msgstr "Etat civil"
@@ -184,8 +196,15 @@ msgstr "Payé"
 msgid "payment_complete"
 msgstr "En ordre de paiement"
 
+msgid "phone_mobile"
+msgstr "GSM"
+
 msgid "post"
 msgstr "Courrier"
+
+msgid "postal_code"
+msgstr "Code postal"
+
 
 msgid "previous_ucl_registration"
 msgstr "Avez-vous déjà été inscrit(e) à l'UCL ?"
