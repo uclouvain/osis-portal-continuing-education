@@ -27,13 +27,13 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db import models
 from django.test import TestCase
 
 from base.tests.factories.person import PersonFactory
-from continuing_education.forms.admission import AdmissionForm
-from continuing_education.models.continuing_education_person import ContinuingEducationPerson
 from continuing_education.tests.factories.admission import AdmissionFactory
-from continuing_education.tests.forms.test_admission_form import convert_dates, convert_countries
+from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
+from continuing_education.tests.forms.test_admission_form import convert_dates
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -92,23 +92,25 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertTemplateUsed(response, 'admission_form.html')
 
     def test_edit_post_admission_found(self):
-        admission = AdmissionFactory()
-        admission_dict = admission.__dict__
-        person_dict = admission.person_information.__dict__
-        convert_dates(person_dict)
-        convert_countries(person_dict)
-        admission_dict['person_information'] = ContinuingEducationPerson.objects.get(pk=admission_dict['person_information_id'])
-        url = reverse('admission_edit', args=[self.admission.id])
-        form = AdmissionForm(admission_dict)
-        form.is_valid()
-        response = self.client.post(url, data=form.cleaned_data)
+        person_information = ContinuingEducationPersonFactory()
+        admission = {
+            'person_information': person_information.pk,
+            'motivation': 'abcd',
+            'professional_impact': 'abcd',
+            'formation': 'formation Test',
+            'awareness_ucl_website': True,
+        }
+        url = reverse('admission_edit', args=[self.admission.pk])
+        response = self.client.post(url, data=admission)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.id]))
         self.admission.refresh_from_db()
 
         # verifying that fields are correctly updated
-        for key in form.cleaned_data.keys():
+        for key in admission:
             field_value = self.admission.__getattribute__(key)
-            if type(field_value) is datetime.date:
+            if isinstance(field_value, datetime.date):
                 field_value = field_value.strftime('%Y-%m-%d')
-            self.assertEqual(field_value, admission_dict[key])
+            if isinstance(field_value, models.Model):
+                field_value = field_value.pk
+            self.assertEqual(field_value, admission[key], key)
 
