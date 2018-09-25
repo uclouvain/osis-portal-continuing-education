@@ -37,10 +37,3 @@ class RegistrationForm(ModelForm):
             'assessment_succeeded',
             'sessions'
         ]
-        labels = {}
-        for field in fields:
-            labels[field] = _(field)
-            if "billing_" in field:
-                labels[field] = _(field.replace("billing_",''))
-            if "residence_" in field:
-                labels[field] = _(field.replace("residence_",''))

@@ -1,6 +1,5 @@
 from django import forms
 from django.forms import ModelForm
-from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.admission import Admission
 
@@ -38,5 +37,3 @@ class AdmissionForm(ModelForm):
             # State
             'state',
         ]
-        #automatic translation of field names
-        labels = {field : _(field) for field in fields}

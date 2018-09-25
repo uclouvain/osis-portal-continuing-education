@@ -35,5 +35,3 @@ class ContinuingEducationPersonForm(ModelForm):
             'activity_sector',
             'past_professional_activities',
         ]
-        #automatic translation of field names
-        labels = {field : _(field) for field in fields}
