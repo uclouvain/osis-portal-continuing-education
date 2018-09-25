@@ -50,13 +50,15 @@ def formations_list(request):
         'formations': formations
     })
 
-@login_required(login_url='../authentication/login')
+
+@login_required(login_url='continuing_education_login')
 def main_view(request):
     person = mdl_person.find_by_user(request.user)
     continuing_education_person = mdl_continuing_education_person.find_by_person(person=person)
     admissions = admission.find_by_person(person=continuing_education_person)
     registrations = admission.find_by_state(state="accepted")
     return render(request, "continuing_education/home.html", locals())
+
 
 def _fetch_example_data():
     # get formations from temporary file
