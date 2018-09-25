@@ -92,4 +92,5 @@ def admission_edit(request, admission_id):
         errors.append(address_form.errors)
         display_errors(request, errors)
 
-    return render(request, 'admission_form.html', locals())
+    return render(request, 'admission_form.html', {'admission_form': admission_form, 'person_form': person_form,
+                                                   'address_form': address_form})

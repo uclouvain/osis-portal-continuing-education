@@ -85,8 +85,8 @@ def find_by_id(a_id):
 
 #à modifier lors du lien avec une table student
 def find_by_person(person):
-        return Admission.objects.filter(person_information=person)
+    return Admission.objects.filter(person_information=person)
 
 
 def find_by_state(state):
-        return Admission.objects.filter(state=state)
+    return Admission.objects.filter(state=state)

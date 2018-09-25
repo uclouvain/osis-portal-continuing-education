@@ -10,13 +10,6 @@ class TitleChoiceField(forms.ModelChoiceField):
 
 class AdmissionForm(ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        super(AdmissionForm, self).__init__(*args, **kwargs)
-        # self.fields['formation'].label_from_instance = TitleChoiceField.label_from_instance
-        # self.fields['faculty'].label_from_instance = TitleChoiceField.label_from_instance
-        # avoid adding META ordering in OfferYear model
-        # self.fields['formation'].queryset = self.fields['formation'].queryset.all().order_by('acronym')
-
     class Meta:
         model = Admission
         fields = [
