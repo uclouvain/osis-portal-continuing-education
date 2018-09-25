@@ -1,7 +1,8 @@
 from django.contrib.admin import ModelAdmin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+
+from continuing_education.models.enums.enums import STATE_CHOICES, REGISTRATION_TITLE_CHOICES, MARITAL_STATUS_CHOICES
 
 
 class AdmissionAdmin(ModelAdmin):
@@ -11,26 +12,6 @@ class AdmissionAdmin(ModelAdmin):
 class Admission(models.Model):
 
     CONTINUING_EDUCATION_TYPE = 8
-
-    REGISTRATION_TITLE_CHOICES = (
-        ('PRIVATE', _('private')),
-        ('PROFESSIONAL', _('professional')),
-    )
-
-    MARITAL_STATUS_CHOICES = (
-        ('SINGLE', _('single')),
-        ('MARRIED', _('married')),
-        ('WIDOWED', _('widowed')),
-        ('DIVORCED', _('divorced')),
-        ('SEPARATED', _('separated')),
-        ('LEGAL_COHABITANT', _('legal_cohabitant')),
-    )
-
-    STATE_CHOICES = (
-        ('accepted', _('accepted')),
-        ('rejected', _('rejected')),
-        ('waiting', _('waiting')),
-    )
 
     person_information = models.ForeignKey('continuing_education.ContinuingEducationPerson', blank=True, null=True)
 

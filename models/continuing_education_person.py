@@ -2,7 +2,8 @@ from datetime import datetime
 
 from django.contrib.admin import ModelAdmin
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+
+from continuing_education.models.enums.enums import STATUS_CHOICES, SECTOR_CHOICES
 
 
 class ContinuingEducationPersonAdmin(ModelAdmin):
@@ -11,27 +12,6 @@ class ContinuingEducationPersonAdmin(ModelAdmin):
     list_filter = ('activity_sector', 'citizenship')
 
 class ContinuingEducationPerson(models.Model):
-
-    GENDER_CHOICES = (
-        ('F', _('female')),
-        ('M', _('male')),
-    )
-
-    STATUS_CHOICES = (
-        ('EMPLOYEE', _('employee')),
-        ('SELF_EMPLOYED', _('self_employed')),
-        ('JOB_SEEKER', _('job_seeker')),
-        ('PUBLIC_SERVANT', _('public_servant')),
-        ('OTHER', _('other')),
-    )
-
-    SECTOR_CHOICES = (
-        ('PRIVATE', _('private')),
-        ('PUBLIC', _('public')),
-        ('ASSOCIATIVE', _('associative')),
-        ('HEALTH', _('health')),
-        ('OTHER', _('other')),
-    )
 
     person = models.OneToOneField('base.Person', on_delete=models.CASCADE)
 
