@@ -1,13 +1,13 @@
 from django import forms
 from django.forms import ModelForm
-from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.admission import Admission
+from continuing_education.models.enums.enums import YES_NO_CHOICES
 
 
 class RegistrationForm(ModelForm):
-    previous_ucl_registration = forms.TypedChoiceField(coerce=lambda x: x =='True',
-                                   choices=((False, _('No')), (True, _('Yes'))))
+    previous_ucl_registration = forms.TypedChoiceField(coerce=lambda x: x =='True', choices=YES_NO_CHOICES)
+
     class Meta:
         model = Admission
         fields = [
