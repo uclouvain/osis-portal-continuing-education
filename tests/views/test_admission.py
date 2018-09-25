@@ -28,12 +28,12 @@ import datetime
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.forms import model_to_dict
 from django.test import TestCase
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.tests.forms.test_admission_form import convert_dates
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -62,20 +62,15 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertTemplateUsed(response, 'admission_form.html')
 
     def test_admission_new_save(self):
-        admission = AdmissionFactory()
-        person_dict = admission.person_information.__dict__
-        convert_dates(person_dict)
-        admission_dict = admission.__dict__
-        response = self.client.post(reverse('admission_new'), data=admission_dict)
+        admission = model_to_dict(AdmissionFactory())
+        response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('continuing_education_home'))
 
     def test_admission_save_with_error(self):
-        admission = AdmissionFactory()
-        person_dict = admission.person_information.__dict__
-        convert_dates(person_dict)
-        person_dict["high_school_graduation_year"] = "no valid date"
-        response = self.client.post(reverse('admission_new'), data=person_dict)
+        admission = model_to_dict(AdmissionFactory())
+        admission['person_information'] = "no valid pk"
+        response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
 

@@ -65,6 +65,14 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration_form.html')
 
+    def test_edit_post_registration_with_error(self):
+        registration = model_to_dict(self.admission_accepted)
+        registration['billing_address'] = "no valid pk"
+        response = self.client.post(reverse('registration_edit', args=[self.admission_accepted.pk]),
+                                    data=registration)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration_form.html')
+
     def test_edit_post_registration_found(self):
         address = AddressFactory()
         registration = {
@@ -97,4 +105,3 @@ class ViewStudentRegistrationTestCase(TestCase):
                 if isinstance(field_value, models.Model):
                     field_value = field_value.pk
                 self.assertEqual(field_value, registration[key], key)
-
