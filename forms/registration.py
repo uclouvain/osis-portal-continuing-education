@@ -1,8 +1,9 @@
+from django import forms
 from django.forms import ModelForm
+from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.admission import Admission
-from django.utils.translation import ugettext_lazy as _
-from django import forms
+
 
 class RegistrationForm(ModelForm):
     previous_ucl_registration = forms.TypedChoiceField(coerce=lambda x: x =='True',
@@ -43,4 +44,3 @@ class RegistrationForm(ModelForm):
                 labels[field] = _(field.replace("billing_",''))
             if "residence_" in field:
                 labels[field] = _(field.replace("residence_",''))
-
