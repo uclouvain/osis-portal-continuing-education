@@ -64,7 +64,7 @@ def admission_new(request):
         admission.save()
         return redirect(reverse('continuing_education_home'))
     else:
-        errors = list(itertools.chain(admission_form.errors, person_form.errors, address_form.errors))
+        errors = list(itertools.product(admission_form.errors, person_form.errors, address_form.errors))
         display_errors(request, errors)
 
     return render(request, 'admission_form.html', locals())
@@ -87,7 +87,7 @@ def admission_edit(request, admission_id):
         admission.save()
         return redirect(reverse('admission_detail', kwargs={'admission_id':admission_id}))
     else:
-        errors = list(itertools.chain(admission_form.errors, person_form.errors, address_form.errors))
+        errors = list(itertools.product(admission_form.errors, person_form.errors, address_form.errors))
         display_errors(request, errors)
 
     return render(request, 'admission_form.html', {'admission_form': admission_form, 'person_form': person_form,
