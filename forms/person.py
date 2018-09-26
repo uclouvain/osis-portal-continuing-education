@@ -1,4 +1,5 @@
 from django.forms import ModelForm
+from django.utils.translation import ugettext_lazy as _
 
 from base.models.person import Person
 
@@ -22,3 +23,4 @@ class PersonForm(ModelForm):
             'phone_mobile',
             'gender'
         ]
+        labels = {field: _(field) for field in fields}

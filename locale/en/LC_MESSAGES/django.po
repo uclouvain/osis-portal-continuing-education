@@ -95,7 +95,27 @@ msgid "continuing_education_registration_complete"
 msgstr "Registration to platform completed"
 
 msgid "continuing_education_registration_complete_message"
-msgstr "Your registration to the platform has been completed with success."
+msgstr "Your registration to the platform has been completed with success. "
+       "Please check your email box to activate your user account."
+
+msgid "continuing_education_activation_complete"
+msgstr "User account activated"
+
+msgid "continuing_education_activation_complete_message"
+msgstr "Your user account is activated. "
+       "You can now log in to access the platform."
+
+msgid "continuing_education_activation_failed"
+msgstr "Activation failed"
+
+msgid "continuing_education_activation_failed_message"
+msgstr "Activation has failed. "
+
+msgid "continuing_education_account_information_completion"
+msgstr "Account information completion"
+
+msgid "continuing_education_account_information_completion_message"
+msgstr "Please complete the following form to finalize the creation of your account."
 
 msgid "contact"
 msgstr "Contact"
@@ -168,6 +188,9 @@ msgstr "Location"
 
 msgid "log-in"
 msgstr "Log in"
+
+msgid "log-out"
+msgstr "Log out"
 
 msgid "marital_status"
 msgstr "Marital status"
@@ -267,6 +290,9 @@ msgstr "Student sheet"
 
 msgid "submit"
 msgstr "Submit"
+
+msgid "succesfull_logout"
+msgstr "You are now logged out."
 
 msgid "use_address_for_billing"
 msgstr "Use recorded address for billing"

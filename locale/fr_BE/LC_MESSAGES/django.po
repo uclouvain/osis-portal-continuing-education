@@ -95,7 +95,27 @@ msgid "continuing_education_registration_complete"
 msgstr "Inscription à la plateforme complétée"
 
 msgid "continuing_education_registration_complete_message"
-msgstr "Votre inscription à la plateforme a été complétée avec succès."
+msgstr "Votre inscription à la plateforme a été complétée avec succès. "
+       "Veuillez consulter vos e-mails pour activer votre compte utilisateur."
+
+msgid "continuing_education_activation_complete"
+msgstr "Compte utilisateur activé"
+
+msgid "continuing_education_activation_complete_message"
+msgstr "Votre compte utilsateur est désormais actif. "
+       "Vous pouvez à présent vous identifier pour accéder à la plateforme."
+
+msgid "continuing_education_activation_failed"
+msgstr "Activation échouée"
+
+msgid "continuing_education_activation_failed_message"
+msgstr "L'activation a échoué."
+
+msgid "continuing_education_account_information_completion"
+msgstr "Information du compte utilisateur"
+
+msgid "continuing_education_account_information_completion_message"
+msgstr "Veuillez compléter le formulaire suivant pour finaliser la création de votre compte utilisateur."
 
 msgid "contact"
 msgstr "Contact"
@@ -169,6 +189,9 @@ msgstr "Rue"
 msgid "log-in"
 msgstr "S'identifier"
 
+msgid "log-out"
+msgstr "Déconnexion"
+
 msgid "marital_status"
 msgstr "Etat civil"
 
@@ -213,7 +236,6 @@ msgstr "Courrier"
 
 msgid "postal_code"
 msgstr "Code postal"
-
 
 msgid "previous_ucl_registration"
 msgstr "Avez-vous déjà été inscrit(e) à l'UCL ?"
@@ -268,6 +290,9 @@ msgstr "Fiche de l'étudiant"
 
 msgid "submit"
 msgstr "Soumettre"
+
+msgid "succesfull_logout"
+msgstr "Vous êtes à présent déconnecté."
 
 msgid "use_address_for_billing"
 msgstr "Utiliser l'adresse enregistrée pour la facturation"
