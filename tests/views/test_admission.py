@@ -32,6 +32,7 @@ from django.forms import model_to_dict
 from django.test import TestCase
 
 from base.tests.factories.person import PersonFactory
+from continuing_education.models.admission import Admission
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 
@@ -44,7 +45,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.person = PersonFactory(user=self.user)
 
     def test_admission_detail(self):
-        url = reverse('admission_detail', args=[self.admission.id])
+        url = reverse('admission_detail', args=[self.admission.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_detail.html')
@@ -62,10 +63,11 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertTemplateUsed(response, 'admission_form.html')
 
     def test_admission_new_save(self):
-        admission = model_to_dict(AdmissionFactory())
+        admission = model_to_dict(self.admission)
         response = self.client.post(reverse('admission_new'), data=admission)
+        created_admission = Admission.objects.exclude(pk=self.admission.pk).get()
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('continuing_education_home'))
+        self.assertRedirects(response, reverse('admission_detail', args=[created_admission.pk]))
 
     def test_admission_save_with_error(self):
         admission = model_to_dict(AdmissionFactory())

@@ -25,8 +25,8 @@
 ##############################################################################
 from django.conf.urls import url, include
 
-from continuing_education.views import (home, admission, registration, common)
 from continuing_education.views import account_activation
+from continuing_education.views import (home, admission, registration, common)
 
 urlpatterns = [
     url(r'^$', home.formations_list, name='formations_list'),
@@ -42,8 +42,8 @@ urlpatterns = [
             name='django_registration_register'),
         url(r'^complete_account_registration/$', account_activation.complete_account_registration, name='complete_account_registration'),
         url(r'^', include('django_registration.backends.activation.urls'))])),
-    url(r'^admission_new/', admission.admission_new, name='admission_new'),
-    url(r'^admission_edit/(?P<admission_id>[0-9]+)$', admission.admission_edit, name='admission_edit'),
+    url(r'^admission_new/', admission.admission_form, name='admission_new'),
+    url(r'^admission_edit/(?P<admission_id>[0-9]+)$', admission.admission_form, name='admission_edit'),
     url(r'^admission_detail/(?P<admission_id>[0-9]+)$', admission.admission_detail, name='admission_detail'),
     url(r'^registration_edit/(?P<admission_id>[0-9]+)$', registration.registration_edit, name='registration_edit'),
     url(r'^registration_detail/(?P<admission_id>[0-9]+)$', registration.registration_detail,
