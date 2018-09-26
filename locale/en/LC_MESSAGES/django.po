@@ -91,6 +91,12 @@ msgstr "Company number"
 msgid "continuing_education"
 msgstr "Continuing Education"
 
+msgid "continuing_education_registration_complete"
+msgstr "Registration to platform completed"
+
+msgid "continuing_education_registration_complete_message"
+msgstr "Your registration to the platform has been completed with success."
+
 msgid "contact"
 msgstr "Contact"
 
@@ -159,6 +165,9 @@ msgstr "Graduation year (last degree)"
 
 msgid "location"
 msgstr "Location"
+
+msgid "log-in"
+msgstr "Log in"
 
 msgid "marital_status"
 msgstr "Marital status"
@@ -246,6 +255,9 @@ msgstr "Registration type"
 
 msgid "residence_phone"
 msgstr "Residence phone"
+
+msgid "signup"
+msgstr "Sign up"
 
 msgid "spouse_name"
 msgstr "Spouse name"

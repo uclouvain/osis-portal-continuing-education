@@ -91,6 +91,12 @@ msgstr "Numéro unique d'entreprise"
 msgid "continuing_education"
 msgstr "Formations Continues"
 
+msgid "continuing_education_registration_complete"
+msgstr "Inscription à la plateforme complétée"
+
+msgid "continuing_education_registration_complete_message"
+msgstr "Votre inscription à la plateforme a été complétée avec succès."
+
 msgid "contact"
 msgstr "Contact"
 
@@ -159,6 +165,9 @@ msgstr "Année d'obtention"
 
 msgid "location"
 msgstr "Rue"
+
+msgid "log-in"
+msgstr "S'identifier"
 
 msgid "marital_status"
 msgstr "Etat civil"
@@ -247,6 +256,9 @@ msgstr "Inscription à titre"
 
 msgid "residence_phone"
 msgstr "Téléphone fixe"
+
+msgid "signup"
+msgstr "S'inscrire"
 
 msgid "spouse_name"
 msgstr "Nom du conjoint"
