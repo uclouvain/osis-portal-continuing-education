@@ -23,17 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-import factory
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db import models
+from django.forms import model_to_dict
 from django.test import TestCase
 
-from continuing_education.forms.registration import RegistrationForm
-from continuing_education.models.address import Address
+from continuing_education.tests.factories.address import AddressFactory
 from continuing_education.tests.factories.admission import AdmissionFactory
-from continuing_education.tests.forms.test_admission_form import convert_countries
 
 
 class ViewStudentRegistrationTestCase(TestCase):
@@ -67,20 +65,43 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration_form.html')
 
+    def test_edit_post_registration_with_error(self):
+        registration = model_to_dict(self.admission_accepted)
+        registration['billing_address'] = "no valid pk"
+        response = self.client.post(reverse('registration_edit', args=[self.admission_accepted.pk]),
+                                    data=registration)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration_form.html')
+
     def test_edit_post_registration_found(self):
-        admission = AdmissionFactory()
-        admission_dict = admission.__dict__
-        url = reverse('registration_edit', args=[self.admission_accepted.id])
-        admission_dict['billing_address'] = Address.objects.get(pk=admission_dict['billing_address_id'])
-        admission_dict['residence_address'] = Address.objects.get(pk=admission_dict['residence_address_id'])
-        form = RegistrationForm(admission_dict)
-        form.is_valid()
-        response = self.client.post(url, data=form.cleaned_data)
+        address = AddressFactory()
+        registration = {
+            'previous_ucl_registration': False,
+            'children_number': 2,
+            'company_number': '1-61667-638-8',
+            'head_office_name': 'Campbell-Tanner',
+            'registration_type': 'PRIVATE',
+            'state': 'accepted',
+            'billing_address': address.pk,
+            'billing-location' : address.location,
+            'billing-postal_code' : address.postal_code,
+            'billing-city': address.city,
+            'billing-country': address.country.pk,
+            'residence_address': address.pk,
+            'residence-location': address.location,
+            'residence-postal_code': address.postal_code,
+            'residence-city': address.city,
+            'residence-country': address.country.pk,
+        }
+        url = reverse('registration_edit', args=[self.admission_accepted.pk])
+        response = self.client.post(url, data=registration)
         self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
         self.admission_accepted.refresh_from_db()
 
         # verifying that fields are correctly updated
-        for key in form.cleaned_data.keys():
-            field_value = self.admission_accepted.__getattribute__(key)
-            self.assertEqual(field_value, admission_dict[key])
-
+        for key in registration:
+            if key in model_to_dict(self.admission_accepted):
+                field_value = self.admission_accepted.__getattribute__(key)
+                if isinstance(field_value, models.Model):
+                    field_value = field_value.pk
+                self.assertEqual(field_value, registration[key], key)

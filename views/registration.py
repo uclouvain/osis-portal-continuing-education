@@ -23,15 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect, get_object_or_404
 
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.registration import RegistrationForm
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.views.common import display_errors
+
 
 @login_required
 def registration_detail(request, admission_id):

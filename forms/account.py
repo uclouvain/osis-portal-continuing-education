@@ -3,11 +3,12 @@ from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.continuing_education_person import ContinuingEducationPerson
+from continuing_education.models.enums.enums import YES_NO_CHOICES
 
 
 class ContinuingEducationPersonForm(ModelForm):
     high_school_diploma = forms.TypedChoiceField(coerce=lambda x: x =='True', required=False,
-                                   choices=((False, _('No')), (True, _('Yes'))), label=_("high_school_diploma"))
+                                   choices=YES_NO_CHOICES, label=_("high_school_diploma"))
 
     class Meta:
         model = ContinuingEducationPerson
@@ -34,5 +35,3 @@ class ContinuingEducationPersonForm(ModelForm):
             'activity_sector',
             'past_professional_activities',
         ]
-        #automatic translation of field names
-        labels = {field : _(field) for field in fields}

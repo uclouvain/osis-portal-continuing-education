@@ -1,8 +1,6 @@
-from django.contrib.auth.models import User
-from django.forms import ModelForm, IntegerField, HiddenInput
+from django.forms import ModelForm
 
 from base.models.person import Person
-from django.utils.translation import ugettext_lazy as _
 
 
 class PersonForm(ModelForm):
@@ -24,4 +22,3 @@ class PersonForm(ModelForm):
             'phone_mobile',
             'gender'
         ]
-        labels = {field: _(field) for field in fields}

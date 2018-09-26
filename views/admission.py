@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import itertools
+
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -31,9 +33,9 @@ from base.models import person as mdl_person
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
+from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
-from continuing_education.models.continuing_education_person import ContinuingEducationPerson
 from continuing_education.views.common import display_errors
 
 
@@ -43,53 +45,27 @@ def admission_detail(request, admission_id):
     return render(request, "admission_detail.html", locals())
 
 @login_required
-def admission_new(request):
-    person = get_object_or_404(ContinuingEducationPerson, pk=request.GET['person_information']) if 'person_information' in request.GET else None
+def admission_form(request, admission_id=None):
     base_person = mdl_person.find_by_user(user=request.user)
-    address = person.address if person else None
-    admission_form = AdmissionForm(request.POST or None)
-    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person)
-    address_form = AddressForm(request.POST or None, instance=address)
-    errors = []
-    if admission_form.is_valid() and person_form.is_valid() and address_form.is_valid():
-        address = address_form.save()
-        person = person_form.save(commit=False)
-        person.address = address
-        person.person_id = base_person.id
-        person.save()
-        admission = admission_form.save(commit=False)
-        admission.person = person
-        admission.save()
-        return redirect(reverse('continuing_education_home'))
-    else:
-        errors.append(admission_form.errors)
-        errors.append(person_form.errors)
-        errors.append(address_form.errors)
-        display_errors(request, errors)
-
-    return render(request, 'admission_form.html', locals())
-
-@login_required
-def admission_edit(request, admission_id):
-    admission = get_object_or_404(Admission, pk=admission_id)
-    person = get_object_or_404(ContinuingEducationPerson, pk=request.GET['person']) if 'person' in request.GET else admission.person_information
+    admission = get_object_or_404(Admission, pk=admission_id) if admission_id else None
+    person_information = continuing_education_person.find_by_person(person=base_person)
+    address = person_information.address if person_information else None
     admission_form = AdmissionForm(request.POST or None, instance=admission)
-    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person)
-    address_form = AddressForm(request.POST or None, instance=person.address)
-    errors = []
-    if admission_form.is_valid() and person_form.is_valid() and address_form.is_valid():
+    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
+    address_form = AddressForm(request.POST or None, instance=address)
+    if all((admission_form.is_valid(), person_form.is_valid(), address_form.is_valid())):
         address, created = Address.objects.get_or_create(**address_form.cleaned_data)
         person = person_form.save(commit=False)
         person.address = address
+        person.person_id = base_person.pk
         person.save()
         admission = admission_form.save(commit=False)
         admission.person = person
         admission.save()
-        return redirect(reverse('admission_detail', kwargs={'admission_id':admission_id}))
+        return redirect(reverse('admission_detail', kwargs={'admission_id':admission.pk}))
     else:
-        errors.append(admission_form.errors)
-        errors.append(person_form.errors)
-        errors.append(address_form.errors)
+        errors = list(itertools.product(admission_form.errors, person_form.errors, address_form.errors))
         display_errors(request, errors)
 
-    return render(request, 'admission_form.html', locals())
+    return render(request, 'admission_form.html', {'admission_form': admission_form, 'person_form': person_form,
+                                                   'address_form': address_form})

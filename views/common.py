@@ -23,16 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
+from django.contrib.auth.views import login as django_login
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
-from base.models import person as person_mdl
-from django.contrib.auth.views import login as django_login
 
+from base.models import person as person_mdl
 from base.views import layout
 from base.views.layout import render
 
