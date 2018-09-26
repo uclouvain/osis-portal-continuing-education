@@ -130,7 +130,7 @@ def __post_complete_account_registration(request):
         continuing_education_person = ce_person_form.save(commit=False)
         continuing_education_person.person = person
         continuing_education_person.save()
-        return redirect(reverse('continuing_education'))
+        return redirect(reverse('continuing_education_home'))
     else:
         errors.append(root_person_form.errors)
         errors.append(ce_person_form.errors)

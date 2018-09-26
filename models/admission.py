@@ -1,160 +1,81 @@
-from datetime import datetime
-
 from django.contrib.admin import ModelAdmin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from base.models.academic_year import current_academic_years
-from base.models.enums import entity_type
+from continuing_education.models.enums.enums import STATE_CHOICES, REGISTRATION_TITLE_CHOICES, MARITAL_STATUS_CHOICES
 
 
 class AdmissionAdmin(ModelAdmin):
-    list_display = ('last_name', 'first_name', 'country', 'formation', 'program_code')
+    list_display = ('person_information', 'formation', 'state')
 
 
 class Admission(models.Model):
 
     CONTINUING_EDUCATION_TYPE = 8
 
-    GENDER_CHOICES = (
-        ('F', _('female')),
-        ('M', _('male')),
-    )
-
-    STATUS_CHOICES = (
-        ('EMPLOYEE', _('employee')),
-        ('SELF_EMPLOYED', _('self_employed')),
-        ('JOB_SEEKER', _('job_seeker')),
-        ('PUBLIC_SERVANT', _('public_servant')),
-        ('OTHER', _('other')),
-    )
-
-    SECTOR_CHOICES = (
-        ('PRIVATE', _('private')),
-        ('PUBLIC', _('public')),
-        ('ASSOCIATIVE', _('associative')),
-        ('HEALTH', _('health')),
-        ('OTHER', _('other')),
-    )
-
-    REGISTRATION_TITLE_CHOICES = (
-        ('PRIVATE', _('private')),
-        ('PROFESSIONAL', _('professional')),
-    )
-
-    MARITAL_STATUS_CHOICES = (
-        ('SINGLE', _('single')),
-        ('MARRIED', _('married')),
-        ('WIDOWED', _('widowed')),
-        ('DIVORCED', _('divorced')),
-        ('SEPARATED', _('separated')),
-        ('LEGAL_COHABITANT', _('legal_cohabitant')),
-    )
-
-    STATE_CHOICES = (
-        ('accepted', _('accepted')),
-        ('rejected', _('rejected')),
-        ('waiting', _('waiting')),
-    )
-
-    #Identification
-    first_name = models.CharField(max_length=50, blank=True, db_index=True)
-    last_name = models.CharField(max_length=50, blank=True, db_index=True)
-    birth_date = models.DateField(blank=True, default=datetime.now)
-    birth_location = models.CharField(max_length=255, blank=True)
-    birth_country = models.ForeignKey('reference.Country', blank=True, null=True, related_name='birth_country')
-    citizenship = models.ForeignKey('reference.Country', blank=True, null=True, related_name='citizenship')
-    gender = models.CharField(max_length=1, blank=True, choices=GENDER_CHOICES, default='F')
-
-    #Contact
-    phone_mobile = models.CharField(max_length=30, blank=True)
-    email = models.EmailField(max_length=255, blank=True)
-
-    #Address
-    location = models.CharField(max_length=255, blank=True)
-    postal_code = models.CharField(max_length=20, blank=True)
-    city = models.CharField(max_length=255, blank=True)
-    country = models.ForeignKey('reference.Country', blank=True, null=True, related_name='address_country')
-
-    #Education
-    high_school_diploma = models.BooleanField(default=False)
-    high_school_graduation_year = models.DateField(blank=True, default=datetime.now)
-    last_degree_level = models.CharField(max_length=50, blank=True)
-    last_degree_field = models.CharField(max_length=50, blank=True)
-    last_degree_institution = models.CharField(max_length=50, blank=True)
-    last_degree_graduation_year = models.DateField(blank=True, default=datetime.now)
-    other_educational_background = models.TextField(blank=True)
-
-    #Professional Background
-    professional_status = models.CharField(max_length=50, blank=True, choices=STATUS_CHOICES)
-    current_occupation = models.CharField(max_length=50, blank=True)
-    current_employer = models.CharField(max_length=50, blank=True)
-    activity_sector = models.CharField(max_length=50, blank=True, choices=SECTOR_CHOICES)
-    past_professional_activities = models.TextField(blank=True)
+    person_information = models.ForeignKey('continuing_education.ContinuingEducationPerson', blank=True, null=True,
+                                           verbose_name=_("person_information"))
 
     #Motivation
-    motivation = models.TextField(blank=True)
-    professional_impact = models.TextField(blank=True)
+    motivation = models.TextField(blank=True, verbose_name=_("motivation"))
+    professional_impact = models.TextField(blank=True, verbose_name=_("professional_impact"))
 
-    #Formation
-    formation = models.ForeignKey('base.OfferYear', blank=True, null=True)
-    courses_formula = models.CharField(max_length=50, blank=True)
-    program_code = models.CharField(max_length=50, blank=True)
-    faculty = models.ForeignKey('base.EntityVersion', blank=True, null=True)
-    formation_administrator = models.CharField(max_length=50, blank=True)
+    # temporarily simplifying getting formation
+    formation = models.CharField(max_length=255, blank=True, verbose_name=_("formation"))
 
     #Awareness
-    awareness_ucl_website = models.BooleanField(default=False)
-    awareness_formation_website = models.BooleanField(default=False)
-    awareness_press = models.BooleanField(default=False)
-    awareness_facebook = models.BooleanField(default=False)
-    awareness_linkedin = models.BooleanField(default=False)
-    awareness_customized_mail = models.BooleanField(default=False)
-    awareness_emailing = models.BooleanField(default=False)
+    awareness_ucl_website = models.BooleanField(default=False, verbose_name=_("awareness_ucl_website"))
+    awareness_formation_website = models.BooleanField(default=False, verbose_name=_("awareness_formation_website"))
+    awareness_press = models.BooleanField(default=False, verbose_name=_("awareness_press"))
+    awareness_facebook = models.BooleanField(default=False, verbose_name=_("awareness_facebook"))
+    awareness_linkedin = models.BooleanField(default=False, verbose_name=_("awareness_linkedin"))
+    awareness_customized_mail = models.BooleanField(default=False, verbose_name=_("awareness_customized_mail"))
+    awareness_emailing = models.BooleanField(default=False, verbose_name=_("awareness_emailing"))
 
     #State
-    state = models.CharField(max_length=50, blank=True,  choices=STATE_CHOICES)
+    state = models.CharField(max_length=50, blank=True,  choices=STATE_CHOICES, verbose_name=_("state"))
 
     #Billing
-    registration_type = models.CharField(max_length=50, blank=True, choices=REGISTRATION_TITLE_CHOICES)
-    use_address_for_billing = models.BooleanField(default=False)
-    billing_location = models.CharField(max_length=255, blank=True)
-    billing_postal_code = models.CharField(max_length=20, blank=True)
-    billing_city = models.CharField(max_length=255, blank=True)
-    billing_country = models.ForeignKey('reference.Country', blank=True, null=True, related_name='billing_country')
-    head_office_name = models.CharField(max_length=255, blank=True)
-    company_number = models.CharField(max_length=255, blank=True)
-    vat_number = models.CharField(max_length=255, blank=True)
+    registration_type = models.CharField(max_length=50, blank=True, choices=REGISTRATION_TITLE_CHOICES,
+                                         verbose_name=_("registration_type"))
+    use_address_for_billing = models.BooleanField(default=False, verbose_name=_("use_address_for_billing"))
+    billing_address = models.ForeignKey('continuing_education.Address', blank=True, null=True,
+                                        related_name="billing_address", verbose_name=_("billing_address"))
+
+    head_office_name = models.CharField(max_length=255, blank=True, verbose_name=_("head_office_name"))
+    company_number = models.CharField(max_length=255, blank=True, verbose_name=_("company_number"))
+    vat_number = models.CharField(max_length=255, blank=True, verbose_name=_("vat_number"))
 
     #Registration
-    national_registry_number = models.CharField(max_length=255, blank=True)
-    id_card_number = models.CharField(max_length=255, blank=True)
-    passport_number = models.CharField(max_length=255, blank=True)
-    marital_status = models.CharField(max_length=255, blank=True, choices=MARITAL_STATUS_CHOICES)
-    spouse_name = models.CharField(max_length=255, blank=True)
-    children_number = models.SmallIntegerField(blank=True, default=0)
-    previous_ucl_registration = models.BooleanField(default=False)
-    previous_noma = models.CharField(max_length=255, blank=True)
+    national_registry_number = models.CharField(max_length=255, blank=True, verbose_name=_("national_registry_number"))
+    id_card_number = models.CharField(max_length=255, blank=True, verbose_name=_("id_card_number"))
+    passport_number = models.CharField(max_length=255, blank=True, verbose_name=_("passport_number"))
+    marital_status = models.CharField(max_length=255, blank=True, choices=MARITAL_STATUS_CHOICES,
+                                      verbose_name=_("marital_status"))
+    spouse_name = models.CharField(max_length=255, blank=True, verbose_name=_("spouse_name"))
+    children_number = models.SmallIntegerField(blank=True, default=0, verbose_name=_("children_number"))
+    previous_ucl_registration = models.BooleanField(default=False, verbose_name=_("previous_ucl_registration"))
+    previous_noma = models.CharField(max_length=255, blank=True, verbose_name=_("previous_noma"))
 
     #Post
-    use_address_for_post = models.BooleanField(default=False)
-    residence_location = models.CharField(max_length=255, blank=True)
-    residence_postal_code = models.CharField(max_length=20, blank=True)
-    residence_city = models.CharField(max_length=255, blank=True)
-    residence_country = models.ForeignKey('reference.Country', blank=True, null=True, related_name='residence_country')
-    residence_phone = models.CharField(max_length=30, blank=True)
+    use_address_for_post = models.BooleanField(default=False, verbose_name=_("use_address_for_post"))
+    residence_address = models.ForeignKey('continuing_education.Address', blank=True, null=True,
+                                          related_name="residence_address", verbose_name=_("residence_address"))
+
+    residence_phone = models.CharField(max_length=30, blank=True, verbose_name=_("residence_phone"))
 
     #Student Sheet
-    registration_complete = models.BooleanField(default=False)
-    noma = models.CharField(max_length=255, blank=True)
-    payment_complete = models.BooleanField(default=False)
-    formation_spreading = models.BooleanField(default=False)
-    prior_experience_validation = models.BooleanField(default=False)
-    assessment_presented = models.BooleanField(default=False)
-    assessment_succeeded = models.BooleanField(default=False)
+    registration_complete = models.BooleanField(default=False, verbose_name=_("registration_complete"))
+    noma = models.CharField(max_length=255, blank=True, verbose_name=_("noma"))
+    payment_complete = models.BooleanField(default=False, verbose_name=_("payment_complete"))
+    formation_spreading = models.BooleanField(default=False, verbose_name=_("formation_spreading"))
+    prior_experience_validation = models.BooleanField(default=False, verbose_name=_("prior_experience_validation"))
+    assessment_presented = models.BooleanField(default=False, verbose_name=_("assessment_presented"))
+    assessment_succeeded = models.BooleanField(default=False, verbose_name=_("assessment_succeeded"))
     #ajouter dates sessions cours suivies
-    sessions = models.CharField(max_length=255, blank=True)
+    sessions = models.CharField(max_length=255, blank=True, verbose_name=_("sessions"))
+
 
 def find_by_id(a_id):
     try:
@@ -163,5 +84,9 @@ def find_by_id(a_id):
         return None
 
 #à modifier lors du lien avec une table student
-def find_by_student(first_name, last_name):
-        return Admission.objects.filter(first_name=first_name, last_name=last_name)
+def find_by_person(person):
+    return Admission.objects.filter(person_information=person)
+
+
+def find_by_state(state):
+    return Admission.objects.filter(state=state)

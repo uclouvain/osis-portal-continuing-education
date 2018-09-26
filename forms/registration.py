@@ -1,21 +1,19 @@
+from django import forms
 from django.forms import ModelForm
 
 from continuing_education.models.admission import Admission
-from django.utils.translation import ugettext_lazy as _
-from django import forms
+from continuing_education.models.enums.enums import YES_NO_CHOICES
+
 
 class RegistrationForm(ModelForm):
-    previous_ucl_registration = forms.TypedChoiceField(coerce=lambda x: x =='True',
-                                   choices=((False, _('No')), (True, _('Yes'))))
+    previous_ucl_registration = forms.TypedChoiceField(coerce=lambda x: x =='True', choices=YES_NO_CHOICES)
+
     class Meta:
         model = Admission
         fields = [
             'registration_type',
             'use_address_for_billing',
-            'billing_location',
-            'billing_postal_code',
-            'billing_city',
-            'billing_country',
+            'billing_address',
             'head_office_name',
             'company_number',
             'vat_number',
@@ -28,10 +26,7 @@ class RegistrationForm(ModelForm):
             'previous_ucl_registration',
             'previous_noma',
             'use_address_for_post',
-            'residence_location',
-            'residence_postal_code',
-            'residence_city',
-            'residence_country',
+            'residence_address',
             'residence_phone',
             'registration_complete',
             'noma',
@@ -42,11 +37,3 @@ class RegistrationForm(ModelForm):
             'assessment_succeeded',
             'sessions'
         ]
-        labels = {}
-        for field in fields:
-            labels[field] = _(field)
-            if "billing_" in field:
-                labels[field] = _(field.replace("billing_",''))
-            if "residence_" in field:
-                labels[field] = _(field.replace("residence_",''))
-

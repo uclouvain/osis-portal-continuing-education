@@ -23,13 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import itertools
+
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 
+from base.models import person as mdl_person
+from continuing_education.forms.account import ContinuingEducationPersonForm
+from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
+from continuing_education.models import continuing_education_person
+from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.views.common import display_errors
+
 
 @login_required
 def admission_detail(request, admission_id):
@@ -37,29 +45,27 @@ def admission_detail(request, admission_id):
     return render(request, "admission_detail.html", locals())
 
 @login_required
-def admission_new(request):
-    form = AdmissionForm(request.POST or None)
-    errors = []
-    if form.is_valid():
-        admission = form.save()
-        return redirect(reverse('continuing_education_home'))
+def admission_form(request, admission_id=None):
+    base_person = mdl_person.find_by_user(user=request.user)
+    admission = get_object_or_404(Admission, pk=admission_id) if admission_id else None
+    person_information = continuing_education_person.find_by_person(person=base_person)
+    address = person_information.address if person_information else None
+    admission_form = AdmissionForm(request.POST or None, instance=admission)
+    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
+    address_form = AddressForm(request.POST or None, instance=address)
+    if all((admission_form.is_valid(), person_form.is_valid(), address_form.is_valid())):
+        address, created = Address.objects.get_or_create(**address_form.cleaned_data)
+        person = person_form.save(commit=False)
+        person.address = address
+        person.person_id = base_person.pk
+        person.save()
+        admission = admission_form.save(commit=False)
+        admission.person = person
+        admission.save()
+        return redirect(reverse('admission_detail', kwargs={'admission_id':admission.pk}))
     else:
-        errors.append(form.errors)
+        errors = list(itertools.product(admission_form.errors, person_form.errors, address_form.errors))
         display_errors(request, errors)
 
-    return render(request, 'admission_form.html', locals())
-
-@login_required
-def admission_edit(request, admission_id):
-    admission = get_object_or_404(Admission, pk=admission_id)
-
-    form = AdmissionForm(request.POST or None, instance=admission)
-    errors = []
-    if form.is_valid():
-        admission = form.save()
-        return redirect(reverse('admission_detail', kwargs={'admission_id':admission_id}))
-    else:
-        errors.append(form.errors)
-        display_errors(request, errors)
-
-    return render(request, 'admission_form.html', locals())
+    return render(request, 'admission_form.html', {'admission_form': admission_form, 'person_form': person_form,
+                                                   'address_form': address_form})

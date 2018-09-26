@@ -73,6 +73,9 @@ msgstr "Billing"
 msgid "birth_country"
 msgstr "Birth country"
 
+msgid "birth_date"
+msgstr "Date de naissance"
+
 msgid "birth_location"
 msgstr "Birth location"
 
@@ -90,6 +93,9 @@ msgstr "Continuing Education"
 
 msgid "contact"
 msgstr "Contact"
+
+msgid "country"
+msgstr "Country"
 
 msgid "courses_formula"
 msgstr "Courses formula"
@@ -124,6 +130,9 @@ msgstr "Formation administrator"
 msgid "formation_title"
 msgstr "Formation title"
 
+msgid "gender"
+msgstr "Gender"
+
 msgid "head_office_name"
 msgstr "Head office name"
 
@@ -147,6 +156,9 @@ msgstr "Institution"
 
 msgid "last_degree_graduation_year"
 msgstr "Graduation year (last degree)"
+
+msgid "location"
+msgstr "Location"
 
 msgid "marital_status"
 msgstr "Marital status"
@@ -184,8 +196,14 @@ msgstr "Paid"
 msgid "payment_complete"
 msgstr "Payment complete"
 
+msgid "phone_mobile"
+msgstr "Mobile phone"
+
 msgid "post"
 msgstr "Post"
+
+msgid "postal_code"
+msgstr "Postal code"
 
 msgid "previous_ucl_registration"
 msgstr "Have you previously been registered at UCL ?"

@@ -142,6 +142,10 @@
 
     {% if request.user.is_authenticated %}
         {% block breadcrumb_area %}
+            <ol class="breadcrumb">
+            {% block breadcrumb %}
+            {% endblock %}
+            </ol>
         {% endblock %}
     {% endif %}
 

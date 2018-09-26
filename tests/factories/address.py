@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,24 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
 
-from continuing_education.forms.admission import AdmissionForm
-from continuing_education.tests.factories.admission import AdmissionFactory
-from reference.models import country
+import factory
+
+from reference.tests.factories.country import CountryFactory
 
 
-class TestAdmissionForm(TestCase):
+class AddressFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = 'continuing_education.address'
 
-    def test_valid_form(self):
-        admission = AdmissionFactory()
-        form = AdmissionForm(admission.__dict__)
-        self.assertTrue(form.is_valid(), form.errors)
-
-def convert_countries(person):
-    person['birth_country'] = country.Country.objects.get(pk=person["birth_country_id"])
-    person['citizenship'] = country.Country.objects.get(pk=person["citizenship_id"])
-
-def convert_dates(person):
-    person['high_school_graduation_year'] = person['high_school_graduation_year'].strftime('%Y-%m-%d')
-    person['last_degree_graduation_year'] = person['last_degree_graduation_year'].strftime('%Y-%m-%d')
+    location = factory.Faker('street_name')
+    postal_code = factory.Faker('zipcode')
+    city = factory.Faker('city')
+    country = factory.SubFactory(CountryFactory)
