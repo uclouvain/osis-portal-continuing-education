@@ -23,20 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
-from django.utils.translation import ugettext_lazy as _
 from django_registration import signals
-from django_registration.exceptions import ActivationError
-from django_registration.views import ActivationView, RegistrationView
+from django_registration.views import RegistrationView
 
-import base.models.person as mdl_person
 from base.views.layout import render
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.person import PersonForm
