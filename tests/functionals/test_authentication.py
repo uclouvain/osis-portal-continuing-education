@@ -117,7 +117,7 @@ class TestRegistration(FunctionalTestCase, UserMixin):
         self.wait_until_title_is(self.continuing_education_config.get('PAGE_TITLE'))
 
     def __go_to_registration_page(self):
-        self.open_url_by_name('continuing_education')
+        self.open_url_by_name('continuing_education_home')
         self.click_element_by_id('signup_btn')
 
     def __register_user(self):
