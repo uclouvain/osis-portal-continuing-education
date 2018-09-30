@@ -18,7 +18,7 @@ class ContinuingEducationPerson(models.Model):
 
     birth_location = models.CharField(max_length=255, blank=True, verbose_name=_("birth_location"))
     birth_country = models.ForeignKey('reference.Country', blank=True, null=True, related_name='birth_country',
-                                      verbose_name=_("birth country"))
+                                      verbose_name=_("birth_country"))
     citizenship = models.ForeignKey('reference.Country', blank=True, null=True, related_name='citizenship',
                                     verbose_name=_("citizenship"))
     # Contact

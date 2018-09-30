@@ -285,6 +285,9 @@ msgstr "Sign up"
 msgid "spouse_name"
 msgstr "Spouse name"
 
+msgid "state"
+msgstr "State"
+
 msgid "student_sheet"
 msgstr "Student sheet"
 
