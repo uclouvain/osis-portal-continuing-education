@@ -16,6 +16,8 @@ class ContinuingEducationPerson(models.Model):
 
     person = models.OneToOneField('base.Person', on_delete=models.CASCADE)
 
+    birth_date = models.DateField(blank=True, default=datetime.now, verbose_name=_("birth_date"))
+
     birth_location = models.CharField(max_length=255, blank=True, verbose_name=_("birth_location"))
     birth_country = models.ForeignKey('reference.Country', blank=True, null=True, related_name='birth_country',
                                       verbose_name=_("birth_country"))

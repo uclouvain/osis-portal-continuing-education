@@ -13,6 +13,7 @@ class ContinuingEducationPersonForm(ModelForm):
     class Meta:
         model = ContinuingEducationPerson
         fields = [
+            'birth_date',
             'birth_location',
             'birth_country',
             'citizenship',
