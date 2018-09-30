@@ -4,7 +4,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.enums.enums import STATE_CHOICES, REGISTRATION_TITLE_CHOICES, MARITAL_STATUS_CHOICES
-from continuing_education.views.home import fetch_example_data
 
 
 class AdmissionAdmin(ModelAdmin):
@@ -15,10 +14,6 @@ class Admission(models.Model):
 
     CONTINUING_EDUCATION_TYPE = 8
 
-    sorted_formations = sorted(fetch_example_data(), key=lambda k: k['acronym'])
-    FORMATION_CHOICES = tuple([(x['acronym'], " - ".join([x['acronym'], x['title']]))
-                               for x in sorted_formations])
-
     person_information = models.ForeignKey('continuing_education.ContinuingEducationPerson', blank=True, null=True,
                                            verbose_name=_("person_information"))
 
@@ -28,7 +23,7 @@ class Admission(models.Model):
 
     # temporarily simplifying getting formation
     # formation = models.CharField(max_length=255, blank=True, verbose_name=_("formation"))
-    formation = models.CharField(max_length=50, choices=FORMATION_CHOICES)
+    formation = models.CharField(max_length=50)
 
     #Awareness
     awareness_ucl_website = models.BooleanField(default=False, verbose_name=_("awareness_ucl_website"))
