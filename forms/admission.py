@@ -13,12 +13,11 @@ class AdmissionForm(ModelForm):
     class Meta:
         model = Admission
         fields = [
+            'formation',
             'person_information',
             # Motivation
             'motivation',
             'professional_impact',
-            # Formation
-            'formation',
             # Awareness
             'awareness_ucl_website',
             'awareness_formation_website',

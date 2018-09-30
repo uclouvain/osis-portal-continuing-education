@@ -37,11 +37,23 @@
     <div class="panel panel-default">
         <form id="form" method="POST" class="post-form" action="{% url 'complete_account_registration' %}">
             {% csrf_token %}
+            <div class="panel-heading text-capitalize">{% trans 'identification' %}</div>
             <div class="panel panel-body">
                 {% bootstrap_form root_person_form %}
             </div>
+            <div class="panel-heading">{% trans 'address' %}</div>
             <div class="panel panel-body">
-                {% bootstrap_form ce_person_form %}
+                {% bootstrap_form address_form %}
+            </div>
+            <div class="panel-heading">{% trans 'information' %}</div>
+            <div class="panel panel-body">
+                {% bootstrap_form ce_person_form exclude="address, phone_mobile, email" %}
+            </div>
+            <div class="panel-heading">{% trans 'admission' %}</div>
+            <div class="panel panel-body">
+                {% bootstrap_form admission_form exclude='person_information, state, awareness_ucl_website, awareness_formation_website, awareness_press, awareness_facebook,awareness_linkedin, awareness_customized_mail, awareness_emailing' %}
+                <label class="control-label">{% trans 'awareness' %}</label>
+                {% bootstrap_form admission_form exclude='person_information, state, motivation, professional_impact, formation' %}
             </div>
             <div class="panel panel-body text-center">
                 <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}" id="bt_submit_account_information">

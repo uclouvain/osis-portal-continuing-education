@@ -24,21 +24,18 @@
 #
 ##############################################################################
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
-from django.utils.translation import ugettext_lazy as _
 from django_registration import signals
-from django_registration.exceptions import ActivationError
-from django_registration.views import ActivationView, RegistrationView
+from django_registration.views import RegistrationView
 
-import base.models.person as mdl_person
 from base.views.layout import render
 from continuing_education.forms.account import ContinuingEducationPersonForm
+from continuing_education.forms.address import AddressForm
+from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.views.common import display_errors
 from osis_common.messaging import message_config, send_message as message_service
@@ -116,20 +113,29 @@ def complete_account_registration(request):
     else:
         root_person_form = PersonForm(user_email=request.user.email)
         ce_person_form = ContinuingEducationPersonForm()
+        address_form = AddressForm()
+        admission_form = AdmissionForm()
         return render(request, 'django_registration/complete_account_registration.html', locals())
 
 
 def __post_complete_account_registration(request):
     root_person_form = PersonForm(request.POST)
     ce_person_form = ContinuingEducationPersonForm(request.POST)
+    address_form = AddressForm(request.POST)
+    admission_form = AdmissionForm(request.POST)
     errors = []
     if root_person_form.is_valid() and ce_person_form.is_valid():
+        address = address_form.save()
         person = root_person_form.save(commit=False)
         person.user = request.user
         person.save()
         continuing_education_person = ce_person_form.save(commit=False)
         continuing_education_person.person = person
+        continuing_education_person.address = address
         continuing_education_person.save()
+        admission = admission_form.save(commit=False)
+        admission.person_information = continuing_education_person
+        admission.save()
         return redirect(reverse('continuing_education_home'))
     else:
         errors.append(root_person_form.errors)

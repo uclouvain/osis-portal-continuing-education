@@ -37,7 +37,7 @@ from continuing_education.models import continuing_education_person as mdl_conti
 def formations_list(request):
     if request.user.is_authenticated():
         return redirect(main_view)
-    formations = sorted(_fetch_example_data(), key=lambda k: k['acronym'])
+    formations = sorted(fetch_example_data(), key=lambda k: k['acronym'])
     paginator = Paginator(formations, 10)
     page = request.GET.get('page')
     try:
@@ -60,7 +60,7 @@ def main_view(request):
     return render(request, "continuing_education/home.html", locals())
 
 
-def _fetch_example_data():
+def fetch_example_data():
     # get formations from temporary file
     module_dir = os.path.dirname(__file__)
     file_path = os.path.join(module_dir, 'example_data.json')
