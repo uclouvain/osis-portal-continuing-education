@@ -63,3 +63,10 @@
         </form>
     </div>
 {% endblock %}
+
+{% block script %}
+    <script>
+        let formation_id = localStorage["formation_id"];
+        $("#id_formation").val(formation_id);
+    </script>
+{% endblock %}

@@ -57,7 +57,7 @@
                             </tr>
                         </tfoot>
                         {% for formation in formations %}
-                        <tr id="{{ formation.id }}" class="formation-item" onclick="select(this)">
+                        <tr id="{{ formation.acronym }}" class="formation-item" onclick="select(this)">
                             <td>{{ formation.acronym }}</td>
                             <td>{{ formation.title }}</td>
                         </tr>

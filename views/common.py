@@ -43,6 +43,8 @@ def display_errors(request, errors):
 
 
 def login(request):
+    if("next" in request.GET):
+        formation_id = request.GET['next'].rsplit('/', 1)[-1]
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
