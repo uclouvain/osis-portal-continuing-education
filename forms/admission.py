@@ -10,9 +10,8 @@ class TitleChoiceField(forms.ModelChoiceField):
         return "{} - {}".format(obj.acronym, obj.title)
 
 class AdmissionForm(ModelForm):
-    sorted_formations = sorted(fetch_example_data(), key=lambda k: k['acronym'])
     FORMATION_CHOICES = tuple([(x['acronym'], " - ".join([x['acronym'], x['title']]))
-                               for x in sorted_formations])
+                               for x in fetch_example_data()])
 
     formation = ChoiceField(choices=FORMATION_CHOICES)
 

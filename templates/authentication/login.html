@@ -62,7 +62,7 @@
 {% block script %}
     <script>
         let formation_id = "{{ formation_id }}";
-        if(formation_id != ""){
+        if(formation_id !== ""){
             localStorage["formation_id"] = formation_id;
         }
     </script>

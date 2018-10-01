@@ -22,8 +22,7 @@ class Admission(models.Model):
     professional_impact = models.TextField(blank=True, verbose_name=_("professional_impact"))
 
     # temporarily simplifying getting formation
-    # formation = models.CharField(max_length=255, blank=True, verbose_name=_("formation"))
-    formation = models.CharField(max_length=50)
+    formation = models.CharField(max_length=50, verbose_name=_("formation"))
 
     #Awareness
     awareness_ucl_website = models.BooleanField(default=False, verbose_name=_("awareness_ucl_website"))
