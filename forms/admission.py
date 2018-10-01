@@ -1,7 +1,8 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, ChoiceField
 
 from continuing_education.models.admission import Admission
+from continuing_education.views.home import fetch_example_data
 
 
 class TitleChoiceField(forms.ModelChoiceField):
@@ -9,16 +10,19 @@ class TitleChoiceField(forms.ModelChoiceField):
         return "{} - {}".format(obj.acronym, obj.title)
 
 class AdmissionForm(ModelForm):
+    FORMATION_CHOICES = tuple([(x['acronym'], " - ".join([x['acronym'], x['title']]))
+                               for x in fetch_example_data()])
+
+    formation = ChoiceField(choices=FORMATION_CHOICES)
 
     class Meta:
         model = Admission
         fields = [
+            'formation',
             'person_information',
             # Motivation
             'motivation',
             'professional_impact',
-            # Formation
-            'formation',
             # Awareness
             'awareness_ucl_website',
             'awareness_formation_website',
