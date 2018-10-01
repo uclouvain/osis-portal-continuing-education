@@ -66,8 +66,7 @@ class AdmissionFactory(factory.DjangoModelFactory):
     professional_impact = "professional impact"
 
     # Formation
-    # formation = factory.SubFactory(OfferYearFactory)
-    # faculty = factory.SubFactory(EntityVersionFactory)
+    formation = "EXAMPLE"
 
     # Awareness
     awareness_ucl_website = factory.fuzzy.FuzzyChoice([True, False])

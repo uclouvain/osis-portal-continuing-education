@@ -94,7 +94,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'person_information': person_information.pk,
             'motivation': 'abcd',
             'professional_impact': 'abcd',
-            'formation': 'formation Test',
+            'formation': 'EXAMPLE',
             'awareness_ucl_website': True,
         }
         url = reverse('admission_edit', args=[self.admission.pk])

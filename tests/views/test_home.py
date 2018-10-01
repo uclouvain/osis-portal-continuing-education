@@ -50,18 +50,18 @@ class FormationsListTestCase(TestCase):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.person = PersonFactory()
 
-    @mock.patch('continuing_education.views.home._fetch_example_data')
-    def test_sorted_formations_list(self, mock_fetch_example_data):
+    @mock.patch('continuing_education.views.home.fetch_example_data')
+    def test_formations_list(self, mock_fetch_example_data):
         mock_fetch_example_data.return_value = [{
             'acronym': ''.join([choice(ascii_lowercase) for _ in range(4)]),
             'title': 'title-{}'.format(i)
         } for i in range(11)]
-        sorted_formations = sorted(mock_fetch_example_data.return_value, key=lambda k: k['acronym'])
+        formations = mock_fetch_example_data.return_value
         url = reverse('formations_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['formations'].paginator.num_pages, 2)
-        self.assertEqual(response.context['formations'].object_list, sorted_formations[:10])
+        self.assertEqual(response.context['formations'].object_list, formations[:10])
         self.assertTemplateUsed(response, 'continuing_education/formations.html')
 
     def test_bypass_formations_list_when_logged_in(self):
