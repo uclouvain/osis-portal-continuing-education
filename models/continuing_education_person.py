@@ -1,18 +1,18 @@
 from datetime import datetime
 
-from django.contrib.admin import ModelAdmin
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.enums.enums import STATUS_CHOICES, SECTOR_CHOICES
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class ContinuingEducationPersonAdmin(ModelAdmin):
+class ContinuingEducationPersonAdmin(SerializableModelAdmin):
     list_display = ('person', 'citizenship', 'email',)
     search_fields = ['first_name', 'last_name', 'email']
     list_filter = ('activity_sector', 'citizenship')
 
-class ContinuingEducationPerson(models.Model):
+class ContinuingEducationPerson(SerializableModel):
 
     person = models.OneToOneField('base.Person', on_delete=models.CASCADE)
 
