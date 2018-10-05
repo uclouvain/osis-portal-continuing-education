@@ -44,30 +44,83 @@
     </div>
 
     <div class="panel panel-default">
-            <form id="form" method="POST" class="post-form">
-                {% csrf_token %}
-                <div class="panel panel-body">
-                    {% bootstrap_form person_form exclude="address, phone_mobile, email, high_school_diploma,high_school_graduation_year, last_degree_level, last_degree_field, last_degree_institution, last_degree_graduation_year,other_educational_background, professional_status, current_occupation, current_employer, activity_sector,past_professional_activities" %}
-                    {% bootstrap_form address_form %}
-                    {% bootstrap_form person_form exclude="first_name, last_name, birth_date, birth_location, birth_country, citizenship, gender, address" %}
-                    {% bootstrap_form admission_form exclude='person_information, state, awareness_ucl_website, awareness_formation_website, awareness_press, awareness_facebook,awareness_linkedin, awareness_customized_mail, awareness_emailing' %}
-                    <label class="control-label">{% trans 'awareness' %}</label>
-                    {% bootstrap_form admission_form exclude='person_information, state, motivation, professional_impact, formation' %}
+        <form id="form" method="POST" class="post-form">
+            {% csrf_token %}
+            <div id="smartwizard">
+                <ul>
+                    <li><a href="#step-1">{% trans 'Civility' %}</a></li>
+                    <li><a href="#step-2">{% trans 'Address' %}</a></li>
+                    <li><a href="#step-3">{% trans 'Step 3' %}</a></li>
+                    <li><a href="#step-4">{% trans 'Step 4' %}</a></li>
+                    <li><a href="#step-5">{% trans 'references' %}</a></li>
+                    <li><a href="#step-6">{% trans 'validation' %}</a></li>
+                </ul>
+
+                <div class="scrollable">
+                    <div id="step-1" class="">
+                        {% bootstrap_field person_form.birth_date %}
+                        {% bootstrap_field person_form.birth_location %}
+                        {% bootstrap_field person_form.birth_country %}
+                        {% bootstrap_field person_form.citizenship %}
+                    </div>
+                    <div id="step-2" class="">
+                        {% bootstrap_form address_form %}
+                    </div>
+                    <div id="step-3" class="">
+                        {% bootstrap_field person_form.phone_mobile %}
+                        {% bootstrap_field person_form.email %}
+                        {% bootstrap_field person_form.high_school_diploma %}
+                        {% bootstrap_field person_form.high_school_graduation_year %}
+                        {% bootstrap_field person_form.last_degree_level %}
+                        {% bootstrap_field person_form.last_degree_field %}
+                        {% bootstrap_field person_form.last_degree_institution %}
+                        {% bootstrap_field person_form.last_degree_graduation_year %}
+                        {% bootstrap_field person_form.other_educational_background %}
+                        {% bootstrap_field person_form.professional_status %}
+                        {% bootstrap_field person_form.current_occupation %}
+                        {% bootstrap_field person_form.current_employer %}
+                        {% bootstrap_field person_form.activity_sector %}
+                        {% bootstrap_field person_form.past_professional_activities %}
+                    </div>
+                    <div id="step-4" class="">
+                        {% bootstrap_field admission_form.formation %}
+                        {% bootstrap_field admission_form.motivation %}
+                        {% bootstrap_field admission_form.professional_impact %}
+                    </div>
+                    <div id="step-5" class="">
+                        <h3>{% trans 'awareness' %}</h3>
+                        {% bootstrap_field admission_form.awareness_ucl_website %}
+                        {% bootstrap_field admission_form.awareness_formation_website %}
+                        {% bootstrap_field admission_form.awareness_press %}
+                        {% bootstrap_field admission_form.awareness_facebook %}
+                        {% bootstrap_field admission_form.awareness_linkedin %}
+                        {% bootstrap_field admission_form.awareness_customized_mail %}
+                        {% bootstrap_field admission_form.awareness_emailing %}
+                    </div>
+                    <div id="step-6" class="">
+                        <h3>{% trans 'You can now submit your admission form.' %}</h3>
+                        <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}">
+                            <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
+                        </button>
+                        <a class="btn btn-default" id="" href="{% url 'continuing_education_home' %}">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'cancel' %}
+                        </a>
+                    </div>
+
                 </div>
-                <div class="panel panel-body">
-                    <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}">
-                        <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
-                    </button>
-                    <a class="btn btn-default" id="" href="{% url 'continuing_education_home' %}">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'cancel' %}
-                    </a>
-                </div>
-            </form>
+            </div>
+        </form>
     </div>
 {% endblock %}
 
 
 {% block script %}
+    <script type="text/javascript" src="{% static 'js/jquery.smartWizard.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#smartwizard').smartWizard();
+        });
+    </script>
     <script>
         let diploma_obtained = $('#id_high_school_diploma').find(":selected").val();
         $('.high_school_graduation_year').toggle(diploma_obtained == "True");

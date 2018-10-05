@@ -7,8 +7,12 @@ from continuing_education.models.enums.enums import YES_NO_CHOICES
 
 
 class ContinuingEducationPersonForm(ModelForm):
-    high_school_diploma = forms.TypedChoiceField(coerce=lambda x: x =='True', required=False,
-                                   choices=YES_NO_CHOICES, label=_("high_school_diploma"))
+    high_school_diploma = forms.TypedChoiceField(
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=YES_NO_CHOICES,
+        label=_("high_school_diploma")
+    )
 
     class Meta:
         model = ContinuingEducationPerson

@@ -47,6 +47,8 @@
     <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}?version={{ js }}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
 
+    <link rel="stylesheet" href="{% static 'css/smart_wizard.css' %}" type='text/css'>
+
     {% block style %}
     {% endblock %}
     {% analytical_head_bottom %}
@@ -70,7 +72,7 @@
             {% else %}
                href="#"
             {% endif %} id="lnk_home">
-                <img src="{% static 'img/logo_institution.jpg' %}" style="margin-top: -10px;"></a>
+                <img src="{% static 'img/logo_header.jpg' %}" style="margin-top: -10px;"></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
