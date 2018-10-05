@@ -23,11 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import random
+
+from django.db import IntegrityError
 from django.test import TestCase
 
 from continuing_education.models import admission
+from continuing_education.models.enums.enums import STATE_CHOICES
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
+from continuing_education.tests.utils.utils import get_enum_keys
 
 
 class TestAdmission(TestCase):
@@ -43,7 +48,6 @@ class TestAdmission(TestCase):
         nonexistent_admission = admission.find_by_id(0)
         self.assertIsNone(nonexistent_admission)
 
-    # to be changed with student id
     def test_find_by_person(self):
         an_admission = self.admission
         persisted_admission = admission.find_by_person(an_admission.person_information)
@@ -51,3 +55,16 @@ class TestAdmission(TestCase):
 
         nonexistent_admission = admission.find_by_person(self.person)
         self.assertFalse(nonexistent_admission.exists())
+
+    def test_null_state(self):
+        self.admission = AdmissionFactory(state=None)
+        self.assertEqual(self.admission.state, None)
+
+    def test_valid_state(self):
+        state = random.choice(get_enum_keys(STATE_CHOICES))
+        self.admission = AdmissionFactory(state=state)
+        self.assertEqual(self.admission.state,state)
+
+    def test_invalid_state(self):
+        with self.assertRaises(IntegrityError):
+            self.admission = AdmissionFactory(state="invalid")
