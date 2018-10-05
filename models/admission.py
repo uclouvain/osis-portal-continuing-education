@@ -1,16 +1,16 @@
-from django.contrib.admin import ModelAdmin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.enums.enums import STATE_CHOICES, REGISTRATION_TITLE_CHOICES, MARITAL_STATUS_CHOICES
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
-class AdmissionAdmin(ModelAdmin):
+class AdmissionAdmin(SerializableModelAdmin):
     list_display = ('person_information', 'formation', 'state')
 
 
-class Admission(models.Model):
+class Admission(SerializableModel):
 
     CONTINUING_EDUCATION_TYPE = 8
 
