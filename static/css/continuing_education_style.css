@@ -36,6 +36,16 @@
     margin-top: 20px;
 }
 
+.admission-state{
+    vertical-align: middle !important;
+    width: 100px;
+}
+
+.admission-state span{
+    height: 20px;
+    padding-top: 5px;
+}
+
 .admission-detail-state{
     display: inline;
     position: relative;
