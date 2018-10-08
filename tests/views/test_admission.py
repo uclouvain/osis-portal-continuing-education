@@ -110,4 +110,3 @@ class ViewStudentAdmissionTestCase(TestCase):
             if isinstance(field_value, models.Model):
                 field_value = field_value.pk
             self.assertEqual(field_value, admission[key], key)
-
