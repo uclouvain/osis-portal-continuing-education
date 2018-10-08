@@ -121,7 +121,7 @@ msgid "continuing_education_account_information_completion_message"
 msgstr "Veuillez compléter le formulaire suivant pour finaliser la création de votre compte utilisateur."
 
 msgid "contact"
-msgstr "Contact"
+msgstr "contact"
 
 msgid "Contact information"
 msgstr "Coordonnées"
@@ -138,8 +138,8 @@ msgstr "Fonction actuelle"
 msgid "current_employer"
 msgstr "Employeur actuel"
 
-msgid "Curriculum"
-msgstr "Curriculum"
+msgid "curriculum"
+msgstr "curriculum"
 
 msgid "desc_lnk_continuing_education"
 msgstr "Gestion des étudiants pour la formation continue."
@@ -154,7 +154,7 @@ msgid "first_name"
 msgstr "Prénom"
 
 msgid "formation"
-msgstr "Formation"
+msgstr "formation"
 
 msgid "formation_spreading"
 msgstr "Etalement de la formation"
@@ -180,7 +180,7 @@ msgstr "Année d'obtention (secondaire)"
 msgid "id_card_number"
 msgstr "Numéro de carte d'identité"
 
-msgid "Identification"
+msgid "identification"
 msgstr ""
 
 msgid "last_degree_level"
@@ -279,8 +279,8 @@ msgstr "Impact professionnel de la formation"
 msgid "program_code"
 msgstr "Code de programme"
 
-msgid "References"
-msgstr "Références"
+msgid "references"
+msgstr "références"
 
 msgid "registered"
 msgstr "Inscrit"
@@ -324,8 +324,8 @@ msgstr "Utiliser l'adresse enregistrée pour la facturation"
 msgid "use_address_for_post"
 msgstr "Utiliser l'adresse enregistrée pour le courrier"
 
-msgid "Validation"
-msgstr "Validation"
+msgid "validation"
+msgstr "validation"
 
 msgid "vat_number"
 msgstr "Numéro de TVA"

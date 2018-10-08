@@ -48,12 +48,12 @@
             {% csrf_token %}
             <div id="smartwizard">
                 <ul>
-                    <li><a href="#identification">{% trans 'Identification' %}</a></li>
-                    <li><a href="#contact">{% trans 'Contact information' %}</a></li>
-                    <li><a href="#curriculum">{% trans 'Curriculum' %}</a></li>
-                    <li><a href="#formation">{% trans 'formation' %}</a></li>
-                    <li><a href="#references">{% trans 'References' %}</a></li>
-                    <li><a href="#validation">{% trans 'Validation' %}</a></li>
+                    <li><a href="#identification">{% trans 'identification' as identification %}{{ identification | title }}</a></li>
+                    <li><a href="#contact">{% trans 'contact' as contact %}{{ contact | title }}</a></li>
+                    <li><a href="#curriculum">{% trans 'curriculum' as curriculum %}{{ curriculum | title }}</a></li>
+                    <li><a href="#formation">{% trans 'formation' as formation %}{{ formation | title }}</a></li>
+                    <li><a href="#references">{% trans 'references' as references %}{{ references | title }}</a></li>
+                    <li><a href="#validation">{% trans 'validation' as validation %}{{ validation | title }}</a></li>
                 </ul>
 
                 <div>

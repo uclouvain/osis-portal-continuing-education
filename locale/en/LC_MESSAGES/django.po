@@ -121,7 +121,7 @@ msgid "continuing_education_account_information_completion_message"
 msgstr "Please complete the following form to finalize the creation of your account."
 
 msgid "contact"
-msgstr "Contact"
+msgstr ""
 
 msgid "Contact information"
 msgstr ""
@@ -138,7 +138,7 @@ msgstr "Current occupation"
 msgid "current_employer"
 msgstr "Current employer"
 
-msgid "Curriculum"
+msgid "curriculum"
 msgstr ""
 
 msgid "desc_lnk_continuing_education"
@@ -154,7 +154,7 @@ msgid "first_name"
 msgstr "First name"
 
 msgid "formation"
-msgstr "Formation"
+msgstr ""
 
 msgid "formation_spreading"
 msgstr "Formation spreading"
@@ -180,7 +180,7 @@ msgstr "Graduation year (high school)"
 msgid "id_card_number"
 msgstr "ID card number"
 
-msgid "Identification"
+msgid "identification"
 msgstr ""
 
 msgid "last_degree_level"
@@ -279,7 +279,7 @@ msgstr "Professional impact"
 msgid "program_code"
 msgstr "Program code"
 
-msgid "References"
+msgid "references"
 msgstr ""
 
 msgid "registered"
@@ -324,7 +324,7 @@ msgstr "Use recorded address for billing"
 msgid "use_address_for_post"
 msgstr "Use recorded address for post"
 
-msgid "Validation"
+msgid "validation"
 msgstr ""
 
 msgid "vat_number"
