@@ -123,8 +123,8 @@ msgstr "Veuillez compléter le formulaire suivant pour finaliser la création de
 msgid "contact"
 msgstr "contact"
 
-msgid "Contact information"
-msgstr "Coordonnées"
+msgid "contact information"
+msgstr "coordonnées"
 
 msgid "country"
 msgstr "Pays"
