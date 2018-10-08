@@ -181,7 +181,7 @@ msgid "id_card_number"
 msgstr "Numéro de carte d'identité"
 
 msgid "identification"
-msgstr ""
+msgstr "identification"
 
 msgid "last_degree_level"
 msgstr "Niveau du dernier diplôme"
