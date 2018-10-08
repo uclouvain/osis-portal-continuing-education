@@ -18,13 +18,14 @@ class ContinuingEducationPersonForm(ModelForm):
 
     birth_country = forms.ModelChoiceField(
         queryset=Country.objects.all().order_by('name'),
-        label=_("birth_country")
+        label=_("birth_country"),
+        required=False,
     )
     citizenship = forms.ModelChoiceField(
         queryset=Country.objects.all().order_by('name'),
-        label=_("citizenship")
+        label=_("citizenship"),
+        required=False,
     )
-
 
     class Meta:
         model = ContinuingEducationPerson
