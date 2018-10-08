@@ -79,6 +79,9 @@ msgstr "Date de naissance"
 msgid "birth_location"
 msgstr "Birth location"
 
+msgid "cancel"
+msgstr ""
+
 msgid "children_number"
 msgstr "Children number"
 
@@ -118,7 +121,10 @@ msgid "continuing_education_account_information_completion_message"
 msgstr "Please complete the following form to finalize the creation of your account."
 
 msgid "contact"
-msgstr "Contact"
+msgstr ""
+
+msgid "contact information"
+msgstr ""
 
 msgid "country"
 msgstr "Country"
@@ -131,6 +137,9 @@ msgstr "Current occupation"
 
 msgid "current_employer"
 msgstr "Current employer"
+
+msgid "curriculum"
+msgstr ""
 
 msgid "desc_lnk_continuing_education"
 msgstr "This process controls continuing education offers."
@@ -145,7 +154,7 @@ msgid "first_name"
 msgstr "First name"
 
 msgid "formation"
-msgstr "Formation"
+msgstr ""
 
 msgid "formation_spreading"
 msgstr "Formation spreading"
@@ -170,6 +179,9 @@ msgstr "Graduation year (high school)"
 
 msgid "id_card_number"
 msgstr "ID card number"
+
+msgid "identification"
+msgstr ""
 
 msgid "last_degree_level"
 msgstr "Last degree level"
@@ -204,6 +216,9 @@ msgstr "National registry number"
 msgid "new_admission"
 msgstr "New admission"
 
+msgid "next"
+msgstr ""
+
 msgid "no_admission_yet"
 msgstr "You have no admission form submitted"
 
@@ -237,6 +252,9 @@ msgstr "Post"
 msgid "postal_code"
 msgstr "Postal code"
 
+msgid "previous"
+msgstr ""
+
 msgid "previous_ucl_registration"
 msgstr "Have you previously been registered at UCL ?"
 
@@ -260,6 +278,9 @@ msgstr "Professional impact"
 
 msgid "program_code"
 msgstr "Program code"
+
+msgid "references"
+msgstr ""
 
 msgid "registered"
 msgstr "Registered"
@@ -292,7 +313,7 @@ msgid "student_sheet"
 msgstr "Student sheet"
 
 msgid "submit"
-msgstr "Submit"
+msgstr ""
 
 msgid "succesfull_logout"
 msgstr "You are now logged out."
@@ -303,5 +324,11 @@ msgstr "Use recorded address for billing"
 msgid "use_address_for_post"
 msgstr "Use recorded address for post"
 
+msgid "validation"
+msgstr ""
+
 msgid "vat_number"
 msgstr "VAT number"
+
+msgid "You can now submit your admission form or cancel it."
+msgstr ""

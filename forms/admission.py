@@ -9,6 +9,7 @@ class TitleChoiceField(forms.ModelChoiceField):
     def label_from_instance(obj):
         return "{} - {}".format(obj.acronym, obj.title)
 
+
 class AdmissionForm(ModelForm):
     FORMATION_CHOICES = tuple([(x['acronym'], " - ".join([x['acronym'], x['title']]))
                                for x in fetch_example_data()])

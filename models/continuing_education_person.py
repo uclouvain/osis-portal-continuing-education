@@ -12,8 +12,8 @@ class ContinuingEducationPersonAdmin(SerializableModelAdmin):
     search_fields = ['first_name', 'last_name', 'email']
     list_filter = ('activity_sector', 'citizenship')
 
-class ContinuingEducationPerson(SerializableModel):
 
+class ContinuingEducationPerson(SerializableModel):
     person = models.OneToOneField('base.Person', on_delete=models.CASCADE)
 
     birth_date = models.DateField(blank=True, default=datetime.now, verbose_name=_("birth_date"))

@@ -5,10 +5,26 @@ from django.utils.translation import ugettext_lazy as _
 from continuing_education.models.continuing_education_person import ContinuingEducationPerson
 from continuing_education.models.enums.enums import YES_NO_CHOICES
 
+from reference.models.country import Country
+
 
 class ContinuingEducationPersonForm(ModelForm):
-    high_school_diploma = forms.TypedChoiceField(coerce=lambda x: x =='True', required=False,
-                                   choices=YES_NO_CHOICES, label=_("high_school_diploma"))
+    high_school_diploma = forms.TypedChoiceField(
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=YES_NO_CHOICES,
+        label=_("high_school_diploma")
+    )
+
+    birth_country = forms.ModelChoiceField(
+        queryset=Country.objects.all().order_by('name'),
+        label=_("birth_country")
+    )
+    citizenship = forms.ModelChoiceField(
+        queryset=Country.objects.all().order_by('name'),
+        label=_("citizenship")
+    )
+
 
     class Meta:
         model = ContinuingEducationPerson
