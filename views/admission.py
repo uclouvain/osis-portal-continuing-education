@@ -62,7 +62,7 @@ def admission_form(request, admission_id=None):
         person.person_id = base_person.pk
         person.save()
         admission = adm_form.save(commit=False)
-        admission.person = person
+        admission.person_information = person
         admission.save()
         return redirect(reverse('admission_detail', kwargs={'admission_id':admission.pk}))
     else:

@@ -35,3 +35,38 @@
 #formation-continue-button{
     margin-top: 20px;
 }
+
+.admission-state{
+    vertical-align: middle !important;
+    width: 100px;
+}
+
+.admission-state span{
+    height: 20px;
+    padding-top: 5px;
+}
+
+.admission-detail-state{
+    display: inline;
+    position: relative;
+    padding: 6px 12px;
+    margin-bottom: -1px;
+    border: 1px solid #ddd;
+    height: 34px;
+    margin-right: 10px;
+}
+
+.admission-detail-state-waiting{
+    color: white;
+    background-color: #337ab7;
+}
+
+.admission-detail-state-accepted{
+    color: white;
+    background-color: #5cb85c;
+}
+
+.admission-detail-state-rejected{
+    color: white;
+    background-color: #d9534f;
+}
