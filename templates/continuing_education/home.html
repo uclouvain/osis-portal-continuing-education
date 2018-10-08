@@ -63,7 +63,7 @@
                         {% for admission in admissions %}
                             <tr>
                                 <td><a href="{% url 'admission_detail' admission_id=admission.id %}">{{ admission.formation }}</a></td>
-                                <td style="vertical-align: middle;">
+                                <td class="admission-state">
                                     {% if admission.state == "waiting" %}
                                         <span class="label label-primary show">{% trans admission.state %}</span>
                                     {% elif admission.state == "accepted" %}
