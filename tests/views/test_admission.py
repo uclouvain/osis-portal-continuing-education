@@ -89,7 +89,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertTemplateUsed(response, 'admission_form.html')
 
     def test_edit_post_admission_found(self):
-        person_information = ContinuingEducationPersonFactory()
+        person_information = ContinuingEducationPersonFactory(person=self.person)
         admission = {
             'person_information': person_information.pk,
             'motivation': 'abcd',
