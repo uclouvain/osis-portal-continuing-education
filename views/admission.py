@@ -71,10 +71,10 @@ def admission_form(request, admission_id=None):
 
     return render(
         request,
-        'adm_form.html',
+        'admission_form.html',
         {
-            'adm_form': adm_form,
+            'admission_form': adm_form,
             'person_form': person_form,
-            'address_form': address_form
+            'address_form': address_form,
         }
     )

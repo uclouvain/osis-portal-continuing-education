@@ -79,6 +79,9 @@ msgstr "Date de naissance"
 msgid "birth_location"
 msgstr "Lieu de naissance"
 
+msgid "cancel"
+msgstr "annuler"
+
 msgid "children_number"
 msgstr "Nombre d'enfants"
 
@@ -120,6 +123,9 @@ msgstr "Veuillez compléter le formulaire suivant pour finaliser la création de
 msgid "contact"
 msgstr "Contact"
 
+msgid "Contact information"
+msgstr "Coordonnées"
+
 msgid "country"
 msgstr "Pays"
 
@@ -131,6 +137,9 @@ msgstr "Fonction actuelle"
 
 msgid "current_employer"
 msgstr "Employeur actuel"
+
+msgid "Curriculum"
+msgstr "Curriculum"
 
 msgid "desc_lnk_continuing_education"
 msgstr "Gestion des étudiants pour la formation continue."
@@ -171,6 +180,9 @@ msgstr "Année d'obtention (secondaire)"
 msgid "id_card_number"
 msgstr "Numéro de carte d'identité"
 
+msgid "Identification"
+msgstr ""
+
 msgid "last_degree_level"
 msgstr "Niveau du dernier diplôme"
 
@@ -203,6 +215,9 @@ msgstr "Numéro de registre national belge"
 
 msgid "new_admission"
 msgstr "Nouvelle admission"
+
+msgid "next"
+msgstr "suivant"
 
 msgid "no_admission_yet"
 msgstr "Vous n'avez pas soumis de formulaire d'admission"
@@ -237,6 +252,9 @@ msgstr "Courrier"
 msgid "postal_code"
 msgstr "Code postal"
 
+msgid "previous"
+msgstr "précédent"
+
 msgid "previous_ucl_registration"
 msgstr "Avez-vous déjà été inscrit(e) à l'UCL ?"
 
@@ -260,6 +278,9 @@ msgstr "Impact professionnel de la formation"
 
 msgid "program_code"
 msgstr "Code de programme"
+
+msgid "References"
+msgstr "Références"
 
 msgid "registered"
 msgstr "Inscrit"
@@ -292,7 +313,7 @@ msgid "student_sheet"
 msgstr "Fiche de l'étudiant"
 
 msgid "submit"
-msgstr "Soumettre"
+msgstr "soumettre"
 
 msgid "succesfull_logout"
 msgstr "Vous êtes à présent déconnecté."
@@ -303,5 +324,11 @@ msgstr "Utiliser l'adresse enregistrée pour la facturation"
 msgid "use_address_for_post"
 msgstr "Utiliser l'adresse enregistrée pour le courrier"
 
+msgid "Validation"
+msgstr "Validation"
+
 msgid "vat_number"
 msgstr "Numéro de TVA"
+
+msgid "You can now submit your admission form or cancel it."
+msgstr "Vous pouvez maintenant soumettre votre formulaire d'admission ou l'annuler."
