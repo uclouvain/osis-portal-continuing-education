@@ -26,6 +26,10 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/smart_wizard.css' %}" type='text/css'>
+{% endblock %}
 
 {% block breadcrumb %}
     <li><a href="{% url 'continuing_education_home' %}">{% trans 'continuing_education' %}</a></li>
