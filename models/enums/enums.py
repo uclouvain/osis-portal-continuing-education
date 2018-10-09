@@ -21,7 +21,9 @@ MARITAL_STATUS_CHOICES = (
 
 STATE_CHOICES = (
     ('accepted', _('accepted')),
+    ('draft', _('draft')),
     ('rejected', _('rejected')),
+    ('submitted', _('submitted')),
     ('waiting', _('waiting')),
 )
 
