@@ -315,6 +315,9 @@ msgstr "Fiche de l'étudiant"
 msgid "submit"
 msgstr "soumettre"
 
+msgid "submitted"
+msgstr "soumis"
+
 msgid "succesfull_logout"
 msgstr "Vous êtes à présent déconnecté."
 
