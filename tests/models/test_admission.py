@@ -23,16 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import random
 
-from django.db import IntegrityError
 from django.test import TestCase
 
 from continuing_education.models import admission
-from continuing_education.models.enums.enums import STATE_CHOICES
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.tests.utils.utils import get_enum_keys
 
 
 class TestAdmission(TestCase):

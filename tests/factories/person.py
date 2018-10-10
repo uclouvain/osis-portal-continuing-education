@@ -28,9 +28,8 @@ import datetime
 import factory
 
 from base.tests.factories.person import PersonFactory
-from continuing_education.models.enums.enums import STATUS_CHOICES, SECTOR_CHOICES
+from continuing_education.models.enums.enums import STATUS_CHOICES, SECTOR_CHOICES, get_enum_keys
 from continuing_education.tests.factories.address import AddressFactory
-from continuing_education.tests.utils.utils import get_enum_keys
 from reference.tests.factories.country import CountryFactory
 
 

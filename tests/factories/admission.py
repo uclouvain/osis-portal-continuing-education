@@ -33,10 +33,10 @@ from base.models import entity_version
 from base.models.academic_year import current_academic_years
 from base.models.enums import entity_type
 from base.models.offer_year import OfferYear
-from continuing_education.models.enums.enums import STATE_CHOICES, REGISTRATION_TITLE_CHOICES, MARITAL_STATUS_CHOICES
+from continuing_education.models.enums.enums import REGISTRATION_TITLE_CHOICES, MARITAL_STATUS_CHOICES, \
+    STUDENT_STATE_CHOICES, get_enum_keys
 from continuing_education.tests.factories.address import AddressFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.tests.utils.utils import get_enum_keys
 
 CONTINUING_EDUCATION_TYPE = 8
 
@@ -78,7 +78,7 @@ class AdmissionFactory(factory.DjangoModelFactory):
     awareness_emailing = factory.fuzzy.FuzzyChoice([True, False])
 
     # State
-    state = factory.fuzzy.FuzzyChoice(get_enum_keys(STATE_CHOICES))
+    state = factory.fuzzy.FuzzyChoice(get_enum_keys(STUDENT_STATE_CHOICES))
 
     # Billing
     registration_type = factory.fuzzy.FuzzyChoice(get_enum_keys(REGISTRATION_TITLE_CHOICES))
