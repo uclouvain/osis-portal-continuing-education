@@ -110,7 +110,8 @@ class ContinuingEducationRegistrationView(RegistrationView):
         }
         message_content = message_config.create_message_content(self.html_template_ref, self.txt_template_ref,
                                                                 [], receivers, template_base_data, None)
-        error_message = message_service.send_messages(message_content)
+        error_message = message_service.send_messages(message_content,
+                                                      settings.IUFC_CONFIG.get('ACTIVATION_MESSAGES_OUTSIDE_PRODUCTION'))
 
 
 @login_required
