@@ -35,7 +35,10 @@
         <form id="form" method="POST" class="post-form">
             {% csrf_token %}
             <div class="panel panel-body">
-                {% bootstrap_form form %}
+                {% bootstrap_field form.email %}
+                {% bootstrap_field form.password1 %}
+                {% bootstrap_field form.password2 %}
+                <input type="hidden" name="username" id="id_username" value="{{ form.username.value }}"/>
             </div>
             <div class="panel panel-body">
                 <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}" id="bt_submit_registration">
@@ -47,4 +50,19 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        function fill_username(){
+            var username = document.getElementById("id_username");
+            var email = document.getElementById("id_email");
+            username.value = email.value;
+        }
+        $(document).ready(function(){
+            $("#bt_submit_registration").click(function(){
+               fill_username();
+            });
+        });
+    </script>
 {% endblock %}

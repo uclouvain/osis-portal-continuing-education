@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url, include
+from django_registration.forms import RegistrationFormUniqueEmail
 
 from continuing_education.views import account_activation
 from continuing_education.views import (home, admission, registration, common)
@@ -38,9 +39,12 @@ urlpatterns = [
         url(r'^logged_out$', common.logged_out, name='continuing_education_logged_out')])),
     url(r'^account/', include([
         url(r'^register/$',
-            account_activation.ContinuingEducationRegistrationView.as_view(),
+            account_activation.ContinuingEducationRegistrationView.as_view(form_class=RegistrationFormUniqueEmail),
             name='django_registration_register'),
         url(r'^complete_account_registration/$', account_activation.complete_account_registration, name='complete_account_registration'),
+        url(r'^activate/(?P<activation_key>[-:\w]+)/$',
+            account_activation.ContinuingEducationActivationView.as_view(),
+            name='django_registration_activate'),
         url(r'^', include('django_registration.backends.activation.urls'))])),
     url(r'^admission_new/', admission.admission_form, name='admission_new'),
     url(r'^admission_edit/(?P<admission_id>[0-9]+)$', admission.admission_form, name='admission_edit'),
