@@ -126,23 +126,22 @@ def __post_complete_account_registration(request):
     forms = [root_person_form, ce_person_form, address_form, admission_form]
     errors = []
 
-    if request.POST:
-        if all([f.is_valid() for f in forms]):
-            address = address_form.save()
-            person = root_person_form.save(commit=False)
-            person.user = request.user
-            person.save()
-            continuing_education_person = ce_person_form.save(commit=False)
-            continuing_education_person.person = person
-            continuing_education_person.save()
-            admission = admission_form.save(commit=False)
-            admission.person_information = continuing_education_person
-            admission.address = address
-            admission.save()
-            return redirect(reverse('continuing_education_home'))
-        else:
-            for f in forms:
-                errors.append(f.errors)
-            display_errors(request, errors)
+    if all([f.is_valid() for f in forms]):
+        address = address_form.save()
+        person = root_person_form.save(commit=False)
+        person.user = request.user
+        person.save()
+        continuing_education_person = ce_person_form.save(commit=False)
+        continuing_education_person.person = person
+        continuing_education_person.save()
+        admission = admission_form.save(commit=False)
+        admission.person_information = continuing_education_person
+        admission.address = address
+        admission.save()
+        return redirect(reverse('continuing_education_home'))
+    else:
+        for f in forms:
+            errors.append(f.errors)
+        display_errors(request, errors)
 
     return render(request, 'django_registration/complete_account_registration.html', locals())
