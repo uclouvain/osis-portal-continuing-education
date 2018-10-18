@@ -23,8 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-
 import factory
 
 from base.tests.factories.person import PersonFactory

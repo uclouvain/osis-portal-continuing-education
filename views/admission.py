@@ -59,11 +59,11 @@ def admission_form(request, admission_id=None):
     if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid():
         address, created = Address.objects.get_or_create(**address_form.cleaned_data)
         person = person_form.save(commit=False)
-        person.address = address
         person.person_id = base_person.pk
         person.save()
         admission = adm_form.save(commit=False)
         admission.person_information = person
+        admission.address = address
         admission.save()
         return redirect(reverse('admission_detail', kwargs={'admission_id': admission.pk}))
     else:

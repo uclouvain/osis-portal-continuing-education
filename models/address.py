@@ -5,7 +5,7 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 
 class AddressAdmin(SerializableModelAdmin):
-    list_display = ('location', 'postal_code','city','country')
+    list_display = ('location', 'postal_code', 'city', 'country')
 
 
 class Address(SerializableModel):
