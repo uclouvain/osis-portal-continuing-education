@@ -1,8 +1,11 @@
 from django import forms
 from django.forms import ModelForm, ChoiceField
+from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.admission import Admission
+from continuing_education.models.enums.enums import YES_NO_CHOICES
 from continuing_education.views.home import fetch_example_data
+from reference.models.country import Country
 
 
 class TitleChoiceField(forms.ModelChoiceField):
@@ -15,6 +18,17 @@ class AdmissionForm(ModelForm):
                                for x in fetch_example_data()])
 
     formation = ChoiceField(choices=FORMATION_CHOICES)
+    citizenship = forms.ModelChoiceField(
+        queryset=Country.objects.all().order_by('name'),
+        label=_("citizenship"),
+        required=False,
+    )
+    high_school_diploma = forms.TypedChoiceField(
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=YES_NO_CHOICES,
+        label=_("high_school_diploma")
+    )
 
     class Meta:
         model = Admission
