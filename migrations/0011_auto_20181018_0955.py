@@ -117,7 +117,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='admission',
             name='high_school_graduation_year',
-            field=models.DateField(blank=True, default=datetime.datetime.now, verbose_name='high_school_graduation_year'),
+            field=models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='high_school_graduation_year'),
         ),
         migrations.AddField(
             model_name='admission',
@@ -127,7 +127,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='admission',
             name='last_degree_graduation_year',
-            field=models.DateField(blank=True, default=datetime.datetime.now, verbose_name='last_degree_graduation_year'),
+            field=models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='last_degree_graduation_year'),
         ),
         migrations.AddField(
             model_name='admission',

@@ -52,9 +52,9 @@ class Admission(SerializableModel):
         default=False,
         verbose_name=_("high_school_diploma")
     )
-    high_school_graduation_year = models.DateField(
+    high_school_graduation_year = models.PositiveSmallIntegerField(
         blank=True,
-        default=datetime.now,
+        null=True,
         verbose_name=_("high_school_graduation_year")
     )
     last_degree_level = models.CharField(
@@ -72,8 +72,9 @@ class Admission(SerializableModel):
         blank=True,
         verbose_name=_("last_degree_institution")
     )
-    last_degree_graduation_year = models.DateField(
-        blank=True, default=datetime.now,
+    last_degree_graduation_year = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
         verbose_name=_("last_degree_graduation_year")
     )
     other_educational_background = models.TextField(
