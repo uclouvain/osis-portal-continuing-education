@@ -4,7 +4,7 @@ from django.forms import ModelForm, ChoiceField
 from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.admission import Admission
-from continuing_education.models.enums.enums import YES_NO_CHOICES, STUDENT_STATE_CHOICES, get_enum_keys
+from continuing_education.models.enums import enums
 from continuing_education.views.home import fetch_example_data
 from reference.models.country import Country
 
@@ -27,12 +27,12 @@ class AdmissionForm(ModelForm):
     high_school_diploma = forms.TypedChoiceField(
         coerce=lambda x: x == 'True',
         required=False,
-        choices=YES_NO_CHOICES,
+        choices=enums.YES_NO_CHOICES,
         label=_("high_school_diploma")
     )
 
     def clean(self):
-        if self.cleaned_data['state'] not in get_enum_keys(STUDENT_STATE_CHOICES):
+        if self.cleaned_data['state'] not in enums.get_enum_keys(enums.STUDENT_STATE_CHOICES):
             raise ValidationError(_('invalid state'), code='invalid')
 
     class Meta:
