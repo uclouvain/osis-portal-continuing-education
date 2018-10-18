@@ -20,10 +20,34 @@ class AdmissionForm(ModelForm):
         model = Admission
         fields = [
             'formation',
+
+            # Contact
             'person_information',
+            'citizenship',
+            'address',
+            'phone_mobile',
+            'email',
+
+            # Education
+            'high_school_diploma',
+            'high_school_graduation_year',
+            'last_degree_level',
+            'last_degree_field',
+            'last_degree_institution',
+            'last_degree_graduation_year',
+            'other_educational_background',
+
+            # Professional Background
+            'professional_status',
+            'current_occupation',
+            'current_employer',
+            'activity_sector',
+            'past_professional_activities',
+
             # Motivation
             'motivation',
             'professional_impact',
+
             # Awareness
             'awareness_ucl_website',
             'awareness_formation_website',
@@ -32,6 +56,7 @@ class AdmissionForm(ModelForm):
             'awareness_linkedin',
             'awareness_customized_mail',
             'awareness_emailing',
+
             # State
             'state',
         ]

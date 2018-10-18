@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from continuing_education.models.enums.enums import STATE_CHOICES, REGISTRATION_TITLE_CHOICES, MARITAL_STATUS_CHOICES
+from continuing_education.models.enums import enums
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
@@ -19,6 +21,92 @@ class Admission(SerializableModel):
         blank=True,
         null=True,
         verbose_name=_("person_information")
+    )
+
+    # Contact
+    citizenship = models.ForeignKey(
+        'reference.Country',
+        blank=True, null=True,
+        related_name='citizenship',
+        verbose_name=_("citizenship")
+    )
+    address = models.ForeignKey(
+        'continuing_education.Address',
+        blank=True,
+        null=True,
+        verbose_name=_("address")
+    )
+    phone_mobile = models.CharField(
+        max_length=30,
+        blank=True,
+        verbose_name=_("phone_mobile")
+    )
+    email = models.EmailField(
+        max_length=255,
+        blank=True,
+        verbose_name=_("email")
+    )
+
+    # Education
+    high_school_diploma = models.BooleanField(
+        default=False,
+        verbose_name=_("high_school_diploma")
+    )
+    high_school_graduation_year = models.DateField(
+        blank=True,
+        default=datetime.now,
+        verbose_name=_("high_school_graduation_year")
+    )
+    last_degree_level = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name=_("last_degree_level")
+    )
+    last_degree_field = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name=_("last_degree_field")
+    )
+    last_degree_institution = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name=_("last_degree_institution")
+    )
+    last_degree_graduation_year = models.DateField(
+        blank=True, default=datetime.now,
+        verbose_name=_("last_degree_graduation_year")
+    )
+    other_educational_background = models.TextField(
+        blank=True,
+        verbose_name=_("other_educational_background")
+    )
+
+    # Professional Background
+    professional_status = models.CharField(
+        max_length=50,
+        blank=True,
+        choices=enums.STATUS_CHOICES,
+        verbose_name=_("professional_status")
+    )
+    current_occupation = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name=_("current_occupation")
+    )
+    current_employer = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name=_("current_employer")
+    )
+    activity_sector = models.CharField(
+        max_length=50,
+        blank=True,
+        choices=enums.SECTOR_CHOICES,
+        verbose_name=_("activity_sector")
+    )
+    past_professional_activities = models.TextField(
+        blank=True,
+        verbose_name=_("past_professional_activities")
     )
 
     # Motivation
@@ -72,7 +160,7 @@ class Admission(SerializableModel):
         max_length=50,
         blank=True,
         null=True,
-        choices=STATE_CHOICES,
+        choices=enums.STATE_CHOICES,
         verbose_name=_("state")
     )
 
@@ -80,7 +168,7 @@ class Admission(SerializableModel):
     registration_type = models.CharField(
         max_length=50,
         blank=True,
-        choices=REGISTRATION_TITLE_CHOICES,
+        choices=enums.REGISTRATION_TITLE_CHOICES,
         verbose_name=_("registration_type")
     )
     use_address_for_billing = models.BooleanField(
@@ -130,7 +218,7 @@ class Admission(SerializableModel):
     marital_status = models.CharField(
         max_length=255,
         blank=True,
-        choices=MARITAL_STATUS_CHOICES,
+        choices=enums.MARITAL_STATUS_CHOICES,
         verbose_name=_("marital_status")
     )
     spouse_name = models.CharField(

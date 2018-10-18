@@ -50,9 +50,10 @@ def admission_form(request, admission_id=None):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = get_object_or_404(Admission, pk=admission_id) if admission_id else None
     person_information = continuing_education_person.find_by_person(person=base_person)
-    address = person_information.address if person_information else None
     adm_form = AdmissionForm(request.POST or None, instance=admission)
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
+    # TODO :: get last admission address if it exists instead of None
+    address = None
     address_form = AddressForm(request.POST or None, instance=address)
 
     if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid():
@@ -64,7 +65,7 @@ def admission_form(request, admission_id=None):
         admission = adm_form.save(commit=False)
         admission.person_information = person
         admission.save()
-        return redirect(reverse('admission_detail', kwargs={'admission_id':admission.pk}))
+        return redirect(reverse('admission_detail', kwargs={'admission_id': admission.pk}))
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors))
         display_errors(request, errors)
