@@ -36,7 +36,6 @@ from base.models.offer_year import OfferYear
 from continuing_education.models.enums import enums
 from continuing_education.tests.factories.address import AddressFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.tests.utils.utils import get_enum_keys
 from reference.tests.factories.country import CountryFactory
 
 
@@ -89,12 +88,12 @@ class AdmissionFactory(factory.DjangoModelFactory):
     other_educational_background = "other background"
 
     # Professional Background
-    professional_status = factory.fuzzy.FuzzyChoice(get_enum_keys(enums.STATUS_CHOICES))
+    professional_status = factory.fuzzy.FuzzyChoice(enums.get_enum_keys(enums.STATUS_CHOICES))
 
     current_occupation = factory.Faker('text', max_nb_chars=50)
     current_employer = factory.Faker('company')
 
-    activity_sector = factory.fuzzy.FuzzyChoice(get_enum_keys(enums.SECTOR_CHOICES))
+    activity_sector = factory.fuzzy.FuzzyChoice(enums.get_enum_keys(enums.SECTOR_CHOICES))
 
     past_professional_activities = "past activities"
 
@@ -115,10 +114,10 @@ class AdmissionFactory(factory.DjangoModelFactory):
     awareness_emailing = factory.fuzzy.FuzzyChoice([True, False])
 
     # State
-    state = factory.fuzzy.FuzzyChoice(get_enum_keys(enums.STATE_CHOICES))
+    state = factory.fuzzy.FuzzyChoice(enums.get_enum_keys(enums.STUDENT_STATE_CHOICES))
 
     # Billing
-    registration_type = factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES))
+    registration_type = factory.fuzzy.FuzzyChoice(enums.get_enum_keys(enums.REGISTRATION_TITLE_CHOICES))
 
     use_address_for_billing = factory.fuzzy.FuzzyChoice([True, False])
     billing_address = factory.SubFactory(AddressFactory)
@@ -132,7 +131,7 @@ class AdmissionFactory(factory.DjangoModelFactory):
     id_card_number = factory.Faker('ssn')
     passport_number = factory.Faker('isbn13')
 
-    marital_status = factory.fuzzy.FuzzyChoice(get_enum_keys(enums.MARITAL_STATUS_CHOICES))
+    marital_status = factory.fuzzy.FuzzyChoice(enums.get_enum_keys(enums.MARITAL_STATUS_CHOICES))
 
     spouse_name = factory.Faker('name')
     children_number = random.randint(0,10)

@@ -23,9 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import random
+
 from django.test import TestCase
 
 from continuing_education.forms.admission import AdmissionForm
+from continuing_education.models.enums.enums import ADMIN_STATE_CHOICES, get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionFactory
 from reference.models import country
 
@@ -37,9 +40,16 @@ class TestAdmissionForm(TestCase):
         form = AdmissionForm(admission.__dict__)
         self.assertTrue(form.is_valid(), form.errors)
 
+    def test_invalid_student_state(self):
+        admission = AdmissionFactory(state=random.choices(get_enum_keys(ADMIN_STATE_CHOICES))[0])
+        form = AdmissionForm(admission.__dict__)
+        self.assertFalse(form.is_valid(), form.errors)
+
+
 def convert_countries(person):
     person['birth_country'] = country.Country.objects.get(pk=person["birth_country_id"])
     person['citizenship'] = country.Country.objects.get(pk=person["citizenship_id"])
+
 
 def convert_dates(person):
     person['high_school_graduation_year'] = person['high_school_graduation_year'].strftime('%Y-%m-%d')

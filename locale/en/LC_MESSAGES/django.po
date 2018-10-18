@@ -315,6 +315,9 @@ msgstr "Student sheet"
 msgid "submit"
 msgstr ""
 
+msgid "submitted"
+msgstr ""
+
 msgid "succesfull_logout"
 msgstr "You are now logged out."
 

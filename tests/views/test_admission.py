@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import datetime
+import random
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -33,6 +34,7 @@ from django.test import TestCase
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.admission import Admission
+from continuing_education.models.enums.enums import get_enum_keys, STUDENT_STATE_CHOICES
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 
@@ -96,6 +98,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'professional_impact': 'abcd',
             'formation': 'EXAMPLE',
             'awareness_ucl_website': True,
+            'state': random.choices(get_enum_keys(STUDENT_STATE_CHOICES))[0]
         }
         url = reverse('admission_edit', args=[self.admission.pk])
         response = self.client.post(url, data=admission)
