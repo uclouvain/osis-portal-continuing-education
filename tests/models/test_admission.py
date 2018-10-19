@@ -44,10 +44,10 @@ class TestAdmission(TestCase):
         nonexistent_admission = admission.find_by_id(0)
         self.assertIsNone(nonexistent_admission)
 
-    def test_find_by_person(self):
+    def test_search(self):
         an_admission = self.admission
-        persisted_admission = admission.find_by_person(an_admission.person_information)
+        persisted_admission = admission.search(person=an_admission.person_information)
         self.assertTrue(persisted_admission.exists())
 
-        nonexistent_admission = admission.find_by_person(self.person)
+        nonexistent_admission = admission.search(person=self.person)
         self.assertFalse(nonexistent_admission.exists())
