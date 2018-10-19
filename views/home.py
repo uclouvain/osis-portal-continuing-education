@@ -55,8 +55,11 @@ def formations_list(request):
 def main_view(request):
     person = mdl_person.find_by_user(request.user)
     continuing_education_person = mdl_continuing_education_person.find_by_person(person=person)
-    admissions = admission.find_by_person(person=continuing_education_person)
-    registrations = admission.find_by_state(state="accepted")
+    admissions = admission.search(person=continuing_education_person)
+    registrations = admission.search(
+        person=continuing_education_person,
+        state="accepted",
+    )
     return render(request, "continuing_education/home.html", locals())
 
 

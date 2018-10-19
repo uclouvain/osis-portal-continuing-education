@@ -305,10 +305,14 @@ def find_by_id(a_id):
         return None
 
 
-# TODO :: Update this function when link to student is done
-def find_by_person(person):
-    return Admission.objects.filter(person_information=person)
+def search(**kwargs):
+    qs = Admission.objects
 
+    if "person" in kwargs:
+        # TODO :: Update this condition when link to student is done
+        qs = qs.filter(person_information=kwargs['person'])
 
-def find_by_state(state):
-    return Admission.objects.filter(state=state)
+    if "state" in kwargs:
+        qs = qs.filter(state=kwargs['state'])
+
+    return qs
