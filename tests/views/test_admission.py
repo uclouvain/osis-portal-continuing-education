@@ -99,7 +99,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'professional_impact': 'abcd',
             'formation': 'EXAMPLE',
             'awareness_ucl_website': True,
-            'state': random.choices(get_enum_keys(STUDENT_STATE_CHOICES))[0]
+            'state': random.choice(get_enum_keys(STUDENT_STATE_CHOICES))
         }
         url = reverse('admission_edit', args=[self.admission.pk])
         response = self.client.post(url, data=admission)
