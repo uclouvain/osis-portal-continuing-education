@@ -32,11 +32,8 @@ class AdmissionForm(ModelForm):
     )
 
     def clean(self):
-        # On first admission, state isn't provided and must be 'draft'
-        if not self.cleaned_data['state']:
-            self.cleaned_data['state'] = 'draft'
-
-        if self.cleaned_data['state'] not in enums.get_enum_keys(enums.STUDENT_STATE_CHOICES):
+        state = self.cleaned_data['state']
+        if state and state not in enums.get_enum_keys(enums.STUDENT_STATE_CHOICES):
             raise ValidationError(_('invalid state'), code='invalid')
 
     class Meta:
