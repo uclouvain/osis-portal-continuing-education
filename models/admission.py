@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from continuing_education.models.enums import enums
+from continuing_education.models.enums import admission_state_choices, enums
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
@@ -158,8 +158,8 @@ class Admission(SerializableModel):
     state = models.CharField(
         max_length=50,
         blank=True,
-        choices=enums.STATE_CHOICES,
-        default='draft',
+        choices=admission_state_choices.STATE_CHOICES,
+        default=admission_state_choices.DRAFT,
         verbose_name=_("state")
     )
 

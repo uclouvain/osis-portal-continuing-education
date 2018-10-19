@@ -19,19 +19,6 @@ MARITAL_STATUS_CHOICES = (
     ('LEGAL_COHABITANT', _('legal_cohabitant')),
 )
 
-ADMIN_STATE_CHOICES = (
-    ('accepted', _('accepted')),
-    ('rejected', _('rejected')),
-    ('waiting', _('waiting')),
-)
-
-STUDENT_STATE_CHOICES = (
-    ('draft', _('draft')),
-    ('submitted', _('submitted')),
-)
-
-STATE_CHOICES =  ADMIN_STATE_CHOICES + STUDENT_STATE_CHOICES
-
 GENDER_CHOICES = (
     ('F', _('female')),
     ('M', _('male')),
@@ -52,6 +39,7 @@ SECTOR_CHOICES = (
     ('HEALTH', _('health')),
     ('OTHER', _('other')),
 )
+
 
 def get_enum_keys(enum):
     return [x[0] for x in enum]

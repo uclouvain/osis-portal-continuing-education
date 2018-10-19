@@ -1,10 +1,9 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from django.forms import ModelForm, ChoiceField
 from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.admission import Admission
-from continuing_education.models.enums import enums
+from continuing_education.models.enums import enums, admission_state_choices
 from continuing_education.views.home import fetch_example_data
 from reference.models.country import Country
 
@@ -19,6 +18,7 @@ class AdmissionForm(ModelForm):
                                for x in fetch_example_data()])
 
     formation = ChoiceField(choices=FORMATION_CHOICES)
+    state = ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)
     citizenship = forms.ModelChoiceField(
         queryset=Country.objects.all().order_by('name'),
         label=_("citizenship"),
@@ -30,11 +30,6 @@ class AdmissionForm(ModelForm):
         choices=enums.YES_NO_CHOICES,
         label=_("high_school_diploma")
     )
-
-    def clean(self):
-        state = self.cleaned_data['state']
-        if state and state not in enums.get_enum_keys(enums.STUDENT_STATE_CHOICES):
-            raise ValidationError(_('invalid state'), code='invalid')
 
     class Meta:
         model = Admission

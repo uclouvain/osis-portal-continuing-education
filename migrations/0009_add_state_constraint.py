@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
-from continuing_education.models.enums.enums import STATE_CHOICES, get_enum_keys
+from continuing_education.models.enums.admission_state_choices import STATE_CHOICES
+from continuing_education.models.enums.enums import get_enum_keys
 
 
 class Migration(migrations.Migration):
