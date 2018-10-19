@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -20,7 +20,7 @@ class ContinuingEducationPerson(SerializableModel):
 
     birth_date = models.DateField(
         blank=True,
-        default=datetime.now,
+        default=datetime.date(2000, 1, 1),
         verbose_name=_("birth_date")
     )
 

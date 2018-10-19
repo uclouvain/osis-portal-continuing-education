@@ -3,8 +3,9 @@
 from __future__ import unicode_literals
 
 import datetime
-from django.db import migrations, models
+
 import django.db.models.deletion
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
@@ -158,5 +159,18 @@ class Migration(migrations.Migration):
             model_name='admission',
             name='professional_status',
             field=models.CharField(blank=True, choices=[('EMPLOYEE', 'employee'), ('SELF_EMPLOYED', 'self_employed'), ('JOB_SEEKER', 'job_seeker'), ('PUBLIC_SERVANT', 'public_servant'), ('OTHER', 'other')], max_length=50, verbose_name='professional_status'),
+        ),
+        migrations.AlterField(
+            model_name='admission',
+            name='state',
+            field=models.CharField(blank=True,
+                                   choices=[('accepted', 'accepted'), ('rejected', 'rejected'), ('waiting', 'waiting'),
+                                            ('draft', 'draft'), ('submitted', 'submitted')], default='draft',
+                                   max_length=50, verbose_name='state'),
+        ),
+        migrations.AlterField(
+            model_name='continuingeducationperson',
+            name='birth_date',
+            field=models.DateField(blank=True, default=datetime.date(2000, 1, 1), verbose_name='birth_date'),
         ),
     ]

@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -160,8 +158,8 @@ class Admission(SerializableModel):
     state = models.CharField(
         max_length=50,
         blank=True,
-        null=True,
         choices=enums.STATE_CHOICES,
+        default='draft',
         verbose_name=_("state")
     )
 
