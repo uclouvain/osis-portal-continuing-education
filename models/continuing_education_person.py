@@ -29,6 +29,7 @@ class ContinuingEducationPerson(SerializableModel):
         blank=True,
         verbose_name=_("birth_location")
     )
+    
     birth_country = models.ForeignKey(
         'reference.Country',
         blank=True,

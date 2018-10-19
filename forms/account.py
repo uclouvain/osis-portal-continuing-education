@@ -14,6 +14,21 @@ class ContinuingEducationPersonForm(ModelForm):
         required=False,
     )
 
+    def __init__(self, *args, **kwargs):
+        b_date = kwargs.pop('b_date', None)
+        b_location = kwargs.pop('b_location', None)
+        b_country = kwargs.pop('b_country', None)
+
+        super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
+        if b_date:
+            self.fields['birth_date'].initial = b_date
+        if b_location:
+            self.fields['birth_location'].initial = b_location
+            self.fields['birth_location'].widget.attrs['readonly'] = True
+        if b_country:
+            self.fields['birth_country'].initial = b_country
+            self.fields['birth_country'].widget.attrs['readonly'] = True
+
     class Meta:
         model = ContinuingEducationPerson
         fields = [

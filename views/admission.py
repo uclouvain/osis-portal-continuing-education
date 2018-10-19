@@ -30,9 +30,11 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from base.models import person as mdl_person
+from base.models.person import Person
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
+from continuing_education.forms.person import PersonForm
 from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
@@ -51,15 +53,34 @@ def admission_form(request, admission_id=None):
     admission = get_object_or_404(Admission, pk=admission_id) if admission_id else None
     person_information = continuing_education_person.find_by_person(person=base_person)
     adm_form = AdmissionForm(request.POST or None, instance=admission)
-    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
+    if person_information:
+        person_form = ContinuingEducationPersonForm(request.POST or None,
+                                                    b_country=person_information.birth_country,
+                                                    b_date=person_information.birth_date,
+                                                    b_location=person_information.birth_location)
+    else:
+        person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
     # TODO :: get last admission address if it exists instead of None
     address = None
     address_form = AddressForm(request.POST or None, instance=address)
+    
+    if base_person:
+        id_form = PersonForm(request.POST or None,
+                         first_name=base_person.first_name,
+                         last_name=base_person.last_name,
+                         gender=base_person.gender,
+                         user_email=base_person.email
+                         )
+    else:
+        id_form = PersonForm(request.POST or None)
 
-    if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid():
+    if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
         address, created = Address.objects.get_or_create(**address_form.cleaned_data)
+        identity, created = Person.objects.get_or_create(**id_form.cleaned_data)
+        identity.user = request.user
+        identity.save()
         person = person_form.save(commit=False)
-        person.person_id = base_person.pk
+        person.person_id = identity.pk
         person.save()
         admission = adm_form.save(commit=False)
         admission.person_information = person
@@ -77,5 +98,6 @@ def admission_form(request, admission_id=None):
             'admission_form': adm_form,
             'person_form': person_form,
             'address_form': address_form,
+            'id_form': id_form,
         }
     )
