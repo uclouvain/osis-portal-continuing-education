@@ -32,6 +32,7 @@ from django.shortcuts import render, redirect
 
 from base.models import person as mdl_person
 from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
+from continuing_education.models.enums import admission_state_choices
 
 
 def formations_list(request):
@@ -58,7 +59,7 @@ def main_view(request):
     admissions = admission.search(person=continuing_education_person)
     registrations = admission.search(
         person=continuing_education_person,
-        state="accepted",
+        state=admission_state_choices.ACCEPTED,
     )
     return render(request, "continuing_education/home.html", locals())
 
