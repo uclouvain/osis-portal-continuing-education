@@ -57,11 +57,15 @@ def admission_form(request, admission_id=None):
         person_form = ContinuingEducationPersonForm(request.POST or None,
                                                     b_country=person_information.birth_country,
                                                     b_date=person_information.birth_date,
-                                                    b_location=person_information.birth_location)
+                                                    b_location=person_information.birth_location,
+                                                    instance=person_information
+                                                    )
     else:
-        person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
-    # TODO :: get last admission address if it exists instead of None
-    address = None
+        person_form = ContinuingEducationPersonForm(request.POST or None,
+                                                    instance=person_information
+                                                    )
+    old_admission = Admission.objects.filter(person_information=person_information).last()
+    address = old_admission.address if old_admission else None
     address_form = AddressForm(request.POST or None, instance=address)
     
     if base_person:

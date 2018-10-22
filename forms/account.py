@@ -27,7 +27,13 @@ class ContinuingEducationPersonForm(ModelForm):
             self.fields['birth_location'].widget.attrs['readonly'] = True
         if b_country:
             self.fields['birth_country'].initial = b_country
-            self.fields['birth_country'].widget.attrs['readonly'] = True
+            self.fields['birth_country'].widget.attrs['disabled'] = True
+
+    def clean_birth_country(self):
+        if self.instance:
+            return self.instance.birth_country
+        else:
+            return self.fields['birth_country']
 
     class Meta:
         model = ContinuingEducationPerson
