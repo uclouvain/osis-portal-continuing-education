@@ -92,7 +92,7 @@ def admission_form(request, admission_id=None):
         admission.save()
         return redirect(reverse('admission_detail', kwargs={'admission_id': admission.pk}))
     else:
-        errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors))
+        errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
         display_errors(request, errors)
 
     return render(
