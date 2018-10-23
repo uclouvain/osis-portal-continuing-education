@@ -42,7 +42,7 @@ urlpatterns = [
             account_activation.ContinuingEducationRegistrationView.as_view(form_class=RegistrationFormUniqueEmail),
             name='django_registration_register'),
         url(r'^complete_account_registration/$', account_activation.complete_account_registration, name='complete_account_registration'),
-        url(r'^activate/(?P<activation_key>[-:\w]+)/$',
+        url(r'^activate/(?P<formation_id>[\w]+)/(?P<activation_key>[-:\w]+)/$',
             account_activation.ContinuingEducationActivationView.as_view(),
             name='django_registration_activate'),
         url(r'^', include('django_registration.backends.activation.urls'))])),

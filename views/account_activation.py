@@ -90,7 +90,8 @@ class ContinuingEducationRegistrationView(RegistrationView):
     def __get_activation_link(self, activation_key):
         scheme = 'https' if self.request.is_secure() else 'http'
         site = get_current_site(self.request)
-        url = reverse('django_registration_activate', kwargs={'activation_key': activation_key})
+        url = reverse('django_registration_activate', kwargs={'formation_id': self.request.session.get('formation_id'),
+                                                              'activation_key': activation_key})
         return '{scheme}://{site}{url}'.format(scheme=scheme,
                                                site=site,
                                                url=url)
@@ -144,6 +145,8 @@ def __post_complete_account_registration(request):
         admission = admission_form.save(commit=False)
         admission.person_information = continuing_education_person
         admission.save()
+        if request.session.get('formation_id'):
+            del request.session['formation_id']
         return redirect(reverse('continuing_education_home'))
     else:
         errors.append(root_person_form.errors)
@@ -173,9 +176,11 @@ class ContinuingEducationActivationView(ActivationView):
 
     def activate(self, *args, **kwargs):
         username = self.validate_key(kwargs.get('activation_key'))
+        formation_id = kwargs.get('formation_id')
         user = self.get_user(username)
         user.is_active = True
         user.save()
+        self.request.session['formation_id'] = formation_id
         return user
 
     def validate_key(self, activation_key):

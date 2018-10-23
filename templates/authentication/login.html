@@ -51,20 +51,10 @@
             <div class="form-group">
                 <input type="hidden" name="next" value="{{ next }}"/>
                 <input type="submit" value="{% trans 'log-in' %}" class="btn btn-primary" id="post_login_btn"/>
-                <a href="{% url 'django_registration_register' %}" class="btn btn-default"
+                <a href="{% url 'django_registration_register'%}" class="btn btn-default"
                    id="signup_btn">{% trans 'signup' %}</a>
             </div>
         </div>
     </form>
-{% endblock %}
-
-
-{% block script %}
-    <script>
-        let formation_id = "{{ formation_id }}";
-        if(formation_id !== ""){
-            localStorage["formation_id"] = formation_id;
-        }
-    </script>
 {% endblock %}
 
