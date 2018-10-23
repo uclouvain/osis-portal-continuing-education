@@ -42,11 +42,13 @@ from continuing_education.views.common import display_errors
 @login_required
 def admission_detail(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
+    if request.POST.get("submit"):
+        admission.submit()
     return render(request, "admission_detail.html", locals())
 
 
 @login_required
-def admission_form(request, admission_id=None):
+def admission_form(request, admission_id=None, submit=False):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = get_object_or_404(Admission, pk=admission_id) if admission_id else None
     person_information = continuing_education_person.find_by_person(person=base_person)

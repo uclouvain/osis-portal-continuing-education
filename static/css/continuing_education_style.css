@@ -54,7 +54,6 @@
     margin-bottom: -1px;
     border: 1px solid #ddd;
     height: 34px;
-    margin-right: 10px;
     color: white;
     text-transform: capitalize;
 }
@@ -77,4 +76,8 @@
 
 .admission-detail-state-submitted{
     background-color: #5bc0de;
+}
+
+.btn-space {
+    margin-right: 10px;
 }

@@ -297,6 +297,11 @@ class Admission(SerializableModel):
         verbose_name=_("sessions")
     )
 
+    def submit(self):
+        if self.state == admission_state_choices.DRAFT:
+            self.state = admission_state_choices.SUBMITTED
+            self.save()
+
 
 def find_by_id(a_id):
     try:
