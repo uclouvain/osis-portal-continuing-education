@@ -26,11 +26,6 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-{% block style %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'css/smart_wizard.css' %}" type='text/css'>
-{% endblock %}
-
 {% block breadcrumb %}
     <li><a href="{% url 'continuing_education_home' %}">{% trans 'continuing_education' %}</a></li>
     <li><a class="text-capitalize" href="{% url 'continuing_education_home' %}">{% trans 'student' %}</a></li>
@@ -50,53 +45,98 @@
     <div class="panel panel-default">
         <form id="form" method="POST" class="post-form">
             {% csrf_token %}
-            <div id="smartwizard">
-                <ul>
-                    <li><a href="#identification">{% trans 'identification' as identification %}{{ identification | title }}</a></li>
-                    <li><a href="#contact">{% trans 'contact information' as contact %}{{ contact | title }}</a></li>
-                    <li><a href="#curriculum">{% trans 'curriculum' as curriculum %}{{ curriculum | title }}</a></li>
-                    <li><a href="#formation">{% trans 'formation' as formation %}{{ formation | title }}</a></li>
-                    <li><a href="#references">{% trans 'references' as references %}{{ references | title }}</a></li>
-                    <li><a href="#validation">{% trans 'validation' as validation %}{{ validation | title }}</a></li>
-                </ul>
-
-                <div>
-                    <div id="identification" class="">
+            <ul id="tabs" class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="#identification" role="tab" data-toggle="tab">
+                    {% trans 'identification' as identification %}{{ identification | title }}
+                </a></li>
+                <li role="presentation"><a href="#contact" role="tab" data-toggle="tab">
+                    {% trans 'contact information' as contact %}{{ contact | title }}
+                </a></li>
+                <li role="presentation"><a href="#curriculum" role="tab" data-toggle="tab">
+                    {% trans 'curriculum' as curriculum %}{{ curriculum | title }}
+                </a></li>
+                <li role="presentation"><a href="#formation" role="tab" data-toggle="tab">
+                    {% trans 'formation' as formation %}{{ formation | title }}
+                </a></li>
+                <li role="presentation"><a href="#references" role="tab" data-toggle="tab">
+                    {% trans 'references' as references %}{{ references | title }}
+                </a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="identification" role="tabpanel" class="tab-pane active">
+                    <div class="panel-body">
                         {% bootstrap_field person_form.birth_date %}
                         {% bootstrap_field person_form.birth_location %}
                         {% bootstrap_field person_form.birth_country %}
-                        {% bootstrap_field person_form.citizenship %}
+                        {% bootstrap_field admission_form.citizenship %}
                     </div>
+                    <div class="panel-footer text-right">
+                        <a href="#" class="btn btn-default" onclick="showTab('contact')">
+                            {% trans 'next' as next %}{{ next | title }}
+                        </a>
+                    </div>
+                </div>
 
-                    <div id="contact" class="">
-                        {% bootstrap_field person_form.phone_mobile %}
-                        {% bootstrap_field person_form.email %}
+                <div id="contact" role="tabpanel" class="tab-pane">
+                    <div class="panel-body">
+                        {% bootstrap_field admission_form.phone_mobile %}
+                        {% bootstrap_field admission_form.email %}
                         {% bootstrap_form address_form %}
                     </div>
-
-                    <div id="curriculum" class="">
-                        {% bootstrap_field person_form.high_school_diploma %}
-                        {% bootstrap_field person_form.high_school_graduation_year %}
-                        {% bootstrap_field person_form.last_degree_level %}
-                        {% bootstrap_field person_form.last_degree_field %}
-                        {% bootstrap_field person_form.last_degree_institution %}
-                        {% bootstrap_field person_form.last_degree_graduation_year %}
-                        {% bootstrap_field person_form.other_educational_background %}
-                        {% bootstrap_field person_form.professional_status %}
-                        {% bootstrap_field person_form.current_occupation %}
-                        {% bootstrap_field person_form.current_employer %}
-                        {% bootstrap_field person_form.activity_sector %}
-                        {% bootstrap_field person_form.past_professional_activities %}
+                    <div class="panel-footer text-right">
+                        <a href="#" class="btn btn-default" onclick="showTab('identification')">
+                            {% trans 'previous' as previous %}{{ previous | title }}
+                        </a>
+                        <a href="#" class="btn btn-default" onclick="showTab('curriculum')">
+                            {% trans 'next' as next %}{{ next | title }}
+                        </a>
                     </div>
+                </div>
 
-                    <div id="formation" class="">
+                <div id="curriculum" role="tabpanel" class="tab-pane">
+                    <div class="panel-body">
+                        {% bootstrap_field admission_form.high_school_diploma %}
+                        {% bootstrap_field admission_form.high_school_graduation_year %}
+                        {% bootstrap_field admission_form.last_degree_level %}
+                        {% bootstrap_field admission_form.last_degree_field %}
+                        {% bootstrap_field admission_form.last_degree_institution %}
+                        {% bootstrap_field admission_form.last_degree_graduation_year %}
+                        {% bootstrap_field admission_form.other_educational_background %}
+                        {% bootstrap_field admission_form.professional_status %}
+                        {% bootstrap_field admission_form.current_occupation %}
+                        {% bootstrap_field admission_form.current_employer %}
+                        {% bootstrap_field admission_form.activity_sector %}
+                        {% bootstrap_field admission_form.past_professional_activities %}
+                    </div>
+                    <div class="panel-footer text-right">
+                        <a href="#" class="btn btn-default" onclick="showTab('contact')">
+                            {% trans 'previous' as previous %}{{ previous | title }}
+                        </a>
+                        <a href="#" class="btn btn-default" onclick="showTab('formation')">
+                            {% trans 'next' as next %}{{ next | title }}
+                        </a>
+                    </div>
+                </div>
+
+                <div id="formation" role="tabpanel" class="tab-pane">
+                    <div class="panel-body">
                         {% bootstrap_field admission_form.formation %}
                         {% bootstrap_field admission_form.motivation %}
                         {% bootstrap_field admission_form.professional_impact %}
                     </div>
+                    <div class="panel-footer text-right">
+                        <a href="#" class="btn btn-default" onclick="showTab('curriculum')">
+                            {% trans 'previous' as previous %}{{ previous | title }}
+                        </a>
+                        <a href="#" class="btn btn-default" onclick="showTab('references')">
+                            {% trans 'next' as next %}{{ next | title }}
+                        </a>
+                    </div>
+                </div>
 
-                    <div id="references" class="">
-                        <label>{% trans 'awareness' %}</label>
+                <div id="references" role="tabpanel" class="tab-pane">
+                    <div class="panel-body">
+                    <label>{% trans 'awareness' %}</label>
                         {% bootstrap_field admission_form.awareness_ucl_website %}
                         {% bootstrap_field admission_form.awareness_formation_website %}
                         {% bootstrap_field admission_form.awareness_press %}
@@ -105,13 +145,13 @@
                         {% bootstrap_field admission_form.awareness_customized_mail %}
                         {% bootstrap_field admission_form.awareness_emailing %}
                     </div>
-
-                    <div id="validation" class="">
-                        <label>{% trans 'You can now submit your admission form or cancel it.' %}</label>
-                        <br>
+                    <div class="panel-footer text-right">
+                        <a href="#" class="btn btn-default" onclick="showTab('formation')">
+                            {% trans 'previous' as previous %}{{ previous | title }}
+                        </a>
                         <button type="submit"
-                                name="state" value="submitted" class="btn btn-primary" title="{%trans 'submit' %}">
-                            <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                            name="state" value="submitted" class="btn btn-primary" title="{%trans 'submit' %}">
+                        <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
                             {% trans 'submit' as submit %}{{ submit | title }}
                         </button>
                         <button type="submit"
@@ -132,21 +172,13 @@
 
 
 {% block script %}
-    <script>
-        let next = "{% trans 'next' as submit %}{{ submit | title }}";
-        let previous = "{% trans 'previous' as submit %}{{ submit | title }}";
-    </script>
-    <script type="text/javascript" src="{% static 'js/jquery.smartWizard.js' %}"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#smartwizard').smartWizard();
-        });
-    </script>
-    <script>
-        let diploma_obtained = $('#id_high_school_diploma').find(":selected").val();
-        $('.high_school_graduation_year').toggle(diploma_obtained == "True");
-        $('#id_high_school_diploma').on('change', function() {
-            $('.high_school_graduation_year').toggle($(this).find(":selected").val());
-        });
-    </script>
+<script>
+    $('#tabs a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+    function showTab(tab) {
+        $('#tabs a[href="#' + tab + '"]').tab('show')
+    }
+</script>
 {% endblock %}

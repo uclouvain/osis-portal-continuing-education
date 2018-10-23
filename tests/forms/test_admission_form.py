@@ -28,7 +28,8 @@ import random
 from django.test import TestCase
 
 from continuing_education.forms.admission import AdmissionForm
-from continuing_education.models.enums.enums import ADMIN_STATE_CHOICES, get_enum_keys
+from continuing_education.models.enums.admission_state_choices import ADMIN_STATE_CHOICES
+from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionFactory
 from reference.models import country
 

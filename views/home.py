@@ -33,6 +33,7 @@ from django.urls import reverse
 
 from base.models import person as mdl_person
 from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
+from continuing_education.models.enums import admission_state_choices
 
 
 def formations_list(request):
@@ -54,12 +55,15 @@ def formations_list(request):
 
 def main_view(request, formation_id=None):
     if formation_id:
-        request.session['formation_id']=formation_id
+        request.session['formation_id'] = formation_id
     if request.user.is_authenticated:
         person = mdl_person.find_by_user(request.user)
         continuing_education_person = mdl_continuing_education_person.find_by_person(person=person)
-        admissions = admission.find_by_person(person=continuing_education_person)
-        registrations = admission.find_by_state(state="accepted")
+        admissions = admission.search(person=continuing_education_person)
+        registrations = admission.search(
+            person=continuing_education_person,
+            state=admission_state_choices.ACCEPTED,
+        )
         return render(request, "continuing_education/home.html", locals())
     else:
         return render(request, "authentication/login.html")

@@ -20,7 +20,6 @@ class PersonForm(ModelForm):
             'first_name',
             'last_name',
             'email',
-            'phone_mobile',
             'gender'
         ]
         labels = {field: _(field) for field in fields}

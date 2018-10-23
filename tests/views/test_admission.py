@@ -34,7 +34,8 @@ from django.test import TestCase
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.admission import Admission
-from continuing_education.models.enums.enums import get_enum_keys, STUDENT_STATE_CHOICES
+from continuing_education.models.enums.admission_state_choices import STUDENT_STATE_CHOICES
+from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 
