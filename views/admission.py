@@ -48,7 +48,7 @@ def admission_detail(request, admission_id):
 
 
 @login_required
-def admission_form(request, admission_id=None, submit=False):
+def admission_form(request, admission_id=None):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = get_object_or_404(Admission, pk=admission_id) if admission_id else None
     person_information = continuing_education_person.find_by_person(person=base_person)
