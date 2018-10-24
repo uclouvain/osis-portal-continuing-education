@@ -53,39 +53,57 @@ def admission_form(request, admission_id=None):
     admission = get_object_or_404(Admission, pk=admission_id) if admission_id else None
     person_information = continuing_education_person.find_by_person(person=base_person)
     adm_form = AdmissionForm(request.POST or None, instance=admission)
+
     if person_information:
-        person_form = ContinuingEducationPersonForm(request.POST or None,
-                                                    b_country=person_information.birth_country,
-                                                    b_date=person_information.birth_date,
-                                                    b_location=person_information.birth_location,
-                                                    instance=person_information
-                                                    )
+        person_form = ContinuingEducationPersonForm(
+            request.POST or None,
+            b_country=person_information.birth_country,
+            b_date=person_information.birth_date,
+            b_location=person_information.birth_location,
+            instance=person_information
+        )
     else:
-        person_form = ContinuingEducationPersonForm(request.POST or None,
-                                                    instance=person_information
-                                                    )
+        person_form = ContinuingEducationPersonForm(
+            request.POST or None,
+            instance=person_information
+        )
+
+    current_address = admission.address if admission else None
     old_admission = Admission.objects.filter(person_information=person_information).last()
-    address = old_admission.address if old_admission else None
+    address = current_address if current_address else (old_admission.address if old_admission else None)
     address_form = AddressForm(request.POST or None, instance=address)
-    
+
     if base_person:
-        id_form = PersonForm(request.POST or None,
-                             first_name=base_person.first_name,
-                             last_name=base_person.last_name,
-                             gender=base_person.gender,
-                             user_email=base_person.email
-                             )
+        id_form = PersonForm(
+            request.POST or None,
+            first_name=base_person.first_name,
+            last_name=base_person.last_name,
+            gender=base_person.gender,
+            user_email=base_person.email
+        )
     else:
         id_form = PersonForm(request.POST or None)
 
     if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
-        address, created = Address.objects.get_or_create(**address_form.cleaned_data)
-        identity, created = Person.objects.get_or_create(**id_form.cleaned_data)
-        identity.user = request.user
-        identity.save()
+        if current_address:
+            address = address_form.save()
+        else:
+            address, created = Address.objects.get_or_create(**address_form.cleaned_data)
+
+        identity = Person.objects.filter(user=request.user)
+        print(id_form.cleaned_data['gender'])
+        if not identity.first():
+            identity, id_created = Person.objects.get_or_create(**id_form.cleaned_data)
+            identity.user = request.user
+            identity.save()
+        else:
+            identity.update(**id_form.cleaned_data)
+            identity = identity.first()
+
         person = person_form.save(commit=False)
         person.person_id = identity.pk
         person.save()
+
         admission = adm_form.save(commit=False)
         admission.person_information = person
         admission.address = address

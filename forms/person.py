@@ -24,7 +24,7 @@ class PersonForm(ModelForm):
             self.fields['last_name'].widget.attrs['readonly'] = True
         if gender:
             self.fields['gender'].initial = gender
-            self.fields['gender'].widget.attrs['readonly'] = True
+            self.fields['gender'].widget.attrs['disabled'] = True
 
     class Meta:
         model = Person

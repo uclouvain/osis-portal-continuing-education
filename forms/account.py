@@ -22,6 +22,7 @@ class ContinuingEducationPersonForm(ModelForm):
         super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
         if b_date:
             self.fields['birth_date'].initial = b_date
+            self.fields['birth_date'].widget.attrs['readonly'] = True
         if b_location:
             self.fields['birth_location'].initial = b_location
             self.fields['birth_location'].widget.attrs['readonly'] = True
@@ -30,10 +31,11 @@ class ContinuingEducationPersonForm(ModelForm):
             self.fields['birth_country'].widget.attrs['disabled'] = True
 
     def clean_birth_country(self):
-        if self.instance:
+        if self.instance.birth_country:
             return self.instance.birth_country
         else:
-            return self.fields['birth_country']
+            b_country = self.cleaned_data['birth_country']
+            return Country.objects.filter(name=b_country).first()
 
     class Meta:
         model = ContinuingEducationPerson
