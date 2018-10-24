@@ -65,6 +65,9 @@
             <div class="tab-content">
                 <div id="identification" role="tabpanel" class="tab-pane active">
                     <div class="panel-body">
+                        {% bootstrap_field id_form.first_name %}
+                        {% bootstrap_field id_form.last_name %}
+                        {% bootstrap_field id_form.gender %}
                         {% bootstrap_field person_form.birth_date %}
                         {% bootstrap_field person_form.birth_location %}
                         {% bootstrap_field person_form.birth_country %}
@@ -181,4 +184,9 @@
         $('#tabs a[href="#' + tab + '"]').tab('show')
     }
 </script>
+{% if request.session.formation_id %}
+<script>
+    $("#id_formation").val("{{ request.session.formation_id }}");
+</script>
+{% endif %}
 {% endblock %}

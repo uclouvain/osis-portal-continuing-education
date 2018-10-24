@@ -31,9 +31,11 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from base.models import person as mdl_person
+from base.models.person import Person
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
+from continuing_education.forms.person import PersonForm
 from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
@@ -57,23 +59,44 @@ def admission_form(request, admission_id=None):
         raise PermissionDenied
     person_information = continuing_education_person.find_by_person(person=base_person)
     adm_form = AdmissionForm(request.POST or None, instance=admission)
-    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
-    # TODO :: get last admission address if it exists instead of None
-    address = None
+
+    person_form = check_continuing_education_person(request, person_information)
+
+    current_address = admission.address if admission else None
+    old_admission = Admission.objects.filter(person_information=person_information).last()
+    address = current_address if current_address else (old_admission.address if old_admission else None)
     address_form = AddressForm(request.POST or None, instance=address)
 
-    if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid():
-        address, created = Address.objects.get_or_create(**address_form.cleaned_data)
+    id_form = check_base_person(request, base_person)
+
+    if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
+        if current_address:
+            address = address_form.save()
+        else:
+            address = Address(**address_form.cleaned_data)
+            address.save()
+
+        identity = Person.objects.filter(user=request.user)
+
+        if not identity.first():
+            identity, id_created = Person.objects.get_or_create(**id_form.cleaned_data)
+            identity.user = request.user
+            identity.save()
+        else:
+            identity.update(**id_form.cleaned_data)
+            identity = identity.first()
+
         person = person_form.save(commit=False)
-        person.person_id = base_person.pk
+        person.person_id = identity.pk
         person.save()
+
         admission = adm_form.save(commit=False)
         admission.person_information = person
         admission.address = address
         admission.save()
         return redirect(reverse('admission_detail', kwargs={'admission_id': admission.pk}))
     else:
-        errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors))
+        errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
         display_errors(request, errors)
 
     return render(
@@ -83,5 +106,26 @@ def admission_form(request, admission_id=None):
             'admission_form': adm_form,
             'person_form': person_form,
             'address_form': address_form,
+            'id_form': id_form,
         }
     )
+
+
+def check_base_person(request, base_person):
+    if base_person:
+        return PersonForm(
+            request.POST or None,
+            instance=base_person,
+        )
+    else:
+        return PersonForm(request.POST or None)
+
+
+def check_continuing_education_person(request, person_information):
+    if person_information:
+        return ContinuingEducationPersonForm(
+            request.POST or None,
+            instance=person_information,
+            )
+    else:
+        return ContinuingEducationPersonForm(request.POST or None)
