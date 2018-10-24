@@ -20,6 +20,10 @@ class ContinuingEducationPersonForm(ModelForm):
         b_country = kwargs.pop('b_country', None)
 
         super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
+
+        self._init_fields(b_country, b_date, b_location)
+
+    def _init_fields(self, b_country, b_date, b_location):
         if b_date:
             self.fields['birth_date'].initial = b_date
             self.fields['birth_date'].widget.attrs['readonly'] = True

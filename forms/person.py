@@ -13,6 +13,9 @@ class PersonForm(ModelForm):
         gender = kwargs.pop('gender', None)
 
         super(PersonForm, self).__init__(*args, **kwargs)
+        self._init_fields(first_name, gender, last_name, user_email)
+
+    def _init_fields(self, first_name, gender, last_name, user_email):
         if user_email:
             self.fields['email'].initial = user_email
             self.fields['email'].widget.attrs['readonly'] = True
