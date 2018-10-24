@@ -91,7 +91,7 @@ def admission_form(request, admission_id=None):
             address, created = Address.objects.get_or_create(**address_form.cleaned_data)
 
         identity = Person.objects.filter(user=request.user)
-        print(id_form.cleaned_data['gender'])
+
         if not identity.first():
             identity, id_created = Person.objects.get_or_create(**id_form.cleaned_data)
             identity.user = request.user
