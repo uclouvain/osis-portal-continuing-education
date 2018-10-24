@@ -26,6 +26,7 @@
 import itertools
 
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -38,12 +39,15 @@ from continuing_education.forms.person import PersonForm
 from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
+from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.common import display_errors
 
 
 @login_required
 def admission_detail(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
+    if request.POST.get("submit"):
+        admission.submit()
     return render(request, "admission_detail.html", locals())
 
 
@@ -51,6 +55,8 @@ def admission_detail(request, admission_id):
 def admission_form(request, admission_id=None):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = get_object_or_404(Admission, pk=admission_id) if admission_id else None
+    if admission and admission.state != admission_state_choices.DRAFT:
+        raise PermissionDenied
     person_information = continuing_education_person.find_by_person(person=base_person)
     adm_form = AdmissionForm(request.POST or None, instance=admission)
 

@@ -27,24 +27,29 @@ import datetime
 import random
 
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.admission import Admission
+from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import STUDENT_STATE_CHOICES
 from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
+from continuing_education.views.admission import admission_form
 
 
 class ViewStudentAdmissionTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
-        self.admission = AdmissionFactory()
+        self.request = RequestFactory()
+        self.request.user = self.user
+        self.admission = AdmissionFactory(state=admission_state_choices.DRAFT)
         self.person = PersonFactory(user=self.user)
 
     def test_admission_detail(self):
@@ -58,6 +63,16 @@ class ViewStudentAdmissionTestCase(TestCase):
             'admission_id': 0,
         }))
         self.assertEqual(response.status_code, 404)
+
+    def test_admission_detail_submit(self):
+        url = reverse('admission_detail', args=[self.admission.pk])
+        self.admission.state = admission_state_choices.DRAFT
+        response = self.client.post(url, {
+            "submit": True
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['admission'].state, admission_state_choices.SUBMITTED)
+        self.assertTemplateUsed(response, 'admission_detail.html')
 
     def test_admission_new(self):
         url = reverse('admission_new')
@@ -90,6 +105,14 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
+
+    def test_admission_edit_permission_denied_invalid_state(self):
+        admission = AdmissionFactory(state=admission_state_choices.SUBMITTED)
+        url = reverse('admission_edit', args=[admission.pk])
+        with self.assertRaises(PermissionDenied):
+            admission_form(self.request, admission.pk)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 401)
 
     def test_edit_post_admission_found(self):
         person_information = ContinuingEducationPersonFactory(person=self.person)

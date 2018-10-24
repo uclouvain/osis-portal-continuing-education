@@ -42,7 +42,7 @@ class TestAdmissionForm(TestCase):
         self.assertTrue(form.is_valid(), form.errors)
 
     def test_invalid_student_state(self):
-        admission = AdmissionFactory(state=random.choice(get_enum_keys(ADMIN_STATE_CHOICES))[0])
+        admission = AdmissionFactory(state=random.choice(get_enum_keys(ADMIN_STATE_CHOICES)))
         form = AdmissionForm(admission.__dict__)
         self.assertFalse(form.is_valid(), form.errors)
 

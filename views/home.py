@@ -29,6 +29,7 @@ import os
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from base.models import person as mdl_person
 from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
@@ -52,16 +53,20 @@ def formations_list(request):
     })
 
 
-@login_required(login_url='continuing_education_login')
-def main_view(request):
-    person = mdl_person.find_by_user(request.user)
-    continuing_education_person = mdl_continuing_education_person.find_by_person(person=person)
-    admissions = admission.search(person=continuing_education_person)
-    registrations = admission.search(
-        person=continuing_education_person,
-        state=admission_state_choices.ACCEPTED,
-    )
-    return render(request, "continuing_education/home.html", locals())
+def main_view(request, formation_id=None):
+    if formation_id:
+        request.session['formation_id'] = formation_id
+    if request.user.is_authenticated:
+        person = mdl_person.find_by_user(request.user)
+        continuing_education_person = mdl_continuing_education_person.find_by_person(person=person)
+        admissions = admission.search(person=continuing_education_person)
+        registrations = admission.search(
+            person=continuing_education_person,
+            state=admission_state_choices.ACCEPTED,
+        )
+        return render(request, "continuing_education/home.html", locals())
+    else:
+        return render(request, "authentication/login.html")
 
 
 def fetch_example_data():

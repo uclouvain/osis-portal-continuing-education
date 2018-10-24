@@ -183,6 +183,9 @@ msgstr "Numéro de carte d'identité"
 msgid "identification"
 msgstr "identification"
 
+msgid "It is not possible to edit an admission once submitted"
+msgstr "Il est impossible de modifier une admission une fois celle-ci soumise"
+
 msgid "last_degree_level"
 msgstr "Niveau du dernier diplôme"
 
@@ -314,6 +317,9 @@ msgstr "Fiche de l'étudiant"
 
 msgid "submit"
 msgstr "soumettre"
+
+msgid "Submit admission form ?"
+msgstr "Soumettre le formulaire d'admission ?"
 
 msgid "submitted"
 msgstr "soumis"
