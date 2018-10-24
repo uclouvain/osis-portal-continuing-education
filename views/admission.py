@@ -88,7 +88,8 @@ def admission_form(request, admission_id=None):
         if current_address:
             address = address_form.save()
         else:
-            address, created = Address.objects.get_or_create(**address_form.cleaned_data)
+            address = Address(**address_form.cleaned_data)
+            address.save()
 
         identity = Person.objects.filter(user=request.user)
 
