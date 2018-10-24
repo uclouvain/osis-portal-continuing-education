@@ -260,7 +260,7 @@ class ContinuingEducationActivationView(ActivationView):
                 user=activated_user,
                 request=self.request
             )
-            login(self.request, activated_user)
+            login(self.request, activated_user, backend='django.contrib.auth.backends.ModelBackend')
             return HttpResponseRedirect(
                 force_text(
                     self.get_success_url(activated_user)
