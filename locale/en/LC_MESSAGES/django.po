@@ -180,6 +180,9 @@ msgstr "Graduation year (high school)"
 msgid "id_card_number"
 msgstr "ID card number"
 
+msgid "It is not possible to edit an admission once submitted"
+msgstr ""
+
 msgid "identification"
 msgstr ""
 
@@ -313,6 +316,9 @@ msgid "student_sheet"
 msgstr "Student sheet"
 
 msgid "submit"
+msgstr ""
+
+msgid "Submit admission form ?"
 msgstr ""
 
 msgid "submitted"

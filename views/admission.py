@@ -42,6 +42,8 @@ from continuing_education.views.common import display_errors
 @login_required
 def admission_detail(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
+    if request.POST.get("submit"):
+        admission.submit()
     return render(request, "admission_detail.html", locals())
 
 
