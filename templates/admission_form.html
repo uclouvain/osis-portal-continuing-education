@@ -183,7 +183,10 @@
     function showTab(tab) {
         $('#tabs a[href="#' + tab + '"]').tab('show')
     }
-
+</script>
+{% if request.session.formation_id %}
+<script>
     $("#id_formation").val("{{ request.session.formation_id }}");
 </script>
+{% endif %}
 {% endblock %}
