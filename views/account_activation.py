@@ -126,7 +126,7 @@ def complete_account_registration(request):
         ce_person_form = ContinuingEducationPersonForm()
         address_form = AddressForm()
         admission_form = AdmissionForm()
-        return render(request, 'django_registration/complete_account_registration.html', locals())
+        return redirect(reverse('admission_new'))
 
 
 def __post_complete_account_registration(request):
