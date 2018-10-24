@@ -60,35 +60,14 @@ def admission_form(request, admission_id=None):
     person_information = continuing_education_person.find_by_person(person=base_person)
     adm_form = AdmissionForm(request.POST or None, instance=admission)
 
-    if person_information:
-        person_form = ContinuingEducationPersonForm(
-            request.POST or None,
-            b_country=person_information.birth_country,
-            b_date=person_information.birth_date,
-            b_location=person_information.birth_location,
-            instance=person_information
-        )
-    else:
-        person_form = ContinuingEducationPersonForm(
-            request.POST or None,
-            instance=person_information
-        )
+    person_form = check_continuing_education_person(request, person_information)
 
     current_address = admission.address if admission else None
     old_admission = Admission.objects.filter(person_information=person_information).last()
     address = current_address if current_address else (old_admission.address if old_admission else None)
     address_form = AddressForm(request.POST or None, instance=address)
 
-    if base_person:
-        id_form = PersonForm(
-            request.POST or None,
-            first_name=base_person.first_name,
-            last_name=base_person.last_name,
-            gender=base_person.gender,
-            user_email=base_person.email
-        )
-    else:
-        id_form = PersonForm(request.POST or None)
+    id_form = check_base_person(request, base_person)
 
     if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
         if current_address:
@@ -130,3 +109,29 @@ def admission_form(request, admission_id=None):
             'id_form': id_form,
         }
     )
+
+
+def check_base_person(request, base_person):
+    if base_person:
+        return PersonForm(
+            request.POST or None,
+            first_name=base_person.first_name,
+            last_name=base_person.last_name,
+            gender=base_person.gender,
+            user_email=base_person.email
+        )
+    else:
+        return PersonForm(request.POST or None)
+
+
+def check_continuing_education_person(request, person_information):
+    if person_information:
+        return ContinuingEducationPersonForm(
+            request.POST or None,
+            b_country=person_information.birth_country,
+            b_date=person_information.birth_date,
+            b_location=person_information.birth_location,
+            instance=person_information
+            )
+    else:
+        return ContinuingEducationPersonForm(request.POST or None)
