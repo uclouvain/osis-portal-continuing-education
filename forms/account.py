@@ -15,24 +15,14 @@ class ContinuingEducationPersonForm(ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        b_date = kwargs.pop('b_date', None)
-        b_location = kwargs.pop('b_location', None)
-        b_country = kwargs.pop('b_country', None)
 
         super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
 
-        self._init_fields(b_country, b_date, b_location)
-
-    def _init_fields(self, b_country, b_date, b_location):
-        if b_date:
-            self.fields['birth_date'].initial = b_date
-            self.fields['birth_date'].widget.attrs['readonly'] = True
-        if b_location:
-            self.fields['birth_location'].initial = b_location
-            self.fields['birth_location'].widget.attrs['readonly'] = True
-        if b_country:
-            self.fields['birth_country'].initial = b_country
-            self.fields['birth_country'].widget.attrs['disabled'] = True
+        for field in self.fields.keys():
+            self.fields[field].initial = getattr(self.instance, field)
+            self.fields[field].widget.attrs['readonly'] = True
+            if field is "birth_country":
+                self.fields[field].widget.attrs['disabled'] = True
 
     def clean_birth_country(self):
         if self.instance.birth_country:

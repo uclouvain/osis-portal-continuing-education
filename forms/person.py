@@ -7,27 +7,21 @@ from base.models.person import Person
 class PersonForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
-        user_email = kwargs.pop('user_email', None)
-        first_name = kwargs.pop('first_name', None)
-        last_name = kwargs.pop('last_name', None)
-        gender = kwargs.pop('gender', None)
 
         super(PersonForm, self).__init__(*args, **kwargs)
-        self._init_fields(first_name, gender, last_name, user_email)
 
-    def _init_fields(self, first_name, gender, last_name, user_email):
-        if user_email:
-            self.fields['email'].initial = user_email
-            self.fields['email'].widget.attrs['readonly'] = True
-        if first_name:
-            self.fields['first_name'].initial = first_name
-            self.fields['first_name'].widget.attrs['readonly'] = True
-        if last_name:
-            self.fields['last_name'].initial = last_name
-            self.fields['last_name'].widget.attrs['readonly'] = True
-        if gender:
-            self.fields['gender'].initial = gender
-            self.fields['gender'].widget.attrs['disabled'] = True
+        for field in self.fields.keys():
+            self.fields[field].initial = getattr(self.instance, field)
+            self.fields[field].widget.attrs['readonly'] = True
+            if field is "gender":
+                self.fields[field].widget.attrs['disabled'] = True
+
+    def clean_gender(self):
+        if self.instance.gender:
+            return self.instance.gender
+        else:
+            gender = self.cleaned_data['gender']
+            return gender
 
     class Meta:
         model = Person

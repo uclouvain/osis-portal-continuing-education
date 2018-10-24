@@ -115,10 +115,7 @@ def check_base_person(request, base_person):
     if base_person:
         return PersonForm(
             request.POST or None,
-            first_name=base_person.first_name,
-            last_name=base_person.last_name,
-            gender=base_person.gender,
-            user_email=base_person.email
+            instance=base_person,
         )
     else:
         return PersonForm(request.POST or None)
@@ -128,10 +125,7 @@ def check_continuing_education_person(request, person_information):
     if person_information:
         return ContinuingEducationPersonForm(
             request.POST or None,
-            b_country=person_information.birth_country,
-            b_date=person_information.birth_date,
-            b_location=person_information.birth_location,
-            instance=person_information
+            instance=person_information,
             )
     else:
         return ContinuingEducationPersonForm(request.POST or None)
