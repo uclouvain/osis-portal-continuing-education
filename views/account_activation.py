@@ -122,10 +122,6 @@ def complete_account_registration(request):
     if request.POST:
         return __post_complete_account_registration(request)
     else:
-        root_person_form = PersonForm(user_email=request.user.email)
-        ce_person_form = ContinuingEducationPersonForm()
-        address_form = AddressForm()
-        admission_form = AdmissionForm()
         return redirect(reverse('admission_new'))
 
 
