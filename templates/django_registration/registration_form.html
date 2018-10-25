@@ -29,9 +29,13 @@
 {% block title %}User Registration{% endblock %}
 
 {% block content %}
-    <h2>{% trans 'registration' %}</h2>
+    <h1>{% trans "IUFC - Continuing Education" %}</h1>
+    <br>
     {% include "template_messages.html" %}
     <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>{% trans 'registration' %}</h4>
+        </div>
         <form id="form" method="POST" class="post-form">
             {% csrf_token %}
             <div class="panel panel-body">
