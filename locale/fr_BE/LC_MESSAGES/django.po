@@ -186,6 +186,9 @@ msgstr "identification"
 msgid "It is not possible to edit an admission once submitted"
 msgstr "Il est impossible de modifier une admission une fois celle-ci soumise"
 
+msgid "IUFC - Continuing Education"
+msgstr "IUFC - Formation Continue"
+
 msgid "last_degree_level"
 msgstr "Niveau du dernier diplôme"
 
@@ -339,5 +342,11 @@ msgstr "validation"
 msgid "vat_number"
 msgstr "Numéro de TVA"
 
+msgid "You already have an account"
+msgstr "Vous avez déjà un compte"
+
 msgid "You can now submit your admission form or cancel it."
 msgstr "Vous pouvez maintenant soumettre votre formulaire d'admission ou l'annuler."
+
+msgid "You don't have an account"
+msgstr "Vous n'avez pas encore de compte"

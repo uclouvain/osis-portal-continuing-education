@@ -25,36 +25,58 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block title %}Login{% endblock %}
+{% block title %}{% trans "IUFC - Continuing Education" %}{% endblock %}
 
 {% block content %}
-    <h1>{% trans 'log-in' %}</h1>
-    {% include 'template_messages.html' %}
-    {% if form.errors %}
-        <p class="text-danger">
-            {% trans 'msg_error_username_password_not_matching' %}
-        </p>
-    {% endif %}
+    <h1>{% trans "IUFC - Continuing Education" %}</h1>
     <br>
-    <form action="{% url 'continuing_education_login' %}" method="post" class="form" role="form">
-        {% csrf_token %}
-        <div style="width: 300px;">
-            <div class="form-group">
-                <label class="control-label" for="username">{% trans 'email' %}</label>
-                <input id="id_username" maxlength="254" name="username" type="text" class="form-control"
-                       placeholder="email" value="{{ username }}"/>
-            </div>
-            <div class="form-group">
-                <label class="control-label" for="password">{% trans 'password' %}</label>
-                <input id="id_password" name="password" type="password" class="form-control" placeholder="mot de passe">
-            </div>
-            <div class="form-group">
-                <input type="hidden" name="next" value="{{ next }}"/>
-                <input type="submit" value="{% trans 'log-in' %}" class="btn btn-primary" id="post_login_btn"/>
-                <a href="{% url 'django_registration_register'%}" class="btn btn-default"
-                   id="signup_btn">{% trans 'signup' %}</a>
+    {% include 'template_messages.html' %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>{% trans "You already have an account" %}</h4>
+                </div>
+                <div class="panel-body">
+                    {% if form.errors %}
+                        <p class="text-danger">
+                            {% trans 'msg_error_username_password_not_matching' %}
+                        </p>
+                    {% endif %}
+                    <form action="{% url 'continuing_education_login' %}" method="post" class="form" role="form">
+                        {% csrf_token %}
+                        <div style="width: 300px;">
+                            <div class="form-group">
+                                <label class="control-label" for="username">{% trans 'email' %}</label>
+                                <input id="id_username" maxlength="254" name="username" type="text" class="form-control"
+                                       placeholder="{% trans 'email' %}" value="{{ username }}"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="password">{% trans 'password' as password %}{{ password | capfirst }}</label>
+                                <input id="id_password" name="password" type="password" class="form-control" placeholder="{{ password | capfirst }}">
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="next" value="{{ next }}"/>
+                                <input type="submit" value="{% trans 'log-in' %}" class="btn btn-primary" id="post_login_btn"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </form>
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>{% trans "You don't have an account" %}</h4>
+                </div>
+                <div class="panel-body">
+                    <a href="{% url 'django_registration_register'%}" class="btn btn-primary" id="signup_btn">
+                        {% trans 'signup' %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
