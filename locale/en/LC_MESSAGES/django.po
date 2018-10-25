@@ -183,6 +183,9 @@ msgstr "ID card number"
 msgid "It is not possible to edit an admission once submitted"
 msgstr ""
 
+msgid "IUFC - Continuing Education"
+msgstr ""
+
 msgid "identification"
 msgstr ""
 
