@@ -49,7 +49,7 @@
                     <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
                 </button>
                 <a class="btn btn-default" href="{% url 'continuing_education_home' %}" id="bt_cancel_registration">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'cancel' %}
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'cancel' as cancel %}{{ cancel | capfirst }}
                 </a>
             </div>
         </form>
