@@ -339,5 +339,11 @@ msgstr ""
 msgid "vat_number"
 msgstr "VAT number"
 
+msgid "You already have an account"
+msgstr ""
+
 msgid "You can now submit your admission form or cancel it."
+msgstr ""
+
+msgid "You don't have an account"
 msgstr ""

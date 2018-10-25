@@ -339,5 +339,11 @@ msgstr "validation"
 msgid "vat_number"
 msgstr "Numéro de TVA"
 
+msgid "You already have an account"
+msgstr "Vous avez déjà un compte"
+
 msgid "You can now submit your admission form or cancel it."
 msgstr "Vous pouvez maintenant soumettre votre formulaire d'admission ou l'annuler."
+
+msgid "You don't have an account"
+msgstr "Vous n'avez pas encore de compte"
