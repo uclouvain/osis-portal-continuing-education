@@ -181,15 +181,18 @@
       $(this).tab('show');
     });
     function showTab(tab) {
-        $('#tabs a[href="#' + tab + '"]').tab('show')
+        $('#tabs a[href="#' + tab + '"]').tab('show');
     }
     //re-enable disabled field on form submit
+    var fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year"];
+
+    function enableFields(fields) {
+        for (var field of fields) {
+            $("#id_" + field).prop( "disabled", false );
+        }
+    }
     $( "#form" ).submit(function( event ) {
-        $("#id_birth_country").prop( "disabled", false );
-        $("#id_gender").prop( "disabled", false );
-        $("#id_birth_date_day").prop( "disabled", false );
-        $("#id_birth_date_month").prop( "disabled", false );
-        $("#id_birth_date_year").prop( "disabled", false );
+        enableFields(fields_to_enable);
     });
 </script>
 {% if request.session.formation_id %}
