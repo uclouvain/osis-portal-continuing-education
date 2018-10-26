@@ -37,7 +37,7 @@ class ContinuingEducationPersonForm(ModelForm):
         for field in self.fields.keys():
             self.fields[field].initial = getattr(self.instance, field)
             self.fields[field].widget.attrs['readonly'] = True
-            if field is "birth_country":
+            if field is "birth_country" or field is "birth_date":
                 self.fields[field].widget.attrs['disabled'] = True
 
     def clean_birth_country(self):

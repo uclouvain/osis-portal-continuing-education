@@ -183,6 +183,14 @@
     function showTab(tab) {
         $('#tabs a[href="#' + tab + '"]').tab('show')
     }
+    //re-enable disabled field on form submit
+    $( "#form" ).submit(function( event ) {
+        $("#id_birth_country").prop( "disabled", false );
+        $("#id_gender").prop( "disabled", false );
+        $("#id_birth_date_day").prop( "disabled", false );
+        $("#id_birth_date_month").prop( "disabled", false );
+        $("#id_birth_date_year").prop( "disabled", false );
+    });
 </script>
 {% if request.session.formation_id %}
 <script>
