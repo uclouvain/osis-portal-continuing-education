@@ -10,6 +10,10 @@ class PersonForm(ModelForm):
 
         super(PersonForm, self).__init__(*args, **kwargs)
 
+        if self.instance.pk:
+            self._disable_existing_person_fields()
+
+    def _disable_existing_person_fields(self):
         for field in self.fields.keys():
             self.fields[field].initial = getattr(self.instance, field)
             self.fields[field].widget.attrs['readonly'] = True
@@ -25,11 +29,13 @@ class PersonForm(ModelForm):
 
     class Meta:
         model = Person
-        # automatic translation of field names
+
         fields = [
             'first_name',
             'last_name',
             'email',
             'gender'
         ]
+
+        # Automatic translation of field names
         labels = {field: _(field) for field in fields}

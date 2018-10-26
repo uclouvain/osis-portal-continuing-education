@@ -78,7 +78,7 @@ def admission_form(request, admission_id=None):
 
         identity = Person.objects.filter(user=request.user)
 
-        if not identity.first():
+        if not identity:
             identity, id_created = Person.objects.get_or_create(**id_form.cleaned_data)
             identity.user = request.user
             identity.save()
