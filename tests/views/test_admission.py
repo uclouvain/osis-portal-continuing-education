@@ -82,6 +82,15 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_admission_new_save(self):
         admission = model_to_dict(self.admission)
+        person = {
+            'first_name': self.person.first_name,
+            'last_name': self.person.last_name,
+            'gender': self.person.gender,
+            'birth_country': self.admission.person_information.birth_country.pk,
+            'birth_location': self.admission.person_information.birth_location,
+            'birth_date': self.admission.person_information.birth_date,
+        }
+        admission.update(person)
         response = self.client.post(reverse('admission_new'), data=admission)
         created_admission = Admission.objects.exclude(pk=self.admission.pk).get()
         self.assertEqual(response.status_code, 302)
