@@ -25,6 +25,9 @@ msgstr "Rejected"
 msgid "waiting"
 msgstr "Waiting"
 
+msgid "additional email"
+msgstr ""
+
 msgid "admission"
 msgstr "Admission"
 
@@ -200,6 +203,9 @@ msgstr "Institution"
 
 msgid "last_degree_graduation_year"
 msgstr "Graduation year (last degree)"
+
+msgid "Legal address"
+msgstr ""
 
 msgid "location"
 msgstr "Location"
