@@ -8,16 +8,19 @@ from base.models.person import Person
 class PersonForm(ModelForm):
 
     first_name = forms.CharField(
-        required=True
+        required=True,
+        label=_("first_name")
     )
 
     last_name = forms.CharField(
-        required=True
+        required=True,
+        label=_("last_name")
     )
 
     gender = forms.ChoiceField(
         choices=Person.GENDER_CHOICES,
-        required=True
+        required=True,
+        label=_("gender")
     )
 
     def __init__(self, *args, **kwargs):

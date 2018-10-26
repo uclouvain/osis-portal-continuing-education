@@ -82,6 +82,15 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_admission_new_save(self):
         admission = model_to_dict(self.admission)
+        person = {
+            'first_name': self.person.first_name,
+            'last_name': self.person.last_name,
+            'gender': self.person.gender,
+            'birth_country': self.admission.person_information.birth_country.pk,
+            'birth_location': self.admission.person_information.birth_location,
+            'birth_date': self.admission.person_information.birth_date,
+        }
+        admission.update(person)
         response = self.client.post(reverse('admission_new'), data=admission)
         created_admission = Admission.objects.exclude(pk=self.admission.pk).get()
         self.assertEqual(response.status_code, 302)
@@ -116,6 +125,14 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_edit_post_admission_found(self):
         person_information = ContinuingEducationPersonFactory(person=self.person)
+        person = {
+            'first_name': self.person.first_name,
+            'last_name': self.person.last_name,
+            'gender': self.person.gender,
+            'birth_country': person_information.birth_country.pk,
+            'birth_location': person_information.birth_location,
+            'birth_date': person_information.birth_date,
+        }
         admission = {
             'person_information': person_information.pk,
             'motivation': 'abcd',
@@ -125,7 +142,9 @@ class ViewStudentAdmissionTestCase(TestCase):
             'state': random.choice(get_enum_keys(STUDENT_STATE_CHOICES))
         }
         url = reverse('admission_edit', args=[self.admission.pk])
-        response = self.client.post(url, data=admission)
+        data = person.copy()
+        data.update(admission)
+        response = self.client.post(url, data=data)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.id]))
         self.admission.refresh_from_db()
 

@@ -176,8 +176,19 @@
       $(this).tab('show');
     });
     function showTab(tab) {
-        $('#tabs a[href="#' + tab + '"]').tab('show')
+        $('#tabs a[href="#' + tab + '"]').tab('show');
     }
+    //re-enable disabled field on form submit
+    var fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year"];
+
+    function enableFields(fields) {
+        for (var field of fields) {
+            $("#id_" + field).prop( "disabled", false );
+        }
+    }
+    $( "#form" ).submit(function( event ) {
+        enableFields(fields_to_enable);
+    });
 </script>
 {% if request.session.formation_id %}
 <script>
