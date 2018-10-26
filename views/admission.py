@@ -45,7 +45,11 @@ from continuing_education.views.common import display_errors
 
 @login_required
 def admission_detail(request, admission_id):
-    admission = get_object_or_404(Admission, pk=admission_id)
+    admission = get_object_or_404(
+        Admission,
+        pk=admission_id,
+        person_information__person__user=request.user
+    )
     if request.POST.get("submit"):
         admission.submit()
     return render(request, "admission_detail.html", locals())
@@ -54,7 +58,11 @@ def admission_detail(request, admission_id):
 @login_required
 def admission_form(request, admission_id=None):
     base_person = mdl_person.find_by_user(user=request.user)
-    admission = get_object_or_404(Admission, pk=admission_id) if admission_id else None
+    admission = get_object_or_404(
+        Admission,
+        pk=admission_id,
+        person_information__person__user=request.user
+    ) if admission_id else None
     if admission and admission.state != admission_state_choices.DRAFT:
         raise PermissionDenied
     person_information = continuing_education_person.find_by_person(person=base_person)
