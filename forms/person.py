@@ -20,13 +20,6 @@ class PersonForm(ModelForm):
             if field is "gender":
                 self.fields[field].widget.attrs['disabled'] = True
 
-    def clean_gender(self):
-        if self.instance.gender:
-            return self.instance.gender
-        else:
-            gender = self.cleaned_data['gender']
-            return gender
-
     class Meta:
         model = Person
 
