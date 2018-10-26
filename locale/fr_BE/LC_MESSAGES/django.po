@@ -153,6 +153,9 @@ msgstr "Education"
 msgid "faculty"
 msgstr "Faculté"
 
+msgid "female"
+msgstr "féminin"
+
 msgid "first_name"
 msgstr "Prénom"
 
@@ -215,6 +218,9 @@ msgstr "S'identifier"
 
 msgid "log-out"
 msgstr "Déconnexion"
+
+msgid "male"
+msgstr "masculin"
 
 msgid "marital_status"
 msgstr "Etat civil"
@@ -335,6 +341,9 @@ msgstr "soumis"
 
 msgid "succesfull_logout"
 msgstr "Vous êtes à présent déconnecté."
+
+msgid "unknown"
+msgstr "indéfini"
 
 msgid "use_address_for_billing"
 msgstr "Utiliser l'adresse enregistrée pour la facturation"

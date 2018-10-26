@@ -5,6 +5,10 @@ from django.utils.translation import ugettext_lazy as _
 from base.models.person import Person
 
 
+def _capitalize_choices(choices):
+    return ((choice[0], choice[1].capitalize()) for choice in choices)
+
+
 class PersonForm(ModelForm):
 
     first_name = forms.CharField(
@@ -18,7 +22,7 @@ class PersonForm(ModelForm):
     )
 
     gender = forms.ChoiceField(
-        choices=Person.GENDER_CHOICES,
+        choices=_capitalize_choices(Person.GENDER_CHOICES),
         required=True,
         label=_("gender")
     )

@@ -153,6 +153,9 @@ msgstr "Education"
 msgid "faculty"
 msgstr "Faculty"
 
+msgid "female"
+msgstr ""
+
 msgid "first_name"
 msgstr "First name"
 
@@ -215,6 +218,9 @@ msgstr "Log in"
 
 msgid "log-out"
 msgstr "Log out"
+
+msgid "male"
+msgstr ""
 
 msgid "marital_status"
 msgstr "Marital status"
@@ -335,6 +341,9 @@ msgstr ""
 
 msgid "succesfull_logout"
 msgstr "You are now logged out."
+
+msgid "unknown"
+msgstr ""
 
 msgid "use_address_for_billing"
 msgstr "Use recorded address for billing"
