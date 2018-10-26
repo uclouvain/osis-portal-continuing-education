@@ -25,6 +25,9 @@ msgstr "Refusé"
 msgid "waiting"
 msgstr "En attente"
 
+msgid "additional email"
+msgstr "adresse email additionnelle"
+
 msgid "admission"
 msgstr "Admission"
 
@@ -201,8 +204,11 @@ msgstr "Institution"
 msgid "last_degree_graduation_year"
 msgstr "Année d'obtention"
 
+msgid "Legal address"
+msgstr "Domicile légal"
+
 msgid "location"
-msgstr "Rue"
+msgstr "Rue - numéro - boîte"
 
 msgid "log-in"
 msgstr "S'identifier"

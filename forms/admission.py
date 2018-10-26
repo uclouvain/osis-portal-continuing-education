@@ -40,6 +40,7 @@ class AdmissionForm(ModelForm):
             'person_information',
             'citizenship',
             'address',
+            'residence_phone',
             'phone_mobile',
             'email',
 
