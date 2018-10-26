@@ -24,10 +24,16 @@
 #
 ##############################################################################
 from django.conf.urls import url, include
+from django.urls import reverse_lazy
 from django_registration.forms import RegistrationFormUniqueEmail
 
+from continuing_education.forms.account import ContinuingEducationPasswordResetForm
 from continuing_education.views import account_activation
 from continuing_education.views import (home, admission, registration, common)
+from django.contrib.auth import views as accounts_views
+
+from continuing_education.views.account_activation import ContinuingEducationPasswordResetView, \
+    ContinuingEducationPasswordResetConfirmView
 
 urlpatterns = [
     url(r'^$', home.formations_list, name='formations_list'),
@@ -45,6 +51,9 @@ urlpatterns = [
         url(r'^activate/(?P<formation_id>[\w]+)/(?P<activation_key>[-:\w]+)/$',
             account_activation.ContinuingEducationActivationView.as_view(),
             name='django_registration_activate'),
+        url(r'^password_reset/$', ContinuingEducationPasswordResetView.as_view(), name='password_reset'),
+        url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+            ContinuingEducationPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
         url(r'^', include('django_registration.backends.activation.urls'))])),
     url(r'^admission_new/', admission.admission_form, name='admission_new'),
     url(r'^admission_edit/(?P<admission_id>[0-9]+)$', admission.admission_form, name='admission_edit'),

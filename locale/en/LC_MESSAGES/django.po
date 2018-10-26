@@ -365,3 +365,24 @@ msgstr ""
 
 msgid "You don't have an account"
 msgstr ""
+
+msgid "Enter a new Password"
+msgstr ""
+
+msgid "Change my password"
+msgstr ""
+
+msgid "Forgot your password ?"
+msgstr ""
+
+msgid "Enter your email address below, and we will email instructions for setting a new password."
+msgstr ""
+
+msgid "Your password was successfully changed."
+msgstr ""
+
+msgid "An email was sent to you with the instructions to change your password. You should receive this email shortly."
+msgstr ""
+
+msgid "This email does not exist in our database: {}"
+msgstr ""
