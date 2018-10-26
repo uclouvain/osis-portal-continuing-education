@@ -153,14 +153,9 @@
                             {% trans 'previous' as previous %}{{ previous | title }}
                         </a>
                         <button type="submit"
-                            name="state" value="submitted" class="btn btn-primary" title="{%trans 'submit' %}">
-                        <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
-                            {% trans 'submit' as submit %}{{ submit | title }}
-                        </button>
-                        <button type="submit"
                                 name="state" value="draft" class="btn btn-info" title="{%trans 'draft' %}">
                             <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                            {% trans 'draft' as draft %}{{ draft | title }}
+                            {% trans 'save' as save %}{{ save | title }}
                         </button>
                         <a class="btn btn-default" id="" href="{% url 'continuing_education_home' %}">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
