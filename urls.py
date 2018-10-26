@@ -24,14 +24,10 @@
 #
 ##############################################################################
 from django.conf.urls import url, include
-from django.urls import reverse_lazy
 from django_registration.forms import RegistrationFormUniqueEmail
 
-from continuing_education.forms.account import ContinuingEducationPasswordResetForm
 from continuing_education.views import account_activation
 from continuing_education.views import (home, admission, registration, common)
-from django.contrib.auth import views as accounts_views
-
 from continuing_education.views.account_activation import ContinuingEducationPasswordResetView, \
     ContinuingEducationPasswordResetConfirmView
 

@@ -2,24 +2,18 @@ from datetime import datetime
 
 from django import forms
 from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth.backends import UserModel
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-
-from base.views import layout
-from base.views.layout import render
-from osis_common.messaging import message_config, send_message as message_service
 from django.forms import ModelForm
-from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.continuing_education_person import ContinuingEducationPerson
+from osis_common.messaging import message_config, send_message as message_service
 from reference.models.country import Country
 
 
