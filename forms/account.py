@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django import forms
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
@@ -10,7 +12,18 @@ class ContinuingEducationPersonForm(ModelForm):
     birth_country = forms.ModelChoiceField(
         queryset=Country.objects.all().order_by('name'),
         label=_("birth_country"),
-        required=False,
+        required=True,
+    )
+
+    birth_date = forms.DateField(
+        widget=forms.SelectDateWidget(years=range(1900, datetime.now().year)),
+        label=_("birth_date"),
+        required=True
+    )
+
+    birth_location = forms.CharField(
+        required=True,
+        label=_("birth_location")
     )
 
     def __init__(self, *args, **kwargs):

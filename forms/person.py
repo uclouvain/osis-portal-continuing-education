@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 
@@ -5,6 +6,19 @@ from base.models.person import Person
 
 
 class PersonForm(ModelForm):
+
+    first_name = forms.CharField(
+        required=True
+    )
+
+    last_name = forms.CharField(
+        required=True
+    )
+
+    gender = forms.ChoiceField(
+        choices=Person.GENDER_CHOICES,
+        required=True
+    )
 
     def __init__(self, *args, **kwargs):
 

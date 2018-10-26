@@ -152,7 +152,7 @@
                         <a href="#" class="btn btn-default" onclick="showTab('formation')">
                             {% trans 'previous' as previous %}{{ previous | title }}
                         </a>
-                        <button type="submit"
+                        <button type="submit" onclick="showTab('identification')"
                                 name="state" value="draft" class="btn btn-info" title="{%trans 'draft' %}">
                             <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
                             {% trans 'save' as save %}{{ save | title }}
