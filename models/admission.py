@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -301,6 +301,8 @@ class Admission(SerializableModel):
         if self.state == admission_state_choices.DRAFT:
             self.state = admission_state_choices.SUBMITTED
             self.save()
+        else:
+            raise(PermissionDenied('To submit an admission, its state must be DRAFT.'))
 
 
 def find_by_id(a_id):
