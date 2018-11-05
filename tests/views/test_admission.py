@@ -44,8 +44,6 @@ from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 from continuing_education.views.admission import admission_form
 
-INFO_MESSAGE_LEVEL = 20
-
 
 class ViewStudentAdmissionTestCase(TestCase):
     def setUp(self):
