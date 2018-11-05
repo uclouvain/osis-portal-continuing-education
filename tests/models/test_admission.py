@@ -23,10 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 
 from continuing_education.models import admission
+from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 
@@ -51,3 +52,36 @@ class TestAdmission(TestCase):
 
         nonexistent_admission = admission.search(person=self.person)
         self.assertFalse(nonexistent_admission.exists())
+
+    def test_submit_ok(self):
+        an_admission = self.admission
+        an_admission.state = admission_state_choices.DRAFT
+        an_admission.save()
+        an_admission.submit()
+        self.assertEqual(
+            an_admission.state,
+            admission_state_choices.SUBMITTED
+        )
+
+    def test_submit_nok_incorrect_origin_state(self):
+        an_admission = self.admission
+
+        forbidden_origin_states_to_submit = [
+            admission_state_choices.ACCEPTED,
+            admission_state_choices.REJECTED,
+            admission_state_choices.WAITING,
+            admission_state_choices.SUBMITTED,
+        ]
+
+        for forbidden_state in forbidden_origin_states_to_submit:
+            with self.subTest(forbidden_state=forbidden_state):
+                an_admission.state = forbidden_state
+                an_admission.save()
+
+                with self.assertRaisesMessage(PermissionDenied, 'To submit an admission, its state must be DRAFT.'):
+                    an_admission.submit()
+
+                self.assertEqual(
+                    an_admission.state,
+                    forbidden_state
+                )
