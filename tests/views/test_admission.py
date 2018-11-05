@@ -26,12 +26,14 @@
 import datetime
 import random
 
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase, RequestFactory
+from django.utils.translation import ugettext_lazy as _
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.admission import Admission
@@ -108,6 +110,15 @@ class ViewStudentAdmissionTestCase(TestCase):
         created_admission = Admission.objects.last()
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('admission_detail', args=[created_admission.pk]))
+
+        # An information message should be displayed
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(
+            str(messages_list[0]),
+            _("Your admission file has been saved. Do not forget to submit it when it is complete !")
+        )
+        self.assertEqual(messages_list[0].level, messages.INFO)
 
     def test_admission_save_with_error(self):
         admission = model_to_dict(AdmissionFactory())

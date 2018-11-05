@@ -25,10 +25,12 @@
 ##############################################################################
 import itertools
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 
 from base.models import person as mdl_person
 from base.models.person import Person
@@ -96,6 +98,11 @@ def admission_form(request, admission_id=None):
         admission.save()
         if request.session.get('formation_id'):
             del request.session['formation_id']
+        messages.add_message(
+            request=request,
+            level=messages.INFO,
+            message=_('Your admission file has been saved. Do not forget to submit it when it is complete !'),
+        )
         return redirect(reverse('admission_detail', kwargs={'admission_id': admission.pk}))
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))

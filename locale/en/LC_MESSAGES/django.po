@@ -366,6 +366,9 @@ msgstr ""
 msgid "You don't have an account"
 msgstr ""
 
+msgid "Your admission file has been saved. Do not forget to submit it when it is complete !"
+msgstr ""
+
 msgid "Enter a new Password"
 msgstr ""
 
