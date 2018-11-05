@@ -26,10 +26,8 @@
 import json
 import os
 
-from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
-from django.urls import reverse
 
 from base.models import person as mdl_person
 from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission

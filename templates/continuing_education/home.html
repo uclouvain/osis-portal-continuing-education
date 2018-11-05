@@ -38,6 +38,7 @@
         <h2 class="text-capitalize">{% trans 'student' %}</h2>
         <h3>{{ user.first_name }} {{ user.last_name }}</h3>
     </div>
+    {% include "template_messages.html" %}
     <div class="panel-heading clearfix">
         <a class="btn btn-default pull-right" href="{% url 'admission_new'%}">
             {% trans 'new_admission' %}
