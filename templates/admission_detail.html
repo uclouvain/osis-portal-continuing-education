@@ -34,7 +34,6 @@
 {% endblock %}
 
 {% block content %}
-
     <div class="page-header">
         {% if admission.state == "draft" %}
         <form id="form" method="POST" class="post-form">
@@ -56,6 +55,8 @@
         {% endif %}
         <h2>{% trans 'admission' %}</h2>
     </div>
+
+    {% include 'template_messages.html' %}
 
     <div class="panel panel-default">
         {% csrf_token %}
