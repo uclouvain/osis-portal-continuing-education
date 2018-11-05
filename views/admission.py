@@ -94,6 +94,8 @@ def admission_form(request, admission_id=None):
         admission.person_information = person
         admission.address = address
         admission.save()
+        if request.session.get('formation_id'):
+            del request.session['formation_id']
         return redirect(reverse('admission_detail', kwargs={'admission_id': admission.pk}))
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
