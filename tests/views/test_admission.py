@@ -48,9 +48,16 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
         self.request = RequestFactory()
-        self.request.user = self.user
-        self.admission = AdmissionFactory(state=admission_state_choices.DRAFT)
         self.person = PersonFactory(user=self.user)
+        self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        self.admission = AdmissionFactory(
+            person_information=self.person_information,
+            state=admission_state_choices.DRAFT
+        )
+        self.admission_submitted = AdmissionFactory(
+            person_information=self.person_information,
+            state=admission_state_choices.SUBMITTED
+        )
 
     def test_admission_detail(self):
         url = reverse('admission_detail', args=[self.admission.pk])
@@ -74,6 +81,12 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.context['admission'].state, admission_state_choices.SUBMITTED)
         self.assertTemplateUsed(response, 'admission_detail.html')
 
+    def test_admission_detail_unauthorized(self):
+        admission = AdmissionFactory()
+        url = reverse('admission_detail', args=[admission.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
     def test_admission_new(self):
         url = reverse('admission_new')
         response = self.client.get(url)
@@ -92,7 +105,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         }
         admission.update(person)
         response = self.client.post(reverse('admission_new'), data=admission)
-        created_admission = Admission.objects.exclude(pk=self.admission.pk).get()
+        created_admission = Admission.objects.last()
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('admission_detail', args=[created_admission.pk]))
 
@@ -109,6 +122,12 @@ class ViewStudentAdmissionTestCase(TestCase):
         }))
         self.assertEqual(response.status_code, 404)
 
+    def test_admission_edit_unauthorized(self):
+        admission = AdmissionFactory()
+        url = reverse('admission_detail', args=[admission.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
     def test_edit_get_admission_found(self):
         url = reverse('admission_edit', args=[self.admission.id])
         response = self.client.get(url)
@@ -116,15 +135,16 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertTemplateUsed(response, 'admission_form.html')
 
     def test_admission_edit_permission_denied_invalid_state(self):
-        admission = AdmissionFactory(state=admission_state_choices.SUBMITTED)
-        url = reverse('admission_edit', args=[admission.pk])
+        url = reverse('admission_edit', args=[self.admission_submitted.pk])
+        request = self.request.get(url)
+        request.user = self.user
         with self.assertRaises(PermissionDenied):
-            admission_form(self.request, admission.pk)
+            admission_form(request, self.admission_submitted.pk)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
 
     def test_edit_post_admission_found(self):
-        person_information = ContinuingEducationPersonFactory(person=self.person)
+        person_information = self.admission.person_information
         person = {
             'first_name': self.person.first_name,
             'last_name': self.person.last_name,
