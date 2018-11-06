@@ -28,6 +28,7 @@ from django.test import TestCase
 
 from continuing_education.models import admission
 from continuing_education.models.enums import admission_state_choices
+from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 
@@ -66,12 +67,12 @@ class TestAdmission(TestCase):
     def test_submit_nok_incorrect_origin_state(self):
         an_admission = self.admission
 
-        forbidden_origin_states_to_submit = [
-            admission_state_choices.ACCEPTED,
-            admission_state_choices.REJECTED,
-            admission_state_choices.WAITING,
-            admission_state_choices.SUBMITTED,
-        ]
+        all_states = get_enum_keys(admission_state_choices.STATE_CHOICES)
+        permitted_origin_states_to_submit = [admission_state_choices.DRAFT]
+        forbidden_origin_states_to_submit = get_differences_between_lists(
+            full_list=all_states,
+            list_of_elements_to_remove=permitted_origin_states_to_submit
+        )
 
         for forbidden_state in forbidden_origin_states_to_submit:
             with self.subTest(forbidden_state=forbidden_state):
@@ -85,3 +86,7 @@ class TestAdmission(TestCase):
                     an_admission.state,
                     forbidden_state
                 )
+
+
+def get_differences_between_lists(full_list, list_of_elements_to_remove):
+    return list(set(full_list) - set(list_of_elements_to_remove))
