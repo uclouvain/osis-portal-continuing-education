@@ -69,7 +69,10 @@ class TestAdmission(TestCase):
 
         all_states = get_enum_keys(admission_state_choices.STATE_CHOICES)
         permitted_origin_states_to_submit = [admission_state_choices.DRAFT]
-        forbidden_origin_states_to_submit = get_differences_between_lists(all_states, permitted_origin_states_to_submit)
+        forbidden_origin_states_to_submit = get_differences_between_lists(
+            full_list=all_states,
+            list_of_elements_to_remove=permitted_origin_states_to_submit
+        )
 
         for forbidden_state in forbidden_origin_states_to_submit:
             with self.subTest(forbidden_state=forbidden_state):
@@ -85,5 +88,5 @@ class TestAdmission(TestCase):
                 )
 
 
-def get_differences_between_lists(all_states, permitted_origin_states_to_submit):
-    return list(set(all_states) - set(permitted_origin_states_to_submit))
+def get_differences_between_lists(full_list, list_of_elements_to_remove):
+    return list(set(full_list) - set(list_of_elements_to_remove))
