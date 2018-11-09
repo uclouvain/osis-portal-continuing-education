@@ -369,6 +369,9 @@ msgstr ""
 msgid "Your admission file has been saved. Do not forget to submit it when it is complete !"
 msgstr ""
 
+msgid "Your admission file is not submittable because you did not provide the following data : "
+msgstr ""
+
 msgid "Enter a new Password"
 msgstr ""
 

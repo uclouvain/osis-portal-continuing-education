@@ -31,6 +31,8 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 
 from base.models import person as mdl_person
@@ -49,12 +51,21 @@ from continuing_education.views.common import display_errors
 @login_required
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
-    admission_errors = get_admission_errors(admission)
-    admission_is_submittable = not admission_errors
+    admission_submission_errors = get_admission_submission_errors(admission)
+    admission_is_submittable = not admission_submission_errors
 
     if request.POST.get("submit") and admission_is_submittable:
         admission.submit()
-        admission_is_submittable = False
+
+    if not admission_is_submittable:
+        warning_message = _("Your admission file is not submittable because you did not provide the following data : ")
+        warning_message += ", ".join(['"'+ugettext(key)+'"' for key in admission_submission_errors.keys()])
+
+        messages.add_message(
+            request=request,
+            level=messages.WARNING,
+            message=mark_safe(warning_message),
+        )
 
     return render(
         request,
@@ -62,12 +73,12 @@ def admission_detail(request, admission_id):
         {
             'admission': admission,
             'admission_is_submittable': admission_is_submittable,
-            'admission_errors': admission_errors,
+            'admission_submission_errors': admission_submission_errors,
         }
     )
 
 
-def get_admission_errors(admission):
+def get_admission_submission_errors(admission):
     errors = {}
 
     person_form = StrictPersonForm(
