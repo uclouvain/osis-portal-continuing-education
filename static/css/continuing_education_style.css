@@ -81,3 +81,36 @@
 .btn-space {
     margin-right: 10px;
 }
+
+.btn-file {
+    font-size: 16px;
+}
+
+.alert {
+    display: block !important;
+}
+
+.custom-file {
+    position: relative;
+    overflow: hidden;
+    margin-right: 5px;
+}
+
+.custom-file-input {
+    position: absolute;
+    font-size: 50px;
+    right: 0;
+    top: 0;
+    opacity: 0 !important;
+}
+
+.custom-file-label {
+    width: 70%;
+    display: inline-block;
+    cursor: auto !important;
+}
+
+.custom-file-btn-group {
+    width: calc(30% - 5px);
+    display: inline-block;
+}
