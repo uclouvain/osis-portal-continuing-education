@@ -64,8 +64,25 @@ class ViewStudentAdmissionTestCase(TestCase):
     def test_admission_detail(self):
         url = reverse('admission_detail', args=[self.admission.pk])
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_detail.html')
+
+        self.assertEqual(response.context['admission'], self.admission)
+        self.assertTrue(response.context['admission_is_submittable'])
+
+    def test_admission_detail_not_submittable(self):
+        self.admission.last_degree_level = ''
+        self.admission.save()
+
+        url = reverse('admission_detail', args=[self.admission.pk])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'admission_detail.html')
+
+        self.assertEqual(response.context['admission'], self.admission)
+        self.assertFalse(response.context['admission_is_submittable'])
 
     def test_admission_detail_not_found(self):
         response = self.client.get(reverse('admission_detail', kwargs={

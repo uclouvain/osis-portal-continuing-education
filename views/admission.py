@@ -69,7 +69,6 @@ def admission_detail(request, admission_id):
         {
             'admission': admission,
             'admission_is_submittable': admission_is_submittable,
-            'admission_submission_errors': admission_submission_errors,
         }
     )
 
