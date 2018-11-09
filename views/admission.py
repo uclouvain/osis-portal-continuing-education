@@ -109,8 +109,8 @@ def _build_warning_from_errors_dict(errors):
         "<strong>" + \
         warning_message + \
         "</strong><br>" + \
-        " · ".join([ugettext(key) for key in errors.keys()]) + \
-        "</strong><br>"
+        " · ".join([ugettext(key) for key in errors.keys()])
+
     return mark_safe(warning_message)
 
 

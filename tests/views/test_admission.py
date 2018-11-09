@@ -33,7 +33,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase, RequestFactory
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.admission import Admission
@@ -83,6 +83,19 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         self.assertEqual(response.context['admission'], self.admission)
         self.assertFalse(response.context['admission_is_submittable'])
+
+        messages_list = list(messages.get_messages(response.wsgi_request))
+
+        self.assertEqual(len(messages_list), 1)
+        self.assertIn(
+            ugettext("Your admission file is not submittable because you did not provide the following data : "),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("last_degree_level"),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.WARNING)
 
     def test_admission_detail_not_found(self):
         response = self.client.get(reverse('admission_detail', kwargs={
