@@ -29,15 +29,16 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from base.models import person as mdl_person
 from base.models.person import Person
 from continuing_education.forms.account import ContinuingEducationPersonForm
-from continuing_education.forms.address import AddressForm
-from continuing_education.forms.admission import AdmissionForm
-from continuing_education.forms.person import PersonForm
+from continuing_education.forms.address import AddressForm, StrictAddressForm
+from continuing_education.forms.admission import AdmissionForm, StrictAdmissionForm
+from continuing_education.forms.person import PersonForm, StrictPersonForm
 from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
@@ -48,9 +49,48 @@ from continuing_education.views.common import display_errors
 @login_required
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
-    if request.POST.get("submit"):
+    admission_errors = get_admission_errors(admission)
+    admission_is_submittable = not admission_errors
+
+    if request.POST.get("submit") and admission_is_submittable:
         admission.submit()
-    return render(request, "admission_detail.html", locals())
+        admission_is_submittable = False
+
+    return render(
+        request,
+        "admission_detail.html",
+        {
+            'admission': admission,
+            'admission_is_submittable': admission_is_submittable,
+            'admission_errors': admission_errors,
+        }
+    )
+
+
+def get_admission_errors(admission):
+    errors = {}
+
+    person_form = StrictPersonForm(
+        data=model_to_dict(admission.person_information.person)
+    )
+    errors.update(person_form.errors)
+
+    person_information_form = ContinuingEducationPersonForm(
+        data=model_to_dict(admission.person_information)
+    )
+    errors.update(person_information_form.errors)
+
+    address_form = StrictAddressForm(
+        data=model_to_dict(admission.address)
+    )
+    errors.update(address_form.errors)
+
+    adm_form = StrictAdmissionForm(
+        data=model_to_dict(admission)
+    )
+    errors.update(adm_form.errors)
+
+    return errors
 
 
 @login_required

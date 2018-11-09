@@ -42,7 +42,7 @@ from continuing_education.models.enums.admission_state_choices import STUDENT_ST
 from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.views.admission import admission_form
+from continuing_education.views.admission import admission_form, get_admission_errors
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -187,3 +187,77 @@ class ViewStudentAdmissionTestCase(TestCase):
             if isinstance(field_value, models.Model):
                 field_value = field_value.pk
             self.assertEqual(field_value, admission[key], key)
+
+
+class AdmissionIsSubmittableTestCase(TestCase):
+    def setUp(self):
+        self.admission = AdmissionFactory()
+
+    def test_admission_is_submittable(self):
+        self.assertFalse(
+            get_admission_errors(self.admission)
+        )
+
+    def test_admission_is_not_submittable_missing_data_in_all_objects(self):
+        self.admission.person_information.person.email = ''
+        self.admission.person_information.person.save()
+        self.admission.person_information.birth_country = None
+        self.admission.person_information.save()
+        self.admission.address.postal_code = ''
+        self.admission.address.save()
+        self.admission.last_degree_level = ''
+        self.admission.save()
+
+        self.assertDictEqual(
+            get_admission_errors(self.admission),
+            {
+                'email': [_("This field is required.")],
+                'birth_country': [_("This field is required.")],
+                'postal_code': [_("This field is required.")],
+                'last_degree_level': [_("This field is required.")]
+            }
+        )
+
+    def test_admission_is_not_submittable_missing_admission_data(self):
+        self.admission.last_degree_level = ''
+        self.admission.save()
+
+        self.assertDictEqual(
+            get_admission_errors(self.admission),
+            {
+                'last_degree_level': [_("This field is required.")]
+            }
+        )
+
+    def test_admission_is_not_submittable_missing_person_information_data(self):
+        self.admission.person_information.birth_country = None
+        self.admission.person_information.save()
+
+        self.assertDictEqual(
+            get_admission_errors(self.admission),
+            {
+                'birth_country': [_("This field is required.")],
+            }
+        )
+
+    def test_admission_is_not_submittable_missing_address_data(self):
+        self.admission.address.postal_code = ''
+        self.admission.address.save()
+
+        self.assertDictEqual(
+            get_admission_errors(self.admission),
+            {
+                'postal_code': [_("This field is required.")],
+            }
+        )
+
+    def test_admission_is_not_submittable_missing_person_data(self):
+        self.admission.person_information.person.gender = None
+        self.admission.person_information.person.save()
+
+        self.assertDictEqual(
+            get_admission_errors(self.admission),
+            {
+                'gender': [_("This field is required.")],
+            }
+        )
