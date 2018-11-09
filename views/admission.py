@@ -31,7 +31,6 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 
@@ -58,13 +57,10 @@ def admission_detail(request, admission_id):
         admission.submit()
 
     if not admission_is_submittable:
-        warning_message = _("Your admission file is not submittable because you did not provide the following data : ")
-        warning_message += ", ".join(['"'+ugettext(key)+'"' for key in admission_submission_errors.keys()])
-
         messages.add_message(
             request=request,
             level=messages.WARNING,
-            message=mark_safe(warning_message),
+            message=_build_warning_from_errors(admission_submission_errors),
         )
 
     return render(
@@ -102,6 +98,12 @@ def get_admission_submission_errors(admission):
     errors.update(adm_form.errors)
 
     return errors
+
+
+def _build_warning_from_errors(errors):
+    warning_message = _("Your admission file is not submittable because you did not provide the following data : ")
+    warning_message += ", ".join(['"' + ugettext(key) + '"' for key in errors.keys()])
+    return warning_message
 
 
 @login_required
