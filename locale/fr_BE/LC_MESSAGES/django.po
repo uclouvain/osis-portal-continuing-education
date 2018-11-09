@@ -369,6 +369,9 @@ msgstr "Vous n'avez pas encore de compte"
 msgid "Your admission file has been saved. Do not forget to submit it when it is complete !"
 msgstr "Votre dossier d'admission a été enregistré. N'oubliez pas de le soumettre quand il est complet !"
 
+msgid "Your admission file is not submittable because you did not provide the following data : "
+msgstr "Vous ne pouvez pas soumettre votre dossier d'admission car il manque les informations suivantes : "
+
 msgid "Enter a new Password"
 msgstr "Saisir un nouveau mot de passe"
 

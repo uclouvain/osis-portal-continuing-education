@@ -53,3 +53,9 @@ class PersonForm(ModelForm):
 
         # Automatic translation of field names
         labels = {field: _(field) for field in fields}
+
+
+class StrictPersonForm(PersonForm):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, **kwargs)
+        self.fields['email'].required = True

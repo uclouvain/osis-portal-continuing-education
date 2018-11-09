@@ -76,3 +76,29 @@ class AdmissionForm(ModelForm):
             # State
             'state',
         ]
+
+
+class StrictAdmissionForm(AdmissionForm):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, **kwargs)
+
+        required_fields = [
+            'citizenship',
+            'phone_mobile',
+            'email',
+            'high_school_diploma',
+            'last_degree_level',
+            'last_degree_field',
+            'last_degree_institution',
+            'last_degree_graduation_year',
+            'professional_status',
+            'current_occupation',
+            'current_employer',
+            'activity_sector',
+            'motivation',
+            'professional_impact',
+            'formation',
+        ]
+
+        for required_field in required_fields:
+            self.fields[required_field].required = True

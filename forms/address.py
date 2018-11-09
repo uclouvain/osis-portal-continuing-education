@@ -21,3 +21,18 @@ class AddressForm(ModelForm):
             'city',
             'country'
         ]
+
+
+class StrictAddressForm(AddressForm):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, **kwargs)
+
+        required_fields = [
+            'location',
+            'postal_code',
+            'city',
+            'country',
+        ]
+
+        for required_field in required_fields:
+            self.fields[required_field].required = True

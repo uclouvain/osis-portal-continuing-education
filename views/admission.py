@@ -29,15 +29,18 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 
 from base.models import person as mdl_person
 from base.models.person import Person
 from continuing_education.forms.account import ContinuingEducationPersonForm
-from continuing_education.forms.address import AddressForm
-from continuing_education.forms.admission import AdmissionForm
-from continuing_education.forms.person import PersonForm
+from continuing_education.forms.address import AddressForm, StrictAddressForm
+from continuing_education.forms.admission import AdmissionForm, StrictAdmissionForm
+from continuing_education.forms.person import PersonForm, StrictPersonForm
 from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
@@ -48,9 +51,67 @@ from continuing_education.views.common import display_errors
 @login_required
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
-    if request.POST.get("submit"):
+    admission_submission_errors = get_admission_submission_errors(admission)
+    admission_is_submittable = not admission_submission_errors
+
+    if request.POST.get("submit") and admission_is_submittable:
         admission.submit()
-    return render(request, "admission_detail.html", locals())
+
+    if not admission_is_submittable:
+        messages.add_message(
+            request=request,
+            level=messages.WARNING,
+            message=_build_warning_from_errors_dict(admission_submission_errors),
+        )
+
+    return render(
+        request,
+        "admission_detail.html",
+        {
+            'admission': admission,
+            'admission_is_submittable': admission_is_submittable,
+        }
+    )
+
+
+def get_admission_submission_errors(admission):
+    errors = {}
+
+    person_form = StrictPersonForm(
+        data=model_to_dict(admission.person_information.person)
+    )
+    errors.update(person_form.errors)
+
+    person_information_form = ContinuingEducationPersonForm(
+        data=model_to_dict(admission.person_information)
+    )
+    errors.update(person_information_form.errors)
+
+    address_form = StrictAddressForm(
+        data=model_to_dict(admission.address)
+    )
+    errors.update(address_form.errors)
+
+    adm_form = StrictAdmissionForm(
+        data=model_to_dict(admission)
+    )
+    errors.update(adm_form.errors)
+
+    return errors
+
+
+def _build_warning_from_errors_dict(errors):
+    warning_message = ugettext(
+        "Your admission file is not submittable because you did not provide the following data : "
+    )
+
+    warning_message = \
+        "<strong>" + \
+        warning_message + \
+        "</strong><br>" + \
+        " · ".join([ugettext(key) for key in errors.keys()])
+
+    return mark_safe(warning_message)
 
 
 @login_required
