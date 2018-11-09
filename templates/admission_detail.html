@@ -62,115 +62,181 @@
     {% include 'template_messages.html' %}
 
     <div class="panel panel-default">
-        {% csrf_token %}
-        <div class="panel-heading">{% trans 'identification' %}</div>
-        <div class="panel panel-body">
-            <div class="row form-group">
-                <div class="col-md-3">{% bootstrap_label _("first_name") %} <br/> {{ admission.person_information.person.first_name | default:"-" }} </div>
-                <div class="col-md-3">{% bootstrap_label _("last_name") %} <br/> {{ admission.person_information.person.last_name | default:"-" }} </div>
-                <div class="col-md-3">{% bootstrap_label _("gender") %} <br/> {{ admission.person_information.person.gender | default:"-" }} </div>
-                <div class="col-md-3">{% bootstrap_label _("citizenship") %} <br/> {{ admission.citizenship | default:"-" }} </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-3">{% bootstrap_label _("birth_date") %} <br/> {{ admission.person_information.birth_date | default:"-" }} </div>
-                <div class="col-md-3">{% bootstrap_label _("birth_location") %} <br/> {{ admission.person_information.birth_location | default:"-" }} </div>
-                <div class="col-md-3">{% bootstrap_label _("birth_country") %} <br/> {{ admission.person_information.birth_country | default:"-" }} </div>
-            </div>
-        </div>
-
-        <div class="panel-heading">{% trans 'contact' %}</div>
-        <div class="panel panel-body">
-            <div class="row form-group">
-                <div class="col-md-3">{% bootstrap_label _("phone_mobile") %} <br/> {{ admission.phone_mobile | default:"-" }} </div>
-                <div class="col-md-3">{% bootstrap_label _("email") %} <br/> {{ admission.email | default:"-" }} </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-3">{% bootstrap_label _("location") %} <br/> {{ admission.address.location | default:"-" }} </div>
-                <div class="col-md-3">{% bootstrap_label _("postal_code") %} <br/> {{ admission.address.postal_code | default:"-" }} </div>
-                <div class="col-md-3">{% bootstrap_label _("city") %} <br/> {{ admission.address.city | default:"-" }} </div>
-                <div class="col-md-3">{% bootstrap_label _("country") %} <br/> {{ admission.address.country | default:"-" }} </div>
-            </div>
-        </div>
-
-                <div class="panel-heading">{% trans 'education' %}</div>
+        <ul id="tabs" class="nav nav-tabs">
+          <li role="presentation" class="active"><a href="#informations" role="tab" data-toggle="tab">{% trans 'Informations' %}</a></li>
+          <li role="presentation"><a href="#documents" role="tab" data-toggle="tab">{% trans 'Documents' %}</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="informations">
+                {% csrf_token %}
+                <div class="panel-heading">{% trans 'Identification' %}</div>
                 <div class="panel panel-body">
                     <div class="row form-group">
-                        <div class="col-md-4">{% bootstrap_label _("high_school_diploma") %} <br/> {{ admission.high_school_diploma | yesno }} </div>
-                        <div class="col-md-4">{% bootstrap_label _("high_school_graduation_year") %} <br/> {{ admission.high_school_graduation_year | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("first_name") %} <br/> {{ admission.person_information.person.first_name | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("last_name") %} <br/> {{ admission.person_information.person.last_name | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("gender") %} <br/> {{ admission.person_information.person.gender | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("citizenship") %} <br/> {{ admission.citizenship | default:"-" }} </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-4">{% bootstrap_label _("last_degree_level") %} <br/> {{ admission.last_degree_level | default:"-" }} </div>
-                        <div class="col-md-4">{% bootstrap_label _("last_degree_field") %} <br/> {{ admission.last_degree_field | default:"-" }} </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-4">{% bootstrap_label _("last_degree_institution") %} <br/> {{ admission.last_degree_institution | default:"-" }} </div>
-                        <div class="col-md-4">{% bootstrap_label _("last_degree_graduation_year") %} <br/> {{ admission.last_degree_graduation_year | default:"-" }} </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-4">{% bootstrap_label _("other_educational_background") %} <br/> {{ admission.other_educational_background | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("birth_date") %} <br/> {{ admission.person_information.birth_date | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("birth_location") %} <br/> {{ admission.person_information.birth_location | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("birth_country") %} <br/> {{ admission.person_information.birth_country | default:"-" }} </div>
                     </div>
                 </div>
 
-            <div class="panel-heading">{% trans 'professional_background' %}</div>
-            <div class="panel panel-body">
-                <div class="row form-group">
-                    <div class="col-md-4">{% bootstrap_label _("professional_status") %} <br/> {{ admission.professional_status | default:"-" }} </div>
+                <div class="panel-heading">{% trans 'Contact' %}</div>
+                <div class="panel panel-body">
+                    <div class="row form-group">
+                        <div class="col-md-3">{% bootstrap_label _("phone_mobile") %} <br/> {{ admission.phone_mobile | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("email") %} <br/> {{ admission.email | default:"-" }} </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">{% bootstrap_label _("location") %} <br/> {{ admission.address.location | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("postal_code") %} <br/> {{ admission.address.postal_code | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("city") %} <br/> {{ admission.address.city | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("country") %} <br/> {{ admission.address.country | default:"-" }} </div>
+                    </div>
                 </div>
-                <div class="row form-group">
-                    <div class="col-md-4">{% bootstrap_label _("current_occupation") %} <br/> {{ admission.current_occupation | default:"-" }} </div>
+
+                        <div class="panel-heading">{% trans 'education' %}</div>
+                        <div class="panel panel-body">
+                            <div class="row form-group">
+                                <div class="col-md-4">{% bootstrap_label _("high_school_diploma") %} <br/> {{ admission.high_school_diploma | yesno }} </div>
+                                <div class="col-md-4">{% bootstrap_label _("high_school_graduation_year") %} <br/> {{ admission.high_school_graduation_year | default:"-" }} </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4">{% bootstrap_label _("last_degree_level") %} <br/> {{ admission.last_degree_level | default:"-" }} </div>
+                                <div class="col-md-4">{% bootstrap_label _("last_degree_field") %} <br/> {{ admission.last_degree_field | default:"-" }} </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4">{% bootstrap_label _("last_degree_institution") %} <br/> {{ admission.last_degree_institution | default:"-" }} </div>
+                                <div class="col-md-4">{% bootstrap_label _("last_degree_graduation_year") %} <br/> {{ admission.last_degree_graduation_year | default:"-" }} </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4">{% bootstrap_label _("other_educational_background") %} <br/> {{ admission.other_educational_background | default:"-" }} </div>
+                            </div>
+                        </div>
+
+                    <div class="panel-heading">{% trans 'professional_background' %}</div>
+                    <div class="panel panel-body">
+                        <div class="row form-group">
+                            <div class="col-md-4">{% bootstrap_label _("professional_status") %} <br/> {{ admission.professional_status | default:"-" }} </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">{% bootstrap_label _("current_occupation") %} <br/> {{ admission.current_occupation | default:"-" }} </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">{% bootstrap_label _("current_employer") %} <br/> {{ admission.current_employer | default:"-" }} </div>
+                            <div class="col-md-4">{% bootstrap_label _("activity_sector") %} <br/> {{ admission.activity_sector | default:"-" }} </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-4">{% bootstrap_label _("past_professional_activities") %} <br/> {{ admission.past_professional_activities | default:"-" }} </div>
+                        </div>
+                    </div>
+
+                <div class="panel-heading">{% trans 'motivation' %}</div>
+                    <div class="panel panel-body">
+                        <div class="row form-group">
+                            <div class="col-md-4">{% bootstrap_label _("motivation") %} <br/> {{ admission.motivation | default:"-" }} </div>
+                            <div class="col-md-4">{% bootstrap_label _("professional_impact") %} <br/> {{ admission.professional_impact | default:"-" }} </div>
+                        </div>
                 </div>
-                <div class="row form-group">
-                    <div class="col-md-4">{% bootstrap_label _("current_employer") %} <br/> {{ admission.current_employer | default:"-" }} </div>
-                    <div class="col-md-4">{% bootstrap_label _("activity_sector") %} <br/> {{ admission.activity_sector | default:"-" }} </div>
+
+                <div class="panel-heading">{% trans 'Formation' %}</div>
+                    <div class="panel panel-body">
+                        <div class="row form-group">
+                            <div class="col-md-4">{% bootstrap_label _("Formation") %} <br/> {{ admission.formation | default:"-" }} </div>
+                        </div>
                 </div>
-                <div class="row form-group">
-                    <div class="col-md-4">{% bootstrap_label _("past_professional_activities") %} <br/> {{ admission.past_professional_activities | default:"-" }} </div>
+
+                <div class="panel-heading">
+                    {% trans 'awareness' %}
+                </div>
+                <div class="panel panel-body">
+                    <div class="row form-group">
+                        <ul>
+                        {% if admission.awareness_ucl_website %}
+                        <li>{% trans 'awareness_ucl_website' %}</li>
+                        {% endif %}
+                        {% if admission.awareness_formation_website %}
+                        <li>{% trans 'awareness_formation_website' %}</li>
+                        {% endif %}
+                        {% if admission.awareness_press %}
+                        <li>{% trans 'awareness_press' %}</li>
+                        {% endif %}
+                        {% if admission.awareness_facebook %}
+                        <li>{% trans 'awareness_facebook' %}</li>
+                        {% endif %}
+                        {% if admission.awareness_linkedin %}
+                        <li>{% trans 'awareness_linkedin' %}</li>
+                        {% endif %}
+                        {% if admission.awareness_customized_mail %}
+                        <li>{% trans 'awareness_customized_mail' %}</li>
+                        {% endif %}
+                        {% if admission.awareness_emailing %}
+                        <li>{% trans 'awareness_emailing' %}</li>
+                        {% endif %}
+                        </ul>
+                    </div>
                 </div>
             </div>
-
-        <div class="panel-heading">{% trans 'motivation' %}</div>
-            <div class="panel panel-body">
-                <div class="row form-group">
-                    <div class="col-md-4">{% bootstrap_label _("motivation") %} <br/> {{ admission.motivation | default:"-" }} </div>
-                    <div class="col-md-4">{% bootstrap_label _("professional_impact") %} <br/> {{ admission.professional_impact | default:"-" }} </div>
+            <div role="tabpanel" class="tab-pane active" id="documents">
+                <div class="panel-body">
+                    {% if not list_files %}
+                        <div class="jumbotron">
+                            <span>{% trans 'no_document_available' %}</span>
+                        </div>
+                    {% endif %}
+                    {% if list_files %}
+                        <table id="table_education_groups" class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th id="name">{% trans 'Name' %}</th>
+                                    <th id="size">{% trans 'Size' %}</th>
+                                    <th id="last_update">{% trans 'Last update' %}</th>
+                                    <th id="actions">{% trans 'Actions' %}</th>
+                                </tr>
+                            </thead>
+                            {% for file in list_files %}
+                                <tr>
+                                    <td> {{file.name}} </td>
+                                    <td> {{file.size|filesizeformat}} </td>
+                                    <td > {{file.created_date}} </td>
+                                    <td>
+                                        <a class="button" role="button">
+                                            <span class="glyphicon glyphicon-remove-circle btn-space btn-file"
+                                                  aria-hidden="true"></span>
+                                        </a>
+                                        <a class="button" role="button"
+                                           href="{% url 'view_file' file.path %}" target="_blank">
+                                            <span class="glyphicon glyphicon-eye-open btn-space btn-file"
+                                                  aria-hidden="true"></span>
+                                        </a>
+                                        <a class="button" role="button" href="{% url 'download_file' file.path %}">
+                                            <span class="glyphicon glyphicon-download-alt btn-space btn-file"
+                                                  aria-hidden="true"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endif %}
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label class="custom-file-label btn btn-default"
+                               disabled id="custom-file-label">Aucun fichier choisi</label>
+                        <div class="custom-file-btn-group pull-right">
+                            <button type="submit" class="btn btn-primary pull-right" name="file_submit">
+                                <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+                                {% trans 'Upload' %}
+                            </button>
+                            <div class="custom-file file btn btn-primary pull-right">
+                                Browse
+                              <input type="file" class="custom-file-input" id="customFile" name="myfile">
+                            </div>
+                        </div>
+                    </form>
                 </div>
-        </div>
-
-        <div class="panel-heading">{% trans 'formation' %}</div>
-            <div class="panel panel-body">
-                <div class="row form-group">
-                    <div class="col-md-4">{% bootstrap_label _("formation") %} <br/> {{ admission.formation | default:"-" }} </div>
-                </div>
-        </div>
-
-        <div class="panel-heading">
-            {% trans 'awareness' %}
-        </div>
-        <div class="panel panel-body">
-            <div class="row form-group">
-                <ul>
-                {% if admission.awareness_ucl_website %}
-                <li>{% trans 'awareness_ucl_website' %}</li>
-                {% endif %}
-                {% if admission.awareness_formation_website %}
-                <li>{% trans 'awareness_formation_website' %}</li>
-                {% endif %}
-                {% if admission.awareness_press %}
-                <li>{% trans 'awareness_press' %}</li>
-                {% endif %}
-                {% if admission.awareness_facebook %}
-                <li>{% trans 'awareness_facebook' %}</li>
-                {% endif %}
-                {% if admission.awareness_linkedin %}
-                <li>{% trans 'awareness_linkedin' %}</li>
-                {% endif %}
-                {% if admission.awareness_customized_mail %}
-                <li>{% trans 'awareness_customized_mail' %}</li>
-                {% endif %}
-                {% if admission.awareness_emailing %}
-                <li>{% trans 'awareness_emailing' %}</li>
-                {% endif %}
-                </ul>
             </div>
         </div>
     </div>
@@ -184,5 +250,21 @@
             console.log($(this).find(":selected").val());
             $('.high_school_graduation_year').toggle($(this).find(":selected").val());
         });
+
+        $('#tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+        let uploaded = "{{request_to_put_file}}";
+        if(uploaded){
+            showTab("documents");
+        }
+        function showTab(tab) {
+            $('#tabs a[href="#' + tab + '"]').tab('show');
+        }
+        $('#customFile').change(function(e) {
+            $('#custom-file-label').text(this.files[0].name);
+        });
+
     </script>
 {% endblock %}

@@ -24,16 +24,25 @@
 #
 ##############################################################################
 import itertools
+import json
+from datetime import datetime
+from json import JSONDecodeError
+from mimetypes import MimeTypes
 
+import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
+from rest_framework import status
+from rest_framework.renderers import MultiPartRenderer
 
 from base.models import person as mdl_person
 from base.models.person import Person
@@ -45,7 +54,7 @@ from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.common import display_errors
+from continuing_education.views.common import display_errors, display_success_messages, display_error_messages
 
 
 @login_required
@@ -53,7 +62,10 @@ def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
     admission_submission_errors = get_admission_submission_errors(admission)
     admission_is_submittable = not admission_submission_errors
-
+    headers_to_get = {
+        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
+    }
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API
     if request.POST.get("submit") and admission_is_submittable:
         admission.submit()
 
@@ -63,6 +75,30 @@ def admission_detail(request, admission_id):
             level=messages.WARNING,
             message=_build_warning_from_errors_dict(admission_submission_errors),
         )
+    request_to_put_file = None
+    if request.method == 'POST' and 'file_submit' in request.POST:
+        if 'myfile' in request.FILES:
+            file = request.FILES['myfile']
+        else:
+            file = None
+        data = {
+            'file': file,
+            'admission_id': str(admission.uuid)
+        }
+        renderer = MultiPartRenderer()
+        headers_put = {
+            'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
+            'Content-Disposition': 'attachment; filename=name.jpeg',
+            'Content-Type': renderer.media_type
+        }
+        if file:
+            request_to_put_file = requests.put(url, data=renderer.render(data),  headers=headers_put)
+            if request_to_put_file.status_code == status.HTTP_201_CREATED:
+                display_success_messages(request, _("The document is uploaded correctly"))
+            else:
+                display_error_messages(request, _("A problem occured : the document is not uploaded"))
+    request_to_get_list = requests.get(url + '?admission_id=' + str(admission.uuid), headers=headers_to_get)
+    list_files = _make_list_files(request_to_get_list)
 
     return render(
         request,
@@ -70,6 +106,8 @@ def admission_detail(request, admission_id):
         {
             'admission': admission,
             'admission_is_submittable': admission_is_submittable,
+            'list_files': list_files,
+            'request_to_put_file': request_to_put_file
         }
     )
 
@@ -114,6 +152,52 @@ def _build_warning_from_errors_dict(errors):
     return mark_safe(warning_message)
 
 
+def _make_list_files(response):
+    list_temp = response.content.decode('utf8')
+    try:
+        list_json = json.loads(list_temp)
+    except JSONDecodeError:
+        list_json = []
+    list_files = [
+        {
+            'path': file['fields']['path'],
+            'name': file['fields']['name'],
+            'created_date': datetime.strptime(file['fields']['created_date'], "%Y-%m-%dT%H:%M:%S.%f"),
+            'size': file['fields']['size']
+        }
+        for file in list_json
+    ]
+    return list_files
+
+
+@login_required
+def view_file(request, path):
+    return _get_file(path, is_download=False)
+
+
+@login_required
+def download_file(request, path):
+    return _get_file(path, is_download=True)
+
+
+def _get_file(path, is_download):
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API
+    headers_to_get = {
+        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
+    }
+    request_to_get = requests.get(url + '?file_path=' + path, headers=headers_to_get)
+    name = path.rsplit('/', 1)[-1]
+    response = HttpResponse()
+    mime_type = MimeTypes().guess_type(path)
+    response['Content-Type'] = mime_type
+    if is_download:
+        response['Content-Disposition'] = 'attachment; filename=%s' % name
+    else:
+        response['Content-Disposition'] = 'inline; filename=%s' % name
+    response.write(request_to_get.content)
+    return response
+
+
 @login_required
 def admission_form(request, admission_id=None):
     base_person = mdl_person.find_by_user(user=request.user)
@@ -123,14 +207,14 @@ def admission_form(request, admission_id=None):
     person_information = continuing_education_person.find_by_person(person=base_person)
     adm_form = AdmissionForm(request.POST or None, instance=admission)
 
-    person_form = check_continuing_education_person(request, person_information)
+    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
     current_address = admission.address if admission else None
     old_admission = Admission.objects.filter(person_information=person_information).last()
     address = current_address if current_address else (old_admission.address if old_admission else None)
     address_form = AddressForm(request.POST or None, instance=address)
 
-    id_form = check_base_person(request, base_person)
+    id_form = PersonForm(request.POST or None, instance=base_person)
 
     if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
         if current_address:
@@ -179,26 +263,6 @@ def admission_form(request, admission_id=None):
             'id_form': id_form,
         }
     )
-
-
-def check_base_person(request, base_person):
-    if base_person:
-        return PersonForm(
-            request.POST or None,
-            instance=base_person,
-        )
-    else:
-        return PersonForm(request.POST or None)
-
-
-def check_continuing_education_person(request, person_information):
-    if person_information:
-        return ContinuingEducationPersonForm(
-            request.POST or None,
-            instance=person_information,
-            )
-    else:
-        return ContinuingEducationPersonForm(request.POST or None)
 
 
 def _find_user_admission_by_id(admission_id, user):
