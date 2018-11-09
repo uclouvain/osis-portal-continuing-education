@@ -123,8 +123,8 @@ msgstr "Information du compte utilisateur"
 msgid "continuing_education_account_information_completion_message"
 msgstr "Veuillez compléter le formulaire suivant pour finaliser la création de votre compte utilisateur."
 
-msgid "contact"
-msgstr "contact"
+msgid "Contact"
+msgstr "Contact"
 
 msgid "contact information"
 msgstr "coordonnées"
@@ -159,8 +159,8 @@ msgstr "féminin"
 msgid "first_name"
 msgstr "Prénom"
 
-msgid "formation"
-msgstr "formation"
+msgid "Formation"
+msgstr "Formation"
 
 msgid "formation_spreading"
 msgstr "Etalement de la formation"
@@ -186,8 +186,8 @@ msgstr "Année d'obtention (secondaire)"
 msgid "id_card_number"
 msgstr "Numéro de carte d'identité"
 
-msgid "identification"
-msgstr "identification"
+msgid "Identification"
+msgstr "Identification"
 
 msgid "It is not possible to edit an admission once submitted"
 msgstr "Il est impossible de modifier une admission une fois celle-ci soumise"
@@ -392,3 +392,27 @@ msgstr "Un email vous a été envoyé contenant les instructions de changement d
 
 msgid "This email does not exist in our database: {}"
 msgstr "Cet adresse mail n'existe pas dans notre base de donnée : {}"
+
+msgid "Informations"
+msgstr "Informations"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Size"
+msgstr "Taille"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Last update"
+msgstr "Dernière modification"
+
+msgid "The document is uploaded correctly"
+msgstr "Le document a bien été uploadé"
+
+msgid "A problem occured : the document is not uploaded"
+msgstr "Une erreur est survenue : le document n'a pas été uploadé"

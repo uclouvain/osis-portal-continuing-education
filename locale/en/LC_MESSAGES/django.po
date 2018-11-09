@@ -123,7 +123,7 @@ msgstr "Account information completion"
 msgid "continuing_education_account_information_completion_message"
 msgstr "Please complete the following form to finalize the creation of your account."
 
-msgid "contact"
+msgid "Contact"
 msgstr ""
 
 msgid "contact information"
@@ -159,7 +159,7 @@ msgstr ""
 msgid "first_name"
 msgstr "First name"
 
-msgid "formation"
+msgid "Formation"
 msgstr ""
 
 msgid "formation_spreading"
@@ -192,7 +192,7 @@ msgstr ""
 msgid "IUFC - Continuing Education"
 msgstr ""
 
-msgid "identification"
+msgid "Identification"
 msgstr ""
 
 msgid "last_degree_level"
@@ -392,3 +392,27 @@ msgstr ""
 
 msgid "This email does not exist in our database: {}"
 msgstr ""
+
+msgid "Informations"
+msgstr "Informations"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Size"
+msgstr "Size"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Last update"
+msgstr "Last update"
+
+msgid "The document is uploaded correctly"
+msgstr "The document is uploaded correctly"
+
+msgid "A problem occured : the document is not uploaded"
+msgstr "A problem occured : the document is not uploaded"
