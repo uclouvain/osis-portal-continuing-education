@@ -60,7 +60,7 @@ def admission_detail(request, admission_id):
         messages.add_message(
             request=request,
             level=messages.WARNING,
-            message=_build_warning_from_errors(admission_submission_errors),
+            message=_build_warning_from_errors_dict(admission_submission_errors),
         )
 
     return render(
@@ -99,7 +99,7 @@ def get_admission_submission_errors(admission):
     return errors
 
 
-def _build_warning_from_errors(errors):
+def _build_warning_from_errors_dict(errors):
     warning_message = _("Your admission file is not submittable because you did not provide the following data : ")
     warning_message += ", ".join(['"' + ugettext(key) + '"' for key in errors.keys()])
     return warning_message

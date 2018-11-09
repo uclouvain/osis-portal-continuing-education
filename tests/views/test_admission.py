@@ -206,7 +206,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             self.assertEqual(field_value, admission[key], key)
 
 
-class AdmissionIsSubmittableTestCase(TestCase):
+class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUp(self):
         self.admission = AdmissionFactory()
 
