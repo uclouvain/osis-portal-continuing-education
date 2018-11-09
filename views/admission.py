@@ -31,6 +31,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 
@@ -100,9 +101,17 @@ def get_admission_submission_errors(admission):
 
 
 def _build_warning_from_errors_dict(errors):
-    warning_message = _("Your admission file is not submittable because you did not provide the following data : ")
-    warning_message += ", ".join(['"' + ugettext(key) + '"' for key in errors.keys()])
-    return warning_message
+    warning_message = ugettext(
+        "Your admission file is not submittable because you did not provide the following data : "
+    )
+
+    warning_message = \
+        "<strong>" + \
+        warning_message + \
+        "</strong><br>" + \
+        " · ".join([ugettext(key) for key in errors.keys()]) + \
+        "</strong><br>"
+    return mark_safe(warning_message)
 
 
 @login_required
