@@ -394,25 +394,25 @@ msgid "This email does not exist in our database: {}"
 msgstr ""
 
 msgid "Informations"
-msgstr "Informations"
+msgstr ""
 
 msgid "Documents"
-msgstr "Documents"
+msgstr ""
 
 msgid "Name"
-msgstr "Name"
+msgstr ""
 
 msgid "Size"
-msgstr "Size"
+msgstr ""
 
 msgid "Actions"
-msgstr "Actions"
+msgstr ""
 
 msgid "Last update"
-msgstr "Last update"
+msgstr ""
 
 msgid "The document is uploaded correctly"
-msgstr "The document is uploaded correctly"
+msgstr ""
 
 msgid "A problem occured : the document is not uploaded"
-msgstr "A problem occured : the document is not uploaded"
+msgstr ""
