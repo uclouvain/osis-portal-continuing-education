@@ -85,7 +85,6 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertFalse(response.context['admission_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-
         self.assertEqual(len(messages_list), 1)
         self.assertIn(
             ugettext("Your admission file is not submittable because you did not provide the following data : "),
@@ -97,21 +96,65 @@ class ViewStudentAdmissionTestCase(TestCase):
         )
         self.assertEqual(messages_list[0].level, messages.WARNING)
 
+    def test_admission_submitted_detail(self):
+        url = reverse('admission_detail', args=[self.admission_submitted.pk])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'admission_detail.html')
+
+        self.assertEqual(response.context['admission'], self.admission_submitted)
+        self.assertFalse(response.context['admission_is_submittable'])
+
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 0)
+
     def test_admission_detail_not_found(self):
         response = self.client.get(reverse('admission_detail', kwargs={
             'admission_id': 0,
         }))
         self.assertEqual(response.status_code, 404)
 
-    def test_admission_detail_submit(self):
-        url = reverse('admission_detail', args=[self.admission.pk])
+    def test_admission_submit(self):
         self.admission.state = admission_state_choices.DRAFT
-        response = self.client.post(url, {
-            "submit": True
-        })
+        self.admission.save()
+        url = reverse('admission_submit')
+        response = self.client.post(
+            url,
+            follow=True,
+            data={
+                "submit": True,
+                "admission_id": self.admission.pk
+            }
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['admission'].state, admission_state_choices.SUBMITTED)
         self.assertTemplateUsed(response, 'admission_detail.html')
+
+    def test_admission_submit_not_draft(self):
+        url = reverse('admission_submit')
+        response = self.client.post(
+            url,
+            data={
+                "submit": True,
+                "admission_id": self.admission_submitted.pk
+            }
+        )
+        self.assertEqual(response.status_code, 401)
+
+    def test_admission_submit_not_complete(self):
+        self.admission.last_degree_level = ''
+        self.admission.save()
+
+        url = reverse('admission_submit')
+        response = self.client.post(
+            url,
+            data={
+                "submit": True,
+                "admission_id": self.admission.pk
+            }
+        )
+        self.assertEqual(response.status_code, 401)
 
     def test_admission_detail_unauthorized(self):
         admission = AdmissionFactory()

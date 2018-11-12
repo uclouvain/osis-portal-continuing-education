@@ -34,6 +34,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
 from base.models.person import Person
@@ -51,18 +52,19 @@ from continuing_education.views.common import display_errors
 @login_required
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
-    admission_submission_errors = get_admission_submission_errors(admission)
-    admission_is_submittable = not admission_submission_errors
 
-    if request.POST.get("submit") and admission_is_submittable:
-        admission.submit()
+    if admission.state == admission_state_choices.DRAFT:
+        admission_submission_errors = get_admission_submission_errors(admission)
+        admission_is_submittable = not admission_submission_errors
 
-    if not admission_is_submittable:
-        messages.add_message(
-            request=request,
-            level=messages.WARNING,
-            message=_build_warning_from_errors_dict(admission_submission_errors),
-        )
+        if not admission_is_submittable:
+            messages.add_message(
+                request=request,
+                level=messages.WARNING,
+                message=_build_warning_from_errors_dict(admission_submission_errors),
+            )
+    else:
+        admission_is_submittable = False
 
     return render(
         request,
@@ -72,6 +74,20 @@ def admission_detail(request, admission_id):
             'admission_is_submittable': admission_is_submittable,
         }
     )
+
+
+@login_required
+@require_http_methods(["POST"])
+def admission_submit(request):
+    admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
+
+    if admission.state == admission_state_choices.DRAFT:
+        admission_submission_errors = get_admission_submission_errors(admission)
+        if request.POST.get("submit") and not admission_submission_errors:
+            admission.submit()
+            return redirect('admission_detail', admission.pk)
+
+    raise PermissionDenied
 
 
 def get_admission_submission_errors(admission):
