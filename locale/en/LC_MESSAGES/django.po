@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-22 15:14+0200\n"
+"POT-Creation-Date: 2018-11-13 13:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,379 +16,705 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "accepted"
-msgstr "Accepted"
-
-msgid "rejected"
-msgstr "Rejected"
-
-msgid "waiting"
-msgstr "Waiting"
-
-msgid "additional email"
-msgstr ""
-
-msgid "admission"
-msgstr "Admission"
-
-msgid "admission_view"
-msgstr "Admission view"
-
-msgid "administrator"
-msgstr "Administrator"
-
-msgid "awareness"
-msgstr "How did you hear about the program ?"
-
-msgid "awareness_ucl_website"
-msgstr "UCL website"
-
-msgid "awareness_formation_website"
-msgstr "Formation website"
-
-msgid "awareness_press"
-msgstr "Press"
-
-msgid "awareness_facebook"
-msgstr "Facebook"
-
-msgid "awareness_linkedin"
-msgstr "LinkedIn"
-
-msgid "awareness_customized_mail"
-msgstr "Customized mail"
-
-msgid "awareness_emailing"
-msgstr "Emailing"
-
-msgid "activity_sector"
-msgstr "Activity sector"
-
-msgid "assessment_presented"
-msgstr "Assessment presented"
-
-msgid "assessment_succeeded"
-msgstr "Assessment succeeded"
-
-msgid "billing"
-msgstr "Billing"
-
+#: forms/account.py:23 models/continuing_education_person.py:38
+#: templates/admission_detail.html:77
 msgid "birth_country"
 msgstr "Birth country"
 
+#: forms/account.py:29 models/continuing_education_person.py:24
+#: templates/admission_detail.html:75
 msgid "birth_date"
 msgstr "Date de naissance"
 
+#: forms/account.py:35 models/continuing_education_person.py:30
+#: templates/admission_detail.html:76
 msgid "birth_location"
 msgstr "Birth location"
 
-msgid "cancel"
+#: forms/account.py:64
+msgid "Email"
 msgstr ""
 
-msgid "children_number"
-msgstr "Children number"
-
-msgid "citizenship"
-msgstr "Citizenship"
-
-msgid "company_number"
-msgstr "Company number"
-
-msgid "continuing_education"
-msgstr "Continuing Education"
-
-msgid "continuing_education_registration_complete"
-msgstr "Registration to platform completed"
-
-msgid "continuing_education_registration_complete_message"
-msgstr "Your registration to the platform has been completed with success. "
-       "Please check your email box to activate your user account."
-
-msgid "continuing_education_activation_complete"
-msgstr "User account activated"
-
-msgid "continuing_education_activation_complete_message"
-msgstr "Your user account is activated. "
-       "You can now log in to access the platform."
-
-msgid "continuing_education_activation_failed"
-msgstr "Activation failed"
-
-msgid "continuing_education_activation_failed_message"
-msgstr "Activation has failed. "
-
-msgid "continuing_education_account_information_completion"
-msgstr "Account information completion"
-
-msgid "continuing_education_account_information_completion_message"
-msgstr "Please complete the following form to finalize the creation of your account."
-
-msgid "contact"
+#: forms/account.py:78
+msgid "This email does not exist in our database: {}"
 msgstr ""
 
-msgid "contact information"
-msgstr ""
-
+#: forms/address.py:12 models/address.py:32 templates/admission_detail.html:91
+#: templates/registration_detail.html:57 templates/registration_detail.html:91
+#: templates/registration_form.html:58 templates/registration_form.html:79
 msgid "country"
 msgstr "Country"
 
-msgid "courses_formula"
-msgstr "Courses formula"
+#: forms/admission.py:24 forms/registration.py:14 models/admission.py:29
+#: templates/admission_detail.html:72
+msgid "citizenship"
+msgstr "Citizenship"
 
-msgid "current_occupation"
-msgstr "Current occupation"
-
-msgid "current_employer"
-msgstr "Current employer"
-
-msgid "curriculum"
-msgstr ""
-
-msgid "desc_lnk_continuing_education"
-msgstr "This process controls continuing education offers."
-
-msgid "education"
-msgstr "Education"
-
-msgid "faculty"
-msgstr "Faculty"
-
-msgid "female"
-msgstr ""
-
-msgid "first_name"
-msgstr "First name"
-
-msgid "formation"
-msgstr ""
-
-msgid "formation_spreading"
-msgstr "Formation spreading"
-
-msgid "formation_administrator"
-msgstr "Formation administrator"
-
-msgid "formation_title"
-msgstr "Formation title"
-
-msgid "gender"
-msgstr "Gender"
-
-msgid "head_office_name"
-msgstr "Head office name"
-
+#: forms/admission.py:31 forms/registration.py:21 models/admission.py:51
+#: templates/admission_detail.html:98
 msgid "high_school_diploma"
 msgstr "High school diploma"
 
-msgid "high_school_graduation_year"
-msgstr "Graduation year (high school)"
+#: forms/person.py:16 templates/admission_detail.html:69
+msgid "first_name"
+msgstr "First name"
 
-msgid "id_card_number"
-msgstr "ID card number"
+#: forms/person.py:21 templates/admission_detail.html:70
+#, fuzzy
+#| msgid "first_name"
+msgid "last_name"
+msgstr "First name"
 
-msgid "It is not possible to edit an admission once submitted"
-msgstr ""
+#: forms/person.py:27 templates/admission_detail.html:71
+msgid "gender"
+msgstr "Gender"
 
-msgid "IUFC - Continuing Education"
-msgstr ""
-
-msgid "identification"
-msgstr ""
-
-msgid "last_degree_level"
-msgstr "Last degree level"
-
-msgid "last_degree_field"
-msgstr "Field of study"
-
-msgid "last_degree_institution"
-msgstr "Institution"
-
-msgid "last_degree_graduation_year"
-msgstr "Graduation year (last degree)"
-
-msgid "Legal address"
-msgstr ""
-
+#: models/address.py:15 templates/admission_detail.html:88
+#: templates/registration_detail.html:54 templates/registration_detail.html:88
+#: templates/registration_form.html:55 templates/registration_form.html:76
 msgid "location"
 msgstr "Location"
 
-msgid "log-in"
-msgstr "Log in"
-
-msgid "log-out"
-msgstr "Log out"
-
-msgid "male"
-msgstr ""
-
-msgid "marital_status"
-msgstr "Marital status"
-
-msgid "motivation"
-msgstr "Motivation"
-
-msgid "national_registry_number"
-msgstr "National registry number"
-
-msgid "new_admission"
-msgstr "New admission"
-
-msgid "next"
-msgstr ""
-
-msgid "no_admission_yet"
-msgstr "You have no admission form submitted"
-
-msgid "no_document_available"
-msgstr "No document available"
-
-msgid "no_registration_yet"
-msgstr "There is no registration form yet available"
-
-msgid "other_educational_background"
-msgstr "Other educational background"
-
-msgid "passport_number"
-msgstr "Passport number"
-
-msgid "past_professional_activities"
-msgstr "Past professional activities"
-
-msgid "paid"
-msgstr "Paid"
-
-msgid "payment_complete"
-msgstr "Payment complete"
-
-msgid "phone_mobile"
-msgstr "Mobile phone"
-
-msgid "post"
-msgstr "Post"
-
+#: models/address.py:20 templates/admission_detail.html:89
+#: templates/registration_detail.html:55 templates/registration_detail.html:89
+#: templates/registration_form.html:56 templates/registration_form.html:77
 msgid "postal_code"
 msgstr "Postal code"
 
-msgid "previous"
+#: models/address.py:25 templates/admission_detail.html:90
+#: templates/registration_detail.html:56 templates/registration_detail.html:90
+#: templates/registration_form.html:57 templates/registration_form.html:78
+msgid "city"
 msgstr ""
 
-msgid "previous_ucl_registration"
-msgstr "Have you previously been registered at UCL ?"
+#: models/admission.py:21
+msgid "person_information"
+msgstr ""
 
-msgid "private"
-msgstr "Private"
+#: models/admission.py:35
+#: templates/django_registration/complete_account_registration.html:44
+msgid "address"
+msgstr ""
 
-msgid "previous_noma"
-msgstr "Previous NOMA"
+#: models/admission.py:40 templates/admission_detail.html:84
+msgid "phone_mobile"
+msgstr "Mobile phone"
 
-msgid "prior_experience_validation"
-msgstr "Prior experience validation"
+#: models/admission.py:45
+msgid "additional email"
+msgstr ""
 
-msgid "professional_background"
-msgstr "Professional background"
+#: models/admission.py:56 templates/admission_detail.html:99
+msgid "high_school_graduation_year"
+msgstr "Graduation year (high school)"
 
+#: models/admission.py:61 templates/admission_detail.html:102
+#: tests/views/test_admission.py:94
+msgid "last_degree_level"
+msgstr "Last degree level"
+
+#: models/admission.py:66 templates/admission_detail.html:103
+msgid "last_degree_field"
+msgstr "Field of study"
+
+#: models/admission.py:71 templates/admission_detail.html:106
+msgid "last_degree_institution"
+msgstr "Institution"
+
+#: models/admission.py:76 templates/admission_detail.html:107
+msgid "last_degree_graduation_year"
+msgstr "Graduation year (last degree)"
+
+#: models/admission.py:80 templates/admission_detail.html:110
+msgid "other_educational_background"
+msgstr "Other educational background"
+
+#: models/admission.py:88 templates/admission_detail.html:117
 msgid "professional_status"
 msgstr "Professional status"
 
+#: models/admission.py:93 templates/admission_detail.html:120
+msgid "current_occupation"
+msgstr "Current occupation"
+
+#: models/admission.py:98 templates/admission_detail.html:123
+msgid "current_employer"
+msgstr "Current employer"
+
+#: models/admission.py:104 templates/admission_detail.html:124
+msgid "activity_sector"
+msgstr "Activity sector"
+
+#: models/admission.py:108 templates/admission_detail.html:127
+msgid "past_professional_activities"
+msgstr "Past professional activities"
+
+#: models/admission.py:114 templates/admission_detail.html:131
+#: templates/admission_detail.html:134
+msgid "motivation"
+msgstr "Motivation"
+
+#: models/admission.py:118 templates/admission_detail.html:135
 msgid "professional_impact"
 msgstr "Professional impact"
 
-msgid "program_code"
-msgstr "Program code"
-
-msgid "references"
+#: models/admission.py:124 templates/admission_detail.html:139
+#: templates/admission_detail.html:142 templates/admission_form.html:59
+#: templates/continuing_education/home.html:60
+#: templates/continuing_education/home.html:96
+msgid "formation"
 msgstr ""
 
-msgid "registered"
-msgstr "Registered"
+#: models/admission.py:130 templates/admission_detail.html:153
+msgid "awareness_ucl_website"
+msgstr "UCL website"
 
-msgid "registration"
-msgstr "Registration"
+#: models/admission.py:134 templates/admission_detail.html:156
+msgid "awareness_formation_website"
+msgstr "Formation website"
 
-msgid "registration_view"
-msgstr "Registration view"
+#: models/admission.py:138 templates/admission_detail.html:159
+msgid "awareness_press"
+msgstr "Press"
 
-msgid "registration_complete"
-msgstr "Registration complete"
+#: models/admission.py:142 templates/admission_detail.html:162
+msgid "awareness_facebook"
+msgstr "Facebook"
 
-msgid "registration_type"
-msgstr "Registration type"
+#: models/admission.py:146 templates/admission_detail.html:165
+msgid "awareness_linkedin"
+msgstr "LinkedIn"
 
-msgid "residence_phone"
-msgstr "Residence phone"
+#: models/admission.py:150 templates/admission_detail.html:168
+msgid "awareness_customized_mail"
+msgstr "Customized mail"
 
-msgid "signup"
-msgstr "Sign up"
+#: models/admission.py:154 templates/admission_detail.html:171
+msgid "awareness_emailing"
+msgstr "Emailing"
 
-msgid "spouse_name"
-msgstr "Spouse name"
-
+#: models/admission.py:163 templates/continuing_education/home.html:61
 msgid "state"
 msgstr "State"
 
-msgid "student_sheet"
-msgstr "Student sheet"
+#: models/admission.py:171 templates/registration_detail.html:51
+msgid "registration_type"
+msgstr "Registration type"
 
-msgid "submit"
-msgstr ""
-
-msgid "Submit admission form ?"
-msgstr ""
-
-msgid "submitted"
-msgstr ""
-
-msgid "succesfull_logout"
-msgstr "You are now logged out."
-
-msgid "unknown"
-msgstr ""
-
+#: models/admission.py:175
 msgid "use_address_for_billing"
 msgstr "Use recorded address for billing"
 
-msgid "use_address_for_post"
-msgstr "Use recorded address for post"
+#: models/admission.py:182
+#, fuzzy
+#| msgid "billing"
+msgid "billing_address"
+msgstr "Billing"
 
-msgid "validation"
-msgstr ""
+#: models/admission.py:188 templates/registration_detail.html:60
+msgid "head_office_name"
+msgstr "Head office name"
 
+#: models/admission.py:193 templates/registration_detail.html:61
+msgid "company_number"
+msgstr "Company number"
+
+#: models/admission.py:198 templates/registration_detail.html:62
 msgid "vat_number"
 msgstr "VAT number"
 
+#: models/admission.py:205 templates/registration_detail.html:69
+msgid "national_registry_number"
+msgstr "National registry number"
+
+#: models/admission.py:210 templates/registration_detail.html:70
+msgid "id_card_number"
+msgstr "ID card number"
+
+#: models/admission.py:215 templates/registration_detail.html:71
+msgid "passport_number"
+msgstr "Passport number"
+
+#: models/admission.py:221 templates/registration_detail.html:74
+msgid "marital_status"
+msgstr "Marital status"
+
+#: models/admission.py:226 templates/registration_detail.html:75
+msgid "spouse_name"
+msgstr "Spouse name"
+
+#: models/admission.py:231 templates/registration_detail.html:76
+msgid "children_number"
+msgstr "Children number"
+
+#: models/admission.py:235 templates/registration_detail.html:79
+msgid "previous_ucl_registration"
+msgstr "Have you previously been registered at UCL ?"
+
+#: models/admission.py:240 templates/registration_detail.html:80
+msgid "previous_noma"
+msgstr "Previous NOMA"
+
+#: models/admission.py:246
+msgid "use_address_for_post"
+msgstr "Use recorded address for post"
+
+#: models/admission.py:253
+#, fuzzy
+#| msgid "residence_phone"
+msgid "residence_address"
+msgstr "Residence phone"
+
+#: models/admission.py:259 templates/registration_detail.html:94
+msgid "residence_phone"
+msgstr "Residence phone"
+
+#: models/admission.py:265
+msgid "registration_complete"
+msgstr "Registration complete"
+
+#: models/admission.py:270
+msgid "noma"
+msgstr ""
+
+#: models/admission.py:274
+msgid "payment_complete"
+msgstr "Payment complete"
+
+#: models/admission.py:278
+msgid "formation_spreading"
+msgstr "Formation spreading"
+
+#: models/admission.py:282
+msgid "prior_experience_validation"
+msgstr "Prior experience validation"
+
+#: models/admission.py:286
+msgid "assessment_presented"
+msgstr "Assessment presented"
+
+#: models/admission.py:290
+msgid "assessment_succeeded"
+msgstr "Assessment succeeded"
+
+#: models/admission.py:297
+msgid "sessions"
+msgstr ""
+
+#: models/enums/enums.py:4 templates/continuing_education/home.html:109
+msgid "No"
+msgstr ""
+
+#: models/enums/enums.py:5 templates/continuing_education/home.html:107
+msgid "Yes"
+msgstr ""
+
+#: models/enums/enums.py:9 models/enums/enums.py:36
+msgid "private"
+msgstr "Private"
+
+#: models/enums/enums.py:10
+#, fuzzy
+#| msgid "professional_status"
+msgid "professional"
+msgstr "Professional status"
+
+#: models/enums/enums.py:14
+msgid "single"
+msgstr ""
+
+#: models/enums/enums.py:15
+msgid "married"
+msgstr ""
+
+#: models/enums/enums.py:16
+msgid "widowed"
+msgstr ""
+
+#: models/enums/enums.py:17
+msgid "divorced"
+msgstr ""
+
+#: models/enums/enums.py:18
+msgid "separated"
+msgstr ""
+
+#: models/enums/enums.py:19
+msgid "legal_cohabitant"
+msgstr ""
+
+#: models/enums/enums.py:23
+msgid "female"
+msgstr ""
+
+#: models/enums/enums.py:24
+msgid "male"
+msgstr ""
+
+#: models/enums/enums.py:28
+msgid "employee"
+msgstr ""
+
+#: models/enums/enums.py:29
+#, fuzzy
+#| msgid "current_employer"
+msgid "self_employed"
+msgstr "Current employer"
+
+#: models/enums/enums.py:30
+msgid "job_seeker"
+msgstr ""
+
+#: models/enums/enums.py:31
+msgid "public_servant"
+msgstr ""
+
+#: models/enums/enums.py:32 models/enums/enums.py:40
+msgid "other"
+msgstr ""
+
+#: models/enums/enums.py:37
+msgid "public"
+msgstr ""
+
+#: models/enums/enums.py:38
+msgid "associative"
+msgstr ""
+
+#: models/enums/enums.py:39
+msgid "health"
+msgstr ""
+
+#: templates/admission_detail.html:31 templates/admission_form.html:30
+#: templates/continuing_education/home.html:32
+#: templates/registration_detail.html:31 templates/registration_form.html:31
+msgid "continuing_education"
+msgstr "Continuing Education"
+
+#: templates/admission_detail.html:32 templates/admission_form.html:31
+#: templates/continuing_education/home.html:33
+#: templates/continuing_education/home.html:38
+#: templates/registration_detail.html:32 templates/registration_form.html:32
+#, fuzzy
+#| msgid "student_sheet"
+msgid "student"
+msgstr "Student sheet"
+
+#: templates/admission_detail.html:33 templates/admission_detail.html:59
+#: templates/admission_form.html:32 templates/admission_form.html:42
+#: templates/django_registration/complete_account_registration.html:52
+msgid "admission"
+msgstr "Admission"
+
+#: templates/admission_detail.html:42
+#: templates/django_registration/complete_account_registration.html:65
+#: templates/django_registration/complete_account_registration.html:66
+#: templates/django_registration/registration_form.html:48
+#: templates/django_registration/registration_form.html:49
+#: templates/fragment/submit_confirmation_modal.html:41
+#: templates/registration/continuing_education_password_reset_form.html:40
+#: templates/registration_form.html:85 templates/registration_form.html:86
+msgid "submit"
+msgstr ""
+
+#: templates/admission_detail.html:51 templates/registration_detail.html:40
+msgid "edit"
+msgstr ""
+
+#: templates/admission_detail.html:66 templates/admission_form.html:50
+#: templates/django_registration/complete_account_registration.html:40
+msgid "identification"
+msgstr ""
+
+#: templates/admission_detail.html:81
+msgid "contact"
+msgstr ""
+
+#: templates/admission_detail.html:85 templates/authentication/login.html:50
+#: templates/authentication/login.html:52
+msgid "email"
+msgstr ""
+
+#: templates/admission_detail.html:95
+msgid "education"
+msgstr "Education"
+
+#: templates/admission_detail.html:114 templates/admission_form.html:134
+msgid "professional_background"
+msgstr "Professional background"
+
+#: templates/admission_detail.html:147 templates/admission_form.html:173
+#: templates/django_registration/complete_account_registration.html:55
+msgid "awareness"
+msgstr "How did you hear about the program ?"
+
+#: templates/admission_form.html:39 templates/admission_form.html:189
+#: templates/registration_form.html:40
+msgid "save"
+msgstr ""
+
+#: templates/admission_form.html:53
+msgid "contact information"
+msgstr ""
+
+#: templates/admission_form.html:56
+msgid "curriculum"
+msgstr ""
+
+#: templates/admission_form.html:62
+msgid "references"
+msgstr ""
+
+#: templates/admission_form.html:85 templates/admission_form.html:113
+#: templates/admission_form.html:150 templates/admission_form.html:166
+msgid "next"
+msgstr ""
+
+#: templates/admission_form.html:97
+msgid "Legal address"
+msgstr ""
+
+#: templates/admission_form.html:110 templates/admission_form.html:147
+#: templates/admission_form.html:163 templates/admission_form.html:184
+msgid "previous"
+msgstr ""
+
+#: templates/admission_form.html:187
+msgid "draft"
+msgstr ""
+
+#: templates/admission_form.html:193
+#: templates/django_registration/registration_form.html:52
+#: templates/fragment/submit_confirmation_modal.html:40
+#: templates/registration_form.html:89
+msgid "cancel"
+msgstr ""
+
+#: templates/authentication/logged_out.html:33
+msgid "logout"
+msgstr ""
+
+#: templates/authentication/logged_out.html:38
+msgid "succesfull_logout"
+msgstr "You are now logged out."
+
+#: templates/authentication/logged_out.html:39
+#: templates/authentication/login.html:62
+#: templates/django_registration/activation_complete.html:36
+msgid "log-in"
+msgstr "Log in"
+
+#: templates/authentication/login.html:28
+#: templates/authentication/login.html:31
+#: templates/django_registration/registration_form.html:32
+msgid "IUFC - Continuing Education"
+msgstr ""
+
+#: templates/authentication/login.html:38
 msgid "You already have an account"
 msgstr ""
 
-msgid "You can now submit your admission form or cancel it."
+#: templates/authentication/login.html:43
+msgid "msg_error_username_password_not_matching"
 msgstr ""
 
-msgid "You don't have an account"
+#: templates/authentication/login.html:55
+msgid "password"
 msgstr ""
 
-msgid "Your admission file has been saved. Do not forget to submit it when it is complete !"
-msgstr ""
-
-msgid "Your admission file is not submittable because you did not provide the following data : "
-msgstr ""
-
-msgid "Enter a new Password"
-msgstr ""
-
-msgid "Change my password"
-msgstr ""
-
+#: templates/authentication/login.html:65
+#: templates/registration/continuing_education_password_reset_form.html:32
 msgid "Forgot your password ?"
 msgstr ""
 
-msgid "Enter your email address below, and we will email instructions for setting a new password."
+#: templates/authentication/login.html:78
+msgid "You don't have an account"
 msgstr ""
 
+#: templates/authentication/login.html:82
+msgid "signup"
+msgstr "Sign up"
+
+#: templates/continuing_education/formations.html:36
+#, fuzzy
+#| msgid "formation_title"
+msgid "formations"
+msgstr "Formation title"
+
+#: templates/continuing_education/formations.html:45
+msgid "program_code"
+msgstr "Program code"
+
+#: templates/continuing_education/formations.html:46
+msgid "formation_title"
+msgstr "Formation title"
+
+#: templates/continuing_education/home.html:44
+msgid "new_admission"
+msgstr "New admission"
+
+#: templates/continuing_education/home.html:85
+msgid "no_admission_yet"
+msgstr "You have no admission form submitted"
+
+#: templates/continuing_education/home.html:97
+msgid "faculty"
+msgstr "Faculty"
+
+#: templates/continuing_education/home.html:98
+msgid "registered"
+msgstr "Registered"
+
+#: templates/continuing_education/home.html:117
+msgid "no_registration_yet"
+msgstr "There is no registration form yet available"
+
+#: templates/continuing_education/home.html:125
+msgid "no_document_available"
+msgstr "No document available"
+
+#: templates/continuing_education_layout.html:84
+#, fuzzy
+#| msgid "administrator"
+msgid "administration"
+msgstr "Administrator"
+
+#: templates/continuing_education_layout.html:89
+msgid "data"
+msgstr ""
+
+#: templates/django_registration/activation_complete.html:31
+msgid "continuing_education_activation_complete"
+msgstr "User account activated"
+
+#: templates/django_registration/activation_complete.html:33
+msgid "continuing_education_activation_complete_message"
+msgstr ""
+"Your user account is activated. You can now log in to access the platform."
+
+#: templates/django_registration/activation_failed.html:31
+msgid "continuing_education_activation_failed"
+msgstr "Activation failed"
+
+#: templates/django_registration/activation_failed.html:33
+msgid "continuing_education_activation_failed_message"
+msgstr "Activation has failed. "
+
+#: templates/django_registration/complete_account_registration.html:32
+msgid "continuing_education_account_information_completion"
+msgstr "Account information completion"
+
+#: templates/django_registration/complete_account_registration.html:35
+msgid "continuing_education_account_information_completion_message"
+msgstr ""
+"Please complete the following form to finalize the creation of your account."
+
+#: templates/django_registration/complete_account_registration.html:48
+#, fuzzy
+#| msgid "formation_title"
+msgid "information"
+msgstr "Formation title"
+
+#: templates/django_registration/registration_complete.html:30
+msgid "continuing_education_registration_complete"
+msgstr "Registration to platform completed"
+
+#: templates/django_registration/registration_complete.html:32
+msgid "continuing_education_registration_complete_message"
+msgstr ""
+"Your registration to the platform has been completed with success. Please "
+"check your email box to activate your user account."
+
+#: templates/django_registration/registration_form.html:37
+#: templates/registration_detail.html:33 templates/registration_detail.html:43
+#: templates/registration_detail.html:66 templates/registration_form.html:33
+#: templates/registration_form.html:43
+msgid "registration"
+msgstr "Registration"
+
+#: templates/fragment/submit_confirmation_modal.html:33
+msgid "Submit admission form ?"
+msgstr ""
+
+#: templates/fragment/submit_confirmation_modal.html:37
+msgid "It is not possible to edit an admission once submitted"
+msgstr ""
+
+#: templates/registration/continuing_education_password_reset_confirm.html:32
+msgid "Enter a new Password"
+msgstr ""
+
+#: templates/registration/continuing_education_password_reset_confirm.html:39
+msgid "Change my password"
+msgstr ""
+
+#: templates/registration/continuing_education_password_reset_form.html:35
+msgid ""
+"Enter your email address below, and we will email instructions for setting a "
+"new password."
+msgstr ""
+
+#: templates/registration_detail.html:48 templates/registration_form.html:53
+msgid "billing"
+msgstr "Billing"
+
+#: templates/registration_detail.html:85 templates/registration_form.html:74
+msgid "post"
+msgstr "Post"
+
+#: tests/views/test_admission.py:90 views/admission.py:121
+msgid ""
+"Your admission file is not submittable because you did not provide the "
+"following data : "
+msgstr ""
+
+#: tests/views/test_admission.py:192 views/admission.py:181
+msgid ""
+"Your admission file has been saved. Do not forget to submit it when it is "
+"complete !"
+msgstr ""
+
+#: tests/views/test_admission.py:287 tests/views/test_admission.py:288
+#: tests/views/test_admission.py:289 tests/views/test_admission.py:290
+#: tests/views/test_admission.py:301 tests/views/test_admission.py:312
+#: tests/views/test_admission.py:323 tests/views/test_admission.py:334
+msgid "This field is required."
+msgstr ""
+
+#: views/account_activation.py:178
+msgid "The account you tried to activate has already been activated."
+msgstr ""
+
+#: views/account_activation.py:181
+msgid "The account you attempted to activate is invalid."
+msgstr ""
+
+#: views/account_activation.py:183
+msgid "This account has expired."
+msgstr ""
+
+#: views/account_activation.py:185
+msgid "The activation key you provided is invalid."
+msgstr ""
+
+#: views/account_activation.py:299
+msgid "Password reset"
+msgstr ""
+
+#: views/account_activation.py:314
+msgid ""
+"An email was sent to you with the instructions to change your password. You "
+"should receive this email shortly."
+msgstr ""
+
+#: views/account_activation.py:326
+msgid "Enter new password"
+msgstr ""
+
+#: views/account_activation.py:375
 msgid "Your password was successfully changed."
 msgstr ""
 
-msgid "An email was sent to you with the instructions to change your password. You should receive this email shortly."
-msgstr ""
-
-msgid "This email does not exist in our database: {}"
+#: views/account_activation.py:388
+msgid "Password reset unsuccessful"
 msgstr ""
