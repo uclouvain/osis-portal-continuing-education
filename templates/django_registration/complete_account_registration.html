@@ -29,30 +29,30 @@
 {% block title %}Account information completion{% endblock %}
 
 {% block content %}
-    <h2>{% trans 'continuing_education_account_information_completion' %}</h2>
+    <h2>{% trans 'User account information' %}</h2>
     {% include "template_messages.html" %}
     <div class="panel panel-body">
-        {% trans 'continuing_education_account_information_completion_message' %}
+        {% trans 'Please complete the following form to finalize the creation of your user account.' %}
     </div>
     <div class="panel panel-default">
         <form id="form" method="POST" class="post-form" action="{% url 'complete_account_registration' %}">
             {% csrf_token %}
-            <div class="panel-heading text-capitalize">{% trans 'identification' %}</div>
+            <div class="panel-heading text-capitalize">{% trans 'Identification' %}</div>
             <div class="panel panel-body">
                 {% bootstrap_form root_person_form %}
             </div>
-            <div class="panel-heading">{% trans 'address' %}</div>
+            <div class="panel-heading">{% trans 'Address' %}</div>
             <div class="panel panel-body">
                 {% bootstrap_form address_form %}
             </div>
-            <div class="panel-heading">{% trans 'information' %}</div>
+            <div class="panel-heading">{% trans 'Information' %}</div>
             <div class="panel panel-body">
                 {% bootstrap_form ce_person_form %}
             </div>
-            <div class="panel-heading">{% trans 'admission' %}</div>
+            <div class="panel-heading">{% trans 'Admission' %}</div>
             <div class="panel panel-body">
                 {% bootstrap_form admission_form exclude='address, person_information, state, awareness_ucl_website, awareness_formation_website, awareness_press, awareness_facebook,awareness_linkedin, awareness_customized_mail, awareness_emailing' %}
-                <label class="control-label">{% trans 'awareness' %}</label>
+                <label class="control-label">{% trans 'Awareness' %}</label>
                 {% bootstrap_field admission_form.awareness_ucl_website %}
                 {% bootstrap_field admission_form.awareness_formation_website %}
                 {% bootstrap_field admission_form.awareness_press %}
@@ -62,8 +62,8 @@
                 {% bootstrap_field admission_form.awareness_emailing %}
             </div>
             <div class="panel panel-body text-center">
-                <button type="submit" class="btn btn-primary" title="{% trans 'submit' %}" id="bt_submit_account_information">
-                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
+                <button type="submit" class="btn btn-primary" title="{% trans 'Submit' %}" id="bt_submit_account_information">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' %}
                 </button>
             </div>
         </form>
