@@ -40,26 +40,26 @@
                 <div class="panel-body">
                     {% if form.errors %}
                         <p class="text-danger">
-                            {% trans 'msg_error_username_password_not_matching' %}
+                            {% trans 'Username and password not matching' %}
                         </p>
                     {% endif %}
                     <form action="{% url 'continuing_education_login' %}" method="post" class="form" role="form">
                         {% csrf_token %}
                         <div style="width: 300px;">
                             <div class="form-group">
-                                <label class="control-label" for="username">{% trans 'email' %}</label>
+                                <label class="control-label" for="username">{% trans 'Email' %}</label>
                                 <input id="id_username" maxlength="254" name="username" type="text" class="form-control"
-                                       placeholder="{% trans 'email' %}" value="{{ username }}"/>
+                                       placeholder="{% trans 'Email' %}" value="{{ username }}"/>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" for="password">{% trans 'password' as password %}{{ password | capfirst }}</label>
+                                <label class="control-label" for="password">{% trans 'Password' %}</label>
                                 <input id="id_password" name="password" type="password" class="form-control" placeholder="{{ password | capfirst }}">
                             </div>
                             <div class="form-group">
                                 <input type="hidden" name="next" value="{{ next }}"/>
                                 <div class="row">
                                     <div class="col-md-6 align-content-center">
-                                        <input type="submit" value="{% trans 'log-in' %}" class="btn btn-primary" id="post_login_btn"/>
+                                        <input type="submit" value="{% trans 'Login' %}" class="btn btn-primary" id="post_login_btn"/>
                                     </div>
                                     <div class="col-md-6 align-content-center">
                                         <a href="{% url 'password_reset' %}">{% trans 'Forgot your password ?' %}</a>
@@ -79,7 +79,7 @@
                 </div>
                 <div class="panel-body">
                     <a href="{% url 'django_registration_register'%}" class="btn btn-primary" id="signup_btn">
-                        {% trans 'signup' %}
+                        {% trans 'Signup' %}
                     </a>
                 </div>
             </div>

@@ -43,6 +43,7 @@ from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import status
 from rest_framework.renderers import MultiPartRenderer
+from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
 from base.models.person import Person
@@ -99,6 +100,7 @@ def admission_detail(request, admission_id):
                 display_error_messages(request, _("A problem occured : the document is not uploaded"))
     request_to_get_list = requests.get(url + '?admission_id=' + str(admission.uuid), headers=headers_to_get)
     list_files = _make_list_files(request_to_get_list)
+
     return render(
         request,
         "admission_detail.html",
@@ -109,6 +111,20 @@ def admission_detail(request, admission_id):
             'request_to_put_file': request_to_put_file
         }
     )
+
+
+@login_required
+@require_http_methods(["POST"])
+def admission_submit(request):
+    admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
+
+    if admission.state == admission_state_choices.DRAFT:
+        admission_submission_errors = get_admission_submission_errors(admission)
+        if request.POST.get("submit") and not admission_submission_errors:
+            admission.submit()
+            return redirect('admission_detail', admission.pk)
+
+    raise PermissionDenied
 
 
 def get_admission_submission_errors(admission):

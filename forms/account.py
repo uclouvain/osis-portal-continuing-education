@@ -20,19 +20,19 @@ from reference.models.country import Country
 class ContinuingEducationPersonForm(ModelForm):
     birth_country = forms.ModelChoiceField(
         queryset=Country.objects.all().order_by('name'),
-        label=_("birth_country"),
+        label=_("Birth country"),
         required=True,
     )
 
     birth_date = forms.DateField(
         widget=forms.SelectDateWidget(years=range(1900, datetime.now().year)),
-        label=_("birth_date"),
+        label=_("Birth date"),
         required=True
     )
 
     birth_location = forms.CharField(
         required=True,
-        label=_("birth_location")
+        label=_("Birth location")
     )
 
     def __init__(self, *args, **kwargs):
@@ -75,7 +75,7 @@ class ContinuingEducationPasswordResetForm(forms.Form):
         try:
             user = User.objects.get(username=email)
         except (ObjectDoesNotExist, MultipleObjectsReturned) :
-            error_message = _('This email does not exist in our database: {}').format(email)
+            error_message = _('This email does not exist in our database: %(mail)s').format(mail=email)
         else:
             scheme = 'https' if request.is_secure() else 'http'
             site = get_current_site(request)

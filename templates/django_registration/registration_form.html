@@ -34,7 +34,7 @@
     {% include "template_messages.html" %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4>{% trans 'registration' %}</h4>
+            <h4>{% trans 'Registration' %}</h4>
         </div>
         <form id="form" method="POST" class="post-form">
             {% csrf_token %}
@@ -45,11 +45,11 @@
                 <input type="hidden" name="username" id="id_username" value="{{ form.username.value }}"/>
             </div>
             <div class="panel panel-body">
-                <button type="submit" class="btn btn-primary" title="{%trans 'submit' %}" id="bt_submit_registration">
-                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'submit' %}
+                <button type="submit" class="btn btn-primary" title="{%trans 'Submit' %}" id="bt_submit_registration">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' %}
                 </button>
                 <a class="btn btn-default" href="{% url 'continuing_education_home' %}" id="bt_cancel_registration">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'cancel' as cancel %}{{ cancel | capfirst }}
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'Cancel' %}
                 </a>
             </div>
         </form>
