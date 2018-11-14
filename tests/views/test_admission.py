@@ -284,10 +284,10 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.assertDictEqual(
             get_admission_submission_errors(self.admission),
             {
-                'email': [_("This field is required.")],
-                'birth_country': [_("This field is required.")],
-                'postal_code': [_("This field is required.")],
-                'last_degree_level': [_("This field is required.")]
+                _("Email"): [_("This field is required.")],
+                _("Birth country"): [_("This field is required.")],
+                _("Postal code"): [_("This field is required.")],
+                _("Last degree level"): [_("This field is required.")]
             }
         )
 
@@ -298,7 +298,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.assertDictEqual(
             get_admission_submission_errors(self.admission),
             {
-                'last_degree_level': [_("This field is required.")]
+                _("Last degree level"): [_("This field is required.")]
             }
         )
 
@@ -309,7 +309,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.assertDictEqual(
             get_admission_submission_errors(self.admission),
             {
-                'birth_country': [_("This field is required.")],
+                _("Birth country"): [_("This field is required.")],
             }
         )
 
@@ -320,7 +320,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.assertDictEqual(
             get_admission_submission_errors(self.admission),
             {
-                'postal_code': [_("This field is required.")],
+                _("Postal code"): [_("This field is required.")],
             }
         )
 
@@ -331,6 +331,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.assertDictEqual(
             get_admission_submission_errors(self.admission),
             {
-                'gender': [_("This field is required.")],
+                _("Gender"): [_("This field is required.")],
             }
         )

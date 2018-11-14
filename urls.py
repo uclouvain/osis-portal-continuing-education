@@ -57,5 +57,7 @@ urlpatterns = [
     url(r'^admission_submit/', admission.admission_submit, name='admission_submit'),
     url(r'^registration_edit/(?P<admission_id>[0-9]+)$', registration.registration_edit, name='registration_edit'),
     url(r'^registration_detail/(?P<admission_id>[0-9]+)$', registration.registration_detail,
-        name='registration_detail')
+        name='registration_detail'),
+    url(r'^view_file/(?P<path>.*)$', admission.view_file, name="view_file"),
+    url(r'^download_file/(?P<path>.*)$', admission.download_file, name="download_file")
 ]
