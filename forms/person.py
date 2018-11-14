@@ -28,11 +28,11 @@ class PersonForm(ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-
         super(PersonForm, self).__init__(*args, **kwargs)
 
         if self.instance.pk:
             self._disable_existing_person_fields()
+        self.fields['email'].label = _('Email')
 
     def _disable_existing_person_fields(self):
         for field in self.fields.keys():
@@ -50,9 +50,6 @@ class PersonForm(ModelForm):
             'email',
             'gender'
         ]
-
-        # Automatic translation of field names
-        labels = {field: _(field) for field in fields}
 
 
 class StrictPersonForm(PersonForm):

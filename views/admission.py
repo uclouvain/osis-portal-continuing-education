@@ -61,21 +61,23 @@ from continuing_education.views.common import display_errors, display_success_me
 @login_required
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
-    admission_submission_errors = get_admission_submission_errors(admission)
-    admission_is_submittable = not admission_submission_errors
+    if admission.state == admission_state_choices.DRAFT:
+        admission_submission_errors = get_admission_submission_errors(admission)
+        admission_is_submittable = not admission_submission_errors
+
+        if not admission_is_submittable:
+            messages.add_message(
+                request=request,
+                level=messages.WARNING,
+                message=_build_warning_from_errors_dict(admission_submission_errors),
+            )
+    else:
+        admission_is_submittable = False
     headers_to_get = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
     url = settings.URL_CONTINUING_EDUCATION_FILE_API
-    if request.POST.get("submit") and admission_is_submittable:
-        admission.submit()
 
-    if not admission_is_submittable:
-        messages.add_message(
-            request=request,
-            level=messages.WARNING,
-            message=_build_warning_from_errors_dict(admission_submission_errors),
-        )
     request_to_put_file = None
     if request.method == 'POST' and 'file_submit' in request.POST:
         if 'myfile' in request.FILES:
@@ -133,23 +135,26 @@ def get_admission_submission_errors(admission):
     person_form = StrictPersonForm(
         data=model_to_dict(admission.person_information.person)
     )
-    errors.update(person_form.errors)
+    for field in person_form.errors:
+        errors.update({person_form[field].label: person_form.errors[field]})
 
     person_information_form = ContinuingEducationPersonForm(
         data=model_to_dict(admission.person_information)
     )
-    errors.update(person_information_form.errors)
+    for field in person_information_form.errors:
+        errors.update({person_information_form[field].label: person_information_form.errors[field]})
 
     address_form = StrictAddressForm(
         data=model_to_dict(admission.address)
     )
-    errors.update(address_form.errors)
+    for field in address_form.errors:
+        errors.update({address_form[field].label: address_form.errors[field]})
 
     adm_form = StrictAdmissionForm(
         data=model_to_dict(admission)
     )
-    errors.update(adm_form.errors)
-
+    for field in adm_form.errors:
+        errors.update({adm_form[field].label: adm_form.errors[field]})
     return errors
 
 
