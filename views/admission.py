@@ -99,7 +99,6 @@ def admission_detail(request, admission_id):
                 display_error_messages(request, _("A problem occured : the document is not uploaded"))
     request_to_get_list = requests.get(url + '?admission_id=' + str(admission.uuid), headers=headers_to_get)
     list_files = _make_list_files(request_to_get_list)
-
     return render(
         request,
         "admission_detail.html",

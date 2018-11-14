@@ -256,7 +256,7 @@
             $(this).tab('show');
         })
         let uploaded = "{{request_to_put_file}}";
-        if(uploaded){
+        if(uploaded != 'None'){
             showTab("documents");
         }
         function showTab(tab) {
