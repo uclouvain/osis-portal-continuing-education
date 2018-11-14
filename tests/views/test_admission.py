@@ -91,7 +91,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("last_degree_level"),
+            ugettext("Last degree level"),
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.WARNING)

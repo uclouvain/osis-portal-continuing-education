@@ -323,7 +323,7 @@ class ContinuingEducationPasswordResetConfirmView(PasswordContextMixin, FormView
     post_reset_login_backend = 'django.contrib.auth.backends.ModelBackend'
     success_url = reverse_lazy('continuing_education_home')
     template_name = 'registration/continuing_education_password_reset_confirm.html'
-    title = _('Enter new password')
+    title = _('Enter a new password')
     token_generator = default_token_generator
 
     @method_decorator(sensitive_post_parameters())

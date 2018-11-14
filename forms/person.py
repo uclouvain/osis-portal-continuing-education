@@ -13,18 +13,18 @@ class PersonForm(ModelForm):
 
     first_name = forms.CharField(
         required=True,
-        label=_("first_name")
+        label=_("First name")
     )
 
     last_name = forms.CharField(
         required=True,
-        label=_("last_name")
+        label=_("Last name")
     )
 
     gender = forms.ChoiceField(
         choices=_capitalize_choices(Person.GENDER_CHOICES),
         required=True,
-        label=_("gender")
+        label=_("Gender")
     )
 
     def __init__(self, *args, **kwargs):
