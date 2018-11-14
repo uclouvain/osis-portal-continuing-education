@@ -3,11 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 16:53+0100\n"
+"POT-Creation-Date: 2018-11-14 08:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +23,7 @@ msgstr ""
 
 #: models/admission.py:104 templates/admission_detail.html:124
 msgid "Activity sector"
-msgstr "Activity sector"
+msgstr ""
 
 #: models/admission.py:45
 msgid "Additional email"
@@ -34,18 +35,14 @@ msgid "Address"
 msgstr ""
 
 #: templates/continuing_education_layout.html:84
-#, fuzzy
-#| msgid "administrator"
 msgid "Administration"
-msgstr "Administrator"
+msgstr ""
 
 #: templates/admission_detail.html:33 templates/admission_detail.html:59
 #: templates/admission_form.html:32 templates/admission_form.html:42
 #: templates/django_registration/complete_account_registration.html:52
-#, fuzzy
-#| msgid "admission"
 msgid "Admission"
-msgstr "Admission"
+msgstr ""
 
 #: views/account_activation.py:314
 msgid ""
@@ -54,16 +51,12 @@ msgid ""
 msgstr ""
 
 #: models/admission.py:286
-#, fuzzy
-#| msgid "assessment_presented"
 msgid "Assessment presented"
-msgstr "Assessment presented"
+msgstr ""
 
 #: models/admission.py:290
-#, fuzzy
-#| msgid "assessment_succeeded"
 msgid "Assessment succeeded"
-msgstr "Assessment succeeded"
+msgstr ""
 
 #: models/enums/enums.py:38
 msgid "Associative"
@@ -71,69 +64,49 @@ msgstr ""
 
 #: templates/admission_detail.html:147 templates/admission_form.html:173
 #: templates/django_registration/complete_account_registration.html:55
-#, fuzzy
-#| msgid "awareness"
 msgid "Awareness"
-msgstr "How did you hear about the program ?"
+msgstr ""
 
 #: models/admission.py:142 templates/admission_detail.html:162
-#, fuzzy
-#| msgid "awareness_facebook"
 msgid "Awareness Facebook"
-msgstr "Facebook"
+msgstr ""
 
 #: models/admission.py:146 templates/admission_detail.html:165
-#, fuzzy
-#| msgid "awareness_linkedin"
 msgid "Awareness LinkedIn"
-msgstr "LinkedIn"
+msgstr ""
 
 #: models/admission.py:130 templates/admission_detail.html:153
-#, fuzzy
-#| msgid "awareness_ucl_website"
 msgid "Awareness UCL website"
-msgstr "UCL website"
+msgstr ""
 
 #: models/admission.py:150 templates/admission_detail.html:168
-#, fuzzy
-#| msgid "awareness_customized_mail"
 msgid "Awareness customized mail"
-msgstr "Customized mail"
+msgstr ""
 
 #: models/admission.py:154 templates/admission_detail.html:171
-#, fuzzy
-#| msgid "awareness_emailing"
 msgid "Awareness emailing"
-msgstr "Emailing"
+msgstr ""
 
 #: models/admission.py:134 templates/admission_detail.html:156
-#, fuzzy
-#| msgid "awareness_formation_website"
 msgid "Awareness formation website"
-msgstr "Formation website"
+msgstr ""
 
 #: models/admission.py:138 templates/admission_detail.html:159
-#, fuzzy
-#| msgid "awareness_press"
 msgid "Awareness press"
-msgstr "Press"
+msgstr ""
 
 #: templates/registration_detail.html:48 templates/registration_form.html:53
-#, fuzzy
-#| msgid "billing"
 msgid "Billing"
-msgstr "Billing"
+msgstr ""
 
 #: models/admission.py:182
-#, fuzzy
-#| msgid "billing"
 msgid "Billing address"
-msgstr "Billing"
+msgstr ""
 
 #: forms/account.py:23 models/continuing_education_person.py:38
 #: templates/admission_detail.html:77
 msgid "Birth country"
-msgstr "Birth country"
+msgstr ""
 
 #: forms/account.py:29 models/continuing_education_person.py:24
 #: templates/admission_detail.html:75
@@ -142,10 +115,8 @@ msgstr ""
 
 #: forms/account.py:35 models/continuing_education_person.py:30
 #: templates/admission_detail.html:76
-#, fuzzy
-#| msgid "birth_location"
 msgid "Birth location"
-msgstr "Birth location"
+msgstr ""
 
 #: templates/admission_form.html:193
 #: templates/django_registration/registration_form.html:52
@@ -159,17 +130,13 @@ msgid "Change my password"
 msgstr ""
 
 #: models/admission.py:231 templates/registration_detail.html:76
-#, fuzzy
-#| msgid "children_number"
 msgid "Children number"
-msgstr "Children number"
+msgstr ""
 
 #: forms/admission.py:24 forms/registration.py:14 models/admission.py:29
 #: templates/admission_detail.html:72
-#, fuzzy
-#| msgid "citizenship"
 msgid "Citizenship"
-msgstr "Citizenship"
+msgstr ""
 
 #: models/address.py:25 templates/admission_detail.html:90
 #: templates/registration_detail.html:56 templates/registration_detail.html:90
@@ -178,46 +145,36 @@ msgid "City"
 msgstr ""
 
 #: models/admission.py:193 templates/registration_detail.html:61
-#, fuzzy
-#| msgid "company_number"
 msgid "Company number"
-msgstr "Company number"
+msgstr ""
 
 #: templates/admission_detail.html:81
 msgid "Contact"
 msgstr ""
 
 #: templates/admission_form.html:53
-#, fuzzy
-#| msgid "formation_title"
 msgid "Contact information"
-msgstr "Formation title"
+msgstr ""
 
 #: templates/admission_detail.html:31 templates/admission_form.html:30
 #: templates/continuing_education/home.html:32
 #: templates/registration_detail.html:31 templates/registration_form.html:31
-#, fuzzy
-#| msgid "continuing_education"
 msgid "Continuing Education"
-msgstr "Continuing Education"
+msgstr ""
 
 #: forms/address.py:12 models/address.py:32 templates/admission_detail.html:91
 #: templates/registration_detail.html:57 templates/registration_detail.html:91
 #: templates/registration_form.html:58 templates/registration_form.html:79
 msgid "Country"
-msgstr "Country"
+msgstr ""
 
 #: models/admission.py:98 templates/admission_detail.html:123
-#, fuzzy
-#| msgid "current_employer"
 msgid "Current employer"
-msgstr "Current employer"
+msgstr ""
 
 #: models/admission.py:93 templates/admission_detail.html:120
-#, fuzzy
-#| msgid "current_occupation"
 msgid "Current occupation"
-msgstr "Current occupation"
+msgstr ""
 
 #: templates/admission_form.html:56
 msgid "Curriculum"
@@ -236,10 +193,8 @@ msgid "Edit"
 msgstr ""
 
 #: templates/admission_detail.html:95
-#, fuzzy
-#| msgid "education"
 msgid "Education"
-msgstr "Education"
+msgstr ""
 
 #: forms/account.py:64 templates/admission_detail.html:85
 #: templates/authentication/login.html:50
@@ -263,20 +218,16 @@ msgid ""
 msgstr ""
 
 #: templates/continuing_education/home.html:97
-#, fuzzy
-#| msgid "faculty"
 msgid "Faculty"
-msgstr "Faculty"
+msgstr ""
 
 #: models/enums/enums.py:23
 msgid "Female"
 msgstr ""
 
 #: forms/person.py:16 templates/admission_detail.html:69
-#, fuzzy
-#| msgid "first_name"
 msgid "First name"
-msgstr "First name"
+msgstr ""
 
 #: templates/authentication/login.html:65
 #: templates/registration/continuing_education_password_reset_form.html:32
@@ -287,40 +238,28 @@ msgstr ""
 #: templates/admission_detail.html:142 templates/admission_form.html:59
 #: templates/continuing_education/home.html:60
 #: templates/continuing_education/home.html:96
-#, fuzzy
-#| msgid "formation_title"
 msgid "Formation"
-msgstr "Formation title"
+msgstr ""
 
 #: models/admission.py:278
-#, fuzzy
-#| msgid "formation_spreading"
 msgid "Formation spreading"
-msgstr "Formation spreading"
+msgstr ""
 
 #: templates/continuing_education/formations.html:46
-#, fuzzy
-#| msgid "formation_title"
 msgid "Formation title"
-msgstr "Formation title"
+msgstr ""
 
 #: templates/continuing_education/formations.html:36
-#, fuzzy
-#| msgid "formation_title"
 msgid "Formations"
-msgstr "Formation title"
+msgstr ""
 
 #: forms/person.py:27 templates/admission_detail.html:71
-#, fuzzy
-#| msgid "gender"
 msgid "Gender"
-msgstr "Gender"
+msgstr ""
 
 #: models/admission.py:188 templates/registration_detail.html:60
-#, fuzzy
-#| msgid "head_office_name"
 msgid "Head office name"
-msgstr "Head office name"
+msgstr ""
 
 #: models/enums/enums.py:39
 msgid "Health"
@@ -328,22 +267,16 @@ msgstr ""
 
 #: forms/admission.py:31 forms/registration.py:21 models/admission.py:51
 #: templates/admission_detail.html:98
-#, fuzzy
-#| msgid "high_school_diploma"
 msgid "High school diploma"
-msgstr "High school diploma"
+msgstr ""
 
 #: models/admission.py:56 templates/admission_detail.html:99
-#, fuzzy
-#| msgid "high_school_graduation_year"
 msgid "High school graduation year"
-msgstr "Graduation year (high school)"
+msgstr ""
 
 #: models/admission.py:210 templates/registration_detail.html:70
-#, fuzzy
-#| msgid "id_card_number"
 msgid "ID card number"
-msgstr "ID card number"
+msgstr ""
 
 #: templates/authentication/login.html:28
 #: templates/authentication/login.html:31
@@ -353,16 +286,12 @@ msgstr ""
 
 #: templates/admission_detail.html:66 templates/admission_form.html:50
 #: templates/django_registration/complete_account_registration.html:40
-#, fuzzy
-#| msgid "education"
 msgid "Identification"
-msgstr "Education"
+msgstr ""
 
 #: templates/django_registration/complete_account_registration.html:48
-#, fuzzy
-#| msgid "formation_title"
 msgid "Information"
-msgstr "Formation title"
+msgstr ""
 
 #: templates/fragment/submit_confirmation_modal.html:37
 msgid "It is not possible to edit an admission once submitted"
@@ -374,32 +303,24 @@ msgstr ""
 
 #: models/admission.py:66 templates/admission_detail.html:103
 msgid "Last degree field"
-msgstr "Field of study"
+msgstr ""
 
 #: models/admission.py:76 templates/admission_detail.html:107
-#, fuzzy
-#| msgid "last_degree_graduation_year"
 msgid "Last degree graduation year"
-msgstr "Graduation year (last degree)"
+msgstr ""
 
 #: models/admission.py:71 templates/admission_detail.html:106
-#, fuzzy
-#| msgid "last_degree_institution"
 msgid "Last degree institution"
-msgstr "Institution"
+msgstr ""
 
 #: models/admission.py:61 templates/admission_detail.html:102
 #: tests/views/test_admission.py:94
-#, fuzzy
-#| msgid "last_degree_level"
 msgid "Last degree level"
-msgstr "Last degree level"
+msgstr ""
 
 #: forms/person.py:21 templates/admission_detail.html:70
-#, fuzzy
-#| msgid "first_name"
 msgid "Last name"
-msgstr "First name"
+msgstr ""
 
 #: templates/admission_form.html:97
 msgid "Legal address"
@@ -412,10 +333,8 @@ msgstr ""
 #: models/address.py:15 templates/admission_detail.html:88
 #: templates/registration_detail.html:54 templates/registration_detail.html:88
 #: templates/registration_form.html:55 templates/registration_form.html:76
-#, fuzzy
-#| msgid "location"
 msgid "Location"
-msgstr "Location"
+msgstr ""
 
 #: templates/authentication/logged_out.html:39
 #: templates/authentication/login.html:62
@@ -432,10 +351,8 @@ msgid "Male"
 msgstr ""
 
 #: models/admission.py:221 templates/registration_detail.html:74
-#, fuzzy
-#| msgid "marital_status"
 msgid "Marital status"
-msgstr "Marital status"
+msgstr ""
 
 #: models/enums/enums.py:15
 msgid "Married"
@@ -443,26 +360,20 @@ msgstr ""
 
 #: models/admission.py:114 templates/admission_detail.html:131
 #: templates/admission_detail.html:134
-#, fuzzy
-#| msgid "motivation"
 msgid "Motivation"
-msgstr "Motivation"
+msgstr ""
 
 #: models/admission.py:270
 msgid "NOMA"
 msgstr ""
 
 #: models/admission.py:205 templates/registration_detail.html:69
-#, fuzzy
-#| msgid "national_registry_number"
 msgid "National registry number"
-msgstr "National registry number"
+msgstr ""
 
 #: templates/continuing_education/home.html:44
-#, fuzzy
-#| msgid "new_admission"
 msgid "New admission"
-msgstr "New admission"
+msgstr ""
 
 #: templates/admission_form.html:85 templates/admission_form.html:113
 #: templates/admission_form.html:150 templates/admission_form.html:166
@@ -474,38 +385,28 @@ msgid "No"
 msgstr ""
 
 #: templates/continuing_education/home.html:85
-#, fuzzy
-#| msgid "no_admission_yet"
 msgid "No admission yet"
-msgstr "You have no admission form submitted"
+msgstr ""
 
 #: templates/continuing_education/home.html:125
-#, fuzzy
-#| msgid "no_document_available"
 msgid "No document available"
-msgstr "No document available"
+msgstr ""
 
 #: templates/continuing_education/home.html:117
-#, fuzzy
-#| msgid "no_registration_yet"
 msgid "No registration yet"
-msgstr "There is no registration form yet available"
+msgstr ""
 
 #: models/enums/enums.py:32 models/enums/enums.py:40
 msgid "Other"
 msgstr ""
 
 #: models/admission.py:80 templates/admission_detail.html:110
-#, fuzzy
-#| msgid "other_educational_background"
 msgid "Other educational background"
-msgstr "Other educational background"
+msgstr ""
 
 #: models/admission.py:215 templates/registration_detail.html:71
-#, fuzzy
-#| msgid "passport_number"
 msgid "Passport number"
-msgstr "Passport number"
+msgstr ""
 
 #: templates/authentication/login.html:55
 msgid "Password"
@@ -520,28 +421,20 @@ msgid "Password reset unsuccessful"
 msgstr ""
 
 #: models/admission.py:108 templates/admission_detail.html:127
-#, fuzzy
-#| msgid "past_professional_activities"
 msgid "Past professional activities"
-msgstr "Past professional activities"
+msgstr ""
 
 #: models/admission.py:274
-#, fuzzy
-#| msgid "payment_complete"
 msgid "Payment complete"
-msgstr "Payment complete"
+msgstr ""
 
 #: models/admission.py:21
-#, fuzzy
-#| msgid "formation_title"
 msgid "Person information"
-msgstr "Formation title"
+msgstr ""
 
 #: models/admission.py:40 templates/admission_detail.html:84
-#, fuzzy
-#| msgid "phone_mobile"
 msgid "Phone mobile"
-msgstr "Mobile phone"
+msgstr ""
 
 #: templates/django_registration/complete_account_registration.html:35
 msgid ""
@@ -556,69 +449,49 @@ msgstr ""
 #: models/address.py:20 templates/admission_detail.html:89
 #: templates/registration_detail.html:55 templates/registration_detail.html:89
 #: templates/registration_form.html:56 templates/registration_form.html:77
-#, fuzzy
-#| msgid "postal_code"
 msgid "Postal code"
-msgstr "Postal code"
+msgstr ""
 
 #: templates/admission_form.html:110 templates/admission_form.html:147
 #: templates/admission_form.html:163 templates/admission_form.html:184
-#, fuzzy
-#| msgid "previous_noma"
 msgid "Previous"
-msgstr "Previous NOMA"
+msgstr ""
 
 #: models/admission.py:240 templates/registration_detail.html:80
 msgid "Previous NOMA"
 msgstr ""
 
 #: models/admission.py:235 templates/registration_detail.html:79
-#, fuzzy
-#| msgid "previous_ucl_registration"
 msgid "Previous UCL registration"
-msgstr "Have you previously been registered at UCL ?"
+msgstr ""
 
 #: models/admission.py:282
-#, fuzzy
-#| msgid "prior_experience_validation"
 msgid "Prior experience validation"
-msgstr "Prior experience validation"
+msgstr ""
 
 #: models/enums/enums.py:9 models/enums/enums.py:36
-#, fuzzy
-#| msgid "private"
 msgid "Private"
-msgstr "Private"
+msgstr ""
 
 #: models/enums/enums.py:10
-#, fuzzy
-#| msgid "professional_status"
 msgid "Professional"
-msgstr "Professional status"
+msgstr ""
 
 #: templates/admission_detail.html:114 templates/admission_form.html:134
-#, fuzzy
-#| msgid "professional_background"
 msgid "Professional background"
-msgstr "Professional background"
+msgstr ""
 
 #: models/admission.py:118 templates/admission_detail.html:135
-#, fuzzy
-#| msgid "professional_impact"
 msgid "Professional impact"
-msgstr "Professional impact"
+msgstr ""
 
 #: models/admission.py:88 templates/admission_detail.html:117
-#, fuzzy
-#| msgid "professional_status"
 msgid "Professional status"
-msgstr "Professional status"
+msgstr ""
 
 #: templates/continuing_education/formations.html:45
-#, fuzzy
-#| msgid "program_code"
 msgid "Program code"
-msgstr "Program code"
+msgstr ""
 
 #: models/enums/enums.py:37
 msgid "Public"
@@ -633,49 +506,35 @@ msgid "References"
 msgstr ""
 
 #: templates/continuing_education/home.html:98
-#, fuzzy
-#| msgid "registered"
 msgid "Registered"
-msgstr "Registered"
+msgstr ""
 
 #: templates/django_registration/registration_form.html:37
 #: templates/registration_detail.html:33 templates/registration_detail.html:43
 #: templates/registration_detail.html:66 templates/registration_form.html:33
 #: templates/registration_form.html:43
-#, fuzzy
-#| msgid "registration"
 msgid "Registration"
-msgstr "Registration"
+msgstr ""
 
 #: models/admission.py:265
-#, fuzzy
-#| msgid "registration_complete"
 msgid "Registration complete"
-msgstr "Registration complete"
+msgstr ""
 
 #: templates/django_registration/registration_complete.html:30
-#, fuzzy
-#| msgid "registration_complete"
 msgid "Registration completed"
-msgstr "Registration complete"
+msgstr ""
 
 #: models/admission.py:171 templates/registration_detail.html:51
-#, fuzzy
-#| msgid "registration_type"
 msgid "Registration type"
-msgstr "Registration type"
+msgstr ""
 
 #: models/admission.py:253
-#, fuzzy
-#| msgid "residence_phone"
 msgid "Residence address"
-msgstr "Residence phone"
+msgstr ""
 
 #: models/admission.py:259 templates/registration_detail.html:94
-#, fuzzy
-#| msgid "residence_phone"
 msgid "Residence phone"
-msgstr "Residence phone"
+msgstr ""
 
 #: templates/admission_form.html:39 templates/admission_form.html:189
 #: templates/registration_form.html:40
@@ -683,51 +542,39 @@ msgid "Save"
 msgstr ""
 
 #: models/enums/enums.py:29
-#, fuzzy
-#| msgid "current_employer"
 msgid "Self employed"
-msgstr "Current employer"
+msgstr ""
 
 #: models/enums/enums.py:18
 msgid "Separated"
 msgstr ""
 
 #: models/admission.py:297
-#, fuzzy
-#| msgid "professional_status"
 msgid "Sessions"
-msgstr "Professional status"
+msgstr ""
 
 #: templates/authentication/login.html:82
-#, fuzzy
-#| msgid "signup"
 msgid "Signup"
-msgstr "Sign up"
+msgstr ""
 
 #: models/enums/enums.py:14
 msgid "Single"
 msgstr ""
 
 #: models/admission.py:226 templates/registration_detail.html:75
-#, fuzzy
-#| msgid "spouse_name"
 msgid "Spouse name"
-msgstr "Spouse name"
+msgstr ""
 
 #: models/admission.py:163 templates/continuing_education/home.html:61
-#, fuzzy
-#| msgid "state"
 msgid "State"
-msgstr "State"
+msgstr ""
 
 #: templates/admission_detail.html:32 templates/admission_form.html:31
 #: templates/continuing_education/home.html:33
 #: templates/continuing_education/home.html:38
 #: templates/registration_detail.html:32 templates/registration_form.html:32
-#, fuzzy
-#| msgid "student_sheet"
 msgid "Student"
-msgstr "Student sheet"
+msgstr ""
 
 #: templates/admission_detail.html:42
 #: templates/django_registration/complete_account_registration.html:65
@@ -745,10 +592,8 @@ msgid "Submit admission form ?"
 msgstr ""
 
 #: templates/authentication/logged_out.html:38
-#, fuzzy
-#| msgid "succesfull_logout"
 msgid "Succesfull logout"
-msgstr "You are now logged out."
+msgstr ""
 
 #: views/account_activation.py:181
 msgid "The account you attempted to activate is invalid."
@@ -783,36 +628,28 @@ msgid "This field is required."
 msgstr ""
 
 #: models/admission.py:175
-#, fuzzy
-#| msgid "use_address_for_billing"
 msgid "Use address for billing"
-msgstr "Use recorded address for billing"
+msgstr ""
 
 #: models/admission.py:246
-#, fuzzy
-#| msgid "use_address_for_post"
 msgid "Use address for post"
-msgstr "Use recorded address for post"
+msgstr ""
 
 #: templates/django_registration/activation_complete.html:31
 msgid "User account activated"
 msgstr ""
 
 #: templates/django_registration/complete_account_registration.html:32
-#, fuzzy
-#| msgid "formation_title"
 msgid "User account information"
-msgstr "Formation title"
+msgstr ""
 
 #: templates/authentication/login.html:43
 msgid "Username and password not matching"
 msgstr ""
 
 #: models/admission.py:198 templates/registration_detail.html:62
-#, fuzzy
-#| msgid "vat_number"
 msgid "VAT number"
-msgstr "VAT number"
+msgstr ""
 
 #: models/enums/enums.py:16
 msgid "Widowed"
@@ -860,38 +697,3 @@ msgstr ""
 #: templates/continuing_education_layout.html:89
 msgid "data"
 msgstr ""
-
-#~ msgid "continuing_education_account_information_completion"
-#~ msgstr "Account information completion"
-
-#~ msgid "continuing_education_account_information_completion_message"
-#~ msgstr ""
-#~ "Please complete the following form to finalize the creation of your "
-#~ "account."
-
-#~ msgid "continuing_education_activation_complete"
-#~ msgstr "User account activated"
-
-#~ msgid "continuing_education_activation_complete_message"
-#~ msgstr ""
-#~ "Your user account is activated. You can now log in to access the platform."
-
-#~ msgid "continuing_education_activation_failed"
-#~ msgstr "Activation failed"
-
-#~ msgid "continuing_education_activation_failed_message"
-#~ msgstr "Activation has failed. "
-
-#~ msgid "continuing_education_registration_complete"
-#~ msgstr "Registration to platform completed"
-
-#~ msgid "continuing_education_registration_complete_message"
-#~ msgstr ""
-#~ "Your registration to the platform has been completed with success. Please "
-#~ "check your email box to activate your user account."
-
-#~ msgid "log-in"
-#~ msgstr "Log in"
-
-#~ msgid "post"
-#~ msgstr "Post"
