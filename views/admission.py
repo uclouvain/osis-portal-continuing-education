@@ -76,7 +76,7 @@ def admission_detail(request, admission_id):
     headers_to_get = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API
+    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
 
     request_to_put_file = None
     if request.method == 'POST' and 'file_submit' in request.POST:
@@ -95,12 +95,20 @@ def admission_detail(request, admission_id):
             'Content-Type': renderer.media_type
         }
         if file:
-            request_to_put_file = requests.put(url, data=renderer.render(data),  headers=headers_put)
+            request_to_put_file = requests.put(
+                url_continuing_education_file_api,
+                data=renderer.render(data),
+                headers=headers_put
+            )
             if request_to_put_file.status_code == status.HTTP_201_CREATED:
                 display_success_messages(request, _("The document is uploaded correctly"))
             else:
                 display_error_messages(request, _("A problem occured : the document is not uploaded"))
-    request_to_get_list = requests.get(url + '?admission_id=' + str(admission.uuid), headers=headers_to_get)
+    request_to_get_list = _get_response_from_api(
+        admission,
+        headers_to_get,
+        url_continuing_education_file_api
+    )
     list_files = _make_list_files(request_to_get_list)
 
     return render(
@@ -113,6 +121,15 @@ def admission_detail(request, admission_id):
             'request_to_put_file': request_to_put_file
         }
     )
+
+
+def _get_response_from_api(admission, headers_to_get, url_continuing_education_file_api):
+    url_to_api = url_continuing_education_file_api + '?admission_id=' + str(admission.uuid),
+    request_to_get_list = requests.get(
+        url=url_to_api,
+        headers=headers_to_get
+    )
+    return request_to_get_list
 
 
 @login_required
@@ -173,10 +190,10 @@ def _build_warning_from_errors_dict(errors):
 
 
 def _make_list_files(response):
-    list_temp = response.content.decode('utf8')
     try:
+        list_temp = response.content.decode('utf8')
         list_json = json.loads(list_temp)
-    except JSONDecodeError:
+    except (JSONDecodeError, AttributeError):
         list_json = []
     list_files = [
         {

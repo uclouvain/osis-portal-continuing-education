@@ -25,6 +25,7 @@
 ##############################################################################
 import datetime
 import random
+from unittest.mock import patch
 
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -34,6 +35,7 @@ from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase, RequestFactory
 from django.utils.translation import ugettext_lazy as _, ugettext
+from requests import Response
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.admission import Admission
@@ -60,6 +62,14 @@ class ViewStudentAdmissionTestCase(TestCase):
             person_information=self.person_information,
             state=admission_state_choices.SUBMITTED
         )
+        self.patcher = patch(
+            "continuing_education.views.admission._get_response_from_api",
+            return_value=Response()
+        )
+        self.mocked_called_api_function = self.patcher.start()
+
+    def tearDown(self):
+        self.patcher.stop()
 
     def test_admission_detail(self):
         url = reverse('admission_detail', args=[self.admission.pk])
@@ -99,7 +109,6 @@ class ViewStudentAdmissionTestCase(TestCase):
     def test_admission_submitted_detail(self):
         url = reverse('admission_detail', args=[self.admission_submitted.pk])
         response = self.client.get(url)
-
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_detail.html')
 
