@@ -100,7 +100,7 @@ def admission_detail(request, admission_id):
                 display_success_messages(request, _("The document is uploaded correctly"))
             else:
                 display_error_messages(request, _("A problem occured : the document is not uploaded"))
-    request_to_get_list = requests.get(url + '?admission_id=' + str(admission.uuid), headers=headers_to_get)
+    request_to_get_list = _get_response_from_api(admission, headers_to_get, url)
     list_files = _make_list_files(request_to_get_list)
 
     return render(
@@ -113,6 +113,11 @@ def admission_detail(request, admission_id):
             'request_to_put_file': request_to_put_file
         }
     )
+
+
+def _get_response_from_api(admission, headers_to_get, url):
+    request_to_get_list = requests.get(url + '?admission_id=' + str(admission.uuid), headers=headers_to_get)
+    return request_to_get_list
 
 
 @login_required
@@ -173,10 +178,10 @@ def _build_warning_from_errors_dict(errors):
 
 
 def _make_list_files(response):
-    list_temp = response.content.decode('utf8')
     try:
+        list_temp = response.content.decode('utf8')
         list_json = json.loads(list_temp)
-    except JSONDecodeError:
+    except (JSONDecodeError, AttributeError):
         list_json = []
     list_files = [
         {
