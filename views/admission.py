@@ -78,7 +78,12 @@ def admission_detail(request, admission_id):
     }
     url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
 
-    request_to_put_file = None
+    request_to_get_list = _get_response_from_api(
+        admission,
+        headers_to_get,
+        url_continuing_education_file_api
+    )
+    list_files = _make_list_files(request_to_get_list)
     if request.method == 'POST' and 'file_submit' in request.POST:
         if 'myfile' in request.FILES:
             file = request.FILES['myfile']
@@ -104,12 +109,14 @@ def admission_detail(request, admission_id):
                 display_success_messages(request, _("The document is uploaded correctly"))
             else:
                 display_error_messages(request, _("A problem occured : the document is not uploaded"))
-    request_to_get_list = _get_response_from_api(
-        admission,
-        headers_to_get,
-        url_continuing_education_file_api
-    )
-    list_files = _make_list_files(request_to_get_list)
+            return redirect(
+                reverse('admission_detail', kwargs={'admission_id': admission_id})+'#documents',
+                args={
+                    'admission': admission,
+                    'admission_is_submittable': admission_is_submittable,
+                    'list_files': list_files
+                }
+            )
 
     return render(
         request,
@@ -117,17 +124,16 @@ def admission_detail(request, admission_id):
         {
             'admission': admission,
             'admission_is_submittable': admission_is_submittable,
-            'list_files': list_files,
-            'request_to_put_file': request_to_put_file
+            'list_files': list_files
         }
     )
 
 
 def _get_response_from_api(admission, headers_to_get, url_continuing_education_file_api):
-    url_to_api = url_continuing_education_file_api + "?admission_id=" + str(admission.uuid)
     request_to_get_list = requests.get(
-        url=url_to_api,
-        headers=headers_to_get
+        url=url_continuing_education_file_api,
+        headers=headers_to_get,
+        params={'admission_id': admission.uuid}
     )
     return request_to_get_list
 
@@ -222,7 +228,11 @@ def _get_file(path, is_download):
     headers_to_get = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
-    request_to_get = requests.get(url + '?file_path=' + path, headers=headers_to_get)
+    request_to_get = requests.get(
+        url,
+        params={'file_path': path},
+        headers=headers_to_get
+    )
     name = path.rsplit('/', 1)[-1]
     response = HttpResponse()
     mime_type = MimeTypes().guess_type(path)
@@ -230,7 +240,7 @@ def _get_file(path, is_download):
     if is_download:
         response['Content-Disposition'] = 'attachment; filename=%s' % name
     else:
-        response['Content-Disposition'] = 'inline; filename=%s' % name
+        response['Content-Disposition'] = 'filename=%s' % name
     response.write(request_to_get.content)
     return response
 
