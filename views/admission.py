@@ -124,7 +124,7 @@ def admission_detail(request, admission_id):
 
 
 def _get_response_from_api(admission, headers_to_get, url_continuing_education_file_api):
-    url_to_api = url_continuing_education_file_api + '?admission_id=' + str(admission.uuid),
+    url_to_api = url_continuing_education_file_api + "?admission_id=" + str(admission.uuid)
     request_to_get_list = requests.get(
         url=url_to_api,
         headers=headers_to_get
