@@ -254,14 +254,11 @@
         $('#tabs a').click(function (e) {
             e.preventDefault();
             $(this).tab('show');
-        })
-        let uploaded = "{{request_to_put_file}}";
-        if(uploaded != 'None'){
-            showTab("documents");
-        }
-        function showTab(tab) {
-            $('#tabs a[href="#' + tab + '"]').tab('show');
-        }
+        });
+
+        var anchor = location.hash;
+        $('#tabs a[href="' + anchor + '"]').tab('show');
+
         $('#customFile').change(function(e) {
             $('#custom-file-label').text(this.files[0].name);
         });
