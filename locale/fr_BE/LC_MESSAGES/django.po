@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 17:00+0100\n"
+"POT-Creation-Date: 2018-11-19 11:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,9 +16,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: views/admission.py:102
+#: views/admission.py:106
 msgid "A problem occured : the document is not uploaded"
 msgstr "Une erreur est survenue : le document n'a pas été uploadé"
+
+#: views/admission.py:238
+msgid "A problem occured during delete"
+msgstr "Un problème est survenu durant la suppression"
 
 #: templates/admission_detail.html:196
 msgid "Actions"
@@ -113,8 +117,8 @@ msgid "Billing address"
 msgstr "Adresse de facturation"
 
 #: forms/account.py:23 models/continuing_education_person.py:38
-#: templates/admission_detail.html:83 tests/views/test_admission.py:288
-#: tests/views/test_admission.py:312
+#: templates/admission_detail.html:83 tests/views/test_admission.py:297
+#: tests/views/test_admission.py:321
 msgid "Birth country"
 msgstr "Pays de naissance"
 
@@ -210,9 +214,9 @@ msgstr "Editer"
 msgid "Education"
 msgstr "Education"
 
-#: forms/account.py:64 templates/admission_detail.html:91
+#: forms/account.py:64 forms/person.py:35 templates/admission_detail.html:91
 #: templates/authentication/login.html:50
-#: templates/authentication/login.html:52 tests/views/test_admission.py:287
+#: templates/authentication/login.html:52 tests/views/test_admission.py:296
 msgid "Email"
 msgstr ""
 
@@ -240,6 +244,10 @@ msgstr "Faculté"
 #: models/enums/enums.py:23
 msgid "Female"
 msgstr "Femme"
+
+#: views/admission.py:236
+msgid "File correctly deleted"
+msgstr "Le fichier a bien été supprimé"
 
 #: forms/person.py:16 templates/admission_detail.html:75
 msgid "First name"
@@ -270,7 +278,7 @@ msgid "Formations"
 msgstr "Formations"
 
 #: forms/person.py:27 templates/admission_detail.html:77
-#: tests/views/test_admission.py:334
+#: tests/views/test_admission.py:343
 msgid "Gender"
 msgstr "Genre"
 
@@ -335,8 +343,8 @@ msgid "Last degree institution"
 msgstr "Institution"
 
 #: models/admission.py:61 templates/admission_detail.html:108
-#: tests/views/test_admission.py:94 tests/views/test_admission.py:290
-#: tests/views/test_admission.py:301
+#: tests/views/test_admission.py:104 tests/views/test_admission.py:299
+#: tests/views/test_admission.py:310
 msgid "Last degree level"
 msgstr "Niveau du dernier diplôme"
 
@@ -482,7 +490,7 @@ msgstr "Courrier"
 #: models/address.py:20 templates/admission_detail.html:95
 #: templates/registration_detail.html:55 templates/registration_detail.html:89
 #: templates/registration_form.html:56 templates/registration_form.html:77
-#: tests/views/test_admission.py:289 tests/views/test_admission.py:323
+#: tests/views/test_admission.py:298 tests/views/test_admission.py:332
 msgid "Postal code"
 msgstr "Code postal"
 
@@ -649,7 +657,7 @@ msgstr "L'activation a échoué."
 msgid "The activation key you provided is invalid."
 msgstr "La clé d'activation que vous avez fournie n'est pas valide."
 
-#: views/admission.py:100
+#: views/admission.py:104
 msgid "The document is uploaded correctly"
 msgstr "Le document a bien été uploadé"
 
@@ -662,14 +670,14 @@ msgstr "Ce compte a expiré."
 msgid "This email does not exist in our database: %(mail)s"
 msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 
-#: tests/views/test_admission.py:287 tests/views/test_admission.py:288
-#: tests/views/test_admission.py:289 tests/views/test_admission.py:290
-#: tests/views/test_admission.py:301 tests/views/test_admission.py:312
-#: tests/views/test_admission.py:323 tests/views/test_admission.py:334
+#: tests/views/test_admission.py:296 tests/views/test_admission.py:297
+#: tests/views/test_admission.py:298 tests/views/test_admission.py:299
+#: tests/views/test_admission.py:310 tests/views/test_admission.py:321
+#: tests/views/test_admission.py:332 tests/views/test_admission.py:343
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
-#: templates/admission_detail.html:230
+#: templates/admission_detail.html:231
 msgid "Upload"
 msgstr ""
 
@@ -713,7 +721,7 @@ msgstr "Vous avez déjà un compte"
 msgid "You don't have an account"
 msgstr "Vous n'avez pas encore de compte"
 
-#: tests/views/test_admission.py:192 views/admission.py:269
+#: tests/views/test_admission.py:201 views/admission.py:309
 msgid ""
 "Your admission file has been saved. Do not forget to submit it when it is "
 "complete !"
@@ -721,7 +729,7 @@ msgstr ""
 "Votre dossier d'admission a été enregistré. N'oubliez pas de le soumettre "
 "quand il est complet !"
 
-#: tests/views/test_admission.py:90 views/admission.py:163
+#: tests/views/test_admission.py:100 views/admission.py:180
 msgid ""
 "Your admission file is not submittable because you did not provide the "
 "following data : "
