@@ -202,7 +202,8 @@
                                     <td> {{file.size|filesizeformat}} </td>
                                     <td > {{file.created_date}} </td>
                                     <td>
-                                        <a class="button" role="button">
+                                        <a class="button" role="button"
+                                            href="{% url 'remove_file' file.path %}">
                                             <span class="glyphicon glyphicon-remove-circle btn-space btn-file"
                                                   aria-hidden="true"></span>
                                         </a>

@@ -63,7 +63,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             state=admission_state_choices.SUBMITTED
         )
         self.patcher = patch(
-            "continuing_education.views.admission._get_response_from_api",
+            "continuing_education.views.admission._get_files_list",
             return_value=Response()
         )
         self.mocked_called_api_function = self.patcher.start()
