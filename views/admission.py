@@ -78,7 +78,7 @@ def admission_detail(request, admission_id):
     }
     url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
 
-    request_to_get_list = _get_response_from_api(
+    request_to_get_list = _get_list_from_api(
         admission,
         headers_to_get,
         url_continuing_education_file_api
@@ -89,34 +89,8 @@ def admission_detail(request, admission_id):
             file = request.FILES['myfile']
         else:
             file = None
-        data = {
-            'file': file,
-            'admission_id': str(admission.uuid)
-        }
-        renderer = MultiPartRenderer()
-        headers_put = {
-            'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
-            'Content-Disposition': 'attachment; filename=name.jpeg',
-            'Content-Type': renderer.media_type
-        }
         if file:
-            request_to_put_file = requests.put(
-                url_continuing_education_file_api,
-                data=renderer.render(data),
-                headers=headers_put
-            )
-            if request_to_put_file.status_code == status.HTTP_201_CREATED:
-                display_success_messages(request, _("The document is uploaded correctly"))
-            else:
-                display_error_messages(request, _("A problem occured : the document is not uploaded"))
-            return redirect(
-                reverse('admission_detail', kwargs={'admission_id': admission_id})+'#documents',
-                args={
-                    'admission': admission,
-                    'admission_is_submittable': admission_is_submittable,
-                    'list_files': list_files
-                }
-            )
+            return _upload_file_with_api(admission, admission_is_submittable, file, list_files, request)
 
     return render(
         request,
@@ -129,7 +103,38 @@ def admission_detail(request, admission_id):
     )
 
 
-def _get_response_from_api(admission, headers_to_get, url_continuing_education_file_api):
+def _upload_file_with_api(admission, admission_is_submittable, file, list_files, request):
+    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
+    data = {
+        'file': file,
+        'admission_id': str(admission.uuid)
+    }
+    renderer = MultiPartRenderer()
+    headers_put = {
+        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
+        'Content-Disposition': 'attachment; filename=name.jpeg',
+        'Content-Type': renderer.media_type
+    }
+    request_to_put_file = requests.put(
+        url_continuing_education_file_api,
+        data=renderer.render(data),
+        headers=headers_put
+    )
+    if request_to_put_file.status_code == status.HTTP_201_CREATED:
+        display_success_messages(request, _("The document is uploaded correctly"))
+    else:
+        display_error_messages(request, _("A problem occured : the document is not uploaded"))
+    return redirect(
+        reverse('admission_detail', kwargs={'admission_id': admission.id}) + '#documents',
+        args={
+            'admission': admission,
+            'admission_is_submittable': admission_is_submittable,
+            'list_files': list_files
+        }
+    )
+
+
+def _get_list_from_api(admission, headers_to_get, url_continuing_education_file_api):
     request_to_get_list = requests.get(
         url=url_continuing_education_file_api,
         headers=headers_to_get,
@@ -242,7 +247,7 @@ def _remove_file(request, path):
         display_success_messages(request, _("File correctly deleted"))
     else:
         display_error_messages(request, _("A problem occured during delete"))
-    return redirect(request.META.get('HTTP_REFERER'))
+    return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
 
 def _get_file(path, is_download):
