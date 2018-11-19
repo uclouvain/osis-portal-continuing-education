@@ -35,7 +35,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
@@ -215,6 +215,28 @@ def view_file(request, path):
 @login_required
 def download_file(request, path):
     return _get_file(path, is_download=True)
+
+
+@login_required
+def remove_file(request, path):
+    return _remove_file(request, path)
+
+
+def _remove_file(request, path):
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API
+    headers_to_delete = {
+        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
+    }
+    request_to_delete = requests.delete(
+        url,
+        params={'file_path': path},
+        headers=headers_to_delete
+    )
+    if request_to_delete.status_code == status.HTTP_204_NO_CONTENT:
+        display_success_messages(request, _("File correctly deleted"))
+    else:
+        display_error_messages(request, _("A problem occured during delete"))
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def _get_file(path, is_download):
