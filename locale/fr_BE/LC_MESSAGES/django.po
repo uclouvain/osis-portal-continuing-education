@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-19 11:42+0100\n"
+"POT-Creation-Date: 2018-11-19 11:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,11 +16,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: views/admission.py:111
+#: views/admission.py:106
 msgid "A problem occured : the document is not uploaded"
 msgstr "Une erreur est survenue : le document n'a pas été uploadé"
 
-#: templates/fragment/files_panel.html:39
+#: views/admission.py:238
+msgid "A problem occured during delete"
+msgstr "Un problème est survenu durant la suppression"
+
+#: templates/admission_detail.html:196
 msgid "Actions"
 msgstr "Actions"
 
@@ -241,6 +245,10 @@ msgstr "Faculté"
 msgid "Female"
 msgstr "Femme"
 
+#: views/admission.py:236
+msgid "File correctly deleted"
+msgstr "Le fichier a bien été supprimé"
+
 #: forms/person.py:16 templates/admission_detail.html:75
 msgid "First name"
 msgstr "Prénom"
@@ -418,6 +426,7 @@ msgstr "Non"
 msgid "No admission yet"
 msgstr "Vous n'avez pas soumis de formulaire d'admission"
 
+#: templates/admission_detail.html:186
 #: templates/continuing_education/home.html:125
 #: templates/fragment/files_panel.html:29
 msgid "No document available"
@@ -574,7 +583,7 @@ msgstr "Adresse"
 msgid "Residence phone"
 msgstr "Téléphone fixe"
 
-#: templates/admission_form.html:39 templates/admission_form.html:192
+#: templates/admission_form.html:39 templates/admission_form.html:189
 #: templates/registration_form.html:40
 msgid "Save"
 msgstr "Sauver"
@@ -599,7 +608,7 @@ msgstr "S'inscrire"
 msgid "Single"
 msgstr "Célibataire"
 
-#: templates/fragment/files_panel.html:37
+#: templates/admission_detail.html:194
 msgid "Size"
 msgstr "Taille"
 
@@ -653,7 +662,7 @@ msgstr "L'activation a échoué."
 msgid "The activation key you provided is invalid."
 msgstr "La clé d'activation que vous avez fournie n'est pas valide."
 
-#: views/admission.py:109
+#: views/admission.py:104
 msgid "The document is uploaded correctly"
 msgstr "Le document a bien été uploadé"
 
@@ -673,7 +682,7 @@ msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
-#: templates/fragment/files_panel.html:73
+#: templates/admission_detail.html:230
 msgid "Upload"
 msgstr ""
 
@@ -717,7 +726,7 @@ msgstr "Vous avez déjà un compte"
 msgid "You don't have an account"
 msgstr "Vous n'avez pas encore de compte"
 
-#: tests/views/test_admission.py:201 views/admission.py:296
+#: tests/views/test_admission.py:192 views/admission.py:269
 msgid ""
 "Your admission file has been saved. Do not forget to submit it when it is "
 "complete !"
@@ -725,7 +734,7 @@ msgstr ""
 "Votre dossier d'admission a été enregistré. N'oubliez pas de le soumettre "
 "quand il est complet !"
 
-#: tests/views/test_admission.py:100 views/admission.py:186
+#: tests/views/test_admission.py:90 views/admission.py:163
 msgid ""
 "Your admission file is not submittable because you did not provide the "
 "following data : "

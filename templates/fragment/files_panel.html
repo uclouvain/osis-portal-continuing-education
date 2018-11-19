@@ -45,7 +45,8 @@
                 <td> {{file.size|filesizeformat}} </td>
                 <td > {{file.created_date}} </td>
                 <td>
-                    <a class="button" role="button">
+                    <a class="button" role="button"
+                        href="{% url 'remove_file' file.path %}">
                         <span class="glyphicon glyphicon-remove-circle btn-space btn-file"
                               aria-hidden="true"></span>
                     </a>
@@ -66,7 +67,7 @@
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <label class="custom-file-label btn btn-default"
-           disabled id="custom-file-label">{% trans 'No file chosen' %}</label>
+           disabled id="custom-file-label">Aucun fichier choisi</label>
     <div class="custom-file-btn-group pull-right">
         <button type="submit" class="btn btn-primary pull-right" name="file_submit">
             <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
