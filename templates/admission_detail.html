@@ -180,65 +180,11 @@
         </div>
     </div>
     <div role="tabpanel" class="tab-pane" id="documents">
-                <div class="panel-body">
-                    {% if not list_files %}
-                        <div class="jumbotron">
-                            <span>{% trans 'No document available' %}</span>
-                        </div>
-                    {% endif %}
-                    {% if list_files %}
-                        <table id="table_education_groups" class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th id="name">{% trans 'Name' %}</th>
-                                    <th id="size">{% trans 'Size' %}</th>
-                                    <th id="last_update">{% trans 'Last update' %}</th>
-                                    <th id="actions">{% trans 'Actions' %}</th>
-                                </tr>
-                            </thead>
-                            {% for file in list_files %}
-                                <tr>
-                                    <td> {{file.name}} </td>
-                                    <td> {{file.size|filesizeformat}} </td>
-                                    <td > {{file.created_date}} </td>
-                                    <td>
-                                        <a class="button" role="button">
-                                            <span class="glyphicon glyphicon-remove-circle btn-space btn-file"
-                                                  aria-hidden="true"></span>
-                                        </a>
-                                        <a class="button" role="button"
-                                           href="{% url 'view_file' file.path %}" target="_blank">
-                                            <span class="glyphicon glyphicon-eye-open btn-space btn-file"
-                                                  aria-hidden="true"></span>
-                                        </a>
-                                        <a class="button" role="button" href="{% url 'download_file' file.path %}">
-                                            <span class="glyphicon glyphicon-download-alt btn-space btn-file"
-                                                  aria-hidden="true"></span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    {% endif %}
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <label class="custom-file-label btn btn-default"
-                               disabled id="custom-file-label">Aucun fichier choisi</label>
-                        <div class="custom-file-btn-group pull-right">
-                            <button type="submit" class="btn btn-primary pull-right" name="file_submit">
-                                <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
-                                {% trans 'Upload' %}
-                            </button>
-                            <div class="custom-file file btn btn-primary pull-right">
-                                Browse
-                              <input type="file" class="custom-file-input" id="customFile" name="myfile">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="panel-body">
+            {% include 'fragment/files_panel.html' %}
         </div>
     </div>
+</div>
 {% endblock %}
 
 

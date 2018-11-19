@@ -61,6 +61,9 @@
                 <li role="presentation"><a href="#references" role="tab" data-toggle="tab">
                     {% trans 'References' %}
                 </a></li>
+                <li role="presentation"><a href="#documents" role="tab" data-toggle="tab">
+                    {% trans 'Documents' %}
+                </a></li>
             </ul>
             <div class="tab-content">
                 <div id="identification" role="tabpanel" class="tab-pane active">
@@ -194,6 +197,13 @@
                         </a>
                     </div>
                 </div>
+
+                <div role="tabpanel" class="tab-pane" id="documents">
+                    <div class="panel-body">
+                        {% include 'fragment/files_panel.html' %}
+                    </div>
+                </div>
+
             </div>
         </form>
     </div>
