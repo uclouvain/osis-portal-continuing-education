@@ -64,13 +64,8 @@ def admission_detail(request, admission_id):
     if admission.state == admission_state_choices.DRAFT:
         admission_submission_errors = get_admission_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
-
         if not admission_is_submittable:
-            messages.add_message(
-                request=request,
-                level=messages.WARNING,
-                message=_build_warning_from_errors_dict(admission_submission_errors),
-            )
+            _show_submit_warning(admission_submission_errors, request)
     else:
         admission_is_submittable = False
     headers_to_get = {
@@ -103,6 +98,14 @@ def admission_detail(request, admission_id):
             'admission_is_submittable': admission_is_submittable,
             'list_files': list_files
         }
+    )
+
+
+def _show_submit_warning(admission_submission_errors, request):
+    messages.add_message(
+        request=request,
+        level=messages.WARNING,
+        message=_build_warning_from_errors_dict(admission_submission_errors),
     )
 
 
@@ -273,6 +276,12 @@ def admission_form(request, admission_id=None):
     address_form = AddressForm(request.POST or None, instance=address)
 
     id_form = PersonForm(request.POST or None, instance=base_person)
+
+    if admission and not request.POST:
+        admission_submission_errors = get_admission_submission_errors(admission)
+        admission_is_submittable = not admission_submission_errors
+        if not admission_is_submittable:
+            _show_submit_warning(admission_submission_errors, request)
 
     if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
         if current_address:
