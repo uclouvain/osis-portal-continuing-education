@@ -207,11 +207,6 @@
                                             <span class="glyphicon glyphicon-remove-circle btn-space btn-file"
                                                   aria-hidden="true"></span>
                                         </a>
-                                        <a class="button" role="button"
-                                           href="{% url 'view_file' file.path %}" target="_blank">
-                                            <span class="glyphicon glyphicon-eye-open btn-space btn-file"
-                                                  aria-hidden="true"></span>
-                                        </a>
                                         <a class="button" role="button" href="{% url 'download_file' file.path %}">
                                             <span class="glyphicon glyphicon-download-alt btn-space btn-file"
                                                   aria-hidden="true"></span>
@@ -226,7 +221,8 @@
                         <label class="custom-file-label btn btn-default"
                                disabled id="custom-file-label">Aucun fichier choisi</label>
                         <div class="custom-file-btn-group pull-right">
-                            <button type="submit" class="btn btn-primary pull-right" name="file_submit">
+                            <button type="submit" class="btn btn-primary pull-right"
+                                    name="file_submit" id="btn-upload" disabled>
                                 <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
                                 {% trans 'Upload' %}
                             </button>
@@ -261,6 +257,7 @@
 
         $('#customFile').change(function(e) {
             $('#custom-file-label').text(this.files[0].name);
+            $('#btn-upload').removeAttr("disabled")
         });
 
     </script>
