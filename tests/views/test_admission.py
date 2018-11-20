@@ -177,6 +177,10 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
 
+        #no message should be displayed
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 0)
+
     def test_admission_new_save(self):
         admission = model_to_dict(self.admission)
         person = {
@@ -221,11 +225,37 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-    def test_edit_get_admission_found(self):
+    def test_edit_get_admission_found_incomplete(self):
+        self.admission.last_degree_level = ''
+        self.admission.save()
         url = reverse('admission_edit', args=[self.admission.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
+
+        #A warning message should be displayed
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertIn(
+            ugettext("Your admission file is not submittable because you did not provide the following data : "),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("Last degree level"),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.WARNING)
+
+    def test_edit_get_admission_found_complete(self):
+        url = reverse('admission_edit', args=[self.admission.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'admission_form.html')
+
+        # No warning message should be displayed
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 0)
+
 
     def test_admission_edit_permission_denied_invalid_state(self):
         url = reverse('admission_edit', args=[self.admission_submitted.pk])
