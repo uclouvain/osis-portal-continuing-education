@@ -219,21 +219,27 @@ def _make_list_files(response):
 
 
 @login_required
-def view_file(request, path):
-    return _get_file(path, is_download=False)
-
-
-@login_required
 def download_file(request, path):
-    return _get_file(path, is_download=True)
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API
+    headers_to_get = {
+        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
+    }
+    request_to_get = requests.get(
+        url,
+        params={'file_path': path},
+        headers=headers_to_get
+    )
+    name = path.rsplit('/', 1)[-1]
+    response = HttpResponse()
+    mime_type = MimeTypes().guess_type(path)
+    response['Content-Type'] = mime_type
+    response['Content-Disposition'] = 'attachment; filename=%s' % name
+    response.write(request_to_get.content)
+    return response
 
 
 @login_required
 def remove_file(request, path):
-    return _remove_file(request, path)
-
-
-def _remove_file(request, path):
     url = settings.URL_CONTINUING_EDUCATION_FILE_API
     headers_to_delete = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
@@ -248,28 +254,6 @@ def _remove_file(request, path):
     else:
         display_error_messages(request, _("A problem occured during delete"))
     return redirect(request.META.get('HTTP_REFERER')+'#documents')
-
-
-def _get_file(path, is_download):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API
-    headers_to_get = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
-    }
-    request_to_get = requests.get(
-        url,
-        params={'file_path': path},
-        headers=headers_to_get
-    )
-    name = path.rsplit('/', 1)[-1]
-    response = HttpResponse()
-    mime_type = MimeTypes().guess_type(path)
-    response['Content-Type'] = mime_type
-    if is_download:
-        response['Content-Disposition'] = 'attachment; filename=%s' % name
-    else:
-        response['Content-Disposition'] = 'filename=%s' % name
-    response.write(request_to_get.content)
-    return response
 
 
 @login_required
