@@ -43,7 +43,7 @@
     </div>
 
     <div class="panel panel-default">
-        <form id="form" method="POST" class="post-form">
+        <form id="form" method="POST" class="post-form" enctype="multipart/form-data">
             {% csrf_token %}
             <ul id="tabs" class="nav nav-tabs">
                 <li role="presentation" class="active"><a href="#identification" role="tab" data-toggle="tab">
@@ -186,6 +186,21 @@
                         <a href="#" class="btn btn-default" onclick="showTab('formation')">
                             {% trans 'Previous' %}
                         </a>
+                        <a href="#" class="btn btn-default" onclick="showTab('documents')">
+                            {% trans 'Next' %}
+                        </a>
+                    </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="documents">
+                    <div class="panel-body">
+                        {% include 'template_messages.html' %}
+                        {% include 'fragment/files_panel.html' %}
+                    </div>
+                    <div class="panel-footer text-right">
+                        <a href="#" class="btn btn-default" onclick="showTab('references')">
+                            {% trans 'Previous' %}
+                        </a>
                         <button type="submit" onclick="showTab('identification')"
                                 name="state" value="draft" class="btn btn-primary" title="{%trans 'Draft' %}">
                             <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
@@ -195,12 +210,6 @@
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             {% trans 'Cancel' %}
                         </a>
-                    </div>
-                </div>
-
-                <div role="tabpanel" class="tab-pane" id="documents">
-                    <div class="panel-body">
-                        {% include 'fragment/files_panel.html' %}
                     </div>
                 </div>
 
@@ -229,6 +238,13 @@
     }
     $( "#form" ).submit(function( event ) {
         enableFields(fields_to_enable);
+    });
+
+    var anchor = location.hash;
+    $('#tabs li a[href="' + anchor + '"]').tab('show');
+
+    $('#customFile').change(function(e) {
+        $('#custom-file-label').text(this.files[0].name);
     });
 </script>
 {% if request.session.formation_id %}
