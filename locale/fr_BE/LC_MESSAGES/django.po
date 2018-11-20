@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-19 11:17+0100\n"
+"POT-Creation-Date: 2018-11-20 16:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: views/admission.py:106
+#: views/admission.py:129
 msgid "A problem occured : the document is not uploaded"
 msgstr "Une erreur est survenue : le document n'a pas été uploadé"
 
-#: views/admission.py:238
+#: views/admission.py:249
 msgid "A problem occured during delete"
 msgstr "Un problème est survenu durant la suppression"
 
@@ -182,6 +182,10 @@ msgstr "Formations Continues"
 msgid "Country"
 msgstr "Pays"
 
+#: templates/django_registration/registration_form.html:37
+msgid "Creating a user account"
+msgstr "Création d'un compte utilisateur"
+
 #: models/admission.py:98 templates/admission_detail.html:128
 msgid "Current employer"
 msgstr "Employeur actuel"
@@ -237,7 +241,7 @@ msgstr ""
 "Indiquez votre adresse mail ci-dessous, nous vous enverrons un email avec "
 "les instructions pour définir un nouveau mot de passe"
 
-#: templates/continuing_education/home.html:97
+#: templates/continuing_education/home.html:96
 msgid "Faculty"
 msgstr "Faculté"
 
@@ -245,7 +249,7 @@ msgstr "Faculté"
 msgid "Female"
 msgstr "Femme"
 
-#: views/admission.py:236
+#: views/admission.py:247
 msgid "File correctly deleted"
 msgstr "Le fichier a bien été supprimé"
 
@@ -260,8 +264,8 @@ msgstr "Mot de passe oublié ?"
 
 #: models/admission.py:124 templates/admission_detail.html:144
 #: templates/admission_detail.html:147 templates/admission_form.html:59
-#: templates/continuing_education/home.html:60
-#: templates/continuing_education/home.html:96
+#: templates/continuing_education/home.html:59
+#: templates/continuing_education/home.html:95
 msgid "Formation"
 msgstr "Formation"
 
@@ -374,7 +378,7 @@ msgstr "Rue - numéro - boîte"
 #: templates/authentication/login.html:62
 #: templates/django_registration/activation_complete.html:36
 msgid "Login"
-msgstr "S'identifier"
+msgstr "Se connecter"
 
 #: templates/authentication/logged_out.html:33
 msgid "Logout"
@@ -418,20 +422,19 @@ msgstr "Nouvelle admission"
 msgid "Next"
 msgstr "Suivant"
 
-#: models/enums/enums.py:4 templates/continuing_education/home.html:109
+#: models/enums/enums.py:4 templates/continuing_education/home.html:108
 msgid "No"
 msgstr "Non"
 
-#: templates/continuing_education/home.html:85
+#: templates/continuing_education/home.html:84
 msgid "No admission yet"
 msgstr "Vous n'avez pas soumis de formulaire d'admission"
 
 #: templates/admission_detail.html:186
-#: templates/continuing_education/home.html:125
 msgid "No document available"
 msgstr "Pas de document disponible"
 
-#: templates/continuing_education/home.html:117
+#: templates/continuing_education/home.html:116
 msgid "No registration yet"
 msgstr "Pas de formulaire d'inscription disponible"
 
@@ -547,11 +550,10 @@ msgstr "Fonctionnaire"
 msgid "References"
 msgstr "Références"
 
-#: templates/continuing_education/home.html:98
+#: templates/continuing_education/home.html:97
 msgid "Registered"
 msgstr "Inscrit"
 
-#: templates/django_registration/registration_form.html:37
 #: templates/registration_detail.html:33 templates/registration_detail.html:43
 #: templates/registration_detail.html:66 templates/registration_form.html:33
 #: templates/registration_form.html:43
@@ -597,7 +599,7 @@ msgstr "Sessions"
 
 #: templates/authentication/login.html:82
 msgid "Signup"
-msgstr "S'inscrire"
+msgstr "Créer un compte"
 
 #: models/enums/enums.py:14
 msgid "Single"
@@ -611,7 +613,7 @@ msgstr "Taille"
 msgid "Spouse name"
 msgstr "Nom du conjoint"
 
-#: models/admission.py:163 templates/continuing_education/home.html:61
+#: models/admission.py:163 templates/continuing_education/home.html:60
 msgid "State"
 msgstr "Statut"
 
@@ -657,7 +659,7 @@ msgstr "L'activation a échoué."
 msgid "The activation key you provided is invalid."
 msgstr "La clé d'activation que vous avez fournie n'est pas valide."
 
-#: views/admission.py:104
+#: views/admission.py:127
 msgid "The document is uploaded correctly"
 msgstr "Le document a bien été uploadé"
 
@@ -709,7 +711,7 @@ msgstr "Numéro de TVA"
 msgid "Widowed"
 msgstr "Veuf(ve)"
 
-#: models/enums/enums.py:5 templates/continuing_education/home.html:107
+#: models/enums/enums.py:5 templates/continuing_education/home.html:106
 msgid "Yes"
 msgstr "Oui"
 
@@ -721,7 +723,7 @@ msgstr "Vous avez déjà un compte"
 msgid "You don't have an account"
 msgstr "Vous n'avez pas encore de compte"
 
-#: tests/views/test_admission.py:201 views/admission.py:309
+#: tests/views/test_admission.py:201 views/admission.py:323
 msgid ""
 "Your admission file has been saved. Do not forget to submit it when it is "
 "complete !"
@@ -729,7 +731,7 @@ msgstr ""
 "Votre dossier d'admission a été enregistré. N'oubliez pas de le soumettre "
 "quand il est complet !"
 
-#: tests/views/test_admission.py:100 views/admission.py:180
+#: tests/views/test_admission.py:100 views/admission.py:191
 msgid ""
 "Your admission file is not submittable because you did not provide the "
 "following data : "

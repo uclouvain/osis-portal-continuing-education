@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-19 11:17+0100\n"
+"POT-Creation-Date: 2018-11-20 16:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: views/admission.py:106
+#: views/admission.py:129
 msgid "A problem occured : the document is not uploaded"
 msgstr ""
 
-#: views/admission.py:238
+#: views/admission.py:249
 msgid "A problem occured during delete"
 msgstr ""
 
@@ -181,6 +181,10 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
+#: templates/django_registration/registration_form.html:37
+msgid "Creating a user account"
+msgstr ""
+
 #: models/admission.py:98 templates/admission_detail.html:128
 msgid "Current employer"
 msgstr ""
@@ -234,7 +238,7 @@ msgid ""
 "new password."
 msgstr ""
 
-#: templates/continuing_education/home.html:97
+#: templates/continuing_education/home.html:96
 msgid "Faculty"
 msgstr ""
 
@@ -242,7 +246,7 @@ msgstr ""
 msgid "Female"
 msgstr ""
 
-#: views/admission.py:236
+#: views/admission.py:247
 msgid "File correctly deleted"
 msgstr ""
 
@@ -257,8 +261,8 @@ msgstr ""
 
 #: models/admission.py:124 templates/admission_detail.html:144
 #: templates/admission_detail.html:147 templates/admission_form.html:59
-#: templates/continuing_education/home.html:60
-#: templates/continuing_education/home.html:96
+#: templates/continuing_education/home.html:59
+#: templates/continuing_education/home.html:95
 msgid "Formation"
 msgstr ""
 
@@ -415,20 +419,19 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: models/enums/enums.py:4 templates/continuing_education/home.html:109
+#: models/enums/enums.py:4 templates/continuing_education/home.html:108
 msgid "No"
 msgstr ""
 
-#: templates/continuing_education/home.html:85
+#: templates/continuing_education/home.html:84
 msgid "No admission yet"
 msgstr ""
 
 #: templates/admission_detail.html:186
-#: templates/continuing_education/home.html:125
 msgid "No document available"
 msgstr ""
 
-#: templates/continuing_education/home.html:117
+#: templates/continuing_education/home.html:116
 msgid "No registration yet"
 msgstr ""
 
@@ -542,11 +545,10 @@ msgstr ""
 msgid "References"
 msgstr ""
 
-#: templates/continuing_education/home.html:98
+#: templates/continuing_education/home.html:97
 msgid "Registered"
 msgstr ""
 
-#: templates/django_registration/registration_form.html:37
 #: templates/registration_detail.html:33 templates/registration_detail.html:43
 #: templates/registration_detail.html:66 templates/registration_form.html:33
 #: templates/registration_form.html:43
@@ -606,7 +608,7 @@ msgstr ""
 msgid "Spouse name"
 msgstr ""
 
-#: models/admission.py:163 templates/continuing_education/home.html:61
+#: models/admission.py:163 templates/continuing_education/home.html:60
 msgid "State"
 msgstr ""
 
@@ -652,7 +654,7 @@ msgstr ""
 msgid "The activation key you provided is invalid."
 msgstr ""
 
-#: views/admission.py:104
+#: views/admission.py:127
 msgid "The document is uploaded correctly"
 msgstr ""
 
@@ -704,7 +706,7 @@ msgstr ""
 msgid "Widowed"
 msgstr ""
 
-#: models/enums/enums.py:5 templates/continuing_education/home.html:107
+#: models/enums/enums.py:5 templates/continuing_education/home.html:106
 msgid "Yes"
 msgstr ""
 
@@ -716,13 +718,13 @@ msgstr ""
 msgid "You don't have an account"
 msgstr ""
 
-#: tests/views/test_admission.py:201 views/admission.py:309
+#: tests/views/test_admission.py:201 views/admission.py:323
 msgid ""
 "Your admission file has been saved. Do not forget to submit it when it is "
 "complete !"
 msgstr ""
 
-#: tests/views/test_admission.py:100 views/admission.py:180
+#: tests/views/test_admission.py:100 views/admission.py:191
 msgid ""
 "Your admission file is not submittable because you did not provide the "
 "following data : "
