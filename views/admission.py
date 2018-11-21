@@ -360,7 +360,7 @@ def admission_form(request, admission_id=None):
             'address_form': address_form,
             'id_form': id_form,
             'admission': admission,
-            'list_files': list_files
+            'list_files': list_files,
             'errors_fields': errors_fields,
         }
     )
