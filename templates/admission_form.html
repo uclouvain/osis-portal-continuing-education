@@ -180,6 +180,18 @@
                         {% bootstrap_field admission_form.awareness_linkedin %}
                         {% bootstrap_field admission_form.awareness_customized_mail %}
                         {% bootstrap_field admission_form.awareness_emailing %}
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label for="id_awareness_other">
+                                    <input type="checkbox" name="awareness_other" class="" id="id_awareness_other_checkbox"
+                                    {% if admission_form.awareness_other.value != '' %} checked {% endif %}>
+                                    {% trans 'Other' %}
+                                </label>
+                            </div>
+                            <div id="other-text-field" class="col-md-4" {% if admission_form.awareness_other.value == '' %} hidden {% endif %}>
+                                {% bootstrap_field admission_form.awareness_other show_label=False form_group_class='other-form-group' %}
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-footer text-right">
                         <a href="#" class="btn btn-default" onclick="showTab('formation')">
@@ -223,10 +235,19 @@
         enableFields(fields_to_enable);
     });
 
+    //show missing fields in red
     let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
     errors_fields = JSON.parse(errors_fields);
     for(field of errors_fields)
         $('#id_'+field).parent().addClass('has-error');
+
+    //show other text field when other is checked
+    $('#id_awareness_other_checkbox').change(function(){
+        $('#other-text-field').toggle(this.checked);
+        if(!this.checked){
+            $('#other-text-field input').val('');
+        }
+    });
 </script>
 {% if request.session.formation_id %}
 <script>

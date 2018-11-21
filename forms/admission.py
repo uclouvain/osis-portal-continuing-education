@@ -72,6 +72,7 @@ class AdmissionForm(ModelForm):
             'awareness_linkedin',
             'awareness_customized_mail',
             'awareness_emailing',
+            'awareness_other',
 
             # State
             'state',
