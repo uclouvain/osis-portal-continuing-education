@@ -180,18 +180,25 @@
                         {% bootstrap_field admission_form.awareness_linkedin %}
                         {% bootstrap_field admission_form.awareness_customized_mail %}
                         {% bootstrap_field admission_form.awareness_emailing %}
+                        {% with admission_form.awareness_other.value as other_value %}
                         <div class="form-group">
                             <div class="checkbox">
                                 <label for="id_awareness_other">
                                     <input type="checkbox" name="awareness_other" class="" id="id_awareness_other_checkbox"
-                                    {% if admission_form.awareness_other.value != '' %} checked {% endif %}>
-                                    {% trans 'Other' %}
+                                        {% if other_value != None and other_value != '' %}
+                                               checked
+                                        {% endif %}>
+                                        {% trans 'Other' %}
                                 </label>
                             </div>
-                            <div id="other-text-field" class="col-md-4" {% if admission_form.awareness_other.value == '' %} hidden {% endif %}>
+                            <div id="other-text-field" class="col-md-4"
+                                    {% if other_value == None or other_value == '' %}
+                                        hidden
+                                    {% endif %}>
                                 {% bootstrap_field admission_form.awareness_other show_label=False form_group_class='other-form-group' %}
                             </div>
                         </div>
+                        {% endwith %}
                     </div>
                     <div class="panel-footer text-right">
                         <a href="#" class="btn btn-default" onclick="showTab('formation')">
