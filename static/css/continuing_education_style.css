@@ -114,3 +114,7 @@
     width: calc(30% - 5px);
     display: inline-block;
 }
+
+.required:after{
+    content:" *";
+}

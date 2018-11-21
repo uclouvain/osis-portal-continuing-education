@@ -207,6 +207,7 @@
 
         $('#customFile').change(function(e) {
             $('#custom-file-label').text(this.files[0].name);
+            $('#btn-upload').removeAttr("disabled")
         });
 
     </script>
