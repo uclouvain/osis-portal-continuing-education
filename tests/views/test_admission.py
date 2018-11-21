@@ -306,8 +306,10 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.admission = AdmissionFactory()
 
     def test_admission_is_submittable(self):
+        errors, errors_fields = get_admission_submission_errors(self.admission)
+
         self.assertFalse(
-            get_admission_submission_errors(self.admission)
+            errors
         )
 
     def test_admission_is_not_submittable_missing_data_in_all_objects(self):
@@ -319,9 +321,10 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.admission.address.save()
         self.admission.last_degree_level = ''
         self.admission.save()
+        errors, errors_fields = get_admission_submission_errors(self.admission)
 
         self.assertDictEqual(
-            get_admission_submission_errors(self.admission),
+            errors,
             {
                 _("Email"): [_("This field is required.")],
                 _("Birth country"): [_("This field is required.")],
@@ -333,9 +336,10 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_admission_data(self):
         self.admission.last_degree_level = ''
         self.admission.save()
+        errors, errors_fields = get_admission_submission_errors(self.admission)
 
         self.assertDictEqual(
-            get_admission_submission_errors(self.admission),
+            errors,
             {
                 _("Last degree level"): [_("This field is required.")]
             }
@@ -344,9 +348,10 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_person_information_data(self):
         self.admission.person_information.birth_country = None
         self.admission.person_information.save()
+        errors, errors_fields = get_admission_submission_errors(self.admission)
 
         self.assertDictEqual(
-            get_admission_submission_errors(self.admission),
+            errors,
             {
                 _("Birth country"): [_("This field is required.")],
             }
@@ -355,9 +360,10 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_address_data(self):
         self.admission.address.postal_code = ''
         self.admission.address.save()
+        errors, errors_fields = get_admission_submission_errors(self.admission)
 
         self.assertDictEqual(
-            get_admission_submission_errors(self.admission),
+            errors,
             {
                 _("Postal code"): [_("This field is required.")],
             }
@@ -366,9 +372,10 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_person_data(self):
         self.admission.person_information.person.gender = None
         self.admission.person_information.person.save()
+        errors, errors_fields = get_admission_submission_errors(self.admission)
 
         self.assertDictEqual(
-            get_admission_submission_errors(self.admission),
+            errors,
             {
                 _("Gender"): [_("This field is required.")],
             }
