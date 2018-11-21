@@ -118,3 +118,8 @@
 .required:after{
     content:" *";
 }
+
+.form-button-group{
+    margin-right: 3px !important;
+    margin-top: 3px !important;
+}
