@@ -120,6 +120,12 @@
 }
 
 .form-button-group{
-    margin-right: 3px !important;
-    margin-top: 3px !important;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+
+#tabs li a{
+    display: inline-block;
+    padding-top: 15px;
+    padding-bottom:15px;
 }
