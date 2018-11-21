@@ -66,6 +66,17 @@
                 <li role="presentation"><a href="#documents" role="tab" data-toggle="tab">
                     {% trans 'Documents' %}
                 </a></li>
+                <div class="form-button-group pull-right">
+                    <button class="btn btn-default" id="cancel" href="{% url 'continuing_education_home' %}">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        {% trans 'Cancel' %}
+                    </button>
+                    <button type="submit" onclick="showTab('identification')"
+                            name="state" value="draft" class="btn btn-primary" title="{%trans 'Draft' %}">
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                        {% trans 'Save' %}
+                    </button>
+                </div>
             </ul>
             <div class="tab-content">
                 <div id="identification" role="tabpanel" class="tab-pane active">
@@ -207,22 +218,20 @@
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="documents">
-                    <div class="panel-body">
-                        {% include 'template_messages.html' %}
-                        {% include 'fragment/files_panel.html' %}
-                    </div>
+                    {% if admission %}
+                        <div class="panel-body">
+                            <div class="jumbotron">
+                                 <span>{% trans 'Please save your admission before uploading documents' %}</span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="panel-body">
+                            {% include 'fragment/files_panel.html' %}
+                        </div>
+                    {% endif %}
                     <div class="panel-footer text-right">
                         <a href="#" class="btn btn-default" onclick="showTab('references')">
                             {% trans 'Previous' %}
-                        </a>
-                        <button type="submit" onclick="showTab('identification')"
-                                name="state" value="draft" class="btn btn-primary" title="{%trans 'Draft' %}">
-                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                            {% trans 'Save' %}
-                        </button>
-                        <a class="btn btn-default" id="" href="{% url 'continuing_education_home' %}">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            {% trans 'Cancel' %}
                         </a>
                     </div>
                 </div>
@@ -258,6 +267,7 @@
 
     $('#customFile').change(function(e) {
         $('#custom-file-label').text(this.files[0].name);
+        $('#btn-upload').removeAttr("disabled")
     });
 
     //show missing fields in red
