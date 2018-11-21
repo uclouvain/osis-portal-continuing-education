@@ -222,6 +222,11 @@
     $( "#form" ).submit(function( event ) {
         enableFields(fields_to_enable);
     });
+
+    let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
+    errors_fields = JSON.parse(errors_fields);
+    for(field of errors_fields)
+        $('#id_'+field).parent().addClass('has-error');
 </script>
 {% if request.session.formation_id %}
 <script>

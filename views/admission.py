@@ -62,7 +62,7 @@ from continuing_education.views.common import display_errors, display_success_me
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
     if admission.state == admission_state_choices.DRAFT:
-        admission_submission_errors = get_admission_submission_errors(admission)
+        admission_submission_errors, errors_fields = get_admission_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
@@ -152,7 +152,7 @@ def admission_submit(request):
     admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
 
     if admission.state == admission_state_choices.DRAFT:
-        admission_submission_errors = get_admission_submission_errors(admission)
+        admission_submission_errors, errors_fields = get_admission_submission_errors(admission)
         if request.POST.get("submit") and not admission_submission_errors:
             admission.submit()
             return redirect('admission_detail', admission.pk)
@@ -161,6 +161,7 @@ def admission_submit(request):
 
 
 def get_admission_submission_errors(admission):
+    errors_field = []
     errors = {}
 
     person_form = StrictPersonForm(
@@ -168,25 +169,30 @@ def get_admission_submission_errors(admission):
     )
     for field in person_form.errors:
         errors.update({person_form[field].label: person_form.errors[field]})
+        errors_field.append(field)
 
     person_information_form = ContinuingEducationPersonForm(
         data=model_to_dict(admission.person_information)
     )
     for field in person_information_form.errors:
         errors.update({person_information_form[field].label: person_information_form.errors[field]})
+        errors_field.append(field)
 
     address_form = StrictAddressForm(
         data=model_to_dict(admission.address)
     )
     for field in address_form.errors:
         errors.update({address_form[field].label: address_form.errors[field]})
+        errors_field.append(field)
 
     adm_form = StrictAdmissionForm(
         data=model_to_dict(admission)
     )
     for field in adm_form.errors:
         errors.update({adm_form[field].label: adm_form.errors[field]})
-    return errors
+        errors_field.append(field)
+
+    return errors, errors_field
 
 
 def _build_warning_from_errors_dict(errors):
@@ -277,8 +283,10 @@ def admission_form(request, admission_id=None):
 
     id_form = PersonForm(request.POST or None, instance=base_person)
 
+    errors_fields = []
+
     if admission and not request.POST:
-        admission_submission_errors = get_admission_submission_errors(admission)
+        admission_submission_errors, errors_fields = get_admission_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
@@ -315,6 +323,7 @@ def admission_form(request, admission_id=None):
             level=messages.INFO,
             message=_('Your admission file has been saved. Do not forget to submit it when it is complete !'),
         )
+        errors, errors_fields = get_admission_submission_errors(admission)
         return redirect(reverse('admission_detail', kwargs={'admission_id': admission.pk}))
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
@@ -328,6 +337,7 @@ def admission_form(request, admission_id=None):
             'person_form': person_form,
             'address_form': address_form,
             'id_form': id_form,
+            'errors_fields': errors_fields,
         }
     )
 
