@@ -71,7 +71,7 @@
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         {% trans 'Cancel' %}
                     </button>
-                    <button type="submit" onclick="showTab('identification')"
+                    <button type="submit"
                             name="state" value="draft" class="btn btn-primary" title="{%trans 'Draft' %}">
                         <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
                         {% trans 'Save' %}
@@ -218,7 +218,7 @@
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="documents">
-                    {% if admission %}
+                    {% if not admission %}
                         <div class="panel-body">
                             <div class="jumbotron">
                                  <span>{% trans 'Please save your admission before uploading documents' %}</span>
