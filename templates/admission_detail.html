@@ -52,7 +52,7 @@
         </a>
         {% endif %}
 
-        <span class="admission-detail-state admission-detail-state-{{admission.state}} btn-space pull-right">
+        <span class="admission-detail-state admission-detail-state-{{admission.state|lower}} btn-space pull-right">
             {% trans admission.state %}
         </span>
 
