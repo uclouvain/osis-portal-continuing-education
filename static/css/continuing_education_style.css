@@ -115,6 +115,6 @@
     display: inline-block;
 }
 
-.required:after{
+label.required:after{
     content:" *";
 }
