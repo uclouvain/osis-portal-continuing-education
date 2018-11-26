@@ -103,11 +103,12 @@ def admission_detail(request, admission_id):
 
 
 def _show_submit_warning(admission_submission_errors, request):
-    messages.add_message(
-        request=request,
-        level=messages.WARNING,
-        message=_build_warning_from_errors_dict(admission_submission_errors),
-    )
+    if request.method == 'GET':
+        messages.add_message(
+            request=request,
+            level=messages.WARNING,
+            message=_build_warning_from_errors_dict(admission_submission_errors),
+        )
 
 
 def _upload_file(request, file, admission, **kwargs):
