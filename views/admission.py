@@ -111,6 +111,14 @@ def _show_submit_warning(admission_submission_errors, request):
         )
 
 
+def _show_save_before_submit(request):
+    messages.add_message(
+        request=request,
+        level=messages.INFO,
+        message=_("You can save an application form and access it later until it is submitted"),
+    )
+
+
 def _upload_file(request, file, admission, **kwargs):
     url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
     data = {
@@ -271,6 +279,8 @@ def remove_file(request, path):
 def admission_form(request, admission_id=None):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = _find_user_admission_by_id(admission_id, user=request.user) if admission_id else None
+    if not admission:
+        _show_save_before_submit(request)
     if admission and admission.state != admission_state_choices.DRAFT:
         raise PermissionDenied
     person_information = continuing_education_person.find_by_person(person=base_person)
