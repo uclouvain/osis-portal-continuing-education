@@ -64,15 +64,15 @@
                             <tr>
                                 <td><a href="{% url 'admission_detail' admission_id=admission.id %}">{{ admission.formation }}</a></td>
                                 <td class="admission-state">
-                                    {% if admission.state == "waiting" %}
+                                    {% if admission.state == "Waiting" %}
                                         <span class="label label-primary show">{% trans admission.state %}</span>
-                                    {% elif admission.state == "accepted" %}
+                                    {% elif admission.state == "Accepted" %}
                                         <span class="label label-success show">{% trans admission.state %}</span>
-                                    {% elif admission.state == "rejected" %}
+                                    {% elif admission.state == "Rejected" %}
                                         <span class="label label-danger show">{% trans admission.state %}</span>
-                                    {% elif admission.state == "submitted" %}
+                                    {% elif admission.state == "Submitted" %}
                                         <span class="label label-info show">{% trans admission.state %}</span>
-                                    {% elif admission.state == "draft" %}
+                                    {% elif admission.state == "Draft" %}
                                         <span class="label label-default show">{% trans admission.state %}</span>
                                     {% endif %}
                                 </td>

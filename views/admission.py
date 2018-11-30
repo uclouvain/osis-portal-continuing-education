@@ -25,6 +25,7 @@
 ##############################################################################
 import itertools
 import json
+from collections import OrderedDict
 from datetime import datetime
 from json import JSONDecodeError
 from mimetypes import MimeTypes
@@ -35,15 +36,15 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
 from django.forms import model_to_dict
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.http import require_http_methods
 from rest_framework import status
 from rest_framework.renderers import MultiPartRenderer
-from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
 from base.models.person import Person
@@ -96,11 +97,12 @@ def admission_detail(request, admission_id):
 
 
 def _show_submit_warning(admission_submission_errors, request):
-    messages.add_message(
-        request=request,
-        level=messages.WARNING,
-        message=_build_warning_from_errors_dict(admission_submission_errors),
-    )
+    if request.method == 'GET':
+        messages.add_message(
+            request=request,
+            level=messages.WARNING,
+            message=_build_warning_from_errors_dict(admission_submission_errors),
+        )
 
 
 def _upload_file(request, file, admission, **kwargs):
@@ -169,7 +171,7 @@ def admission_submit(request):
 
 def get_admission_submission_errors(admission):
     errors_field = []
-    errors = {}
+    errors = OrderedDict()
 
     person_form = StrictPersonForm(
         data=model_to_dict(admission.person_information.person)
