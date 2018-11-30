@@ -279,8 +279,6 @@ def remove_file(request, path):
 def admission_form(request, admission_id=None):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = _find_user_admission_by_id(admission_id, user=request.user) if admission_id else None
-    if not admission:
-        _show_save_before_submit(request)
     if admission and admission.state != admission_state_choices.DRAFT:
         raise PermissionDenied
     person_information = continuing_education_person.find_by_person(person=base_person)
@@ -296,6 +294,9 @@ def admission_form(request, admission_id=None):
     id_form = PersonForm(request.POST or None, instance=base_person)
 
     errors_fields = []
+
+    if not admission and not request.POST:
+        _show_save_before_submit(request)
 
     if admission and not request.POST:
         admission_submission_errors, errors_fields = get_admission_submission_errors(admission)

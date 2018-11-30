@@ -177,9 +177,9 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
 
-        #no message should be displayed
+        #info message should be displayed
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 0)
+        self.assertEqual(len(messages_list), 1)
 
     def test_admission_new_save(self):
         admission = model_to_dict(self.admission)
