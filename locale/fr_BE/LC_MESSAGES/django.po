@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-21 11:24+0100\n"
+"POT-Creation-Date: 2018-12-03 13:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,15 +16,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: views/admission.py:132
+#: views/admission.py:140
 msgid "A problem occured : the document is not uploaded"
 msgstr "Une erreur est survenue : le document n'a pas été uploadé"
 
-#: views/admission.py:264
+#: views/admission.py:291
 msgid "A problem occured during delete"
 msgstr "Un problème est survenu durant la suppression"
 
-#: templates/admission_detail.html:196
+#: templates/fragment/files_panel.html:39
 msgid "Actions"
 msgstr "Actions"
 
@@ -50,7 +50,8 @@ msgid "Administration"
 msgstr "Administration"
 
 #: templates/admission_detail.html:33 templates/admission_detail.html:59
-#: templates/admission_form.html:32 templates/admission_form.html:42
+#: templates/admission_form.html:32 templates/admission_form.html:37
+#: templates/continuing_education/home.html:49
 #: templates/django_registration/complete_account_registration.html:52
 msgid "Admission"
 msgstr "Admission"
@@ -75,7 +76,7 @@ msgstr "A réussi l'épreuve d'évaluation"
 msgid "Associative"
 msgstr "Associatif"
 
-#: templates/admission_detail.html:152 templates/admission_form.html:175
+#: templates/admission_detail.html:152 templates/admission_form.html:191
 #: templates/django_registration/complete_account_registration.html:55
 msgid "Awareness"
 msgstr "Comment avez-vous connu l'existence de ce programme ?"
@@ -112,6 +113,10 @@ msgstr "Autre"
 msgid "Awareness press"
 msgstr "Dans la presse"
 
+#: templates/admission_form.html:74
+msgid "Back"
+msgstr "Retour"
+
 #: templates/registration_detail.html:48 templates/registration_form.html:53
 msgid "Billing"
 msgstr "Facturation"
@@ -121,8 +126,8 @@ msgid "Billing address"
 msgstr "Adresse de facturation"
 
 #: forms/account.py:23 models/continuing_education_person.py:38
-#: templates/admission_detail.html:83 tests/views/test_admission.py:330
-#: tests/views/test_admission.py:356
+#: templates/admission_detail.html:83 tests/views/test_admission.py:332
+#: tests/views/test_admission.py:358
 msgid "Birth country"
 msgstr "Pays de naissance"
 
@@ -140,7 +145,6 @@ msgstr "Lieu de naissance"
 msgid "Browse"
 msgstr "Parcourir"
 
-#: templates/admission_form.html:232
 #: templates/django_registration/registration_form.html:52
 #: templates/fragment/submit_confirmation_modal.html:40
 #: templates/registration_form.html:89
@@ -174,7 +178,7 @@ msgstr "Numéro unique d'entreprise"
 msgid "Contact"
 msgstr "Contact"
 
-#: templates/admission_form.html:55
+#: templates/admission_form.html:50
 msgid "Contact information"
 msgstr "Coordonnées"
 
@@ -202,7 +206,7 @@ msgstr "Employeur actuel"
 msgid "Current occupation"
 msgstr "Fonction actuelle"
 
-#: templates/admission_form.html:58
+#: templates/admission_form.html:53
 msgid "Curriculum"
 msgstr "Curriculum"
 
@@ -210,11 +214,11 @@ msgstr "Curriculum"
 msgid "Divorced"
 msgstr "Divorcé"
 
-#: templates/admission_detail.html:67
+#: templates/admission_detail.html:67 templates/admission_form.html:62
 msgid "Documents"
 msgstr "Documents"
 
-#: templates/admission_form.html:190
+#: templates/admission_form.html:77
 msgid "Draft"
 msgstr "Brouillon"
 
@@ -228,7 +232,7 @@ msgstr "Education"
 
 #: forms/account.py:64 forms/person.py:35 templates/admission_detail.html:91
 #: templates/authentication/login.html:50
-#: templates/authentication/login.html:52 tests/views/test_admission.py:329
+#: templates/authentication/login.html:52 tests/views/test_admission.py:331
 msgid "Email"
 msgstr ""
 
@@ -257,7 +261,7 @@ msgstr "Faculté"
 msgid "Female"
 msgstr "Femme"
 
-#: views/admission.py:262
+#: views/admission.py:289
 msgid "File correctly deleted"
 msgstr "Le fichier a bien été supprimé"
 
@@ -271,7 +275,7 @@ msgid "Forgot your password ?"
 msgstr "Mot de passe oublié ?"
 
 #: models/admission.py:124 templates/admission_detail.html:144
-#: templates/admission_detail.html:147 templates/admission_form.html:61
+#: templates/admission_detail.html:147 templates/admission_form.html:56
 #: templates/continuing_education/home.html:59
 #: templates/continuing_education/home.html:95
 msgid "Formation"
@@ -290,7 +294,7 @@ msgid "Formations"
 msgstr "Formations"
 
 #: forms/person.py:27 templates/admission_detail.html:77
-#: tests/views/test_admission.py:380
+#: tests/views/test_admission.py:382
 msgid "Gender"
 msgstr "Genre"
 
@@ -321,7 +325,7 @@ msgstr "Numéro de carte d'identité"
 msgid "IUFC - Continuing Education"
 msgstr "IUFC - Formation Continue"
 
-#: templates/admission_detail.html:72 templates/admission_form.html:52
+#: templates/admission_detail.html:72 templates/admission_form.html:47
 #: templates/django_registration/complete_account_registration.html:40
 msgid "Identification"
 msgstr "Identification"
@@ -355,8 +359,8 @@ msgid "Last degree institution"
 msgstr "Institution"
 
 #: models/admission.py:61 templates/admission_detail.html:108
-#: tests/views/test_admission.py:104 tests/views/test_admission.py:244
-#: tests/views/test_admission.py:332 tests/views/test_admission.py:344
+#: tests/views/test_admission.py:104 tests/views/test_admission.py:246
+#: tests/views/test_admission.py:334 tests/views/test_admission.py:346
 msgid "Last degree level"
 msgstr "Niveau du dernier diplôme"
 
@@ -364,11 +368,11 @@ msgstr "Niveau du dernier diplôme"
 msgid "Last name"
 msgstr "Nom"
 
-#: templates/admission_detail.html:195
+#: templates/fragment/files_panel.html:38
 msgid "Last update"
 msgstr "Dernière modification"
 
-#: templates/admission_form.html:99
+#: templates/admission_form.html:115
 msgid "Legal address"
 msgstr "Domicile légal"
 
@@ -413,7 +417,7 @@ msgstr "Motivation"
 msgid "NOMA"
 msgstr "NOMA"
 
-#: templates/admission_detail.html:193
+#: templates/fragment/files_panel.html:36
 msgid "Name"
 msgstr "Nom"
 
@@ -425,8 +429,9 @@ msgstr "Numéro de registre national belge"
 msgid "New admission"
 msgstr "Nouvelle admission"
 
-#: templates/admission_form.html:87 templates/admission_form.html:115
-#: templates/admission_form.html:152 templates/admission_form.html:168
+#: templates/admission_form.html:103 templates/admission_form.html:131
+#: templates/admission_form.html:168 templates/admission_form.html:184
+#: templates/admission_form.html:224
 msgid "Next"
 msgstr "Suivant"
 
@@ -438,11 +443,11 @@ msgstr "Non"
 msgid "No admission yet"
 msgstr "Vous n'avez pas soumis de formulaire d'admission"
 
-#: templates/admission_detail.html:186
+#: templates/fragment/files_panel.html:29
 msgid "No document available"
 msgstr "Pas de document disponible"
 
-#: templates/fragment/files_panel.html:70
+#: templates/fragment/files_panel.html:68
 msgid "No file chosen"
 msgstr "Aucun fichier choisi"
 
@@ -451,6 +456,7 @@ msgid "No registration yet"
 msgstr "Pas de formulaire d'inscription disponible"
 
 #: models/enums/enums.py:32 models/enums/enums.py:40
+#: templates/admission_detail.html:179 templates/admission_form.html:207
 msgid "Other"
 msgstr "Autre"
 
@@ -498,7 +504,7 @@ msgstr ""
 "Veuillez compléter le formulaire suivant pour finaliser la création de votre "
 "compte utilisateur."
 
-#: templates/admission_form.html:213
+#: templates/admission_form.html:233
 msgid "Please save your admission before uploading documents"
 msgstr "Veuillez enregistrer votre admission afin de télécharger des documents"
 
@@ -509,12 +515,13 @@ msgstr "Courrier"
 #: models/address.py:20 templates/admission_detail.html:95
 #: templates/registration_detail.html:55 templates/registration_detail.html:89
 #: templates/registration_form.html:56 templates/registration_form.html:77
-#: tests/views/test_admission.py:331 tests/views/test_admission.py:368
+#: tests/views/test_admission.py:333 tests/views/test_admission.py:370
 msgid "Postal code"
 msgstr "Code postal"
 
-#: templates/admission_form.html:112 templates/admission_form.html:149
-#: templates/admission_form.html:165 templates/admission_form.html:187
+#: templates/admission_form.html:128 templates/admission_form.html:165
+#: templates/admission_form.html:181 templates/admission_form.html:221
+#: templates/admission_form.html:243
 msgid "Previous"
 msgstr "Précédent"
 
@@ -538,7 +545,7 @@ msgstr "Privé"
 msgid "Professional"
 msgstr "Professionel"
 
-#: templates/admission_detail.html:119 templates/admission_form.html:136
+#: templates/admission_detail.html:119 templates/admission_form.html:152
 msgid "Professional background"
 msgstr "Parcours professionnel"
 
@@ -562,7 +569,7 @@ msgstr "Public"
 msgid "Public servant"
 msgstr "Fonctionnaire"
 
-#: templates/admission_form.html:64
+#: templates/admission_form.html:59
 msgid "References"
 msgstr "Références"
 
@@ -570,6 +577,7 @@ msgstr "Références"
 msgid "Registered"
 msgstr "Inscrit"
 
+#: templates/continuing_education/home.html:50
 #: templates/registration_detail.html:33 templates/registration_detail.html:43
 #: templates/registration_detail.html:66 templates/registration_form.html:33
 #: templates/registration_form.html:43
@@ -596,8 +604,7 @@ msgstr "Adresse"
 msgid "Residence phone"
 msgstr "Téléphone fixe"
 
-#: templates/admission_form.html:39 templates/admission_form.html:192
-#: templates/registration_form.html:40
+#: templates/admission_form.html:79 templates/registration_form.html:40
 msgid "Save"
 msgstr "Sauver"
 
@@ -621,7 +628,7 @@ msgstr "Créer un compte"
 msgid "Single"
 msgstr "Célibataire"
 
-#: templates/admission_detail.html:194
+#: templates/fragment/files_panel.html:37
 msgid "Size"
 msgstr "Taille"
 
@@ -675,7 +682,7 @@ msgstr "L'activation a échoué."
 msgid "The activation key you provided is invalid."
 msgstr "La clé d'activation que vous avez fournie n'est pas valide."
 
-#: views/admission.py:130
+#: views/admission.py:138
 msgid "The document is uploaded correctly"
 msgstr "Le document a bien été uploadé"
 
@@ -688,14 +695,14 @@ msgstr "Ce compte a expiré."
 msgid "This email does not exist in our database: %(mail)s"
 msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 
-#: tests/views/test_admission.py:329 tests/views/test_admission.py:330
 #: tests/views/test_admission.py:331 tests/views/test_admission.py:332
-#: tests/views/test_admission.py:344 tests/views/test_admission.py:356
-#: tests/views/test_admission.py:368 tests/views/test_admission.py:380
+#: tests/views/test_admission.py:333 tests/views/test_admission.py:334
+#: tests/views/test_admission.py:346 tests/views/test_admission.py:358
+#: tests/views/test_admission.py:370 tests/views/test_admission.py:382
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
-#: templates/admission_detail.html:227
+#: templates/fragment/files_panel.html:74
 msgid "Upload"
 msgstr "Envoyer"
 
@@ -735,25 +742,27 @@ msgstr "Oui"
 msgid "You already have an account"
 msgstr "Vous avez déjà un compte"
 
-#: views/admission.py:118
+#: views/admission.py:112
 msgid ""
 "You can save an application form and access it later until it is submitted"
-msgstr "Vous pouvez enregistrer et encore modifier les données de votre demande d’admission, tant que celle-ci n’est pas soumise"
+msgstr ""
+"Vous pouvez enregistrer et encore modifier les données de votre demande "
+"d’admission, tant que celle-ci n’est pas soumise"
 
 #: templates/authentication/login.html:78
 msgid "You don't have an account"
 msgstr "Vous n'avez pas encore de compte"
 
-#: tests/views/test_admission.py:205 views/admission.py:324
+#: tests/views/test_admission.py:205 views/admission.py:120
 msgid ""
-"Your admission file has been saved. Do not forget to submit it when it is "
-"complete !"
+"Your admission file has been saved. You are still able to edit the form. Do "
+"not forget to submit it when it is complete !"
 msgstr ""
-"Votre dossier d'admission a été enregistré. N'oubliez pas de le soumettre "
-"quand il est complet !"
+"Votre dossier d'admission a été enregistré. Vous pouvez encore le modifier. "
+"N'oubliez pas de le soumettre quand il est complet !"
 
-#: tests/views/test_admission.py:100 tests/views/test_admission.py:240
-#: views/admission.py:200
+#: tests/views/test_admission.py:100 tests/views/test_admission.py:242
+#: views/admission.py:227
 msgid ""
 "Your admission file is not submittable because you did not provide the "
 "following data : "
@@ -783,3 +792,10 @@ msgstr ""
 #: templates/continuing_education_layout.html:89
 msgid "data"
 msgstr ""
+
+#~ msgid ""
+#~ "Your admission file has been saved. Do not forget to submit it when it is "
+#~ "complete !"
+#~ msgstr ""
+#~ "Votre dossier d'admission a été enregistré. N'oubliez pas de le soumettre "
+#~ "quand il est complet !"
