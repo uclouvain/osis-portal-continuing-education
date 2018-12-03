@@ -111,6 +111,14 @@ def _show_submit_warning(admission_submission_errors, request):
         )
 
 
+def _show_save_before_submit(request):
+    messages.add_message(
+        request=request,
+        level=messages.INFO,
+        message=_("You can save an application form and access it later until it is submitted"),
+    )
+
+
 def _upload_file(request, file, admission, **kwargs):
     url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
     data = {
@@ -286,6 +294,9 @@ def admission_form(request, admission_id=None):
     id_form = PersonForm(request.POST or None, instance=base_person)
 
     errors_fields = []
+
+    if not admission and not request.POST:
+        _show_save_before_submit(request)
 
     if admission and not request.POST:
         admission_submission_errors, errors_fields = get_admission_submission_errors(admission)
