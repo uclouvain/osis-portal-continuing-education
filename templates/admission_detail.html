@@ -39,7 +39,7 @@
         <form id="form" method="POST" class="post-form" action="{% url 'admission_submit' %}">
             {% csrf_token %}
             <a class="btn btn-primary pull-right" data-toggle="modal" data-target="#submit_confirmation_modal">
-                <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' %}
+                <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' context "admission" %}
             </a>
             <input type="hidden" name="admission_id" value="{{ admission.pk }}" />
             {% include "fragment/submit_confirmation_modal.html" %}
