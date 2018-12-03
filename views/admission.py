@@ -314,7 +314,7 @@ def admission_form(request, admission_id=None, **kwargs):
 
     id_form = PersonForm(request.POST or None, instance=base_person)
 
-    landing_tab = request.POST.get("tab") or kwargs.get('landing_tab')
+    landing_tab = "#{}".format(request.POST.get("tab") or kwargs.get('landing_tab'))
 
     errors_fields = []
 
@@ -368,6 +368,9 @@ def admission_form(request, admission_id=None, **kwargs):
             del request.session['formation_id']
         _show_admission_saved(request)
         errors, errors_fields = get_admission_submission_errors(admission)
+        return redirect(
+            reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab,
+        )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
         display_errors(request, errors)
@@ -382,8 +385,7 @@ def admission_form(request, admission_id=None, **kwargs):
             'id_form': id_form,
             'admission': admission,
             'list_files': list_files,
-            'errors_fields': errors_fields,
-            'landing_tab': landing_tab
+            'errors_fields': errors_fields
         }
     )
 

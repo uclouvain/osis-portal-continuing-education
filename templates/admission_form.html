@@ -252,8 +252,6 @@
 
 {% block script %}
 <script>
-    let landing_tab = "{{ landing_tab|safe }}";
-    showTab(landing_tab);
     $('#tabs a').click(function (e) {
       e.preventDefault();
       $('#landing_tab').val($(this).context.hash.substring(1));
@@ -275,12 +273,9 @@
     });
 
     let anchor = location.hash;
-    if(anchor === "#documents"){
-        landing_tab = anchor.substring(1);
-        $('#landing_tab').val(landing_tab);
-        showTab(landing_tab);
-        location.hash = ''
-    }
+    landing_tab = anchor.substring(1);
+    $('#landing_tab').val(landing_tab);
+    showTab(landing_tab);
 
     $('#customFile').change(function(e) {
         $('#custom-file-label').text(this.files[0].name);
