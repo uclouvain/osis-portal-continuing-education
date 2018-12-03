@@ -196,8 +196,9 @@ class ViewStudentAdmissionTestCase(TestCase):
         }
         admission.update(person)
         response = self.client.post(reverse('admission_new'), data=admission)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'admission_form.html')
+        created_admission = Admission.objects.last()
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('admission_edit', args=[created_admission.pk]))
 
         # An information message should be displayed
         messages_list = list(messages.get_messages(response.wsgi_request))
@@ -286,14 +287,14 @@ class ViewStudentAdmissionTestCase(TestCase):
             'professional_impact': 'abcd',
             'formation': 'EXAMPLE',
             'awareness_ucl_website': True,
-            'state': random.choice(get_enum_keys(STUDENT_STATE_CHOICES))
+            'state': admission_state_choices.DRAFT
         }
         url = reverse('admission_edit', args=[self.admission.pk])
         data = person.copy()
         data.update(admission)
         response = self.client.post(url, data=data)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'admission_form.html')
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('admission_edit', args=[self.admission.id]))
         self.admission.refresh_from_db()
 
         # verifying that fields are correctly updated
