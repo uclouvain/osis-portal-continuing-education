@@ -80,10 +80,14 @@ def admission_detail(request, admission_id):
     if request.method == 'POST' and 'file_submit' in request.POST:
         file = request.FILES['myfile'] if 'myfile' in request.FILES else None
         if file:
-            return _upload_file(request, file, admission, kwargs={
-                'list_files': list_files,
-                'admission_is_submittable': admission_is_submittable
-            })
+            return _upload_file(
+                request,
+                file,
+                admission,
+                list_files=list_files,
+                admission_is_submittable=admission_is_submittable,
+                form=False,
+            )
 
     return render(
         request,
@@ -113,6 +117,16 @@ def _show_save_before_submit(request):
     )
 
 
+def _show_admission_saved(request):
+    messages.add_message(
+        request=request,
+        level=messages.INFO,
+        message=_('Your admission file has been saved.'
+                  ' You are still able to edit the form.'
+                  ' Do not forget to submit it when it is complete !'),
+    )
+
+
 def _upload_file(request, file, admission, **kwargs):
     url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
     data = {
@@ -129,9 +143,9 @@ def _upload_file(request, file, admission, **kwargs):
     else:
         display_error_messages(request, _("A problem occured : the document is not uploaded"))
     kwargs.update({'admission': admission})
-    if(kwargs['kwargs']['form']):
+    if kwargs['form']:
         return redirect(
-            reverse('admission_edit', kwargs={'admission_id': admission.id}) + '#documents',
+            reverse('admission_edit', kwargs={'admission_id': admission.id}) + "#documents",
         )
     else:
         return redirect(
@@ -283,7 +297,7 @@ def remove_file(request, path):
 
 
 @login_required
-def admission_form(request, admission_id=None):
+def admission_form(request, admission_id=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = _find_user_admission_by_id(admission_id, user=request.user) if admission_id else None
     if admission and admission.state != admission_state_choices.DRAFT:
@@ -299,6 +313,8 @@ def admission_form(request, admission_id=None):
     address_form = AddressForm(request.POST or None, instance=address)
 
     id_form = PersonForm(request.POST or None, instance=base_person)
+
+    landing_tab = request.POST.get("tab") or kwargs.get('landing_tab')
 
     errors_fields = []
 
@@ -321,10 +337,7 @@ def admission_form(request, admission_id=None):
     if request.method == 'POST':
         file = request.FILES['myfile'] if 'myfile' in request.FILES else None
         if file:
-            return _upload_file(request, file, admission, kwargs={
-                'list_files': list_files,
-                'form': True,
-            })
+            return _upload_file(request, file, admission, list_files=list_files, form=True)
 
     if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
         if current_address:
@@ -353,13 +366,8 @@ def admission_form(request, admission_id=None):
         admission.save()
         if request.session.get('formation_id'):
             del request.session['formation_id']
-        messages.add_message(
-            request=request,
-            level=messages.INFO,
-            message=_('Your admission file has been saved. Do not forget to submit it when it is complete !'),
-        )
+        _show_admission_saved(request)
         errors, errors_fields = get_admission_submission_errors(admission)
-        return redirect(reverse('admission_detail', kwargs={'admission_id': admission.pk}))
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
         display_errors(request, errors)
@@ -375,6 +383,7 @@ def admission_form(request, admission_id=None):
             'admission': admission,
             'list_files': list_files,
             'errors_fields': errors_fields,
+            'landing_tab': landing_tab
         }
     )
 
