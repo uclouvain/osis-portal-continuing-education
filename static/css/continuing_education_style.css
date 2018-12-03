@@ -93,7 +93,6 @@
 .custom-file {
     position: relative;
     overflow: hidden;
-    margin-right: 5px;
 }
 
 .custom-file-input {
@@ -105,14 +104,16 @@
 }
 
 .custom-file-label {
-    width: 70%;
-    display: inline-block;
+    display: block;
     cursor: auto !important;
 }
 
 .custom-file-btn-group {
-    width: calc(30% - 5px);
-    display: inline-block;
+    display: block;
+}
+
+#btn-upload{
+    margin-left: 10px;
 }
 
 label.required:after{
@@ -128,4 +129,11 @@ label.required:after{
     display: inline-block;
     padding-top: 15px;
     padding-bottom:15px;
+}
+
+.no-pad{
+    margin-right:0 !important;
+    margin-left:0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
