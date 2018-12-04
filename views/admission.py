@@ -121,11 +121,13 @@ def _show_admission_saved(request, admission_id):
     messages.add_message(
         request=request,
         level=messages.INFO,
-        message=mark_safe(_('Your admission file has been saved.'
-                  ' You are still able to edit the form.'
-                  ' Do not forget to submit it when it is complete via <a href="%(url)s"><b>the admission file page</b></a> !'
-                  ) % { 'url': reverse('admission_detail', kwargs={'admission_id': admission_id})}
-    ))
+        message=mark_safe(
+            _('Your admission file has been saved. '
+              'You are still able to edit the form. '
+              'Do not forget to submit it when it is complete via '
+              '<a href="%(url)s"><b>the admission file page</b></a> !'
+              ) % {'url': reverse('admission_detail', kwargs={'admission_id': admission_id})}
+        ))
 
 
 def _upload_file(request, file, admission, **kwargs):
