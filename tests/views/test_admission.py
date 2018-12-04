@@ -25,17 +25,20 @@
 ##############################################################################
 import datetime
 import random
+from unittest import mock
 from unittest.mock import patch
 
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase, RequestFactory
 from django.utils.translation import ugettext_lazy as _, ugettext
 from requests import Response
+from rest_framework import status
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.admission import Admission
@@ -195,14 +198,16 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.post(reverse('admission_new'), data=admission)
         created_admission = Admission.objects.last()
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_detail', args=[created_admission.pk]))
+        self.assertRedirects(response, reverse('admission_edit', args=[created_admission.pk]))
 
         # An information message should be displayed
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(
             str(messages_list[0]),
-            _("Your admission file has been saved. Do not forget to submit it when it is complete !")
+            _("Your admission file has been saved."
+              " You are still able to edit the form."
+              " Do not forget to submit it when it is complete !")
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
 
@@ -282,13 +287,14 @@ class ViewStudentAdmissionTestCase(TestCase):
             'professional_impact': 'abcd',
             'formation': 'EXAMPLE',
             'awareness_ucl_website': True,
-            'state': random.choice(get_enum_keys(STUDENT_STATE_CHOICES))
+            'state': admission_state_choices.DRAFT
         }
         url = reverse('admission_edit', args=[self.admission.pk])
         data = person.copy()
         data.update(admission)
         response = self.client.post(url, data=data)
-        self.assertRedirects(response, reverse('admission_detail', args=[self.admission.id]))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('admission_edit', args=[self.admission.id]))
         self.admission.refresh_from_db()
 
         # verifying that fields are correctly updated
@@ -380,3 +386,96 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
                 _("Gender"): [_("This field is required.")],
             }
         )
+
+
+class AdmissionFormFileUploadTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        self.client.force_login(self.user)
+        self.request = RequestFactory()
+        self.person = PersonFactory(user=self.user)
+        self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        self.admission = AdmissionFactory(
+            person_information=self.person_information,
+            state=admission_state_choices.DRAFT
+        )
+        self.file = SimpleUploadedFile(
+            name='upload_test.pdf',
+            content=str.encode("test_content"),
+            content_type="application/pdf"
+        )
+
+    def mocked_success_put_request(self, **kwargs):
+        response = Response()
+        response.status_code = status.HTTP_201_CREATED
+        return response
+
+    @mock.patch('requests.put', side_effect=mocked_success_put_request)
+    def test_upload_file_success(self, mock_put):
+        url = reverse('admission_edit', args=[self.admission.id])
+        response = self.client.post(url, {'myfile': self.file})
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEquals(response.status_code, 302)
+        #an error should raise as the admission is not retrieved from test
+        self.assertIn(
+            ugettext(_("The document is uploaded correctly")),
+            str(messages_list[0])
+        )
+
+    def test_upload_file_error(self):
+        url = reverse('admission_edit', args=[self.admission.id])
+        response = self.client.post(url, {'myfile': self.file})
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEquals(response.status_code, 302)
+        #an error should raise as the admission is not retrieved from test
+        self.assertIn(
+            ugettext(_("A problem occured : the document is not uploaded")),
+            str(messages_list[0])
+        )
+
+class AdmissionDetailFileUploadTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        self.client.force_login(self.user)
+        self.request = RequestFactory()
+        self.person = PersonFactory(user=self.user)
+        self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        self.admission = AdmissionFactory(
+            person_information=self.person_information,
+            state=admission_state_choices.DRAFT
+        )
+        self.file = SimpleUploadedFile(
+            name='upload_test.pdf',
+            content=str.encode("test_content"),
+            content_type="application/pdf"
+        )
+
+    def mocked_success_put_request(self, **kwargs):
+        response = Response()
+        response.status_code = status.HTTP_201_CREATED
+        return response
+
+    @mock.patch('requests.put', side_effect=mocked_success_put_request)
+    def test_upload_file_success(self, mock_put):
+        url = reverse('admission_detail', args=[self.admission.id])
+        response = self.client.post(url, {'myfile': self.file, 'file_submit': True})
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEquals(response.status_code, 302)
+        #an error should raise as the admission is not retrieved from test
+        self.assertIn(
+            ugettext(_("The document is uploaded correctly")),
+            str(messages_list[0])
+        )
+
+    def test_upload_file_error(self):
+        url = reverse('admission_detail', args=[self.admission.id])
+        response = self.client.post(url, {'myfile': self.file, 'file_submit': True})
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEquals(response.status_code, 302)
+        #an error should raise as the admission is not retrieved from test
+        self.assertIn(
+            ugettext(_("A problem occured : the document is not uploaded")),
+            str(messages_list[0])
+        )
+
+

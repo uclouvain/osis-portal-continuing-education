@@ -34,18 +34,13 @@
 
 {% block content %}
     <div class="page-header">
-        {% if admission_id %}
-        <button type="submit" form="form" class="btn btn-default pull-right">
-            <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Save' %}
-        </button>
-        {% endif %}
         <h2>{% trans 'Admission' %}</h2>
     </div>
 
     {% include 'template_messages.html' %}
 
     <div class="panel panel-default">
-        <form id="form" method="POST" class="post-form">
+        <form id="form" method="POST" class="post-form" enctype="multipart/form-data">
             {% csrf_token %}
             <ul id="tabs" class="nav nav-tabs">
                 <li role="presentation" class="active"><a href="#identification" role="tab" data-toggle="tab">
@@ -63,6 +58,27 @@
                 <li role="presentation"><a href="#references" role="tab" data-toggle="tab">
                     {% trans 'References' %}
                 </a></li>
+                <li role="presentation"><a href="#documents" role="tab" data-toggle="tab">
+                    {% trans 'Documents' %}
+                </a></li>
+                <div class="form-button-group pull-right">
+                    <input type="hidden" id="landing_tab" name="tab">
+                    <button class="btn btn-default" id="back"
+                            {% if admission.id %}
+                                href="{% url 'admission_detail' admission_id=admission.id %}"
+                            {% else %}
+                                href="{% url 'continuing_education_home' %}"
+                            {% endif %}
+                    >
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        {% trans 'Back' %}
+                    </button>
+                    <button type="submit"
+                            name="state" value="Draft" class="btn btn-primary" title="{%trans 'Draft' %}">
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                        {% trans 'Save' %}
+                    </button>
+                </div>
             </ul>
             <div class="tab-content">
                 <div id="identification" role="tabpanel" class="tab-pane active">
@@ -204,14 +220,27 @@
                         <a href="#" class="btn btn-default" onclick="showTab('formation')">
                             {% trans 'Previous' %}
                         </a>
-                        <button type="submit" onclick="showTab('identification')"
-                                name="state" value="Draft" class="btn btn-primary" title="{%trans 'Draft' %}">
-                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-                            {% trans 'Save' %}
-                        </button>
-                        <a class="btn btn-default" id="" href="{% url 'continuing_education_home' %}">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            {% trans 'Cancel' %}
+                        <a href="#" class="btn btn-default" onclick="showTab('documents')">
+                            {% trans 'Next' %}
+                        </a>
+                    </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="documents">
+                    {% if not admission %}
+                        <div class="panel-body">
+                            <div class="jumbotron">
+                                 <span>{% trans 'Please save your admission before uploading documents' %}</span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="panel-body">
+                            {% include 'fragment/files_panel.html' %}
+                        </div>
+                    {% endif %}
+                    <div class="panel-footer text-right">
+                        <a href="#" class="btn btn-default" onclick="showTab('references')">
+                            {% trans 'Previous' %}
                         </a>
                     </div>
                 </div>
@@ -225,13 +254,14 @@
 <script>
     $('#tabs a').click(function (e) {
       e.preventDefault();
+      $('#landing_tab').val($(this).context.hash.substring(1));
       $(this).tab('show');
     });
     function showTab(tab) {
         $('#tabs a[href="#' + tab + '"]').tab('show');
     }
     //re-enable disabled field on form submit
-    var fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year"];
+    let fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year"];
 
     function enableFields(fields) {
         for (var field of fields) {
@@ -240,6 +270,16 @@
     }
     $( "#form" ).submit(function( event ) {
         enableFields(fields_to_enable);
+    });
+
+    let anchor = location.hash;
+    landing_tab = anchor.substring(1);
+    $('#landing_tab').val(landing_tab);
+    showTab(landing_tab);
+
+    $('#customFile').change(function(e) {
+        $('#custom-file-label').text(this.files[0].name);
+        $('#btn-upload').removeAttr("disabled")
     });
 
     //show missing fields in red
@@ -255,6 +295,12 @@
             $('#other-text-field input').val('');
         }
     });
+
+    //prevent back button to submit and redirect to page
+    $('#back').click(function(e){
+        e.preventDefault();
+        window.location = $(this).attr('href');
+    })
 </script>
 {% if request.session.formation_id %}
 <script>

@@ -69,27 +69,25 @@ def admission_detail(request, admission_id):
             _show_submit_warning(admission_submission_errors, request)
     else:
         admission_is_submittable = False
-    headers_to_get = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
-    }
-    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
 
-    request_to_get_list = _get_files_list(
-        admission,
-        headers_to_get,
-        url_continuing_education_file_api
+    list_files = _make_list_files(
+        _get_files_list(
+            admission,
+            settings.URL_CONTINUING_EDUCATION_FILE_API
+        )
     )
-    list_files = _make_list_files(request_to_get_list)
+
     if request.method == 'POST' and 'file_submit' in request.POST:
-        if 'myfile' in request.FILES:
-            file = request.FILES['myfile']
-        else:
-            file = None
+        file = request.FILES['myfile'] if 'myfile' in request.FILES else None
         if file:
-            return _upload_file(request, file, admission, kwargs={
-                'list_files': list_files,
-                'admission_is_submittable': admission_is_submittable
-            })
+            return _upload_file(
+                request,
+                file,
+                admission,
+                list_files=list_files,
+                admission_is_submittable=admission_is_submittable,
+                form=False,
+            )
 
     return render(
         request,
@@ -119,41 +117,64 @@ def _show_save_before_submit(request):
     )
 
 
+def _show_admission_saved(request):
+    messages.add_message(
+        request=request,
+        level=messages.INFO,
+        message=_('Your admission file has been saved.'
+                  ' You are still able to edit the form.'
+                  ' Do not forget to submit it when it is complete !'),
+    )
+
+
 def _upload_file(request, file, admission, **kwargs):
     url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
     data = {
         'file': file,
         'admission_id': str(admission.uuid)
     }
-    renderer = MultiPartRenderer()
-    headers_put = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
-        'Content-Disposition': 'attachment; filename=name.jpeg',
-        'Content-Type': renderer.media_type
-    }
     request_to_put_file = requests.put(
         url_continuing_education_file_api,
-        data=renderer.render(data),
-        headers=headers_put
+        data=MultiPartRenderer().render(data=data),
+        headers=_prepare_headers('POST')
     )
     if request_to_put_file.status_code == status.HTTP_201_CREATED:
         display_success_messages(request, _("The document is uploaded correctly"))
     else:
         display_error_messages(request, _("A problem occured : the document is not uploaded"))
     kwargs.update({'admission': admission})
-    return redirect(
-        reverse('admission_detail', kwargs={'admission_id': admission.id}) + '#documents',
-        args=kwargs
-    )
+    if kwargs['form']:
+        return redirect(
+            reverse('admission_edit', kwargs={'admission_id': admission.id}) + "#documents",
+        )
+    else:
+        return redirect(
+            reverse('admission_detail', kwargs={'admission_id': admission.id}) + '#documents',
+            args=kwargs
+        )
 
 
-def _get_files_list(admission, headers_to_get, url_continuing_education_file_api):
-    request_to_get_list = requests.get(
-        url=url_continuing_education_file_api,
-        headers=headers_to_get,
-        params={'admission_id': admission.uuid}
-    )
-    return request_to_get_list
+def _get_files_list(admission, url_continuing_education_file_api):
+    files_list = []
+    if admission:
+        files_list = requests.get(
+            url=url_continuing_education_file_api,
+            headers=_prepare_headers('GET'),
+            params={'admission_id': admission.uuid}
+        )
+    return files_list
+
+
+def _prepare_headers(method):
+    if(method in ['GET','DELETE']):
+        return {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    elif(method == 'POST'):
+        return {
+            'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
+            'Content-Disposition': 'attachment; filename=name.jpeg',
+            'Content-Type': MultiPartRenderer.media_type
+        }
+
 
 
 @login_required
@@ -276,7 +297,7 @@ def remove_file(request, path):
 
 
 @login_required
-def admission_form(request, admission_id=None):
+def admission_form(request, admission_id=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = _find_user_admission_by_id(admission_id, user=request.user) if admission_id else None
     if admission and admission.state != admission_state_choices.DRAFT:
@@ -293,6 +314,9 @@ def admission_form(request, admission_id=None):
 
     id_form = PersonForm(request.POST or None, instance=base_person)
 
+    landing_tab = request.POST.get("tab") or kwargs.get('landing_tab')
+    landing_tab_anchor = "#{}".format(landing_tab) if landing_tab else ""
+
     errors_fields = []
 
     if not admission and not request.POST:
@@ -303,6 +327,18 @@ def admission_form(request, admission_id=None):
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
+
+    list_files = _make_list_files(
+        _get_files_list(
+            admission,
+            settings.URL_CONTINUING_EDUCATION_FILE_API
+        )
+    )
+
+    if request.method == 'POST':
+        file = request.FILES['myfile'] if 'myfile' in request.FILES else None
+        if file:
+            return _upload_file(request, file, admission, list_files=list_files, form=True)
 
     if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
         if current_address:
@@ -331,13 +367,11 @@ def admission_form(request, admission_id=None):
         admission.save()
         if request.session.get('formation_id'):
             del request.session['formation_id']
-        messages.add_message(
-            request=request,
-            level=messages.INFO,
-            message=_('Your admission file has been saved. Do not forget to submit it when it is complete !'),
-        )
+        _show_admission_saved(request)
         errors, errors_fields = get_admission_submission_errors(admission)
-        return redirect(reverse('admission_detail', kwargs={'admission_id': admission.pk}))
+        return redirect(
+            reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab_anchor,
+        )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
         display_errors(request, errors)
@@ -350,10 +384,11 @@ def admission_form(request, admission_id=None):
             'person_form': person_form,
             'address_form': address_form,
             'id_form': id_form,
-            'errors_fields': errors_fields,
+            'admission': admission,
+            'list_files': list_files,
+            'errors_fields': errors_fields
         }
     )
-
 
 def _find_user_admission_by_id(admission_id, user):
     return get_object_or_404(
