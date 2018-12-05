@@ -203,11 +203,9 @@ class ViewStudentAdmissionTestCase(TestCase):
         # An information message should be displayed
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
-        self.assertEqual(
-            str(messages_list[0]),
-            _("Your admission file has been saved."
-              " You are still able to edit the form."
-              " Do not forget to submit it when it is complete !")
+        self.assertIn(
+            reverse('admission_detail', kwargs={'admission_id': created_admission.pk}),
+            str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
 

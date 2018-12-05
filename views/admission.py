@@ -117,14 +117,17 @@ def _show_save_before_submit(request):
     )
 
 
-def _show_admission_saved(request):
+def _show_admission_saved(request, admission_id):
     messages.add_message(
         request=request,
         level=messages.INFO,
-        message=_('Your admission file has been saved.'
-                  ' You are still able to edit the form.'
-                  ' Do not forget to submit it when it is complete !'),
-    )
+        message=mark_safe(
+            _('Your admission file has been saved. '
+              'You are still able to edit the form. '
+              'Do not forget to submit it when it is complete via '
+              '<a href="%(url)s"><b>the admission file page</b></a> !'
+              ) % {'url': reverse('admission_detail', kwargs={'admission_id': admission_id})}
+        ))
 
 
 def _upload_file(request, file, admission, **kwargs):
@@ -367,7 +370,7 @@ def admission_form(request, admission_id=None, **kwargs):
         admission.save()
         if request.session.get('formation_id'):
             del request.session['formation_id']
-        _show_admission_saved(request)
+        _show_admission_saved(request, admission.id)
         errors, errors_fields = get_admission_submission_errors(admission)
         return redirect(
             reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab_anchor,

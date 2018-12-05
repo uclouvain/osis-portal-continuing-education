@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-03 15:35+0100\n"
+"POT-Creation-Date: 2018-12-04 16:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: tests/views/test_admission.py:431 tests/views/test_admission.py:476
-#: views/admission.py:144
+#: tests/views/test_admission.py:439 tests/views/test_admission.py:492
+#: views/admission.py:145
 msgid "A problem occured : the document is not uploaded"
 msgstr ""
 
-#: views/admission.py:295
+#: views/admission.py:296
 msgid "A problem occured during delete"
 msgstr ""
 
@@ -126,8 +126,8 @@ msgid "Billing address"
 msgstr ""
 
 #: forms/account.py:23 models/continuing_education_person.py:38
-#: templates/admission_detail.html:83 tests/views/test_admission.py:335
-#: tests/views/test_admission.py:361
+#: templates/admission_detail.html:83 tests/views/test_admission.py:336
+#: tests/views/test_admission.py:362
 msgid "Birth country"
 msgstr ""
 
@@ -232,7 +232,7 @@ msgstr ""
 
 #: forms/account.py:64 forms/person.py:35 templates/admission_detail.html:91
 #: templates/authentication/login.html:50
-#: templates/authentication/login.html:52 tests/views/test_admission.py:334
+#: templates/authentication/login.html:52 tests/views/test_admission.py:335
 msgid "Email"
 msgstr ""
 
@@ -259,7 +259,7 @@ msgstr ""
 msgid "Female"
 msgstr ""
 
-#: views/admission.py:293
+#: views/admission.py:294
 msgid "File correctly deleted"
 msgstr ""
 
@@ -292,7 +292,7 @@ msgid "Formations"
 msgstr ""
 
 #: forms/person.py:27 templates/admission_detail.html:77
-#: tests/views/test_admission.py:385
+#: tests/views/test_admission.py:386
 msgid "Gender"
 msgstr ""
 
@@ -357,8 +357,8 @@ msgid "Last degree institution"
 msgstr ""
 
 #: models/admission.py:61 templates/admission_detail.html:108
-#: tests/views/test_admission.py:107 tests/views/test_admission.py:248
-#: tests/views/test_admission.py:337 tests/views/test_admission.py:349
+#: tests/views/test_admission.py:107 tests/views/test_admission.py:249
+#: tests/views/test_admission.py:338 tests/views/test_admission.py:350
 msgid "Last degree level"
 msgstr ""
 
@@ -511,7 +511,7 @@ msgstr ""
 #: models/address.py:20 templates/admission_detail.html:95
 #: templates/registration_detail.html:55 templates/registration_detail.html:89
 #: templates/registration_form.html:56 templates/registration_form.html:77
-#: tests/views/test_admission.py:336 tests/views/test_admission.py:373
+#: tests/views/test_admission.py:337 tests/views/test_admission.py:374
 msgid "Postal code"
 msgstr ""
 
@@ -682,8 +682,8 @@ msgstr ""
 msgid "The activation key you provided is invalid."
 msgstr ""
 
-#: tests/views/test_admission.py:420 tests/views/test_admission.py:465
-#: views/admission.py:142
+#: tests/views/test_admission.py:426 tests/views/test_admission.py:479
+#: views/admission.py:143
 msgid "The document is uploaded correctly"
 msgstr ""
 
@@ -696,10 +696,10 @@ msgstr ""
 msgid "This email does not exist in our database: %(mail)s"
 msgstr ""
 
-#: tests/views/test_admission.py:334 tests/views/test_admission.py:335
-#: tests/views/test_admission.py:336 tests/views/test_admission.py:337
-#: tests/views/test_admission.py:349 tests/views/test_admission.py:361
-#: tests/views/test_admission.py:373 tests/views/test_admission.py:385
+#: tests/views/test_admission.py:335 tests/views/test_admission.py:336
+#: tests/views/test_admission.py:337 tests/views/test_admission.py:338
+#: tests/views/test_admission.py:350 tests/views/test_admission.py:362
+#: tests/views/test_admission.py:374 tests/views/test_admission.py:386
 msgid "This field is required."
 msgstr ""
 
@@ -752,14 +752,22 @@ msgstr ""
 msgid "You don't have an account"
 msgstr ""
 
-#: tests/views/test_admission.py:207 views/admission.py:124
+#: tests/views/test_admission.py:208
 msgid ""
 "Your admission file has been saved. You are still able to edit the form. Do "
 "not forget to submit it when it is complete !"
 msgstr ""
 
-#: tests/views/test_admission.py:103 tests/views/test_admission.py:244
-#: views/admission.py:231
+#: views/admission.py:124
+#, python-format
+msgid ""
+"Your admission file has been saved. You are still able to edit the form. Do "
+"not forget to submit it when it is complete via <a href=\"%(url)s\"><b>the "
+"admission file page</b></a> !"
+msgstr ""
+
+#: tests/views/test_admission.py:103 tests/views/test_admission.py:245
+#: views/admission.py:232
 msgid ""
 "Your admission file is not submittable because you did not provide the "
 "following data : "
