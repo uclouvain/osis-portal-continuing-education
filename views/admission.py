@@ -179,7 +179,6 @@ def _prepare_headers(method):
         }
 
 
-
 @login_required
 @require_http_methods(["POST"])
 def admission_submit(request):
@@ -392,6 +391,7 @@ def admission_form(request, admission_id=None, **kwargs):
             'errors_fields': errors_fields
         }
     )
+
 
 def _find_user_admission_by_id(admission_id, user):
     return get_object_or_404(
