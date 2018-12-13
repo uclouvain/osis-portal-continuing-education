@@ -1,23 +1,35 @@
 from django import forms
-from django.forms import ModelForm, ChoiceField
+from django.forms import ModelForm, ChoiceField, ModelChoiceField
 from django.utils.translation import ugettext_lazy as _
 
+from base.models.academic_year import current_academic_year
+from base.models.education_group_year import EducationGroupYear
+from base.models.enums import education_group_categories
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import enums, admission_state_choices
-from continuing_education.views.home import fetch_example_data
 from reference.models.country import Country
 
 
-class TitleChoiceField(forms.ModelChoiceField):
-    def label_from_instance(obj):
-        return "{} - {}".format(obj.acronym, obj.title)
+class FormationChoiceField(ModelChoiceField):
+    def label_from_instance(self, formation):
+        return "{} {}".format(
+            formation.acronym,
+            formation.academic_year,
+        )
 
 
 class AdmissionForm(ModelForm):
-    FORMATION_CHOICES = tuple([(x['acronym'], " - ".join([x['acronym'], x['title']]))
-                               for x in fetch_example_data()])
+    current_academic_year = current_academic_year()
+    academic_year_to_show = current_academic_year.next() if current_academic_year else None
+    formations_qs = EducationGroupYear.objects.filter(
+        education_group_type__category=education_group_categories.TRAINING
+    )
+    if academic_year_to_show:
+        formations_qs = formations_qs.filter(academic_year=academic_year_to_show).order_by('acronym')
+    else:
+        formations_qs = formations_qs.order_by('acronym', 'academic_year__year')
+    formation = FormationChoiceField(queryset=formations_qs)
 
-    formation = ChoiceField(choices=FORMATION_CHOICES)
     state = ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)
     citizenship = forms.ModelChoiceField(
         queryset=Country.objects.all().order_by('name'),
