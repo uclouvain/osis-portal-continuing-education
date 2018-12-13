@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-12 15:00+0100\n"
+"POT-Creation-Date: 2018-12-13 10:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: tests/views/test_admission.py:437 tests/views/test_admission.py:490
-#: views/admission.py:149
+#: views/admission.py:147
 msgid "A problem occured : the document is not uploaded"
 msgstr ""
 
-#: views/admission.py:300
+#: views/admission.py:297
 msgid "A problem occured during delete"
 msgstr ""
 
@@ -259,7 +259,7 @@ msgstr ""
 msgid "Female"
 msgstr ""
 
-#: views/admission.py:298
+#: views/admission.py:295
 msgid "File correctly deleted"
 msgstr ""
 
@@ -687,7 +687,7 @@ msgid "The activation key you provided is invalid."
 msgstr ""
 
 #: tests/views/test_admission.py:424 tests/views/test_admission.py:477
-#: views/admission.py:147
+#: views/admission.py:145
 msgid "The document is uploaded correctly"
 msgstr ""
 
@@ -751,7 +751,7 @@ msgstr ""
 msgid "You already have an account"
 msgstr ""
 
-#: views/admission.py:118
+#: views/admission.py:116
 msgid ""
 "You can save an application form and access it later until it is submitted"
 msgstr ""
@@ -760,7 +760,7 @@ msgstr ""
 msgid "You don't have an account"
 msgstr ""
 
-#: views/admission.py:127
+#: views/admission.py:125
 #, python-format
 msgid ""
 "Your admission file has been saved. You are still able to edit the form. Do "
@@ -769,7 +769,7 @@ msgid ""
 msgstr ""
 
 #: tests/views/test_admission.py:103 tests/views/test_admission.py:243
-#: views/admission.py:236
+#: views/admission.py:233
 msgid ""
 "Your admission file is not submittable because you did not provide the "
 "following data : "
