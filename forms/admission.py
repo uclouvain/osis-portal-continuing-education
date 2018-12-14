@@ -1,23 +1,25 @@
 from django import forms
-from django.forms import ModelForm, ChoiceField
+from django.forms import ModelForm, ChoiceField, ModelChoiceField
 from django.utils.translation import ugettext_lazy as _
 
+from base.models.academic_year import current_academic_year
+from base.models.education_group_year import EducationGroupYear
+from base.models.enums import education_group_categories
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import enums, admission_state_choices
-from continuing_education.views.home import fetch_example_data
 from reference.models.country import Country
 
 
-class TitleChoiceField(forms.ModelChoiceField):
-    def label_from_instance(obj):
-        return "{} - {}".format(obj.acronym, obj.title)
+class FormationChoiceField(ModelChoiceField):
+    def label_from_instance(self, formation):
+        return "{} {}".format(
+            formation.acronym,
+            formation.academic_year,
+        )
 
 
 class AdmissionForm(ModelForm):
-    FORMATION_CHOICES = tuple([(x['acronym'], " - ".join([x['acronym'], x['title']]))
-                               for x in fetch_example_data()])
-
-    formation = ChoiceField(choices=FORMATION_CHOICES)
+    formation = FormationChoiceField(queryset=EducationGroupYear.objects.all())
     state = ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)
     citizenship = forms.ModelChoiceField(
         queryset=Country.objects.all().order_by('name'),
@@ -30,6 +32,21 @@ class AdmissionForm(ModelForm):
         choices=enums.YES_NO_CHOICES,
         label=_("High school diploma")
     )
+
+    def __init__(self, data, **kwargs):
+        super().__init__(data, **kwargs)
+
+        qs = EducationGroupYear.objects.filter(education_group_type__category=education_group_categories.TRAINING)
+
+        curr_academic_year = current_academic_year()
+        next_academic_year = curr_academic_year.next() if curr_academic_year else None
+
+        if next_academic_year:
+            qs = qs.filter(academic_year=next_academic_year).order_by('acronym')
+        else:
+            qs = qs.order_by('acronym', 'academic_year__year')
+
+        self.fields['formation'].queryset = qs
 
     class Meta:
         model = Admission
