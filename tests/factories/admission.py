@@ -33,6 +33,7 @@ from base.models import entity_version
 from base.models.academic_year import current_academic_years
 from base.models.enums import entity_type
 from base.models.offer_year import OfferYear
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from continuing_education.models.enums import enums, admission_state_choices
 from continuing_education.tests.factories.address import AddressFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
@@ -68,6 +69,9 @@ class AdmissionFactory(factory.DjangoModelFactory):
 
     person_information = factory.SubFactory(ContinuingEducationPersonFactory)
 
+    # Formation
+    formation = factory.SubFactory(EducationGroupYearFactory)
+
     # Identification
     citizenship = factory.SubFactory(CountryFactory)
 
@@ -99,9 +103,6 @@ class AdmissionFactory(factory.DjangoModelFactory):
     # Motivation
     motivation = "motivation"
     professional_impact = "professional impact"
-
-    # Formation
-    formation = "EXAMPLE"
 
     # Awareness
     awareness_ucl_website = factory.fuzzy.FuzzyChoice([True, False])

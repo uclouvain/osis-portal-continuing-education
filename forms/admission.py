@@ -19,17 +19,7 @@ class FormationChoiceField(ModelChoiceField):
 
 
 class AdmissionForm(ModelForm):
-    current_academic_year = current_academic_year()
-    academic_year_to_show = current_academic_year.next() if current_academic_year else None
-    formations_qs = EducationGroupYear.objects.filter(
-        education_group_type__category=education_group_categories.TRAINING
-    )
-    if academic_year_to_show:
-        formations_qs = formations_qs.filter(academic_year=academic_year_to_show).order_by('acronym')
-    else:
-        formations_qs = formations_qs.order_by('acronym', 'academic_year__year')
-    formation = FormationChoiceField(queryset=formations_qs)
-
+    formation = FormationChoiceField(queryset=EducationGroupYear.objects.all())
     state = ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)
     citizenship = forms.ModelChoiceField(
         queryset=Country.objects.all().order_by('name'),
@@ -42,6 +32,21 @@ class AdmissionForm(ModelForm):
         choices=enums.YES_NO_CHOICES,
         label=_("High school diploma")
     )
+
+    def __init__(self, data, **kwargs):
+        super().__init__(data, **kwargs)
+
+        qs = EducationGroupYear.objects.filter(education_group_type__category=education_group_categories.TRAINING)
+
+        curr_academic_year = current_academic_year()
+        next_academic_year = curr_academic_year.next() if curr_academic_year else None
+
+        if next_academic_year:
+            qs = qs.filter(academic_year=next_academic_year).order_by('acronym')
+        else:
+            qs = qs.order_by('acronym', 'academic_year__year')
+
+        self.fields['formation'].queryset = qs
 
     class Meta:
         model = Admission
