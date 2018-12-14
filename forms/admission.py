@@ -36,10 +36,17 @@ class AdmissionForm(ModelForm):
     def __init__(self, data, **kwargs):
         super().__init__(data, **kwargs)
 
-        self.fields['formation'].queryset = EducationGroupYear.objects.filter(
-            education_group_type__category=education_group_categories.TRAINING,
-            academic_year=current_academic_year().next()
-        ).order_by('acronym')
+        qs = EducationGroupYear.objects.filter(education_group_type__category=education_group_categories.TRAINING)
+
+        curr_academic_year = current_academic_year()
+        next_academic_year = curr_academic_year.next() if curr_academic_year else None
+
+        if next_academic_year:
+            qs = qs.filter(academic_year=next_academic_year).order_by('acronym')
+        else:
+            qs = qs.order_by('acronym', 'academic_year__year')
+
+        self.fields['formation'].queryset = qs
 
     class Meta:
         model = Admission

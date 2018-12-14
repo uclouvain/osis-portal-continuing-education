@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import datetime
-import random
 from unittest import mock
 from unittest.mock import patch
 
@@ -40,11 +39,11 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from requests import Response
 from rest_framework import status
 
+from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.models.enums.admission_state_choices import STUDENT_STATE_CHOICES
-from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 from continuing_education.views.admission import admission_form, get_admission_submission_errors
@@ -52,18 +51,24 @@ from continuing_education.views.admission import admission_form, get_admission_s
 
 class ViewStudentAdmissionTestCase(TestCase):
     def setUp(self):
+        current_acad_year = create_current_academic_year()
+        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
         self.request = RequestFactory()
         self.person = PersonFactory(user=self.user)
         self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        self.formation = EducationGroupYearFactory(academic_year=self.next_acad_year)
         self.admission = AdmissionFactory(
             person_information=self.person_information,
-            state=admission_state_choices.DRAFT
+            state=admission_state_choices.DRAFT,
+            formation=self.formation
         )
         self.admission_submitted = AdmissionFactory(
             person_information=self.person_information,
-            state=admission_state_choices.SUBMITTED
+            state=admission_state_choices.SUBMITTED,
+            formation=self.formation
         )
         self.patcher = patch(
             "continuing_education.views.admission._get_files_list",
@@ -259,7 +264,6 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 0)
 
-
     def test_admission_edit_permission_denied_invalid_state(self):
         url = reverse('admission_edit', args=[self.admission_submitted.pk])
         request = self.request.get(url)
@@ -283,7 +287,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'person_information': person_information.pk,
             'motivation': 'abcd',
             'professional_impact': 'abcd',
-            'formation': 'EXAMPLE',
+            'formation': self.formation.pk,
             'awareness_ucl_website': True,
             'state': admission_state_choices.DRAFT
         }
@@ -307,7 +311,11 @@ class ViewStudentAdmissionTestCase(TestCase):
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUp(self):
-        self.admission = AdmissionFactory()
+        current_acad_year = create_current_academic_year()
+        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        self.admission = AdmissionFactory(
+            formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
+        )
 
     def test_admission_is_submittable(self):
         errors, errors_fields = get_admission_submission_errors(self.admission)
@@ -388,6 +396,9 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
 
 class AdmissionFormFileUploadTestCase(TestCase):
     def setUp(self):
+        current_acad_year = create_current_academic_year()
+        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
         self.request = RequestFactory()
@@ -395,7 +406,8 @@ class AdmissionFormFileUploadTestCase(TestCase):
         self.person_information = ContinuingEducationPersonFactory(person=self.person)
         self.admission = AdmissionFactory(
             person_information=self.person_information,
-            state=admission_state_choices.DRAFT
+            state=admission_state_choices.DRAFT,
+            formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
         )
         self.file = SimpleUploadedFile(
             name='upload_test.pdf',
@@ -425,14 +437,14 @@ class AdmissionFormFileUploadTestCase(TestCase):
             str(messages_list[0])
         )
 
-    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs : [])
+    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs: [])
     @mock.patch('requests.put', side_effect=mocked_failed_put_request)
     def test_upload_file_error(self, mock_put, mock_get):
         url = reverse('admission_edit', args=[self.admission.id])
         response = self.client.post(url, {'myfile': self.file})
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEquals(response.status_code, 302)
-        #an error should raise as the admission is not retrieved from test
+        # An error should raise as the admission is not retrieved from test
         self.assertIn(
             ugettext(_("A problem occured : the document is not uploaded")),
             str(messages_list[0])
@@ -441,6 +453,9 @@ class AdmissionFormFileUploadTestCase(TestCase):
 
 class AdmissionDetailFileUploadTestCase(TestCase):
     def setUp(self):
+        current_acad_year = create_current_academic_year()
+        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
         self.request = RequestFactory()
@@ -448,7 +463,8 @@ class AdmissionDetailFileUploadTestCase(TestCase):
         self.person_information = ContinuingEducationPersonFactory(person=self.person)
         self.admission = AdmissionFactory(
             person_information=self.person_information,
-            state=admission_state_choices.DRAFT
+            state=admission_state_choices.DRAFT,
+            formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
         )
         self.file = SimpleUploadedFile(
             name='upload_test.pdf',
