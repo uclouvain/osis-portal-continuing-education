@@ -9,7 +9,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('continuing_education', '0014_auto_20181126_0943'),
+        ('continuing_education', '0015_admission_state_reason'),
     ]
 
     operations = [
