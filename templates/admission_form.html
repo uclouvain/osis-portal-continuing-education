@@ -97,6 +97,7 @@
                         </div>
 
                         {% bootstrap_field admission_form.citizenship label_class="required" %}
+                        {% bootstrap_field admission_form.formation label_class="required" %}
                     </div>
                     <div class="panel-footer text-right">
                         <a href="#" class="btn btn-default" onclick="showTab('contact')">
@@ -172,7 +173,6 @@
 
                 <div id="formation" role="tabpanel" class="tab-pane">
                     <div class="panel-body">
-                        {% bootstrap_field admission_form.formation label_class="required" %}
                         {% bootstrap_field admission_form.motivation label_class="required" %}
                         {% bootstrap_field admission_form.professional_impact label_class="required" %}
                     </div>
