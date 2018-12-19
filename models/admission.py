@@ -323,7 +323,6 @@ class Admission(SerializableModel):
     def is_waiting(self):
         return self.state == admission_state_choices.WAITING
 
-
     def submit(self):
         if self.state == admission_state_choices.DRAFT:
             self.state = admission_state_choices.SUBMITTED
