@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-13 10:25+0100\n"
+"POT-Creation-Date: 2019-01-04 16:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: tests/views/test_admission.py:437 tests/views/test_admission.py:490
+#: tests/views/test_admission.py:449 tests/views/test_admission.py:506
 #: views/admission.py:147
 msgid "A problem occured : the document is not uploaded"
 msgstr ""
@@ -26,7 +26,7 @@ msgstr ""
 msgid "A problem occured during delete"
 msgstr ""
 
-#: templates/fragment/files_panel.html:39
+#: templates/fragment/files_panel.html:40
 msgid "Actions"
 msgstr ""
 
@@ -34,15 +34,15 @@ msgstr ""
 msgid "Activation failed"
 msgstr ""
 
-#: models/admission.py:104 templates/admission_detail.html:135
+#: models/admission.py:110 templates/admission_detail.html:135
 msgid "Activity sector"
 msgstr ""
 
-#: models/admission.py:45
+#: models/admission.py:51
 msgid "Additional email"
 msgstr ""
 
-#: models/admission.py:35
+#: models/admission.py:41
 #: templates/django_registration/complete_account_registration.html:44
 msgid "Address"
 msgstr ""
@@ -126,8 +126,8 @@ msgid "Billing address"
 msgstr ""
 
 #: forms/account.py:23 models/continuing_education_person.py:38
-#: templates/admission_detail.html:89 tests/views/test_admission.py:334
-#: tests/views/test_admission.py:360
+#: templates/admission_detail.html:89 tests/views/test_admission.py:342
+#: tests/views/test_admission.py:368
 msgid "Birth country"
 msgstr ""
 
@@ -141,7 +141,7 @@ msgstr ""
 msgid "Birth location"
 msgstr ""
 
-#: templates/fragment/files_panel.html:77
+#: templates/fragment/files_panel.html:79
 msgid "Browse"
 msgstr ""
 
@@ -159,7 +159,7 @@ msgstr ""
 msgid "Children number"
 msgstr ""
 
-#: forms/admission.py:24 forms/registration.py:14 models/admission.py:29
+#: forms/admission.py:26 forms/registration.py:14 models/admission.py:35
 #: templates/admission_detail.html:84
 msgid "Citizenship"
 msgstr ""
@@ -198,11 +198,11 @@ msgstr ""
 msgid "Creating a user account"
 msgstr ""
 
-#: models/admission.py:98 templates/admission_detail.html:134
+#: models/admission.py:104 templates/admission_detail.html:134
 msgid "Current employer"
 msgstr ""
 
-#: models/admission.py:93 templates/admission_detail.html:131
+#: models/admission.py:99 templates/admission_detail.html:131
 msgid "Current occupation"
 msgstr ""
 
@@ -232,7 +232,7 @@ msgstr ""
 
 #: forms/account.py:64 forms/person.py:35 templates/admission_detail.html:97
 #: templates/authentication/login.html:50
-#: templates/authentication/login.html:52 tests/views/test_admission.py:333
+#: templates/authentication/login.html:52 tests/views/test_admission.py:341
 msgid "Email"
 msgstr ""
 
@@ -251,7 +251,7 @@ msgid ""
 "new password."
 msgstr ""
 
-#: templates/continuing_education/home.html:96
+#: templates/continuing_education/home.html:98
 msgid "Faculty"
 msgstr ""
 
@@ -272,10 +272,10 @@ msgstr ""
 msgid "Forgot your password ?"
 msgstr ""
 
-#: models/admission.py:124 templates/admission_detail.html:150
+#: models/admission.py:27 templates/admission_detail.html:150
 #: templates/admission_detail.html:153 templates/admission_form.html:56
 #: templates/continuing_education/home.html:59
-#: templates/continuing_education/home.html:95
+#: templates/continuing_education/home.html:97
 msgid "Formation"
 msgstr ""
 
@@ -292,7 +292,7 @@ msgid "Formations"
 msgstr ""
 
 #: forms/person.py:27 templates/admission_detail.html:83
-#: tests/views/test_admission.py:384
+#: tests/views/test_admission.py:392
 msgid "Gender"
 msgstr ""
 
@@ -304,12 +304,12 @@ msgstr ""
 msgid "Health"
 msgstr ""
 
-#: forms/admission.py:31 forms/registration.py:21 models/admission.py:51
+#: forms/admission.py:33 forms/registration.py:21 models/admission.py:57
 #: templates/admission_detail.html:110
 msgid "High school diploma"
 msgstr ""
 
-#: models/admission.py:56 templates/admission_detail.html:111
+#: models/admission.py:62 templates/admission_detail.html:111
 msgid "High school graduation year"
 msgstr ""
 
@@ -344,21 +344,21 @@ msgstr ""
 msgid "Job seeker"
 msgstr ""
 
-#: models/admission.py:66 templates/admission_detail.html:115
+#: models/admission.py:72 templates/admission_detail.html:115
 msgid "Last degree field"
 msgstr ""
 
-#: models/admission.py:76 templates/admission_detail.html:118
+#: models/admission.py:82 templates/admission_detail.html:118
 msgid "Last degree graduation year"
 msgstr ""
 
-#: models/admission.py:71 templates/admission_detail.html:117
+#: models/admission.py:77 templates/admission_detail.html:117
 msgid "Last degree institution"
 msgstr ""
 
-#: models/admission.py:61 templates/admission_detail.html:114
-#: tests/views/test_admission.py:107 tests/views/test_admission.py:247
-#: tests/views/test_admission.py:336 tests/views/test_admission.py:348
+#: models/admission.py:67 templates/admission_detail.html:114
+#: tests/views/test_admission.py:112 tests/views/test_admission.py:252
+#: tests/views/test_admission.py:344 tests/views/test_admission.py:356
 msgid "Last degree level"
 msgstr ""
 
@@ -370,7 +370,7 @@ msgstr ""
 msgid "Last update"
 msgstr ""
 
-#: templates/admission_form.html:115
+#: templates/admission_form.html:116
 msgid "Legal address"
 msgstr ""
 
@@ -406,7 +406,7 @@ msgstr ""
 msgid "Married"
 msgstr ""
 
-#: models/admission.py:114 templates/admission_detail.html:142
+#: models/admission.py:120 templates/admission_detail.html:142
 #: templates/admission_detail.html:145
 msgid "Motivation"
 msgstr ""
@@ -427,17 +427,17 @@ msgstr ""
 msgid "New admission"
 msgstr ""
 
-#: templates/admission_form.html:103 templates/admission_form.html:131
-#: templates/admission_form.html:168 templates/admission_form.html:184
+#: templates/admission_form.html:104 templates/admission_form.html:132
+#: templates/admission_form.html:169 templates/admission_form.html:184
 #: templates/admission_form.html:224
 msgid "Next"
 msgstr ""
 
-#: models/enums/enums.py:4 templates/continuing_education/home.html:108
+#: models/enums/enums.py:4 templates/continuing_education/home.html:110
 msgid "No"
 msgstr ""
 
-#: templates/continuing_education/home.html:84
+#: templates/continuing_education/home.html:86
 msgid "No admission yet"
 msgstr ""
 
@@ -445,11 +445,11 @@ msgstr ""
 msgid "No document available"
 msgstr ""
 
-#: templates/fragment/files_panel.html:68
+#: templates/fragment/files_panel.html:70
 msgid "No file chosen"
 msgstr ""
 
-#: templates/continuing_education/home.html:116
+#: templates/continuing_education/home.html:118
 msgid "No registration yet"
 msgstr ""
 
@@ -458,7 +458,7 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: models/admission.py:80 templates/admission_detail.html:121
+#: models/admission.py:86 templates/admission_detail.html:121
 msgid "Other educational background"
 msgstr ""
 
@@ -478,7 +478,7 @@ msgstr ""
 msgid "Password reset unsuccessful"
 msgstr ""
 
-#: models/admission.py:108 templates/admission_detail.html:138
+#: models/admission.py:114 templates/admission_detail.html:138
 msgid "Past professional activities"
 msgstr ""
 
@@ -490,7 +490,7 @@ msgstr ""
 msgid "Person information"
 msgstr ""
 
-#: models/admission.py:40 templates/admission_detail.html:96
+#: models/admission.py:46 templates/admission_detail.html:96
 msgid "Phone mobile"
 msgstr ""
 
@@ -511,11 +511,11 @@ msgstr ""
 #: models/address.py:20 templates/admission_detail.html:101
 #: templates/registration_detail.html:55 templates/registration_detail.html:89
 #: templates/registration_form.html:56 templates/registration_form.html:77
-#: tests/views/test_admission.py:335 tests/views/test_admission.py:372
+#: tests/views/test_admission.py:343 tests/views/test_admission.py:380
 msgid "Postal code"
 msgstr ""
 
-#: templates/admission_form.html:128 templates/admission_form.html:165
+#: templates/admission_form.html:129 templates/admission_form.html:166
 #: templates/admission_form.html:181 templates/admission_form.html:221
 #: templates/admission_form.html:243
 msgid "Previous"
@@ -541,15 +541,15 @@ msgstr ""
 msgid "Professional"
 msgstr ""
 
-#: templates/admission_detail.html:125 templates/admission_form.html:152
+#: templates/admission_detail.html:125 templates/admission_form.html:153
 msgid "Professional background"
 msgstr ""
 
-#: models/admission.py:118 templates/admission_detail.html:146
+#: models/admission.py:124 templates/admission_detail.html:146
 msgid "Professional impact"
 msgstr ""
 
-#: models/admission.py:88 templates/admission_detail.html:128
+#: models/admission.py:94 templates/admission_detail.html:128
 msgid "Professional status"
 msgstr ""
 
@@ -569,7 +569,7 @@ msgstr ""
 msgid "References"
 msgstr ""
 
-#: templates/continuing_education/home.html:97
+#: templates/continuing_education/home.html:99
 msgid "Registered"
 msgstr ""
 
@@ -686,7 +686,7 @@ msgstr ""
 msgid "The activation key you provided is invalid."
 msgstr ""
 
-#: tests/views/test_admission.py:424 tests/views/test_admission.py:477
+#: tests/views/test_admission.py:436 tests/views/test_admission.py:493
 #: views/admission.py:145
 msgid "The document is uploaded correctly"
 msgstr ""
@@ -700,15 +700,19 @@ msgstr ""
 msgid "This email does not exist in our database: %(mail)s"
 msgstr ""
 
-#: tests/views/test_admission.py:333 tests/views/test_admission.py:334
-#: tests/views/test_admission.py:335 tests/views/test_admission.py:336
-#: tests/views/test_admission.py:348 tests/views/test_admission.py:360
-#: tests/views/test_admission.py:372 tests/views/test_admission.py:384
+#: tests/views/test_admission.py:341 tests/views/test_admission.py:342
+#: tests/views/test_admission.py:343 tests/views/test_admission.py:344
+#: tests/views/test_admission.py:356 tests/views/test_admission.py:368
+#: tests/views/test_admission.py:380 tests/views/test_admission.py:392
 msgid "This field is required."
 msgstr ""
 
-#: templates/fragment/files_panel.html:74
+#: templates/fragment/files_panel.html:76
 msgid "Upload"
+msgstr ""
+
+#: templates/fragment/files_panel.html:39
+msgid "Uploaded by"
 msgstr ""
 
 #: models/admission.py:186
@@ -743,7 +747,7 @@ msgstr ""
 msgid "Widowed"
 msgstr ""
 
-#: models/enums/enums.py:5 templates/continuing_education/home.html:106
+#: models/enums/enums.py:5 templates/continuing_education/home.html:108
 msgid "Yes"
 msgstr ""
 
@@ -768,7 +772,7 @@ msgid ""
 "admission file page</b></a> !"
 msgstr ""
 
-#: tests/views/test_admission.py:103 tests/views/test_admission.py:243
+#: tests/views/test_admission.py:108 tests/views/test_admission.py:248
 #: views/admission.py:233
 msgid ""
 "Your admission file is not submittable because you did not provide the "
