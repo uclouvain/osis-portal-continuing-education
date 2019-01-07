@@ -215,7 +215,9 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(messages_list[0].level, messages.INFO)
 
     def test_admission_save_with_error(self):
-        admission = model_to_dict(AdmissionFactory())
+        admission = model_to_dict(AdmissionFactory(
+            formation__academic_year=self.next_acad_year
+        ))
         admission['person_information'] = "no valid pk"
         response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 200)
