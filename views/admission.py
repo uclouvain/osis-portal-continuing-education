@@ -253,7 +253,8 @@ def _make_list_files(response):
             'path': file['fields']['path'],
             'name': file['fields']['name'],
             'created_date': datetime.strptime(file['fields']['created_date'], "%Y-%m-%dT%H:%M:%S.%f"),
-            'size': file['fields']['size']
+            'size': file['fields']['size'],
+            'uploaded_by': file['fields']['uploaded_by']
         }
         for file in list_json
     ]
