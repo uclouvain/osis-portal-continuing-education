@@ -23,13 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import io
 import itertools
-import json
 from collections import OrderedDict
-from datetime import datetime
-from json import JSONDecodeError
 from mimetypes import MimeTypes
 
+import dateutil
 import requests
 from django.conf import settings
 from django.contrib import messages
@@ -44,6 +43,7 @@ from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from rest_framework import status
+from rest_framework.parsers import JSONParser
 from rest_framework.renderers import MultiPartRenderer
 
 from base.models import person as mdl_person
@@ -70,11 +70,9 @@ def admission_detail(request, admission_id):
     else:
         admission_is_submittable = False
 
-    list_files = _make_list_files(
-        _get_files_list(
-            admission,
-            settings.URL_CONTINUING_EDUCATION_FILE_API
-        )
+    list_files = _get_files_list(
+        admission,
+        settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
     )
 
     if request.method == 'POST' and 'file_submit' in request.POST:
@@ -131,7 +129,7 @@ def _show_admission_saved(request, admission_id):
 
 
 def _upload_file(request, file, admission, **kwargs):
-    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
+    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API + "files/"
     data = {
         'file': file,
         'admission_id': str(admission.uuid)
@@ -141,6 +139,7 @@ def _upload_file(request, file, admission, **kwargs):
         data=MultiPartRenderer().render(data=data),
         headers=_prepare_headers('POST')
     )
+
     if request_to_put_file.status_code == status.HTTP_201_CREATED:
         display_success_messages(request, _("The document is uploaded correctly"))
     else:
@@ -160,11 +159,16 @@ def _upload_file(request, file, admission, **kwargs):
 def _get_files_list(admission, url_continuing_education_file_api):
     files_list = []
     if admission:
-        files_list = requests.get(
+        response = requests.get(
             url=url_continuing_education_file_api,
             headers=_prepare_headers('GET'),
-            params={'admission_id': admission.uuid}
         )
+
+        if response.status_code == status.HTTP_200_OK:
+            stream = io.BytesIO(response.content)
+            files_list = JSONParser().parse(stream)['results']
+            for file in files_list:
+                file['created_date'] = dateutil.parser.parse(file['created_date'])
     return files_list
 
 
@@ -242,27 +246,28 @@ def _build_warning_from_errors_dict(errors):
     return mark_safe(warning_message)
 
 
-def _make_list_files(response):
-    try:
-        list_temp = response.content.decode('utf8')
-        list_json = json.loads(list_temp)
-    except (JSONDecodeError, AttributeError):
-        list_json = []
-    list_files = [
-        {
-            'path': file['fields']['path'],
-            'name': file['fields']['name'],
-            'created_date': datetime.strptime(file['fields']['created_date'], "%Y-%m-%dT%H:%M:%S.%f"),
-            'size': file['fields']['size']
-        }
-        for file in list_json
-    ]
-    return list_files
+# def _make_list_files(response):
+#     try:
+#         list_temp = response.content.decode('utf8')
+#         list_json = json.loads(list_temp)
+#     except (JSONDecodeError, AttributeError):
+#         list_json = []
+#     list_files = [
+#         {
+#             'path': file['fields']['path'],
+#             'name': file['fields']['name'],
+#             'created_date': datetime.strptime(file['fields']['created_date'], "%Y-%m-%dT%H:%M:%S.%f"),
+#             'size': file['fields']['size']
+#         }
+#         for file in list_json
+#     ]
+#     return list_files
 
 
 @login_required
 def download_file(request, path):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API
+
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "files/"
     headers_to_get = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
@@ -282,7 +287,7 @@ def download_file(request, path):
 
 @login_required
 def remove_file(request, path):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "files/"
     headers_to_delete = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
@@ -291,6 +296,7 @@ def remove_file(request, path):
         params={'file_path': path},
         headers=headers_to_delete
     )
+
     if request_to_delete.status_code == status.HTTP_204_NO_CONTENT:
         display_success_messages(request, _("File correctly deleted"))
     else:
@@ -330,11 +336,9 @@ def admission_form(request, admission_id=None, **kwargs):
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
 
-    list_files = _make_list_files(
-        _get_files_list(
-            admission,
-            settings.URL_CONTINUING_EDUCATION_FILE_API
-        )
+    list_files = _get_files_list(
+        admission,
+        settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
     )
 
     if request.method == 'POST':
