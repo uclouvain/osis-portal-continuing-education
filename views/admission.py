@@ -168,7 +168,9 @@ def _get_files_list(admission, url_continuing_education_file_api):
             stream = io.BytesIO(response.content)
             files_list = JSONParser().parse(stream)['results']
             for file in files_list:
-                file['created_date'] = dateutil.parser.parse(file['created_date'])
+                file['created_date'] = dateutil.parser.parse(
+                    file['created_date']
+                )
     return files_list
 
 
