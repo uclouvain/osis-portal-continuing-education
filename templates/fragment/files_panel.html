@@ -44,8 +44,8 @@
             <tr>
                 <td> {{file.name}} </td>
                 <td> {{file.size|filesizeformat}} </td>
-                <td> {{file.created_date}} </td>
-                <td> {{file.uploaded_by}} </td>
+                <td> {{file.created_date | date:'d/m/Y h:i'}} </td>
+                <td> {{file.uploaded_by.first_name}} {{file.uploaded_by.last_name}} </td>
                 <td>
                     <a class="button" role="button"
                         href="{% url 'remove_file' file.path %}">
