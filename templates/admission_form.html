@@ -63,16 +63,6 @@
                 </a></li>
                 <div class="form-button-group pull-right">
                     <input type="hidden" id="landing_tab" name="tab">
-                    <button class="btn btn-default" id="back"
-                            {% if admission.id %}
-                                href="{% url 'admission_detail' admission_id=admission.id %}"
-                            {% else %}
-                                href="{% url 'continuing_education_home' %}"
-                            {% endif %}
-                    >
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        {% trans 'Back' %}
-                    </button>
                     <button type="submit"
                             name="state" value="Draft" class="btn btn-primary" title="{%trans 'Draft' %}">
                         <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
