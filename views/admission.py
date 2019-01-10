@@ -74,7 +74,6 @@ def admission_detail(request, admission_id):
         admission,
         settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
     )
-
     if request.method == 'POST' and 'file_submit' in request.POST:
         file = request.FILES['myfile'] if 'myfile' in request.FILES else None
         if file:
@@ -129,7 +128,7 @@ def _show_admission_saved(request, admission_id):
 
 
 def _upload_file(request, file, admission, **kwargs):
-    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API + "files/"
+    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
     data = {
         'file': file,
         'admission_id': str(admission.uuid)
@@ -163,7 +162,6 @@ def _get_files_list(admission, url_continuing_education_file_api):
             url=url_continuing_education_file_api,
             headers=_prepare_headers('GET'),
         )
-
         if response.status_code == status.HTTP_200_OK:
             stream = io.BytesIO(response.content)
             files_list = JSONParser().parse(stream)['results']
@@ -267,29 +265,33 @@ def _build_warning_from_errors_dict(errors):
 
 
 @login_required
-def download_file(request, path):
-
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "files/"
+def download_file(request, url):
     headers_to_get = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
     request_to_get = requests.get(
         url,
-        params={'file_path': path},
         headers=headers_to_get
     )
-    name = path.rsplit('/', 1)[-1]
-    response = HttpResponse()
-    mime_type = MimeTypes().guess_type(path)
-    response['Content-Type'] = mime_type
-    response['Content-Disposition'] = 'attachment; filename=%s' % name
-    response.write(request_to_get.content)
-    return response
+    if request_to_get.status_code == status.HTTP_200_OK:
+        stream = io.BytesIO(request_to_get.content)
+        file = JSONParser().parse(stream)
+        name = file['path'].rsplit('/', 1)[-1]
+        mime_type = MimeTypes().guess_type(file['path'])
+        response_file = requests.get(file['path'], headers_to_get)
+        response = HttpResponse()
+        response['Content-Type'] = mime_type
+        response['Content-Disposition'] = 'attachment; filename=%s' % name
+        response.write(response_file.content)
+        return response
+
+    else:
+        return HttpResponse(status=404)
 
 
 @login_required
 def remove_file(request, path):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "files/"
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API
     headers_to_delete = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
