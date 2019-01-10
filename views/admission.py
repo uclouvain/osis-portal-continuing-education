@@ -246,26 +246,9 @@ def _build_warning_from_errors_dict(errors):
     return mark_safe(warning_message)
 
 
-# def _make_list_files(response):
-#     try:
-#         list_temp = response.content.decode('utf8')
-#         list_json = json.loads(list_temp)
-#     except (JSONDecodeError, AttributeError):
-#         list_json = []
-#     list_files = [
-#         {
-#             'path': file['fields']['path'],
-#             'name': file['fields']['name'],
-#             'created_date': datetime.strptime(file['fields']['created_date'], "%Y-%m-%dT%H:%M:%S.%f"),
-#             'size': file['fields']['size']
-#         }
-#         for file in list_json
-#     ]
-#     return list_files
-
-
 @login_required
-def download_file(request, url):
+def download_file(request, file_uuid, admission_uuid):
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
     headers_to_get = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
@@ -290,7 +273,8 @@ def download_file(request, url):
 
 
 @login_required
-def remove_file(request, url):
+def remove_file(request, file_uuid, admission_uuid):
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
     headers_to_delete = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
