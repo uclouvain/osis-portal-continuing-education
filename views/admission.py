@@ -290,14 +290,12 @@ def download_file(request, url):
 
 
 @login_required
-def remove_file(request, path):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API
+def remove_file(request, url):
     headers_to_delete = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
     request_to_delete = requests.delete(
-        url,
-        params={'file_path': path},
+        url + "/delete",
         headers=headers_to_delete
     )
 

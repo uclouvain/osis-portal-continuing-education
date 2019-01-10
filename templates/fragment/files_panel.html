@@ -48,7 +48,7 @@
                 <td> {{file.uploaded_by.first_name}} {{file.uploaded_by.last_name}} </td>
                 <td>
                     <a class="button" role="button"
-                        href="{% url 'remove_file' file.path %}">
+                        href="{% url 'remove_file' file.url %}">
                         <span class="glyphicon glyphicon-remove-circle btn-space btn-file"
                               aria-hidden="true"></span>
                     </a>
