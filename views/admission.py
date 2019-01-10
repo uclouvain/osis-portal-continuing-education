@@ -248,7 +248,8 @@ def _build_warning_from_errors_dict(errors):
 
 @login_required
 def download_file(request, file_uuid, admission_uuid):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
+          "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
     headers_to_get = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
@@ -274,7 +275,8 @@ def download_file(request, file_uuid, admission_uuid):
 
 @login_required
 def remove_file(request, file_uuid, admission_uuid):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
+          "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
     headers_to_delete = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }

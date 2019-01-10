@@ -58,10 +58,14 @@ urlpatterns = [
     url(r'^registration_edit/(?P<admission_id>[0-9]+)$', registration.registration_edit, name='registration_edit'),
     url(r'^registration_detail/(?P<admission_id>[0-9]+)$', registration.registration_detail,
         name='registration_detail'),
-    url(r'^download_file/(?P<file_uuid>[0-9a-f-]+)/(?P<admission_uuid>[0-9a-f-]+)',
+    url(
+        r'^download_file/(?P<file_uuid>[0-9a-f-]+)/(?P<admission_uuid>[0-9a-f-]+)',
         admission.download_file,
-        name="download_file"),
-    url(r'^remove_file/(?P<file_uuid>[0-9a-f-]+)/(?P<admission_uuid>[0-9a-f-]+)',
+        name="download_file"
+    ),
+    url(
+        r'^remove_file/(?P<file_uuid>[0-9a-f-]+)/(?P<admission_uuid>[0-9a-f-]+)',
         admission.remove_file,
-        name="remove_file"),
+        name="remove_file"
+    ),
 ]
