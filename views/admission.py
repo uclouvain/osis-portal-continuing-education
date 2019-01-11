@@ -323,11 +323,13 @@ def admission_form(request, admission_id=None, **kwargs):
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
-
-    list_files = _get_files_list(
-        admission,
-        settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
-    )
+    if admission:
+        list_files = _get_files_list(
+            admission,
+            settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
+        )
+    else:
+        list_files = []
 
     if request.method == 'POST':
         file = request.FILES['myfile'] if 'myfile' in request.FILES else None
