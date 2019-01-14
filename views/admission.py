@@ -169,13 +169,14 @@ def _get_files_list(admission, url_continuing_education_file_api):
                 file['created_date'] = dateutil.parser.parse(
                     file['created_date']
                 )
+                file['is_deletable'] = file['user'] == admission.person_information.person.user.username
     return files_list
 
 
 def _prepare_headers(method):
-    if(method in ['GET','DELETE']):
+    if method in ['GET', 'DELETE']:
         return {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    elif(method == 'POST'):
+    elif method == 'POST':
         return {
             'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
             'Content-Disposition': 'attachment; filename=name.jpeg',
