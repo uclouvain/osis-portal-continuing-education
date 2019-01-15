@@ -169,8 +169,17 @@ def _get_files_list(admission, url_continuing_education_file_api):
                 file['created_date'] = dateutil.parser.parse(
                     file['created_date']
                 )
-                file['is_deletable'] = file['user'] == admission.person_information.person.user.username
+                file['is_deletable'] = _file_uploaded_by_admission_person(admission, file)
     return files_list
+
+
+def _file_uploaded_by_admission_person(admission, file):
+    return _get_uploadedby_username(file) == admission.person_information.person.user.username
+
+
+def _get_uploadedby_username(file):
+    uploaded_by = file.get('uploaded_by', None)
+    return uploaded_by.get('user', None) if uploaded_by else None
 
 
 def _prepare_headers(method):
