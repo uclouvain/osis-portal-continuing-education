@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 import io
 import itertools
 from collections import OrderedDict
@@ -77,14 +78,36 @@ def admission_detail(request, admission_id):
     if request.method == 'POST' and 'file_submit' in request.POST:
         file = request.FILES['myfile'] if 'myfile' in request.FILES else None
         if file:
-            return _upload_file(
-                request,
-                file,
-                admission,
-                list_files=list_files,
-                admission_is_submittable=admission_is_submittable,
-                form=False,
+            person = admission.person_information.person
+            person_data = {
+                    'first_name': person.first_name,
+                    'last_name': person.last_name,
+                    'email': person.email,
+                    'gender': person.gender,
+                    'user': person.user.username
+            }
+            data = {
+                'name': file.name,
+                'size': file.size,
+                'uploaded_by': person_data,
+                'created_date': datetime.datetime.today()
+            }
+            url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
+                  "admissions/" + str(admission.uuid) + "/files/"
+            headers_to_upload = {
+                'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
+            }
+            request_to_upload = requests.post(
+                url + "create/",
+                headers=headers_to_upload,
+                files={'path': file},
+                data=data
             )
+            if request_to_upload.status_code == status.HTTP_204_NO_CONTENT:
+                display_success_messages(request, _("File correctly added"))
+            else:
+                display_error_messages(request, _("A problem occured during adding"))
+            return redirect(reverse('admission_detail', kwargs={'admission_id': admission.id}) + "#documents")
 
     return render(
         request,
@@ -95,6 +118,26 @@ def admission_detail(request, admission_id):
             'list_files': list_files
         }
     )
+
+
+@login_required
+def upload_file(request, admission_uuid, **kwargs):
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
+          "admissions/" + str(admission_uuid) + "/files/"
+    headers_to_upload = {
+        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
+        'Content-Type': MultiPartRenderer.media_type
+    }
+    request_to_upload = requests.post(
+        url + "create/",
+        headers=headers_to_upload
+    )
+
+    if request_to_upload.status_code == status.HTTP_204_NO_CONTENT:
+        display_success_messages(request, _("File correctly deleted"))
+    else:
+        display_error_messages(request, _("A problem occured during delete"))
+    return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
 
 def _show_submit_warning(admission_submission_errors, request):
@@ -281,7 +324,7 @@ def remove_file(request, file_uuid, admission_uuid):
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
     request_to_delete = requests.delete(
-        url + "/delete",
+        url + "/delete/",
         headers=headers_to_delete
     )
 

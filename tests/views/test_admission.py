@@ -496,7 +496,7 @@ class AdmissionDetailFileUploadTestCase(TestCase):
             str(messages_list[0])
         )
 
-    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs : [])
+    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs: [])
     @mock.patch('requests.put', side_effect=mocked_failed_put_request)
     def test_upload_file_error(self, mock_put, mock_get):
         url = reverse('admission_detail', args=[self.admission.id])
