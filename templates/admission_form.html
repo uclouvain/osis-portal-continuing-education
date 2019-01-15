@@ -258,7 +258,17 @@
             $("#id_" + field).prop( "disabled", false );
         }
     }
+
+    function other_selected(){
+        return $('#id_awareness_other_checkbox').prop('checked');
+    }
+
     $( "#form" ).submit(function( event ) {
+        if(other_selected() && !$('#other-text-field input').val()){
+            event.preventDefault();
+            showTab("references");
+            $(".other-form-group").addClass('has-error');
+        }
         enableFields(fields_to_enable);
     });
 
