@@ -83,13 +83,12 @@ def admission_detail(request, admission_id):
                     'first_name': person.first_name,
                     'last_name': person.last_name,
                     'email': person.email,
-                    'gender': person.gender,
-                    'user': person.user.username
+                    'gender': person.gender
             }
             data = {
                 'name': file.name,
                 'size': file.size,
-                'uploaded_by': person_data,
+                'uploaded_by': person.uuid,
                 'created_date': datetime.datetime.today()
             }
             url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
@@ -174,7 +173,7 @@ def _upload_file(request, file, admission, **kwargs):
     url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
     data = {
         'file': file,
-        'admission_id': str(admission.uuid)
+        'admission_id': str(admission.uuid),
     }
     request_to_put_file = requests.put(
         url_continuing_education_file_api,
