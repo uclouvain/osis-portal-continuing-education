@@ -174,7 +174,7 @@ def _get_files_list(admission, url_continuing_education_file_api):
 
 
 def _file_uploaded_by_admission_person(admission, file):
-    return _get_uploadedby_uuid(file) == admission.person_information.person.uuid
+    return _get_uploadedby_uuid(file) == str(admission.person_information.person.uuid)
 
 
 def _get_uploadedby_uuid(file):
