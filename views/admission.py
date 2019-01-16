@@ -273,12 +273,9 @@ def download_file(request, file_uuid, admission_uuid):
         name = file['path'].rsplit('/', 1)[-1]
         mime_type = MimeTypes().guess_type(file['path'])
         response_file = requests.get(file['path'], headers_to_get)
-        response = HttpResponse()
-        response['Content-Type'] = mime_type
+        response = HttpResponse(response_file, mime_type)
         response['Content-Disposition'] = 'attachment; filename=%s' % name
-        response.write(response_file.content)
         return response
-
     else:
         return HttpResponse(status=404)
 
