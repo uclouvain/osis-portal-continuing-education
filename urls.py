@@ -68,4 +68,9 @@ urlpatterns = [
         admission.remove_file,
         name="remove_file"
     ),
+    url(
+        r'^upload_file/(?P<admission_uuid>[0-9a-f-]+)',
+        admission.upload_file,
+        name="upload_file"
+    ),
 ]

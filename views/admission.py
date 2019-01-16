@@ -75,38 +75,6 @@ def admission_detail(request, admission_id):
         admission,
         settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
     )
-    if request.method == 'POST' and 'file_submit' in request.POST:
-        file = request.FILES['myfile'] if 'myfile' in request.FILES else None
-        if file:
-            person = admission.person_information.person
-            person_data = {
-                    'first_name': person.first_name,
-                    'last_name': person.last_name,
-                    'email': person.email,
-                    'gender': person.gender
-            }
-            data = {
-                'name': file.name,
-                'size': file.size,
-                'uploaded_by': person.uuid,
-                'created_date': datetime.datetime.today()
-            }
-            url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
-                  "admissions/" + str(admission.uuid) + "/files/"
-            headers_to_upload = {
-                'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
-            }
-            request_to_upload = requests.post(
-                url + "create/",
-                headers=headers_to_upload,
-                files={'path': file},
-                data=data
-            )
-            if request_to_upload.status_code == status.HTTP_204_NO_CONTENT:
-                display_success_messages(request, _("File correctly added"))
-            else:
-                display_error_messages(request, _("A problem occured during adding"))
-            return redirect(reverse('admission_detail', kwargs={'admission_id': admission.id}) + "#documents")
 
     return render(
         request,
@@ -121,21 +89,33 @@ def admission_detail(request, admission_id):
 
 @login_required
 def upload_file(request, admission_uuid, **kwargs):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
-          "admissions/" + str(admission_uuid) + "/files/"
+    file = request.FILES['myfile'] if 'myfile' in request.FILES else None
+    admission = Admission.objects.get(uuid=admission_uuid)
+    person = admission.person_information.person
+
+    data = {
+        'name': file.name,
+        'size': file.size,
+        'uploaded_by': person.uuid,
+        'created_date': datetime.datetime.today()
+    }
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
     headers_to_upload = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
-        'Content-Type': MultiPartRenderer.media_type
     }
+
     request_to_upload = requests.post(
         url + "create/",
-        headers=headers_to_upload
+        headers=headers_to_upload,
+        files={'path': file},
+        data=data
     )
 
-    if request_to_upload.status_code == status.HTTP_204_NO_CONTENT:
-        display_success_messages(request, _("File correctly deleted"))
+    if request_to_upload.status_code == status.HTTP_201_CREATED:
+        display_success_messages(request, _("The document is uploaded correctly"))
     else:
-        display_error_messages(request, _("A problem occured during delete"))
+        display_error_messages(request, _("A problem occured : the document is not uploaded"))
+
     return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
 

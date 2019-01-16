@@ -62,7 +62,7 @@
 {% endif %}
 <div class="row">
     <div class="col-md-12">
-<form id="upload_form" method="POST" enctype="multipart/form-data">
+<form id="upload_form" method="POST" enctype="multipart/form-data" action="{% url 'upload_file' admission.uuid %}">
     {% csrf_token %}
     <div class="col-md-9 no-pad">
         <label class="custom-file-label btn btn-default"
