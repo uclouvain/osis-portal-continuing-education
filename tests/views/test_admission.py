@@ -24,7 +24,7 @@
 #
 ##############################################################################
 import datetime
-from unittest import mock
+from unittest import mock, skip
 from unittest.mock import patch
 
 from django.contrib import messages
@@ -417,6 +417,15 @@ class AdmissionFormFileUploadTestCase(TestCase):
             content_type="application/pdf"
         )
 
+        self.patcher = patch(
+            "continuing_education.views.admission._get_files_list",
+            return_value=Response()
+        )
+        self.mocked_called_api_function = self.patcher.start()
+
+    def tearDown(self):
+        self.patcher.stop()
+
     def mocked_success_put_request(self, **kwargs):
         response = Response()
         response.status_code = status.HTTP_201_CREATED
@@ -427,10 +436,10 @@ class AdmissionFormFileUploadTestCase(TestCase):
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return response
 
-    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs : [])
+    @skip("To delete")
     @mock.patch('requests.put', side_effect=mocked_success_put_request)
-    def test_upload_file_success(self, mock_put, mock_get):
-        url = reverse('admission_edit', args=[self.admission.id])
+    def test_upload_file_success(self, mock_put):
+        url = reverse('admission_edit', args=[self.admission.uuid])
         response = self.client.post(url, {'myfile': self.file})
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEquals(response.status_code, 302)
@@ -439,10 +448,10 @@ class AdmissionFormFileUploadTestCase(TestCase):
             str(messages_list[0])
         )
 
-    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs: [])
+    @skip("To delete")
     @mock.patch('requests.put', side_effect=mocked_failed_put_request)
-    def test_upload_file_error(self, mock_put, mock_get):
-        url = reverse('admission_edit', args=[self.admission.id])
+    def test_upload_file_error(self, mock_put):
+        url = reverse('admission_edit', args=[self.admission.uuid])
         response = self.client.post(url, {'myfile': self.file})
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEquals(response.status_code, 302)
@@ -453,7 +462,7 @@ class AdmissionFormFileUploadTestCase(TestCase):
         )
 
 
-class AdmissionDetailFileUploadTestCase(TestCase):
+class AdmissionFileUploadTestCase(TestCase):
     def setUp(self):
         current_acad_year = create_current_academic_year()
         self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
@@ -473,6 +482,14 @@ class AdmissionDetailFileUploadTestCase(TestCase):
             content=str.encode("test_content"),
             content_type="application/pdf"
         )
+        self.patcher = patch(
+            "continuing_education.views.admission._get_files_list",
+            return_value=Response()
+        )
+        self.mocked_called_api_function = self.patcher.start()
+
+    def tearDown(self):
+        self.patcher.stop()
 
     def mocked_success_put_request(self, **kwargs):
         response = Response()
@@ -484,23 +501,25 @@ class AdmissionDetailFileUploadTestCase(TestCase):
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return response
 
-    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs : [])
-    @mock.patch('requests.put', side_effect=mocked_success_put_request)
-    def test_upload_file_success(self, mock_put, mock_get):
-        url = reverse('admission_detail', args=[self.admission.id])
-        response = self.client.post(url, {'myfile': self.file, 'file_submit': True})
+    @mock.patch('requests.post', side_effect=mocked_success_put_request)
+    def test_upload_file_success(self, mock_put):
+        url = reverse('upload_file', args=[self.admission.uuid])
+        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
+        response = self.client.post(url, {'myfile': self.file, 'file_submit': True}, HTTP_REFERER=redirect_url)
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEquals(response.status_code, 302)
         self.assertIn(
             ugettext(_("The document is uploaded correctly")),
             str(messages_list[0])
         )
+        self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
 
-    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs: [])
-    @mock.patch('requests.put', side_effect=mocked_failed_put_request)
-    def test_upload_file_error(self, mock_put, mock_get):
-        url = reverse('admission_detail', args=[self.admission.id])
-        response = self.client.post(url, {'myfile': self.file, 'file_submit': True})
+    @mock.patch('requests.post', side_effect=mocked_failed_put_request)
+    def test_upload_file_error(self, mock_put):
+        url = reverse('upload_file', args=[self.admission.uuid])
+        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
+
+        response = self.client.post(url, {'myfile': self.file, 'file_submit': True}, HTTP_REFERER=redirect_url)
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEquals(response.status_code, 302)
         #an error should raise as the admission is not retrieved from test
@@ -508,3 +527,4 @@ class AdmissionDetailFileUploadTestCase(TestCase):
             ugettext(_("A problem occured : the document is not uploaded")),
             str(messages_list[0])
         )
+        self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
