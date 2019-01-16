@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 import io
 import itertools
 from collections import OrderedDict
@@ -88,16 +87,12 @@ def admission_detail(request, admission_id):
 
 
 @login_required
-def upload_file(request, admission_uuid, **kwargs):
+def upload_file(request, admission_uuid):
     file = request.FILES['myfile'] if 'myfile' in request.FILES else None
     admission = Admission.objects.get(uuid=admission_uuid)
     person = admission.person_information.person
-
     data = {
-        'name': file.name,
-        'size': file.size,
         'uploaded_by': person.uuid,
-        'created_date': datetime.datetime.today()
     }
     url = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
     headers_to_upload = {
@@ -147,34 +142,6 @@ def _show_admission_saved(request, admission_id):
               '<a href="%(url)s"><b>the admission file page</b></a> !'
               ) % {'url': reverse('admission_detail', kwargs={'admission_id': admission_id})}
         ))
-
-
-def _upload_file(request, file, admission, **kwargs):
-    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
-    data = {
-        'file': file,
-        'admission_id': str(admission.uuid),
-    }
-    request_to_put_file = requests.put(
-        url_continuing_education_file_api,
-        data=MultiPartRenderer().render(data=data),
-        headers=_prepare_headers('POST')
-    )
-
-    if request_to_put_file.status_code == status.HTTP_201_CREATED:
-        display_success_messages(request, _("The document is uploaded correctly"))
-    else:
-        display_error_messages(request, _("A problem occured : the document is not uploaded"))
-    kwargs.update({'admission': admission})
-    if kwargs['form']:
-        return redirect(
-            reverse('admission_edit', kwargs={'admission_id': admission.id}) + "#documents",
-        )
-    else:
-        return redirect(
-            reverse('admission_detail', kwargs={'admission_id': admission.id}) + '#documents',
-            args=kwargs
-        )
 
 
 def _get_files_list(admission, url_continuing_education_file_api):
@@ -353,11 +320,6 @@ def admission_form(request, admission_id=None, **kwargs):
     else:
         list_files = []
 
-    if request.method == 'POST':
-        file = request.FILES['myfile'] if 'myfile' in request.FILES else None
-        if file:
-            return _upload_file(request, file, admission, list_files=list_files, form=True)
-
     if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
         if current_address:
             address = address_form.save()
@@ -387,9 +349,10 @@ def admission_form(request, admission_id=None, **kwargs):
             del request.session['formation_id']
         _show_admission_saved(request, admission.id)
         errors, errors_fields = get_admission_submission_errors(admission)
-        return redirect(
-            reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab_anchor,
-        )
+        if not (request.method == 'POST' and 'file_submit' in request.POST):
+            return redirect(
+                reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab_anchor,
+            )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
         display_errors(request, errors)
