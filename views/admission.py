@@ -88,7 +88,7 @@ def admission_detail(request, admission_id):
 
 @login_required
 def upload_file(request, admission_uuid):
-    file = request.FILES['myfile'] if 'myfile' in request.FILES else None
+    admission_file = request.FILES['myfile'] if 'myfile' in request.FILES else None
     admission = Admission.objects.get(uuid=admission_uuid)
     person = admission.person_information.person
     data = {
@@ -102,7 +102,7 @@ def upload_file(request, admission_uuid):
     request_to_upload = requests.post(
         url + "create/",
         headers=headers_to_upload,
-        files={'path': file},
+        files={'path': admission_file},
         data=data
     )
 
@@ -154,9 +154,9 @@ def _get_files_list(admission, url_continuing_education_file_api):
         if response.status_code == status.HTTP_200_OK:
             stream = io.BytesIO(response.content)
             files_list = JSONParser().parse(stream)['results']
-            for file in files_list:
-                file['created_date'] = dateutil.parser.parse(
-                    file['created_date']
+            for admission_file in files_list:
+                admission_file['created_date'] = dateutil.parser.parse(
+                    admission_file['created_date']
                 )
     return files_list
 
@@ -248,10 +248,10 @@ def download_file(request, file_uuid, admission_uuid):
     )
     if request_to_get.status_code == status.HTTP_200_OK:
         stream = io.BytesIO(request_to_get.content)
-        file = JSONParser().parse(stream)
-        name = file['path'].rsplit('/', 1)[-1]
-        mime_type = MimeTypes().guess_type(file['path'])
-        response_file = requests.get(file['path'], headers_to_get)
+        admission_file = JSONParser().parse(stream)
+        name = admission_file['path'].rsplit('/', 1)[-1]
+        mime_type = MimeTypes().guess_type(admission_file['path'])
+        response_file = requests.get(admission_file['path'], headers_to_get)
         response = HttpResponse()
         response['Content-Type'] = mime_type
         response['Content-Disposition'] = 'attachment; filename=%s' % name

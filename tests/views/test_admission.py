@@ -411,7 +411,7 @@ class AdmissionFormFileUploadTestCase(TestCase):
             state=admission_state_choices.DRAFT,
             formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
         )
-        self.file = SimpleUploadedFile(
+        self.admission_file = SimpleUploadedFile(
             name='upload_test.pdf',
             content=str.encode("test_content"),
             content_type="application/pdf"
@@ -440,7 +440,7 @@ class AdmissionFormFileUploadTestCase(TestCase):
     @mock.patch('requests.put', side_effect=mocked_success_put_request)
     def test_upload_file_success(self, mock_put):
         url = reverse('admission_edit', args=[self.admission.uuid])
-        response = self.client.post(url, {'myfile': self.file})
+        response = self.client.post(url, {'myfile': self.admission_file})
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEquals(response.status_code, 302)
         self.assertIn(
@@ -452,7 +452,7 @@ class AdmissionFormFileUploadTestCase(TestCase):
     @mock.patch('requests.put', side_effect=mocked_failed_put_request)
     def test_upload_file_error(self, mock_put):
         url = reverse('admission_edit', args=[self.admission.uuid])
-        response = self.client.post(url, {'myfile': self.file})
+        response = self.client.post(url, {'myfile': self.admission_file})
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEquals(response.status_code, 302)
         # An error should raise as the admission is not retrieved from test
@@ -462,7 +462,7 @@ class AdmissionFormFileUploadTestCase(TestCase):
         )
 
 
-class AdmissionFileUploadTestCase(TestCase):
+class AdmissionFileTestCase(TestCase):
     def setUp(self):
         current_acad_year = create_current_academic_year()
         self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
@@ -477,7 +477,7 @@ class AdmissionFileUploadTestCase(TestCase):
             state=admission_state_choices.DRAFT,
             formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
         )
-        self.file = SimpleUploadedFile(
+        self.admission_file = SimpleUploadedFile(
             name='upload_test.pdf',
             content=str.encode("test_content"),
             content_type="application/pdf"
@@ -491,21 +491,21 @@ class AdmissionFileUploadTestCase(TestCase):
     def tearDown(self):
         self.patcher.stop()
 
-    def mocked_success_put_request(self, **kwargs):
+    def mocked_success_post_request(self, **kwargs):
         response = Response()
         response.status_code = status.HTTP_201_CREATED
         return response
 
-    def mocked_failed_put_request(self, **kwargs):
+    def mocked_failed_post_request(self, **kwargs):
         response = Response()
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return response
 
-    @mock.patch('requests.post', side_effect=mocked_success_put_request)
-    def test_upload_file_success(self, mock_put):
+    @mock.patch('requests.post', side_effect=mocked_success_post_request)
+    def test_upload_file_success(self, mock_post):
         url = reverse('upload_file', args=[self.admission.uuid])
         redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
-        response = self.client.post(url, {'myfile': self.file, 'file_submit': True}, HTTP_REFERER=redirect_url)
+        response = self.client.post(url, {'myfile': self.admission_file, 'file_submit': True}, HTTP_REFERER=redirect_url)
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEquals(response.status_code, 302)
         self.assertIn(
@@ -514,12 +514,12 @@ class AdmissionFileUploadTestCase(TestCase):
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
 
-    @mock.patch('requests.post', side_effect=mocked_failed_put_request)
-    def test_upload_file_error(self, mock_put):
+    @mock.patch('requests.post', side_effect=mocked_failed_post_request)
+    def test_upload_file_error(self, mock_post):
         url = reverse('upload_file', args=[self.admission.uuid])
         redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
 
-        response = self.client.post(url, {'myfile': self.file, 'file_submit': True}, HTTP_REFERER=redirect_url)
+        response = self.client.post(url, {'myfile': self.admission_file, 'file_submit': True}, HTTP_REFERER=redirect_url)
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEquals(response.status_code, 302)
         #an error should raise as the admission is not retrieved from test
@@ -528,3 +528,105 @@ class AdmissionFileUploadTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
+
+    def mocked_success_delete_request(self, **kwargs):
+        response = Response()
+        response.status_code = status.HTTP_204_NO_CONTENT
+        return response
+
+    def mocked_failed_delete_request(self, **kwargs):
+        response = Response()
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return response
+
+    @mock.patch('requests.delete', side_effect=mocked_success_delete_request)
+    def test_delete_file_success(self, mock_delete):
+        url = reverse('remove_file', args=[self.admission.uuid, "1452"])
+        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
+        response = self.client.delete(
+            url,
+            {'myfile': self.admission_file},
+            HTTP_REFERER=redirect_url
+        )
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEquals(response.status_code, 302)
+        self.assertIn(
+            ugettext(_("File correctly deleted")),
+            str(messages_list[0])
+        )
+        self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
+
+    @mock.patch('requests.delete', side_effect=mocked_failed_delete_request)
+    def test_delete_file_error(self, mock_delete):
+        url = reverse('remove_file', args=[self.admission.uuid, "5478"])
+        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
+
+        response = self.client.delete(
+            url,
+            {'myfile': self.admission_file},
+            HTTP_REFERER=redirect_url
+        )
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEquals(response.status_code, 302)
+        #an error should raise as the admission is not retrieved from test
+        self.assertIn(
+            ugettext(_("A problem occured during delete")),
+            str(messages_list[0])
+        )
+        self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
+
+
+class AdmissionFileDownloadTestCase(TestCase):
+    def setUp(self):
+        current_acad_year = create_current_academic_year()
+        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+
+        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        self.client.force_login(self.user)
+        self.request = RequestFactory()
+        self.person = PersonFactory(user=self.user)
+        self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        self.admission = AdmissionFactory(
+            person_information=self.person_information,
+            state=admission_state_choices.DRAFT,
+            formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
+        )
+        self.admission_file = SimpleUploadedFile(
+            name='upload_test.pdf',
+            content=str.encode("test_content"),
+            content_type="application/pdf"
+        )
+        self.patcher = patch(
+            "continuing_education.views.admission._get_files_list",
+            return_value=Response()
+        )
+        self.mocked_called_api_function = self.patcher.start()
+
+    def tearDown(self):
+        self.patcher.stop()
+
+    def mocked_success_get_request(self, *args, **kwargs):
+        response = Response()
+        response.status_code = status.HTTP_200_OK
+        response._content = b'{"path": "value"}'
+        return response
+
+    def mocked_failed_get_request(self, **kwargs):
+        response = Response()
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        return response
+
+    @mock.patch('requests.get', side_effect=mocked_success_get_request)
+    def test_get_file_success(self, mock_get):
+        url = reverse('download_file', args=[self.admission.uuid, "1452"])
+        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
+        response = self.client.get(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
+        self.assertEquals(response.status_code, 200)
+
+    @mock.patch('requests.get', side_effect=mocked_failed_get_request)
+    def test_get_file_error(self, mock_get):
+        url = reverse('download_file', args=[self.admission.uuid, "5478"])
+        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
+
+        response = self.client.get(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
+        self.assertEquals(response.status_code, 404)
