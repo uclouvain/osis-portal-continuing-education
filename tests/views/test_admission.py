@@ -75,9 +75,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             return_value=Response()
         )
         self.mocked_called_api_function = self.patcher.start()
-
-    def tearDown(self):
-        self.patcher.stop()
+        self.addCleanup(self.patcher.stop)
 
     def test_admission_detail(self):
         url = reverse('admission_detail', args=[self.admission.pk])
@@ -423,8 +421,7 @@ class AdmissionFormFileUploadTestCase(TestCase):
         )
         self.mocked_called_api_function = self.patcher.start()
 
-    def tearDown(self):
-        self.patcher.stop()
+        self.addCleanup(self.patcher.stop)
 
     def mocked_success_put_request(self, **kwargs):
         response = Response()
@@ -487,9 +484,7 @@ class AdmissionFileTestCase(TestCase):
             return_value=Response()
         )
         self.mocked_called_api_function = self.patcher.start()
-
-    def tearDown(self):
-        self.patcher.stop()
+        self.addCleanup(self.patcher.stop)
 
     def mocked_success_post_request(self, **kwargs):
         response = Response()
@@ -574,36 +569,6 @@ class AdmissionFileTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
-
-
-class AdmissionFileDownloadTestCase(TestCase):
-    def setUp(self):
-        current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.client.force_login(self.user)
-        self.request = RequestFactory()
-        self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonFactory(person=self.person)
-        self.admission = AdmissionFactory(
-            person_information=self.person_information,
-            state=admission_state_choices.DRAFT,
-            formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
-        )
-        self.admission_file = SimpleUploadedFile(
-            name='upload_test.pdf',
-            content=str.encode("test_content"),
-            content_type="application/pdf"
-        )
-        self.patcher = patch(
-            "continuing_education.views.admission._get_files_list",
-            return_value=Response()
-        )
-        self.mocked_called_api_function = self.patcher.start()
-
-    def tearDown(self):
-        self.patcher.stop()
 
     def mocked_success_get_request(self, *args, **kwargs):
         response = Response()
