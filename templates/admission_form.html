@@ -63,7 +63,7 @@
                 </a></li>
                 <div class="form-button-group pull-right">
                     <input type="hidden" id="landing_tab" name="tab">
-                    <button type="submit"
+                    <button type="submit" id="save-btn"
                             name="state" value="Draft" class="btn btn-primary" title="{%trans 'Draft' %}">
                         <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
                         {% trans 'Save' %}
@@ -258,7 +258,23 @@
             $("#id_" + field).prop( "disabled", false );
         }
     }
+
+    function other_selected(){
+        return $('#id_awareness_other_checkbox').prop('checked');
+    }
+
+    $("#save-btn").click(function(){
+        if(!$('#id_formation').val()){
+            showTab("identification");
+        }
+    });
+
     $( "#form" ).submit(function( event ) {
+        if(other_selected() && !$('#other-text-field input').val()){
+            event.preventDefault();
+            showTab("references");
+            $(".other-form-group").addClass('has-error');
+        }
         enableFields(fields_to_enable);
     });
 

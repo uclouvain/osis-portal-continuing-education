@@ -308,6 +308,29 @@ class ViewStudentAdmissionTestCase(TestCase):
                 field_value = field_value.pk
             self.assertEqual(field_value, admission[key], key)
 
+    @mock.patch('continuing_education.views.admission._get_files_list')
+    def test_admission_detail_files_list(self, mock_get_files_list):
+        file = {
+            'name': 'file.txt',
+            'size': 123000,
+            'created_date': datetime.date.today(),
+            'uploaded_by': {
+                'first_name': 'Test',
+                'last_name': 'Test',
+                'username': 'Test',
+                'is_deletable': True
+            },
+        }
+        mock_get_files_list.return_value = [file]
+        url = reverse('admission_detail', args=[self.admission.pk])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'admission_detail.html')
+
+        self.assertEqual(response.context['admission'], self.admission)
+        self.assertEqual(response.context['list_files'], [file])
+
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUp(self):

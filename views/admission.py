@@ -158,13 +158,23 @@ def _get_files_list(admission, url_continuing_education_file_api):
                 admission_file['created_date'] = dateutil.parser.parse(
                     admission_file['created_date']
                 )
+                file['is_deletable'] = _file_uploaded_by_admission_person(admission, file)
     return files_list
 
 
+def _file_uploaded_by_admission_person(admission, file):
+    return _get_uploadedby_uuid(file) == str(admission.person_information.person.uuid)
+
+
+def _get_uploadedby_uuid(file):
+    uploaded_by = file.get('uploaded_by', None)
+    return uploaded_by.get('uuid', None) if uploaded_by else None
+
+
 def _prepare_headers(method):
-    if(method in ['GET','DELETE']):
+    if method in ['GET', 'DELETE']:
         return {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    elif(method == 'POST'):
+    elif method == 'POST':
         return {
             'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
             'Content-Disposition': 'attachment; filename=name.jpeg',
@@ -252,12 +262,9 @@ def download_file(request, file_uuid, admission_uuid):
         name = admission_file['path'].rsplit('/', 1)[-1]
         mime_type = MimeTypes().guess_type(admission_file['path'])
         response_file = requests.get(admission_file['path'], headers_to_get)
-        response = HttpResponse()
-        response['Content-Type'] = mime_type
+        response = HttpResponse(response_file, mime_type)
         response['Content-Disposition'] = 'attachment; filename=%s' % name
-        response.write(response_file.content)
         return response
-
     else:
         return HttpResponse(status=404)
 

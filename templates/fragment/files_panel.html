@@ -45,16 +45,18 @@
                 <td> {{file.name}} </td>
                 <td> {{file.size|filesizeformat}} </td>
                 <td> {{file.created_date | date:'d/m/Y h:i'}} </td>
-                <td> {{file.uploaded_by.first_name}} {{file.uploaded_by.last_name}} </td>
+                <td> {{file.uploaded_by.first_name}} {{file.uploaded_by.last_name}}</td>
                 <td>
-                    <a class="button" role="button"
-                        href="{% url 'remove_file' file.uuid admission.uuid %}">
-                        <span class="glyphicon glyphicon-remove-circle btn-space btn-file" aria-hidden="true"></span>
-                    </a>
                     <a class="button" role="button" href="{% url 'download_file' file.uuid admission.uuid %}">
                         <span class="glyphicon glyphicon-download-alt btn-space btn-file"
                               aria-hidden="true"></span>
                     </a>
+                    {% if file.is_deletable %}
+                        <a class="button" role="button"
+                            href="{% url 'remove_file' file.uuid admission.uuid %}">
+                            <span class="glyphicon glyphicon-remove-circle btn-space btn-file" aria-hidden="true"></span>
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
