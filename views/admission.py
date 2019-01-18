@@ -28,8 +28,8 @@ import itertools
 from collections import OrderedDict
 from mimetypes import MimeTypes
 
-import dateutil
 import requests
+from dateutil import parser
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -166,8 +166,8 @@ def _get_files_list(admission, url_continuing_education_file_api):
             stream = io.BytesIO(response.content)
             files_list = JSONParser().parse(stream)['results']
             for file in files_list:
-                file['created_date'] = dateutil.parser.parse(
-                    file['created_date']
+                file['created_date'] = parser.parse(
+                    timestr=file['created_date']
                 )
                 file['is_deletable'] = _file_uploaded_by_admission_person(admission, file)
     return files_list
