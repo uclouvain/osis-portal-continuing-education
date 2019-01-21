@@ -596,7 +596,8 @@ class AdmissionFileTestCase(TestCase):
     def mocked_success_get_request(self, *args, **kwargs):
         response = Response()
         response.status_code = status.HTTP_200_OK
-        response._content = b'{"path": "value"}'
+        response._content = b'{"path": "upload_test.pdf"}'
+        response.raw = SimpleUploadedFile(name="file.pdf", content=response._content)
         return response
 
     def mocked_failed_get_request(self, **kwargs):
