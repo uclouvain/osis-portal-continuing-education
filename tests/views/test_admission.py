@@ -23,9 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import base64
 import datetime
+import uuid
 from unittest import mock
 from unittest.mock import patch
+from uuid import UUID
 
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -34,7 +37,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
+from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, ugettext
 from requests import Response
 from rest_framework import status
@@ -531,3 +536,40 @@ class AdmissionDetailFileUploadTestCase(TestCase):
             ugettext(_("A problem occured : the document is not uploaded")),
             str(messages_list[0])
         )
+
+
+class AdmissionDetailFileDownloadTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        self.client.force_login(self.user)
+        self.request = RequestFactory()
+        self.person = PersonFactory(user=self.user)
+        self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        self.admission = AdmissionFactory(
+            person_information=self.person_information,
+            state=admission_state_choices.DRAFT,
+        )
+        self.file = SimpleUploadedFile(
+            name='upload_test.pdf',
+            content=str.encode("test_content"),
+            content_type="application/pdf"
+        )
+
+    def get_mocked_file_response(self, headers):
+        response = HttpResponse(status=status.HTTP_200_OK)
+        response.content = '{"content": "'+str(base64.b64encode(b'test'))+'", "path":"test_name.pdf"}'
+        return response
+
+    @mock.patch('requests.get', side_effect=get_mocked_file_response)
+    def test_download_file_success(self, mock_get):
+        url = reverse('download_file', args=[uuid.uuid4(), self.admission.uuid])
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        for value in ['attachment', 'test_name']:
+            self.assertIn(value, response['Content-Disposition'])
+
+    @mock.patch('requests.get', return_value=HttpResponse(status=status.HTTP_404_NOT_FOUND))
+    def test_download_file_error(self, mock_get):
+        url = reverse('download_file', args=[uuid.uuid4(), self.admission.uuid])
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)

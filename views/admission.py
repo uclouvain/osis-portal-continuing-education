@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import base64
 import io
 import itertools
 from collections import OrderedDict
@@ -30,6 +31,7 @@ from mimetypes import MimeTypes
 
 import dateutil
 import requests
+from dateutil import parser
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -166,7 +168,7 @@ def _get_files_list(admission, url_continuing_education_file_api):
             stream = io.BytesIO(response.content)
             files_list = JSONParser().parse(stream)['results']
             for file in files_list:
-                file['created_date'] = dateutil.parser.parse(
+                file['created_date'] = parser.parse(
                     file['created_date']
                 )
                 file['is_deletable'] = _file_uploaded_by_admission_person(admission, file)
@@ -272,7 +274,7 @@ def download_file(request, file_uuid, admission_uuid):
         file = JSONParser().parse(stream)
         name = file['path'].rsplit('/', 1)[-1]
         mime_type = MimeTypes().guess_type(file['path'])
-        response_file = requests.get(file['path'], headers_to_get)
+        response_file = base64.b64decode(file['content'])
         response = HttpResponse(response_file, mime_type)
         response['Content-Disposition'] = 'attachment; filename=%s' % name
         return response
