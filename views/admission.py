@@ -100,7 +100,7 @@ def upload_file(request, admission_uuid):
     }
 
     request_to_upload = requests.post(
-        url + "create/",
+        url,
         headers=headers_to_upload,
         files={'path': admission_file},
         data=data
@@ -158,7 +158,7 @@ def _get_files_list(admission, url_continuing_education_file_api):
                 admission_file['created_date'] = dateutil.parser.parse(
                     admission_file['created_date']
                 )
-                file['is_deletable'] = _file_uploaded_by_admission_person(admission, file)
+                admission_file['is_deletable'] = _file_uploaded_by_admission_person(admission, admission_file)
     return files_list
 
 
@@ -277,7 +277,7 @@ def remove_file(request, file_uuid, admission_uuid):
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
     }
     request_to_delete = requests.delete(
-        url + "/delete/",
+        url,
         headers=headers_to_delete
     )
 
