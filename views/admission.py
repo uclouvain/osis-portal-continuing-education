@@ -128,6 +128,9 @@ def _show_admission_saved(request, admission_id):
         ))
 
 
+MAX_ADMISSION_FILE_NAME_LENGTH = 100
+
+
 def _upload_file(request, file, admission, **kwargs):
     url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
     data = {
@@ -139,9 +142,15 @@ def _upload_file(request, file, admission, **kwargs):
         data=MultiPartRenderer().render(data=data),
         headers=_prepare_headers('POST')
     )
-
     if request_to_put_file.status_code == status.HTTP_201_CREATED:
         display_success_messages(request, _("The document is uploaded correctly"))
+    elif request_to_put_file.status_code == status.HTTP_406_NOT_ACCEPTABLE:
+        display_error_messages(
+            request,
+            _("The name of the file is too long : maximum %(length)s characters.") % {
+                    'length': MAX_ADMISSION_FILE_NAME_LENGTH
+                }
+        )
     else:
         display_error_messages(request, _("A problem occured : the document is not uploaded"))
     kwargs.update({'admission': admission})

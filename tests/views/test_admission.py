@@ -28,7 +28,6 @@ import datetime
 import uuid
 from unittest import mock
 from unittest.mock import patch
-from uuid import UUID
 
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -39,7 +38,6 @@ from django.db import models
 from django.forms import model_to_dict
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
-from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _, ugettext
 from requests import Response
 from rest_framework import status
@@ -51,7 +49,8 @@ from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.views.admission import admission_form, get_admission_submission_errors
+from continuing_education.views.admission import admission_form, get_admission_submission_errors, \
+    MAX_ADMISSION_FILE_NAME_LENGTH
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -512,6 +511,11 @@ class AdmissionDetailFileUploadTestCase(TestCase):
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return response
 
+    def mocked_failed_put_request_name_too_long(self, **kwargs):
+        response = Response()
+        response.status_code = status.HTTP_406_NOT_ACCEPTABLE
+        return response
+
     @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs : [])
     @mock.patch('requests.put', side_effect=mocked_success_put_request)
     def test_upload_file_success(self, mock_put, mock_get):
@@ -534,6 +538,27 @@ class AdmissionDetailFileUploadTestCase(TestCase):
         #an error should raise as the admission is not retrieved from test
         self.assertIn(
             ugettext(_("A problem occured : the document is not uploaded")),
+            str(messages_list[0])
+        )
+
+    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs : [])
+    @mock.patch('requests.put', side_effect=mocked_failed_put_request_name_too_long)
+    def test_upload_file_error_name_too_long(self, mock_put, mock_get):
+        url = reverse('admission_detail', args=[self.admission.id])
+        file = SimpleUploadedFile(
+            name='upload_test_with_too_much_character_oh_no_this_will_fail_upload_test_' +
+                 'with_too_much_character_oh_no_this_will_fail.pdf',
+            content=str.encode("test_content"),
+            content_type="application/pdf"
+        )
+        response = self.client.post(url, {'myfile': file, 'file_submit': True})
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEquals(response.status_code, 302)
+        #an error should raise as the admission is not retrieved from test
+        self.assertIn(
+            ugettext(_("The name of the file is too long : maximum %(length)s characters.")% {
+                'length': MAX_ADMISSION_FILE_NAME_LENGTH
+            }),
             str(messages_list[0])
         )
 
