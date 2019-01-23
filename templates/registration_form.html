@@ -42,11 +42,11 @@
             <form id="form" method="POST" class="post-form">
                 {% csrf_token %}
                 <ul id="tabs" class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#billing" role="tab" data-toggle="tab">
-                        {% trans 'Billing' %}
-                    </a></li>
-                    <li role="presentation"><a href="#identification" role="tab" data-toggle="tab">
+                    <li role="presentation" class="active"><a href="#identification" role="tab" data-toggle="tab">
                         {% trans 'Identification' %}
+                    </a></li>
+                    <li role="presentation"><a href="#billing" role="tab" data-toggle="tab">
+                        {% trans 'Billing' %}
                     </a></li>
                     <li role="presentation"><a href="#contact" role="tab" data-toggle="tab">
                         {% trans 'Contact information' %}
@@ -59,7 +59,54 @@
                     </div>
                 </ul>
                 <div class="tab-content">
-                    <div id="billing" role="tabpanel" class="tab-pane active">
+                    <div id="identification" role="tabpanel" class="tab-pane active">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">{% bootstrap_field id_form.last_name %}</div>
+                                <div class="col-md-6">{% bootstrap_field id_form.first_name %}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">{% bootstrap_field id_form.gender %}</div>
+                                <div class="col-md-6">{% bootstrap_field person_form.birth_date%}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">{% bootstrap_field person_form.birth_location %}</div>
+                                <div class="col-md-6">{% bootstrap_field person_form.birth_country %}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.national_registry_number %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.id_card_number %}
+                                </div>
+                            </div>
+                            {% bootstrap_field form.passport_number %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.marital_status %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.spouse_name %}
+                                </div>
+                            </div>
+                            {% bootstrap_field form.children_number %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.previous_ucl_registration label=_("Previous UCL registration")%}
+                                </div>
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.previous_noma label_class="label_previous_noma" %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer text-right">
+                            <a href="#" class="btn btn-default" onclick="showTab('billing')">
+                                {% trans 'Next' %}
+                            </a>
+                        </div>
+                    </div>
+                    <div id="billing" role="tabpanel" class="tab-pane">
                         <div class="panel-body">
                             {% bootstrap_field form.registration_type %}
                             {% bootstrap_field form.use_address_for_billing %}
@@ -90,41 +137,6 @@
                         </div>
                         <div class="panel-footer text-right">
                             <a href="#" class="btn btn-default" onclick="showTab('identification')">
-                                {% trans 'Next' %}
-                            </a>
-                        </div>
-                    </div>
-                    <div id="identification" role="tabpanel" class="tab-pane">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    {% bootstrap_field form.national_registry_number %}
-                                </div>
-                                <div class="col-md-6">
-                                    {% bootstrap_field form.id_card_number %}
-                                </div>
-                            </div>
-                            {% bootstrap_field form.passport_number %}
-                            <div class="row">
-                                <div class="col-md-6">
-                                    {% bootstrap_field form.marital_status %}
-                                </div>
-                                <div class="col-md-6">
-                                    {% bootstrap_field form.spouse_name %}
-                                </div>
-                            </div>
-                            {% bootstrap_field form.children_number %}
-                            <div class="row">
-                                <div class="col-md-6">
-                                    {% bootstrap_field form.previous_ucl_registration label=_("Previous UCL registration")%}
-                                </div>
-                                <div class="col-md-6">
-                                    {% bootstrap_field form.previous_noma label_class="label_previous_noma" %}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel-footer text-right">
-                            <a href="#" class="btn btn-default" onclick="showTab('billing')">
                                 {% trans 'Previous' %}
                             </a>
                             <a href="#" class="btn btn-default" onclick="showTab('contact')">
@@ -166,6 +178,15 @@
 
 {% block script %}
     <script>
+
+         let fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year", "billing_country", "residence_country"];
+
+        function enableFields(fields) {
+            for (var field of fields) {
+                $("#id_" + field).prop( "disabled", false );
+            }
+        }
+
         function showNOMA() {
             if($("#id_previous_ucl_registration").value == undefined){
                 hideNOMA();
@@ -228,8 +249,7 @@
 
         //re-enable disabled field on form submit
         $( "#form" ).submit(function( event ) {
-            $("#id_billing_country").prop( "disabled", false );
-            $("#id_residence_country").prop( "disabled", false );
+            enableFields(fields_to_enable);
         });
 
         function copy_address(e){
