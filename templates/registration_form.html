@@ -35,11 +35,6 @@
 
 {% block content %}
     <div class="page-header">
-        {% if admission_id %}
-        <button type="submit" form="form" class="btn btn-default pull-right">
-            <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Save' %}
-        </button>
-        {% endif %}
         <h2>{% trans 'Registration' %}</h2>
     </div>
 
@@ -47,18 +42,24 @@
             <form id="form" method="POST" class="post-form">
                 {% csrf_token %}
                 <ul id="tabs" class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#registration" role="tab" data-toggle="tab">
-                        {% trans 'Registration' %}
-                    </a></li>
-                    <li role="presentation"><a href="#billing" role="tab" data-toggle="tab">
+                    <li role="presentation" class="active"><a href="#billing" role="tab" data-toggle="tab">
                         {% trans 'Billing' %}
                     </a></li>
-                    <li role="presentation"><a href="#post" role="tab" data-toggle="tab">
-                        {% trans 'Post' %}
+                    <li role="presentation"><a href="#identification" role="tab" data-toggle="tab">
+                        {% trans 'Identification' %}
                     </a></li>
+                    <li role="presentation"><a href="#contact" role="tab" data-toggle="tab">
+                        {% trans 'Contact information' %}
+                    </a></li>
+                    <div class="form-button-group pull-right">
+                        <input type="hidden" id="landing_tab" name="tab">
+                        <button type="button" class="btn btn-primary pull-right">
+                            <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Save' %}
+                        </button>
+                    </div>
                 </ul>
                 <div class="tab-content">
-                    <div id="registration" role="tabpanel" class="tab-pane active">
+                    <div id="billing" role="tabpanel" class="tab-pane active">
                         <div class="panel-body">
                             {% bootstrap_field form.registration_type %}
                             {% bootstrap_field form.use_address_for_billing %}
@@ -66,60 +67,99 @@
                                 <div class="panel-heading">{% trans 'Billing' %}</div>
                                     <div class="panel panel-body">
                                         {% bootstrap_field billing_address_form.location form_group_class="form-group" label=_("Location") %}
-                                        {% bootstrap_field billing_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
-                                        {% bootstrap_field billing_address_form.city form_group_class="form-group" label=_("City") %}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {% bootstrap_field billing_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {% bootstrap_field billing_address_form.city form_group_class="form-group" label=_("City") %}
+                                            </div>
+                                        </div>
                                         {% bootstrap_field billing_address_form.country form_group_class="form-group" label=_("Country") %}
                                     </div>
                             </div>
                             {% bootstrap_field form.head_office_name %}
-                            {% bootstrap_field form.company_number %}
-                            {% bootstrap_field form.vat_number %}
-                            {% bootstrap_field form.national_registry_number %}
-                            {% bootstrap_field form.id_card_number %}
-                            {% bootstrap_field form.passport_number %}
-                            {% bootstrap_field form.marital_status %}
-                            {% bootstrap_field form.spouse_name %}
-                            {% bootstrap_field form.children_number %}
-                            {% bootstrap_field form.previous_ucl_registration %}
-                            {% bootstrap_field form.previous_noma %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.company_number %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.vat_number %}
+                                </div>
+                            </div>
                         </div>
                         <div class="panel-footer text-right">
-                            <a href="#" class="btn btn-default" onclick="showTab('billing')">
+                            <a href="#" class="btn btn-default" onclick="showTab('identification')">
                                 {% trans 'Next' %}
                             </a>
                         </div>
                     </div>
-                    <div id="billing" role="tabpanel" class="tab-pane active">
+                    <div id="identification" role="tabpanel" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.national_registry_number %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.id_card_number %}
+                                </div>
+                            </div>
+                            {% bootstrap_field form.passport_number %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.marital_status %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.spouse_name %}
+                                </div>
+                            </div>
+                            {% bootstrap_field form.children_number %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.previous_ucl_registration label=_("Previous UCL registration")%}
+                                </div>
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.previous_noma label_class="label_previous_noma" %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer text-right">
+                            <a href="#" class="btn btn-default" onclick="showTab('billing')">
+                                {% trans 'Previous' %}
+                            </a>
+                            <a href="#" class="btn btn-default" onclick="showTab('contact')">
+                                {% trans 'Next' %}
+                            </a>
+                        </div>
+                    </div>
+                    <div id="contact" role="tabpanel" class="tab-pane">
                         <div class="panel-body">
                             {% bootstrap_field form.use_address_for_post %}
                             <div class="panel panel-default">
                                 <div class="panel-heading">{% trans 'Post' %}</div>
                                     <div class="panel panel-body">
                                         {% bootstrap_field residence_address_form.location form_group_class="form-group" label=_("Location") %}
-                                        {% bootstrap_field residence_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
-                                        {% bootstrap_field residence_address_form.city form_group_class="form-group" label=_("City") %}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {% bootstrap_field residence_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {% bootstrap_field residence_address_form.city form_group_class="form-group" label=_("City") %}
+                                            </div>
+                                        </div>
                                         {% bootstrap_field residence_address_form.country form_group_class="form-group" label=_("Country") %}
                                 </div>
                             </div>
                             {% bootstrap_field form.residence_phone %}
                         </div>
                         <div class="panel-footer text-right">
-                            <a href="#" class="btn btn-default" onclick="showTab('registration')">
+                            <a href="#" class="btn btn-default" onclick="showTab('identification')">
                                 {% trans 'Previous' %}
-                            </a>
-                            <a href="#" class="btn btn-default" onclick="showTab('post')">
-                                {% trans 'Next' %}
                             </a>
                         </div>
                     </div>
-                    <div id="post" role="tabpanel" class="tab-pane active">
-                        <div class="panel-body">
-                        </div>
-                        <div class="panel-footer text-right">
-                            <a href="#" class="btn btn-default" onclick="showTab('billing')">
-                                {% trans 'Previous' %}
-                            </a>
-                        </div>
+                    <div hidden>
+                        {% bootstrap_form address_form %}
                     </div>
                 </div>
             </form>
@@ -129,7 +169,26 @@
 
 {% block script %}
     <script>
+        function showNOMA() {
+            console.log($("#id_previous_ucl_registration").value)
+            if($("#id_previous_ucl_registration").value == undefined){
+                hideNOMA();
+            }
+            $("#id_previous_ucl_registration").change(function () {
+                if (this.value == "True" && this.value != "undefined") {
+                    $("#id_previous_noma").show();
+                    $(".label_previous_noma").show();
+                } else {
+                    hideNOMA();
+                }
+            });
+        }
+        showNOMA();
 
+        function hideNOMA(){
+            $("#id_previous_noma").hide();
+            $(".label_previous_noma").hide();
+        }
         $('#tabs a').click(function (e) {
           e.preventDefault();
           $('#landing_tab').val($(this).context.hash.substring(1));
@@ -138,6 +197,11 @@
         function showTab(tab) {
             $('#tabs a[href="#' + tab + '"]').tab('show');
         }
+
+        let anchor = location.hash;
+        landing_tab = anchor.substring(1);
+        $('#landing_tab').val(landing_tab);
+        showTab(landing_tab);
         //reuse address
         let address = {
             location: "{{admission.person.address.location | escapejs}}",
@@ -173,22 +237,22 @@
         });
 
         function copy_address(e){
-            ["location", "postal_code", "city"].forEach((field) => {
-                $("#id_"+e+"-"+field).val(address[field]);
+            ["location", "postal_code", "city"].forEach(function(field) {
+                $("#id_"+e+"-"+field).val(document.getElementById('id_'+field).value);
                 $("#id_"+e+"-"+field).prop("readonly", true);
             });
-            $("#id_"+e+"-country").val(address.country);
-            console.log($("#id_"+e+"-country"));
+            $("#id_"+e+"-country").val(document.getElementById('id_country').value);
             $("#id_"+e+"-country").prop("disabled", true);
         }
 
         function empty_address(e){
-            ["location", "postal_code", "city"].forEach((field) => {
+            ["location", "postal_code", "city"].forEach(function(field) {
                 $("#id_"+e+"-"+field).val('');
                 $("#id_"+e+"-"+field).prop("readonly", false);
             });
             $("#id_"+e+"-country").val('');
             $("#id_"+e+"-country").prop("disabled", false);
         }
+
     </script>
 {% endblock %}
