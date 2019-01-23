@@ -46,48 +46,81 @@
     <div class="panel panel-default">
             <form id="form" method="POST" class="post-form">
                 {% csrf_token %}
-                <div class="panel panel-body">
-                    {% bootstrap_field form.registration_type %}
-                    {% bootstrap_field form.use_address_for_billing %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading">{% trans 'Billing' %}</div>
-                            <div class="panel panel-body">
-                                {% bootstrap_field billing_address_form.location form_group_class="form-group" label=_("Location") %}
-                                {% bootstrap_field billing_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
-                                {% bootstrap_field billing_address_form.city form_group_class="form-group" label=_("City") %}
-                                {% bootstrap_field billing_address_form.country form_group_class="form-group" label=_("Country") %}
+                <ul id="tabs" class="nav nav-tabs">
+                    <li role="presentation" class="active"><a href="#registration" role="tab" data-toggle="tab">
+                        {% trans 'Registration' %}
+                    </a></li>
+                    <li role="presentation"><a href="#billing" role="tab" data-toggle="tab">
+                        {% trans 'Billing' %}
+                    </a></li>
+                    <li role="presentation"><a href="#post" role="tab" data-toggle="tab">
+                        {% trans 'Post' %}
+                    </a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="registration" role="tabpanel" class="tab-pane active">
+                        <div class="panel-body">
+                            {% bootstrap_field form.registration_type %}
+                            {% bootstrap_field form.use_address_for_billing %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">{% trans 'Billing' %}</div>
+                                    <div class="panel panel-body">
+                                        {% bootstrap_field billing_address_form.location form_group_class="form-group" label=_("Location") %}
+                                        {% bootstrap_field billing_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
+                                        {% bootstrap_field billing_address_form.city form_group_class="form-group" label=_("City") %}
+                                        {% bootstrap_field billing_address_form.country form_group_class="form-group" label=_("Country") %}
+                                    </div>
                             </div>
-                    </div>
-                    {% bootstrap_field form.head_office_name %}
-                    {% bootstrap_field form.company_number %}
-                    {% bootstrap_field form.vat_number %}
-                    {% bootstrap_field form.national_registry_number %}
-                    {% bootstrap_field form.id_card_number %}
-                    {% bootstrap_field form.passport_number %}
-                    {% bootstrap_field form.marital_status %}
-                    {% bootstrap_field form.spouse_name %}
-                    {% bootstrap_field form.children_number %}
-                    {% bootstrap_field form.previous_ucl_registration %}
-                    {% bootstrap_field form.previous_noma %}
-                    {% bootstrap_field form.use_address_for_post %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading">{% trans 'Post' %}</div>
-                            <div class="panel panel-body">
-                                {% bootstrap_field residence_address_form.location form_group_class="form-group" label=_("Location") %}
-                                {% bootstrap_field residence_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
-                                {% bootstrap_field residence_address_form.city form_group_class="form-group" label=_("City") %}
-                                {% bootstrap_field residence_address_form.country form_group_class="form-group" label=_("Country") %}
+                            {% bootstrap_field form.head_office_name %}
+                            {% bootstrap_field form.company_number %}
+                            {% bootstrap_field form.vat_number %}
+                            {% bootstrap_field form.national_registry_number %}
+                            {% bootstrap_field form.id_card_number %}
+                            {% bootstrap_field form.passport_number %}
+                            {% bootstrap_field form.marital_status %}
+                            {% bootstrap_field form.spouse_name %}
+                            {% bootstrap_field form.children_number %}
+                            {% bootstrap_field form.previous_ucl_registration %}
+                            {% bootstrap_field form.previous_noma %}
+                        </div>
+                        <div class="panel-footer text-right">
+                            <a href="#" class="btn btn-default" onclick="showTab('billing')">
+                                {% trans 'Next' %}
+                            </a>
                         </div>
                     </div>
-                    {% bootstrap_field form.residence_phone %}
-                </div>
-                <div class="panel panel-body">
-                    <button type="submit" class="btn btn-primary" title="{%trans 'Submit' %}">
-                        <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' %}
-                    </button>
-                    <a class="btn btn-default" id="" href="{% url 'continuing_education_home' %}">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'Cancel' %}
-                    </a>
+                    <div id="billing" role="tabpanel" class="tab-pane active">
+                        <div class="panel-body">
+                            {% bootstrap_field form.use_address_for_post %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">{% trans 'Post' %}</div>
+                                    <div class="panel panel-body">
+                                        {% bootstrap_field residence_address_form.location form_group_class="form-group" label=_("Location") %}
+                                        {% bootstrap_field residence_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
+                                        {% bootstrap_field residence_address_form.city form_group_class="form-group" label=_("City") %}
+                                        {% bootstrap_field residence_address_form.country form_group_class="form-group" label=_("Country") %}
+                                </div>
+                            </div>
+                            {% bootstrap_field form.residence_phone %}
+                        </div>
+                        <div class="panel-footer text-right">
+                            <a href="#" class="btn btn-default" onclick="showTab('registration')">
+                                {% trans 'Previous' %}
+                            </a>
+                            <a href="#" class="btn btn-default" onclick="showTab('post')">
+                                {% trans 'Next' %}
+                            </a>
+                        </div>
+                    </div>
+                    <div id="post" role="tabpanel" class="tab-pane active">
+                        <div class="panel-body">
+                        </div>
+                        <div class="panel-footer text-right">
+                            <a href="#" class="btn btn-default" onclick="showTab('billing')">
+                                {% trans 'Previous' %}
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </form>
     </div>
@@ -96,6 +129,15 @@
 
 {% block script %}
     <script>
+
+        $('#tabs a').click(function (e) {
+          e.preventDefault();
+          $('#landing_tab').val($(this).context.hash.substring(1));
+          $(this).tab('show');
+        });
+        function showTab(tab) {
+            $('#tabs a[href="#' + tab + '"]').tab('show');
+        }
         //reuse address
         let address = {
             location: "{{admission.person.address.location | escapejs}}",
