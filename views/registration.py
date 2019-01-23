@@ -47,8 +47,6 @@ def registration_edit(request, admission_id):
     billing_address_form = AddressForm(request.POST or None, instance=admission.billing_address, prefix="billing")
     residence_address_form = AddressForm(request.POST or None, instance=admission.residence_address, prefix="residence")
     errors = []
-    address = admission.address
-    address_form = AddressForm(None, instance=address)
     if form.is_valid() and billing_address_form.is_valid() and residence_address_form.is_valid():
         billing_address, created = Address.objects.get_or_create(**billing_address_form.cleaned_data)
         residence_address, created = Address.objects.get_or_create(**residence_address_form.cleaned_data)

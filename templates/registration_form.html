@@ -158,9 +158,6 @@
                             </a>
                         </div>
                     </div>
-                    <div hidden>
-                        {% bootstrap_form address_form %}
-                    </div>
                 </div>
             </form>
     </div>
@@ -170,7 +167,6 @@
 {% block script %}
     <script>
         function showNOMA() {
-            console.log($("#id_previous_ucl_registration").value)
             if($("#id_previous_ucl_registration").value == undefined){
                 hideNOMA();
             }
@@ -204,10 +200,10 @@
         showTab(landing_tab);
         //reuse address
         let address = {
-            location: "{{admission.person.address.location | escapejs}}",
-            postal_code: "{{admission.person.address.postal_code | escapejs}}",
-            city: "{{admission.person.address.city | escapejs}}",
-            country: "{{admission.person.address.country_id | escapejs}}",
+            location: "{{admission.address.location | escapejs}}",
+            postal_code: "{{admission.address.postal_code | escapejs}}",
+            city: "{{admission.address.city | escapejs}}",
+            country: "{{admission.address.country_id | escapejs}}",
         }
 
         $("#id_use_address_for_billing:checkbox").change(function(){
@@ -238,10 +234,10 @@
 
         function copy_address(e){
             ["location", "postal_code", "city"].forEach(function(field) {
-                $("#id_"+e+"-"+field).val(document.getElementById('id_'+field).value);
+                $("#id_"+e+"-"+field).val(address[field]);
                 $("#id_"+e+"-"+field).prop("readonly", true);
             });
-            $("#id_"+e+"-country").val(document.getElementById('id_country').value);
+            $("#id_"+e+"-country").val(address['country']);
             $("#id_"+e+"-country").prop("disabled", true);
         }
 
