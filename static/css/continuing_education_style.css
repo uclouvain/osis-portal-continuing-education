@@ -137,3 +137,7 @@ label.required:after{
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
+
+.badge-warning {
+  background-color: #8a6d3b;
+}

@@ -45,21 +45,27 @@
             <ul id="tabs" class="nav nav-tabs">
                 <li role="presentation" class="active"><a href="#identification" role="tab" data-toggle="tab">
                     {% trans 'Identification' %}
+                    <span class="badge badge-warning"></span>
                 </a></li>
                 <li role="presentation"><a href="#contact" role="tab" data-toggle="tab">
                     {% trans 'Contact information' %}
+                    <span class="badge badge-warning"></span>
                 </a></li>
                 <li role="presentation"><a href="#curriculum" role="tab" data-toggle="tab">
                     {% trans 'Curriculum' %}
+                    <span class="badge badge-warning"></span>
                 </a></li>
                 <li role="presentation"><a href="#formation" role="tab" data-toggle="tab">
                     {% trans 'Formation' %}
+                    <span class="badge badge-warning"></span>
                 </a></li>
                 <li role="presentation"><a href="#references" role="tab" data-toggle="tab">
                     {% trans 'References' %}
+                    <span class="badge badge-warning"></span>
                 </a></li>
                 <li role="presentation"><a href="#documents" role="tab" data-toggle="tab">
                     {% trans 'Documents' %}
+                    <span class="badge badge-warning"></span>
                 </a></li>
                 <div class="form-button-group pull-right">
                     <input type="hidden" id="landing_tab" name="tab">
@@ -292,7 +298,7 @@
     let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
     errors_fields = JSON.parse(errors_fields);
     for(field of errors_fields)
-        $('#id_'+field).parent().addClass('has-error');
+        $('#id_'+field).parent().addClass('has-warning');
 
     //show other text field when other is checked
     $('#id_awareness_other_checkbox').change(function(){
@@ -306,6 +312,15 @@
     $('#back').click(function(e){
         e.preventDefault();
         window.location = $(this).attr('href');
+    });
+
+    $('.tab-pane').each(function(){
+        let tabId = $(this)[0].id;
+        let countWarning = $(this).find('.has-warning').length;
+        if(countWarning>0){
+            let tabBadge = $('a[href="#'+tabId+'"]').find('.badge')[0];
+            tabBadge.innerText = countWarning;
+        }
     })
 </script>
 {% if request.session.formation_id %}
