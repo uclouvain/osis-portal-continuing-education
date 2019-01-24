@@ -179,7 +179,7 @@ class Admission(SerializableModel):
         blank=True,
         choices=admission_state_choices.REGISTRATION_STATE_CHOICES,
         default=admission_state_choices.WAITING,
-        verbose_name=_("State")
+        verbose_name=_("Registration state")
     )
 
     # Billing
