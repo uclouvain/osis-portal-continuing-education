@@ -23,7 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import base64
 import datetime
+import uuid
 from unittest import mock, skip
 from unittest.mock import patch
 
@@ -34,6 +36,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
+from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.utils.translation import ugettext_lazy as _, ugettext
 from requests import Response
@@ -46,7 +49,8 @@ from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.views.admission import admission_form, get_admission_submission_errors
+from continuing_education.views.admission import admission_form, get_admission_submission_errors, \
+    MAX_ADMISSION_FILE_NAME_LENGTH
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -519,6 +523,11 @@ class AdmissionFileTestCase(TestCase):
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return response
 
+    def mocked_failed_put_request_name_too_long(self, **kwargs):
+        response = Response()
+        response.status_code = status.HTTP_406_NOT_ACCEPTABLE
+        return response
+
     @mock.patch('requests.post', side_effect=mocked_success_post_request)
     def test_upload_file_success(self, mock_post):
         url = reverse('upload_file', args=[self.admission.uuid])
@@ -546,6 +555,27 @@ class AdmissionFileTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
+
+    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs : [])
+    @mock.patch('requests.put', side_effect=mocked_failed_put_request_name_too_long)
+    def test_upload_file_error_name_too_long(self, mock_put, mock_get):
+        url = reverse('admission_detail', args=[self.admission.id])
+        file = SimpleUploadedFile(
+            name='upload_test_with_too_much_character_oh_no_this_will_fail_upload_test_' +
+                 'with_too_much_character_oh_no_this_will_fail.pdf',
+            content=str.encode("test_content"),
+            content_type="application/pdf"
+        )
+        response = self.client.post(url, {'myfile': file, 'file_submit': True})
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEquals(response.status_code, 302)
+        #an error should raise as the admission is not retrieved from test
+        self.assertIn(
+            ugettext(_("The name of the file is too long : maximum %(length)s characters.")% {
+                'length': MAX_ADMISSION_FILE_NAME_LENGTH
+            }),
+            str(messages_list[0])
+        )
 
     def mocked_success_delete_request(self, **kwargs):
         response = Response()
@@ -593,29 +623,21 @@ class AdmissionFileTestCase(TestCase):
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
 
-    def mocked_success_get_request(self, *args, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_200_OK
-        response._content = b'{"path": "upload_test.pdf"}'
-        response.raw = SimpleUploadedFile(name="file.pdf", content=response._content)
+    def get_mocked_file_response(self, headers):
+        response = HttpResponse(status=status.HTTP_200_OK)
+        response.content = '{"content": "'+str(base64.b64encode(b'test'))+'", "path":"test_name.pdf"}'
         return response
 
-    def mocked_failed_get_request(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        return response
+    @mock.patch('requests.get', side_effect=get_mocked_file_response)
+    def test_download_file_success(self, mock_get):
+        url = reverse('download_file', args=[uuid.uuid4(), self.admission.uuid])
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        for value in ['attachment', 'test_name']:
+            self.assertIn(value, response['Content-Disposition'])
 
-    @mock.patch('requests.get', side_effect=mocked_success_get_request)
-    def test_get_file_success(self, mock_get):
-        url = reverse('download_file', args=[self.admission.uuid, "1452"])
-        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
-        response = self.client.get(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
-        self.assertEquals(response.status_code, 200)
-
-    @mock.patch('requests.get', side_effect=mocked_failed_get_request)
-    def test_get_file_error(self, mock_get):
-        url = reverse('download_file', args=[self.admission.uuid, "5478"])
-        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
-
-        response = self.client.get(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
-        self.assertEquals(response.status_code, 404)
+    @mock.patch('requests.get', return_value=HttpResponse(status=status.HTTP_404_NOT_FOUND))
+    def test_download_file_error(self, mock_get):
+        url = reverse('download_file', args=[uuid.uuid4(), self.admission.uuid])
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)

@@ -45,10 +45,40 @@
 
     <div class="panel panel-default">
                 {% csrf_token %}
+                        <div class="panel-heading">{% trans 'Identification' %}</div>
+                <div class="panel panel-body">
+                    <div class="row form-group">
+                        <div class="col-md-3">{% bootstrap_label _("First name") %} <br/> {{ admission.person_information.person.first_name | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Last name") %} <br/> {{ admission.person_information.person.last_name | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Gender") %} <br/> {{ admission.person_information.person.gender | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Citizenship") %} <br/> {{ admission.citizenship | default:"-" }} </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">{% bootstrap_label _("Birth date") %} <br/> {{ admission.person_information.birth_date | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Birth location") %} <br/> {{ admission.person_information.birth_location | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Birth country") %} <br/> {{ admission.person_information.birth_country | default:"-" }} </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">{% bootstrap_label _("National registry number") %} <br/> {{ admission.national_registry_number | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("ID card number") %} <br/> {{ admission.id_card_number | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Passport number") %} <br/> {{ admission.passport_number | default_if_none:"-" }} </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">{% bootstrap_label _("Marital status") %} <br/> {{ admission.get_marital_status_display | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Spouse name") %} <br/> {{ admission.spouse_name | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Children number") %} <br/> {{ admission.children_number | default_if_none:"-" }} </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">{% bootstrap_label _("Previous UCL registration") %} <br/> {{ admission.previous_ucl_registration | yesno}} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Previous NOMA") %} <br/> {{ admission.previous_noma | default_if_none:"-" }} </div>
+                    </div>
+
+                </div>
+
                 <div class="panel-heading">{% trans 'Billing' %}</div>
                 <div class="panel panel-body">
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Registration type") %} <br/> {{ admission.registration_type | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Registration type") %} <br/> {{ admission.get_registration_type_display | default_if_none:"-" }} </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-md-3">{% bootstrap_label _("Location") %} <br/> {{ admission.billing_address.location | default_if_none:"-" }} </div>
@@ -63,25 +93,6 @@
                     </div>
                 </div>
 
-                <div class="panel-heading">{% trans 'Registration' %}</div>
-                <div class="panel panel-body">
-                    <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("National registry number") %} <br/> {{ admission.national_registry_number | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("ID card number") %} <br/> {{ admission.id_card_number | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Passport number") %} <br/> {{ admission.passport_number | default_if_none:"-" }} </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Marital status") %} <br/> {{ admission.marital_status | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Spouse name") %} <br/> {{ admission.spouse_name | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Children number") %} <br/> {{ admission.children_number | default_if_none:"-" }} </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-6">{% bootstrap_label _("Previous UCL registration") %} <br/> {{ admission.previous_ucl_registration | yesno}} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Previous NOMA") %} <br/> {{ admission.previous_noma | default_if_none:"-" }} </div>
-                    </div>
-
-                </div>
-
                 <div class="panel-heading">{% trans 'Post' %}</div>
                 <div class="panel panel-body">
                     <div class="row form-group">
@@ -94,6 +105,7 @@
                         <div class="col-md-4">{% bootstrap_label _("Residence phone") %} <br/> {{ admission.residence_phone | default_if_none:"-" }} </div>
                     </div>
                 </div>
+
     </div>
 {% endblock %}
 

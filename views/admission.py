@@ -23,13 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import base64
 import io
 import itertools
 from collections import OrderedDict
 from mimetypes import MimeTypes
 
-import dateutil
 import requests
+from dateutil import parser
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -86,6 +87,9 @@ def admission_detail(request, admission_id):
     )
 
 
+MAX_ADMISSION_FILE_NAME_LENGTH = 100
+
+
 @login_required
 def upload_file(request, admission_uuid):
     admission_file = request.FILES['myfile'] if 'myfile' in request.FILES else None
@@ -108,6 +112,13 @@ def upload_file(request, admission_uuid):
 
     if request_to_upload.status_code == status.HTTP_201_CREATED:
         display_success_messages(request, _("The document is uploaded correctly"))
+    elif request_to_upload.status_code == status.HTTP_406_NOT_ACCEPTABLE:
+        display_error_messages(
+            request,
+            _("The name of the file is too long : maximum %(length)s characters.") % {
+                    'length': MAX_ADMISSION_FILE_NAME_LENGTH
+                }
+        )
     else:
         display_error_messages(request, _("A problem occured : the document is not uploaded"))
 
@@ -155,7 +166,7 @@ def _get_files_list(admission, url_continuing_education_file_api):
             stream = io.BytesIO(response.content)
             files_list = JSONParser().parse(stream)['results']
             for admission_file in files_list:
-                admission_file['created_date'] = dateutil.parser.parse(
+                admission_file['created_date'] = parser.parse(
                     admission_file['created_date']
                 )
                 admission_file['is_deletable'] = _file_uploaded_by_admission_person(admission, admission_file)
@@ -261,7 +272,7 @@ def download_file(request, file_uuid, admission_uuid):
         admission_file = JSONParser().parse(stream)
         name = admission_file['path'].rsplit('/', 1)[-1]
         mime_type = MimeTypes().guess_type(admission_file['path'])
-        response_file = requests.get(admission_file['path'], headers_to_get)
+        response_file = base64.b64decode(admission_file['content'])
         response = HttpResponse(response_file, mime_type)
         response['Content-Disposition'] = 'attachment; filename=%s' % name
         return response
@@ -296,7 +307,6 @@ def admission_form(request, admission_id=None, **kwargs):
         raise PermissionDenied
     person_information = continuing_education_person.find_by_person(person=base_person)
     adm_form = AdmissionForm(request.POST or None, instance=admission)
-
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
     current_address = admission.address if admission else None
