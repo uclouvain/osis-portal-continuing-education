@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-24 16:00+0100\n"
+"POT-Creation-Date: 2019-01-24 16:11+0100\n"
 "PO-Revision-Date: 2019-01-04 16:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -25,6 +25,10 @@ msgstr "Une erreur est survenue : le document n'a pas été uploadé"
 #: views/admission.py:308
 msgid "A problem occured during delete"
 msgstr "Un problème est survenu durant la suppression"
+
+#: models/enums/admission_state_choices.py:12
+msgid "Accepted"
+msgstr "Accepté"
 
 #: templates/fragment/files_panel.html:40
 msgid "Actions"
@@ -145,7 +149,7 @@ msgid "Browse"
 msgstr "Parcourir"
 
 #: templates/django_registration/registration_form.html:52
-#: templates/fragment/submit_confirmation_modal.html:40
+#: templates/fragment/submit_confirmation_modal.html:50
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -216,7 +220,7 @@ msgstr "Divorcé"
 msgid "Documents"
 msgstr "Documents"
 
-#: templates/admission_form.html:73
+#: models/enums/admission_state_choices.py:18 templates/admission_form.html:73
 msgid "Draft"
 msgstr "Brouillon"
 
@@ -338,9 +342,15 @@ msgstr "Information"
 msgid "Informations"
 msgstr "Informations"
 
-#: templates/fragment/submit_confirmation_modal.html:37
+#: templates/fragment/submit_confirmation_modal.html:44
 msgid "It is not possible to edit an admission once submitted"
 msgstr "Il est impossible de modifier une admission une fois celle-ci soumise"
+
+#: templates/fragment/submit_confirmation_modal.html:46
+#, fuzzy
+#| msgid "It is not possible to edit an admission once submitted"
+msgid "It is not possible to edit an registration once submitted"
+msgstr "Il est impossible de modifier une inscription une fois celle-ci soumise"
 
 #: models/enums/enums.py:30
 msgid "Job seeker"
@@ -603,6 +613,10 @@ msgstr "Inscription soumise"
 msgid "Registration type"
 msgstr "Type d'inscription"
 
+#: models/enums/admission_state_choices.py:13
+msgid "Rejected"
+msgstr "Rejeté"
+
 #: models/admission.py:266
 msgid "Residence address"
 msgstr "Adresse"
@@ -662,7 +676,7 @@ msgstr "Etudiant"
 #: templates/django_registration/complete_account_registration.html:66
 #: templates/django_registration/registration_form.html:48
 #: templates/django_registration/registration_form.html:49
-#: templates/fragment/submit_confirmation_modal.html:41
+#: templates/fragment/submit_confirmation_modal.html:51
 #: templates/registration/continuing_education_password_reset_form.html:40
 #, fuzzy
 #| msgctxt "admission"
@@ -675,9 +689,19 @@ msgctxt "admission"
 msgid "Submit"
 msgstr "Soumettre"
 
-#: templates/fragment/submit_confirmation_modal.html:33
+#: templates/fragment/submit_confirmation_modal.html:34
 msgid "Submit admission form ?"
 msgstr "Soumettre le formulaire d'admission ?"
+
+#: templates/fragment/submit_confirmation_modal.html:38
+#, fuzzy
+#| msgid "Submit admission form ?"
+msgid "Submit registration form ?"
+msgstr "Soumettre le formulaire d'inscription ?"
+
+#: models/enums/admission_state_choices.py:19
+msgid "Submitted"
+msgstr "Soumis"
 
 #: templates/authentication/logged_out.html:38
 msgid "Succesfull logout"
@@ -757,6 +781,10 @@ msgstr "Nom d'utilisateur et mot de passe ne correspondent pas"
 msgid "VAT number"
 msgstr "Numéro de TVA"
 
+#: models/enums/admission_state_choices.py:14
+msgid "Waiting"
+msgstr "En attente"
+
 #: templates/admission_detail.html:67
 msgid "Waiting state reason"
 msgstr "Raison de la mise en attente"
@@ -808,7 +836,7 @@ msgstr ""
 msgid "Your password was successfully changed."
 msgstr "Votre mot de passe à été modifié avec succès."
 
-#: views/registration.py:96
+#: views/registration.py:95
 msgid ""
 "Your registration file is not submittable because you did not provide the "
 "following data : "
@@ -838,9 +866,3 @@ msgstr ""
 #: tests/views/test_admission.py:560
 msgid "length"
 msgstr ""
-
-#~ msgid "Submitted"
-#~ msgstr "Soumis"
-
-#~ msgid "Back"
-#~ msgstr "Retour"

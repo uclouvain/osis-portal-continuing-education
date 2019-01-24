@@ -109,7 +109,7 @@ def _build_warning_from_errors_dict(errors):
 def registration_submit(request):
     admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
 
-    if admission.state == admission_state_choices.DRAFT:
+    if admission.state == admission_state_choices.ACCEPTED:
         registration_submission_errors, errors_fields = get_registration_submission_errors(admission)
         if request.POST.get("submit") and not registration_submission_errors:
             admission.submit_registration()
