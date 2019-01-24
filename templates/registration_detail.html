@@ -78,7 +78,7 @@
                 <div class="panel-heading">{% trans 'Billing' %}</div>
                 <div class="panel panel-body">
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Registration type") %} <br/> {{ admission.registration_type | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Registration type") %} <br/> {{ admission.get_registration_type_display | default_if_none:"-" }} </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-md-3">{% bootstrap_label _("Location") %} <br/> {{ admission.billing_address.location | default_if_none:"-" }} </div>
