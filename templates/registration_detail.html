@@ -64,7 +64,7 @@
                         <div class="col-md-3">{% bootstrap_label _("Passport number") %} <br/> {{ admission.passport_number | default_if_none:"-" }} </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Marital status") %} <br/> {{ admission.marital_status | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Marital status") %} <br/> {{ admission.get_marital_status_display | default_if_none:"-" }} </div>
                         <div class="col-md-3">{% bootstrap_label _("Spouse name") %} <br/> {{ admission.spouse_name | default_if_none:"-" }} </div>
                         <div class="col-md-3">{% bootstrap_label _("Children number") %} <br/> {{ admission.children_number | default_if_none:"-" }} </div>
                     </div>
