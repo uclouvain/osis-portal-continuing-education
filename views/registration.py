@@ -23,25 +23,99 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import itertools
+from collections import OrderedDict
+
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext
+from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
 from continuing_education.forms.account import ContinuingEducationPersonForm
-from continuing_education.forms.address import AddressForm
+from continuing_education.forms.address import AddressForm, StrictAddressForm
 from continuing_education.forms.person import PersonForm
-from continuing_education.forms.registration import RegistrationForm
+from continuing_education.forms.registration import RegistrationForm, StrictRegistrationForm
 from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
+from continuing_education.models.enums import admission_state_choices
+from continuing_education.views.admission import _find_user_admission_by_id, _show_submit_warning
 from continuing_education.views.common import display_errors
 
 
 @login_required
 def registration_detail(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
+    if admission.state == admission_state_choices.ACCEPTED:
+        registration_submission_errors, errors_fields = get_registration_submission_errors(admission)
+        registration_is_submittable = not registration_submission_errors
+        if not registration_is_submittable:
+            _show_submit_warning(registration_submission_errors, request)
+    else:
+        registration_is_submittable = False
     return render(request, "registration_detail.html", locals())
+
+
+def get_registration_submission_errors(admission):
+    errors_field = []
+    errors = OrderedDict()
+
+    address_form = StrictAddressForm(
+        data=model_to_dict(admission.billing_address)
+    )
+    for field in address_form.errors:
+        errors.update({address_form[field].label: address_form.errors[field]})
+        errors_field.append(field)
+
+    if not admission.use_address_for_post:
+        residence_address_form = StrictAddressForm(
+            data=model_to_dict(admission.residence_address)
+        )
+        for field in residence_address_form.errors:
+            errors.update({residence_address_form[field].label: residence_address_form.errors[field]})
+            errors_field.append(field)
+
+    adm_form = StrictRegistrationForm(
+        data=model_to_dict(admission)
+    )
+    for field in adm_form.errors:
+        errors.update({adm_form[field].label: adm_form.errors[field]})
+        errors_field.append(field)
+
+    return errors, errors_field
+
+
+def _build_warning_from_errors_dict(errors):
+    warning_message = ugettext(
+        "Your registration file is not submittable because you did not provide the following data : "
+    )
+
+    warning_message = \
+        "<strong>" + \
+        warning_message + \
+        "</strong><br>" + \
+        " · ".join([ugettext(key) for key in errors.keys()])
+
+    return mark_safe(warning_message)
+
+
+@login_required
+@require_http_methods(["POST"])
+def registration_submit(request):
+    admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
+
+    if admission.state == admission_state_choices.DRAFT:
+        registration_submission_errors, errors_fields = get_registration_submission_errors(admission)
+        if request.POST.get("submit") and not registration_submission_errors:
+            admission.submit_registration()
+            return redirect('registration_detail', admission.pk)
+
+    raise PermissionDenied
 
 
 @login_required
@@ -51,7 +125,7 @@ def registration_edit(request, admission_id):
     billing_address_form = AddressForm(request.POST or None, instance=admission.billing_address, prefix="billing")
     residence_address_form = AddressForm(request.POST or None, instance=admission.residence_address, prefix="residence")
     errors = []
-
+    errors_fields = []
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
     person_information = continuing_education_person.find_by_person(person=base_person)
@@ -64,9 +138,10 @@ def registration_edit(request, admission_id):
         admission.billing_address = billing_address
         admission.residence_address = residence_address
         admission.save()
+        errors, errors_fields = get_registration_submission_errors(admission)
         return redirect(reverse('registration_detail', kwargs={'admission_id': admission_id}))
     else:
-        errors.append(form.errors)
+        errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))
         display_errors(request, errors)
 
     return render(request, 'registration_form.html', locals())
