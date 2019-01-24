@@ -56,7 +56,7 @@ def registration_edit(request, admission_id):
     id_form = PersonForm(request.POST or None, instance=base_person)
     person_information = continuing_education_person.find_by_person(person=base_person)
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
-
+    address = admission.address
     if form.is_valid() and billing_address_form.is_valid() and residence_address_form.is_valid():
         billing_address, created = Address.objects.get_or_create(**billing_address_form.cleaned_data)
         residence_address, created = Address.objects.get_or_create(**residence_address_form.cleaned_data)
@@ -64,7 +64,7 @@ def registration_edit(request, admission_id):
         admission.billing_address = billing_address
         admission.residence_address = residence_address
         admission.save()
-        return redirect(reverse('registration_detail', kwargs={'admission_id':admission_id}))
+        return redirect(reverse('registration_detail', kwargs={'admission_id': admission_id}))
     else:
         errors.append(form.errors)
         display_errors(request, errors)
