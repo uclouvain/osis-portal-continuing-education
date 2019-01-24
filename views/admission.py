@@ -337,7 +337,7 @@ def admission_form(request, admission_id=None, **kwargs):
     else:
         list_files = []
 
-    if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
+    if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
         if current_address:
             address = address_form.save()
         else:
@@ -366,10 +366,9 @@ def admission_form(request, admission_id=None, **kwargs):
             del request.session['formation_id']
         _show_admission_saved(request, admission.id)
         errors, errors_fields = get_admission_submission_errors(admission)
-        if not (request.method == 'POST' and 'file_submit' in request.POST):
-            return redirect(
-                reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab_anchor,
-            )
+        return redirect(
+            reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab_anchor,
+        )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
         display_errors(request, errors)

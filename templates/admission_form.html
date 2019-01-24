@@ -58,9 +58,6 @@
                 <li role="presentation"><a href="#references" role="tab" data-toggle="tab">
                     {% trans 'References' %}
                 </a></li>
-                <li role="presentation"><a href="#documents" role="tab" data-toggle="tab">
-                    {% trans 'Documents' %}
-                </a></li>
                 <div class="form-button-group pull-right">
                     <input type="hidden" id="landing_tab" name="tab">
                     <button type="submit" id="save-btn"
@@ -208,28 +205,6 @@
                     </div>
                     <div class="panel-footer text-right">
                         <a href="#" class="btn btn-default" onclick="showTab('formation')">
-                            {% trans 'Previous' %}
-                        </a>
-                        <a href="#" class="btn btn-default" onclick="showTab('documents')">
-                            {% trans 'Next' %}
-                        </a>
-                    </div>
-                </div>
-
-                <div role="tabpanel" class="tab-pane" id="documents">
-                    {% if not admission %}
-                        <div class="panel-body">
-                            <div class="jumbotron">
-                                 <span>{% trans 'Please save your admission before uploading documents' %}</span>
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="panel-body">
-                            {% include 'fragment/files_panel.html' %}
-                        </div>
-                    {% endif %}
-                    <div class="panel-footer text-right">
-                        <a href="#" class="btn btn-default" onclick="showTab('references')">
                             {% trans 'Previous' %}
                         </a>
                     </div>

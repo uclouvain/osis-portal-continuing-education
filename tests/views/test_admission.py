@@ -26,7 +26,7 @@
 import base64
 import datetime
 import uuid
-from unittest import mock, skip
+from unittest import mock
 from unittest.mock import patch
 
 from django.contrib import messages
@@ -421,71 +421,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
 
-class AdmissionFormFileUploadTestCase(TestCase):
-    def setUp(self):
-        current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.client.force_login(self.user)
-        self.request = RequestFactory()
-        self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonFactory(person=self.person)
-        self.admission = AdmissionFactory(
-            person_information=self.person_information,
-            state=admission_state_choices.DRAFT,
-            formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
-        )
-        self.admission_file = SimpleUploadedFile(
-            name='upload_test.pdf',
-            content=str.encode("test_content"),
-            content_type="application/pdf"
-        )
-
-        self.patcher = patch(
-            "continuing_education.views.admission._get_files_list",
-            return_value=Response()
-        )
-        self.mocked_called_api_function = self.patcher.start()
-
-        self.addCleanup(self.patcher.stop)
-
-    def mocked_success_put_request(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_201_CREATED
-        return response
-
-    def mocked_failed_put_request(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        return response
-
-    @skip("To delete")
-    @mock.patch('requests.put', side_effect=mocked_success_put_request)
-    def test_upload_file_success(self, mock_put):
-        url = reverse('admission_edit', args=[self.admission.uuid])
-        response = self.client.post(url, {'myfile': self.admission_file})
-        messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEquals(response.status_code, 302)
-        self.assertIn(
-            ugettext(_("The document is uploaded correctly")),
-            str(messages_list[0])
-        )
-
-    @skip("To delete")
-    @mock.patch('requests.put', side_effect=mocked_failed_put_request)
-    def test_upload_file_error(self, mock_put):
-        url = reverse('admission_edit', args=[self.admission.uuid])
-        response = self.client.post(url, {'myfile': self.admission_file})
-        messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEquals(response.status_code, 302)
-        # An error should raise as the admission is not retrieved from test
-        self.assertIn(
-            ugettext(_("A problem occured : the document is not uploaded")),
-            str(messages_list[0])
-        )
-
-
 class AdmissionFileTestCase(TestCase):
     def setUp(self):
         current_acad_year = create_current_academic_year()
@@ -532,9 +467,9 @@ class AdmissionFileTestCase(TestCase):
     def test_upload_file_success(self, mock_post):
         url = reverse('upload_file', args=[self.admission.uuid])
         redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
-        response = self.client.post(url, {'myfile': self.admission_file, 'file_submit': True}, HTTP_REFERER=redirect_url)
+        response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEquals(response.status_code, 302)
+        self.assertEquals(response.status_code, status.HTTP_302_FOUND)
         self.assertIn(
             ugettext(_("The document is uploaded correctly")),
             str(messages_list[0])
@@ -546,9 +481,9 @@ class AdmissionFileTestCase(TestCase):
         url = reverse('upload_file', args=[self.admission.uuid])
         redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
 
-        response = self.client.post(url, {'myfile': self.admission_file, 'file_submit': True}, HTTP_REFERER=redirect_url)
+        response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEquals(response.status_code, 302)
+        self.assertEquals(response.status_code, status.HTTP_302_FOUND)
         #an error should raise as the admission is not retrieved from test
         self.assertIn(
             ugettext(_("A problem occured : the document is not uploaded")),
@@ -556,22 +491,22 @@ class AdmissionFileTestCase(TestCase):
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
 
-    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs : [])
-    @mock.patch('requests.put', side_effect=mocked_failed_put_request_name_too_long)
-    def test_upload_file_error_name_too_long(self, mock_put, mock_get):
-        url = reverse('admission_detail', args=[self.admission.id])
+    @mock.patch('requests.post', side_effect=mocked_failed_put_request_name_too_long)
+    def test_upload_file_error_name_too_long(self, mock_fail):
+        url = reverse('upload_file', args=[self.admission.uuid])
+        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
+
         file = SimpleUploadedFile(
             name='upload_test_with_too_much_character_oh_no_this_will_fail_upload_test_' +
                  'with_too_much_character_oh_no_this_will_fail.pdf',
             content=str.encode("test_content"),
             content_type="application/pdf"
         )
-        response = self.client.post(url, {'myfile': file, 'file_submit': True})
+        response = self.client.post(url, {'myfile': file}, HTTP_REFERER=redirect_url)
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEquals(response.status_code, 302)
-        #an error should raise as the admission is not retrieved from test
+        self.assertEquals(response.status_code, status.HTTP_302_FOUND)
         self.assertIn(
-            ugettext(_("The name of the file is too long : maximum %(length)s characters.")% {
+            ugettext(_("The name of the file is too long : maximum %(length)s characters.") % {
                 'length': MAX_ADMISSION_FILE_NAME_LENGTH
             }),
             str(messages_list[0])
