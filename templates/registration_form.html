@@ -53,7 +53,7 @@
                     </a></li>
                     <div class="form-button-group pull-right">
                         <input type="hidden" id="landing_tab" name="tab">
-                        <button type="button" class="btn btn-primary pull-right">
+                        <button type="submit" class="btn btn-primary pull-right">
                             <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Save' %}
                         </button>
                     </div>
@@ -179,7 +179,7 @@
 {% block script %}
     <script>
 
-         let fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year", "billing_country", "residence_country"];
+         let fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year", "billing-country", "residence-country"];
 
         function enableFields(fields) {
             for (var field of fields) {
@@ -221,10 +221,10 @@
         showTab(landing_tab);
         //reuse address
         let address = {
-            location: "{{admission.address.location | escapejs}}",
-            postal_code: "{{admission.address.postal_code | escapejs}}",
-            city: "{{admission.address.city | escapejs}}",
-            country: "{{admission.address.country_id | escapejs}}",
+            location: "{{address.location | escapejs}}",
+            postal_code: "{{address.postal_code | escapejs}}",
+            city: "{{address.city | escapejs}}",
+            country: "{{address.country_id | escapejs}}",
         }
 
         $("#id_use_address_for_billing:checkbox").change(function(){
