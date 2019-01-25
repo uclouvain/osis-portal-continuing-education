@@ -424,63 +424,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
 
-class AdmissionFormFileUploadTestCase(TestCase):
-    def setUp(self):
-        current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.client.force_login(self.user)
-        self.request = RequestFactory()
-        self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonFactory(person=self.person)
-        self.admission = AdmissionFactory(
-            person_information=self.person_information,
-            state=admission_state_choices.DRAFT,
-            formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
-        )
-        self.file = SimpleUploadedFile(
-            name='upload_test.pdf',
-            content=str.encode("test_content"),
-            content_type="application/pdf"
-        )
-
-    def mocked_success_put_request(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_201_CREATED
-        return response
-
-    def mocked_failed_put_request(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        return response
-
-    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs : [])
-    @mock.patch('requests.put', side_effect=mocked_success_put_request)
-    def test_upload_file_success(self, mock_put, mock_get):
-        url = reverse('admission_edit', args=[self.admission.id])
-        response = self.client.post(url, {'myfile': self.file})
-        messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEquals(response.status_code, 302)
-        self.assertIn(
-            ugettext(_("The document is uploaded correctly")),
-            str(messages_list[0])
-        )
-
-    @mock.patch('continuing_education.views.admission._get_files_list', side_effect=lambda *args, **kwargs: [])
-    @mock.patch('requests.put', side_effect=mocked_failed_put_request)
-    def test_upload_file_error(self, mock_put, mock_get):
-        url = reverse('admission_edit', args=[self.admission.id])
-        response = self.client.post(url, {'myfile': self.file})
-        messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEquals(response.status_code, 302)
-        # An error should raise as the admission is not retrieved from test
-        self.assertIn(
-            ugettext(_("A problem occured : the document is not uploaded")),
-            str(messages_list[0])
-        )
-
-
 class AdmissionDetailFileUploadTestCase(TestCase):
     def setUp(self):
         current_acad_year = create_current_academic_year()

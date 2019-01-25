@@ -61,13 +61,11 @@ def registration_detail(request, admission_id):
 @require_http_methods(["POST"])
 def registration_submit(request):
     admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
-
     if admission.state == admission_state_choices.ACCEPTED:
         registration_submission_errors, errors_fields = get_submission_errors(admission, is_registration=True)
         if request.POST.get("submit") and not registration_submission_errors:
             admission.submit_registration()
             return redirect('registration_detail', admission.pk)
-
     raise PermissionDenied
 
 
