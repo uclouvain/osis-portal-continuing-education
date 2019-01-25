@@ -102,7 +102,7 @@ def registration_edit(request, admission_id):
             if admission.billing_address == address:
                 billing_address, created = Address.objects.get_or_create(**billing_address_form.cleaned_data)
             else:
-                Address.objects.filter(id=admission.billing_address.id).update(**billing_address.cleaned_data)
+                Address.objects.filter(id=admission.billing_address.id).update(**billing_address_form.cleaned_data)
         if form.cleaned_data['use_address_for_post']:
             residence_address = address
         else:
