@@ -110,7 +110,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertIn(
-            ugettext("Your admission file is not submittable because you did not provide the following data : "),
+            ugettext("Your file is not submittable because you did not provide the following data : "),
             str(messages_list[0])
         )
         self.assertIn(
@@ -252,7 +252,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertIn(
-            ugettext("Your admission file is not submittable because you did not provide the following data : "),
+            ugettext("Your file is not submittable because you did not provide the following data : "),
             str(messages_list[0])
         )
         self.assertIn(

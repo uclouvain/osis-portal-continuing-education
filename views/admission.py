@@ -62,7 +62,7 @@ from continuing_education.views.common import display_errors, display_success_me
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
     if admission.state == admission_state_choices.DRAFT:
-        admission_submission_errors, errors_fields = get_submission_errors(admission, is_registration=False)
+        admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
@@ -198,7 +198,7 @@ def admission_submit(request):
     admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
 
     if admission.state == admission_state_choices.DRAFT:
-        admission_submission_errors, errors_fields = get_submission_errors(admission, is_registration=False)
+        admission_submission_errors, errors_fields = get_submission_errors(admission)
         if request.POST.get("submit") and not admission_submission_errors:
             admission.submit()
             return redirect('admission_detail', admission.pk)
@@ -275,7 +275,7 @@ def admission_form(request, admission_id=None, **kwargs):
         _show_save_before_submit(request)
 
     if admission and not request.POST:
-        admission_submission_errors, errors_fields = get_submission_errors(admission, is_registration=False)
+        admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
@@ -320,7 +320,7 @@ def admission_form(request, admission_id=None, **kwargs):
         if request.session.get('formation_id'):
             del request.session['formation_id']
         _show_admission_saved(request, admission.id)
-        errors, errors_fields = get_submission_errors(admission, is_registration=False)
+        errors, errors_fields = get_submission_errors(admission)
         return redirect(
             reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab_anchor,
         )

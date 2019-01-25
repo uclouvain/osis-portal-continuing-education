@@ -60,7 +60,7 @@ def main_view(request, formation_id=None):
         admissions = admission.search(person=continuing_education_person)
         registrations = admission.search(
             person=continuing_education_person,
-            state=admission_state_choices.ACCEPTED,
+            state__in=[admission_state_choices.ACCEPTED, admission_state_choices.REGISTRATION_SUBMITTED],
         )
         return render(request, "continuing_education/home.html", locals())
     else:

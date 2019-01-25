@@ -40,6 +40,7 @@ from base.views import layout
 from base.views.layout import render
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import StrictAddressForm
+from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
 from continuing_education.models.admission import Admission
@@ -114,7 +115,10 @@ def get_submission_errors(admission, is_registration=False):
         address_form = StrictAddressForm(
             data=model_to_dict(admission.billing_address)
         )
-        _update_errors([address_form], errors, errors_field)
+        adm_form = StrictRegistrationForm(
+            data=model_to_dict(admission)
+        )
+        _update_errors([address_form, adm_form], errors, errors_field)
 
         if not admission.use_address_for_post:
             residence_address_form = StrictAddressForm(
@@ -131,13 +135,12 @@ def get_submission_errors(admission, is_registration=False):
         address_form = StrictAddressForm(
             data=model_to_dict(admission.address)
         )
-        forms = [person_form, person_information_form, address_form]
+        adm_form = StrictAdmissionForm(
+            data=model_to_dict(admission)
+        )
+        forms = [person_form, person_information_form, address_form, adm_form]
         _update_errors(forms, errors, errors_field)
 
-    adm_form = StrictRegistrationForm(
-        data=model_to_dict(admission)
-    )
-    _update_errors([adm_form], errors, errors_field)
     return errors, errors_field
 
 
