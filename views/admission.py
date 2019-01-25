@@ -38,6 +38,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
+from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from rest_framework import status
@@ -220,11 +221,11 @@ def download_file(request, file_uuid, admission_uuid):
     if request_to_get.status_code == status.HTTP_200_OK:
         stream = io.BytesIO(request_to_get.content)
         file = JSONParser().parse(stream)
-        name = file['name']
-        mime_type = MimeTypes().guess_type(file['path'])
+        name = get_valid_filename(file['name'])
+        mime_type = MimeTypes().guess_type(file['name'])
         response_file = base64.b64decode(file['content'])
         response = HttpResponse(response_file, mime_type)
-        response['Content-Disposition'] = 'attachment; filename=%s' % name
+        response['Content-Disposition'] = "attachment; filename=%s" % name
         return response
     else:
         return HttpResponse(status=404)
