@@ -220,7 +220,7 @@ def download_file(request, file_uuid, admission_uuid):
     if request_to_get.status_code == status.HTTP_200_OK:
         stream = io.BytesIO(request_to_get.content)
         file = JSONParser().parse(stream)
-        name = file['path'].rsplit('/', 1)[-1]
+        name = file['name']
         mime_type = MimeTypes().guess_type(file['path'])
         response_file = base64.b64decode(file['content'])
         response = HttpResponse(response_file, mime_type)
