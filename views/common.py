@@ -23,17 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from collections import OrderedDict
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import login as django_login
-from django.shortcuts import redirect
+from django.forms import model_to_dict
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import translation
-from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 from base.models import person as person_mdl
 from base.views import layout
 from base.views.layout import render
+from continuing_education.forms.account import ContinuingEducationPersonForm
+from continuing_education.forms.address import StrictAddressForm
+from continuing_education.forms.person import StrictPersonForm
+from continuing_education.forms.registration import StrictRegistrationForm
+from continuing_education.models.admission import Admission
 
 
 def display_errors(request, errors):
@@ -95,3 +104,84 @@ def display_messages(request, messages_to_display, level, extra_tags=None):
 
     for msg in messages_to_display:
         messages.add_message(request, level, _(msg), extra_tags=extra_tags)
+
+
+def get_submission_errors(admission, is_registration=False):
+    errors_field = []
+    errors = OrderedDict()
+
+    if is_registration:
+        address_form = StrictAddressForm(
+            data=model_to_dict(admission.billing_address)
+        )
+        for field in address_form.errors:
+            errors.update({address_form[field].label: address_form.errors[field]})
+            errors_field.append(field)
+
+        if not admission.use_address_for_post:
+            residence_address_form = StrictAddressForm(
+                data=model_to_dict(admission.residence_address)
+            )
+            for field in residence_address_form.errors:
+                errors.update({residence_address_form[field].label: residence_address_form.errors[field]})
+                errors_field.append(field)
+    else:
+        person_form = StrictPersonForm(
+            data=model_to_dict(admission.person_information.person)
+        )
+        for field in person_form.errors:
+            errors.update({person_form[field].label: person_form.errors[field]})
+            errors_field.append(field)
+
+        person_information_form = ContinuingEducationPersonForm(
+            data=model_to_dict(admission.person_information)
+        )
+        for field in person_information_form.errors:
+            errors.update({person_information_form[field].label: person_information_form.errors[field]})
+            errors_field.append(field)
+
+        address_form = StrictAddressForm(
+            data=model_to_dict(admission.address)
+        )
+        for field in address_form.errors:
+            errors.update({address_form[field].label: address_form.errors[field]})
+            errors_field.append(field)
+
+    adm_form = StrictRegistrationForm(
+        data=model_to_dict(admission)
+    )
+    for field in adm_form.errors:
+        errors.update({adm_form[field].label: adm_form.errors[field]})
+        errors_field.append(field)
+    return errors, errors_field
+
+
+def _find_user_admission_by_id(admission_id, user):
+    return get_object_or_404(
+        Admission,
+        pk=admission_id,
+        person_information__person__user=user
+    )
+
+
+def _build_warning_from_errors_dict(errors):
+    warning_message = ugettext(
+        "Your file is not submittable because you did not provide the following data : "
+    )
+
+    warning_message = \
+        "<strong>" + \
+        warning_message + \
+        "</strong><br>" + \
+        " · ".join([ugettext(key) for key in errors.keys()])
+
+    return mark_safe(warning_message)
+
+
+def _show_submit_warning(admission_submission_errors, request):
+    if request.method == 'GET':
+        messages.add_message(
+            request=request,
+            level=messages.WARNING,
+            message=_build_warning_from_errors_dict(admission_submission_errors),
+        )

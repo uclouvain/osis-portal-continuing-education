@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-24 16:11+0100\n"
+"POT-Creation-Date: 2019-01-25 08:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: tests/views/test_admission.py:478 tests/views/test_admission.py:540
-#: views/admission.py:155
+#: views/admission.py:144
 msgid "A problem occured : the document is not uploaded"
 msgstr ""
 
-#: views/admission.py:308
+#: views/admission.py:248
 msgid "A problem occured during delete"
 msgstr ""
 
@@ -259,7 +259,7 @@ msgstr ""
 msgid "Female"
 msgstr ""
 
-#: views/admission.py:306
+#: views/admission.py:246
 msgid "File correctly deleted"
 msgstr ""
 
@@ -711,11 +711,11 @@ msgid "The activation key you provided is invalid."
 msgstr ""
 
 #: tests/views/test_admission.py:465 tests/views/test_admission.py:527
-#: views/admission.py:146
+#: views/admission.py:135
 msgid "The document is uploaded correctly"
 msgstr ""
 
-#: tests/views/test_admission.py:559 views/admission.py:150
+#: tests/views/test_admission.py:559 views/admission.py:139
 #, python-format
 msgid "The name of the file is too long : maximum %(length)s characters."
 msgstr ""
@@ -788,7 +788,7 @@ msgstr ""
 msgid "You already have an account"
 msgstr ""
 
-#: views/admission.py:114
+#: views/admission.py:103
 msgid ""
 "You can save an application form and access it later until it is submitted"
 msgstr ""
@@ -797,7 +797,7 @@ msgstr ""
 msgid "You don't have an account"
 msgstr ""
 
-#: views/admission.py:123
+#: views/admission.py:112
 #, python-format
 msgid ""
 "Your admission file has been saved. You are still able to edit the form. Do "
@@ -805,21 +805,14 @@ msgid ""
 "admission file page</b></a> !"
 msgstr ""
 
-#: tests/views/test_admission.py:112 tests/views/test_admission.py:254
-#: views/admission.py:257
+#: views/common.py:169
 msgid ""
-"Your admission file is not submittable because you did not provide the "
-"following data : "
+"Your file is not submittable because you did not provide the following "
+"data : "
 msgstr ""
 
 #: views/account_activation.py:375
 msgid "Your password was successfully changed."
-msgstr ""
-
-#: views/registration.py:95
-msgid ""
-"Your registration file is not submittable because you did not provide the "
-"following data : "
 msgstr ""
 
 #: templates/django_registration/registration_complete.html:32
