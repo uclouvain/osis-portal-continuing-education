@@ -73,7 +73,6 @@ def registration_submit(request):
 @login_required
 def registration_edit(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
-    print(vars(admission))
     form = RegistrationForm(request.POST or None, instance=admission)
     billing_address_form = AddressForm(request.POST or None, instance=admission.billing_address, prefix="billing")
     residence_address_form = AddressForm(request.POST or None, instance=admission.residence_address, prefix="residence")
