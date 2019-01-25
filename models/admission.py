@@ -332,6 +332,13 @@ class Admission(SerializableModel):
         else:
             raise(PermissionDenied('To submit an admission, its state must be DRAFT.'))
 
+    def submit_registration(self):
+        if self.state == admission_state_choices.ACCEPTED:
+            self.state = admission_state_choices.REGISTRATION_SUBMITTED
+            self.save()
+        else:
+            raise(PermissionDenied('To submit a registration, its state must be ACCEPTED.'))
+
     def get_faculty(self):
         education_group_year = self.formation
         if education_group_year:
