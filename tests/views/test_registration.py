@@ -33,7 +33,6 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.tests.factories.address import AddressFactory
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 from continuing_education.views.common import get_submission_errors
@@ -170,7 +169,6 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertTemplateUsed(response, 'registration_form.html')
 
     def test_edit_post_registration_found(self):
-        address = AddressFactory()
         registration = {
             'previous_ucl_registration': False,
             'children_number': 2,
@@ -178,20 +176,11 @@ class ViewStudentRegistrationTestCase(TestCase):
             'head_office_name': 'Campbell-Tanner',
             'registration_type': 'PRIVATE',
             'state': 'Accepted',
-            'billing_address': address.pk,
-            'billing-location' : address.location,
-            'billing-postal_code' : address.postal_code,
-            'billing-city': address.city,
-            'billing-country': address.country.pk,
-            'residence_address': address.pk,
-            'residence-location': address.location,
-            'residence-postal_code': address.postal_code,
-            'residence-city': address.city,
-            'residence-country': address.country.pk,
+            'use_address_for_billing': True,
         }
         url = reverse('registration_edit', args=[self.admission_accepted.pk])
         response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
+        self.assertRedirects(response, reverse('registration_edit', args=[self.admission_accepted.id]))
         self.admission_accepted.refresh_from_db()
 
         # verifying that fields are correctly updated
@@ -201,6 +190,21 @@ class ViewStudentRegistrationTestCase(TestCase):
                 if isinstance(field_value, models.Model):
                     field_value = field_value.pk
                 self.assertEqual(field_value, registration[key], key)
+
+    def test_edit_post_registration_found_with_other_address(self):
+        registration = {
+            'previous_ucl_registration': False,
+            'use_address_for_billing': False,
+            'billing-city': 'Brux-city'
+        }
+        url = reverse('registration_edit', args=[self.admission_accepted.pk])
+        response = self.client.post(url, data=registration)
+        self.assertRedirects(response, reverse('registration_edit', args=[self.admission_accepted.id]))
+        self.admission_accepted.refresh_from_db()
+        self.admission_accepted.billing_address.refresh_from_db()
+
+        field_value = self.admission_accepted.billing_address.__getattribute__('city')
+        self.assertEqual(field_value, registration['billing-city'])
 
 
 class RegistrationSubmissionErrorsTestCase(TestCase):

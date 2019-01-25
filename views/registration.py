@@ -47,6 +47,7 @@ from continuing_education.views.common import display_errors, get_submission_err
 @login_required
 def registration_detail(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
+
     if admission.state == admission_state_choices.ACCEPTED:
         registration_submission_errors, errors_fields = get_submission_errors(admission, is_registration=True)
         registration_is_submittable = not registration_submission_errors
@@ -75,24 +76,62 @@ def registration_edit(request, admission_id):
     form = RegistrationForm(request.POST or None, instance=admission)
     billing_address_form = AddressForm(request.POST or None, instance=admission.billing_address, prefix="billing")
     residence_address_form = AddressForm(request.POST or None, instance=admission.residence_address, prefix="residence")
-    errors = []
-    errors_fields = []
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
     person_information = continuing_education_person.find_by_person(person=base_person)
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
+
     address = admission.address
+    residence_address = admission.residence_address
+    billing_address = admission.billing_address
+
+    errors = []
+    errors_fields = []
+    if admission and not request.POST:
+        registration_submission_errors, errors_fields = get_submission_errors(admission, is_registration=True)
+        admission_is_submittable = not registration_submission_errors
+        if not admission_is_submittable:
+            _show_submit_warning(registration_submission_errors, request)
+
     if form.is_valid() and billing_address_form.is_valid() and residence_address_form.is_valid():
-        billing_address, created = Address.objects.get_or_create(**billing_address_form.cleaned_data)
-        residence_address, created = Address.objects.get_or_create(**residence_address_form.cleaned_data)
+        use_address = {
+            'for_billing': form.cleaned_data['use_address_for_billing'],
+            'for_post': form.cleaned_data['use_address_for_post']
+        }
+        admission.residence_address = residence_address
+        admission.billing_address = billing_address
+        billing_address, residence_address = _update_or_create_billing_and_post_address(
+            address,
+            {'address': billing_address, 'form': billing_address_form},
+            {'address': residence_address, 'form': residence_address_form},
+            use_address,
+        )
         admission = form.save(commit=False)
         admission.billing_address = billing_address
         admission.residence_address = residence_address
         admission.save()
         errors, errors_fields = get_submission_errors(admission, is_registration=True)
-        return redirect(reverse('registration_detail', kwargs={'admission_id': admission_id}))
+        return redirect(
+            reverse('registration_edit', kwargs={'admission_id': admission_id})
+        )
     else:
         errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))
         display_errors(request, errors)
-
     return render(request, 'registration_form.html', locals())
+
+
+def _update_or_create_billing_and_post_address(address, billing, residence, use_address):
+    if use_address['for_billing']:
+        billing['address'] = address
+    elif billing['address'] == address:
+        billing['address'], created = Address.objects.get_or_create(**billing['form'].cleaned_data)
+    else:
+        Address.objects.filter(id=billing['address'].id).update(**billing['form'].cleaned_data)
+
+    if use_address['for_post']:
+        residence['address'] = address
+    elif residence['address'] == address:
+        residence['address'], created = Address.objects.get_or_create(**residence['form'].cleaned_data)
+    else:
+        Address.objects.filter(id=residence['address'].id).update(**residence['form'].cleaned_data)
+    return billing['address'], residence['address']
