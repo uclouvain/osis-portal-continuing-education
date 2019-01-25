@@ -94,22 +94,18 @@ def registration_edit(request, admission_id):
             _show_submit_warning(registration_submission_errors, request)
 
     if form.is_valid() and billing_address_form.is_valid() and residence_address_form.is_valid():
-        if form.cleaned_data['use_address_for_billing']:
-            billing_address = address
-        else:
-            admission.billing_address = billing_address
-            if admission.billing_address == address:
-                billing_address, created = Address.objects.get_or_create(**billing_address_form.cleaned_data)
-            else:
-                Address.objects.filter(id=admission.billing_address.id).update(**billing_address_form.cleaned_data)
-        if form.cleaned_data['use_address_for_post']:
-            residence_address = address
-        else:
-            admission.residence_address = residence_address
-            if admission.residence_address == address:
-                residence_address, created = Address.objects.get_or_create(**residence_address_form.cleaned_data)
-            else:
-                Address.objects.filter(id=admission.residence_address.id).update(**residence_address_form.cleaned_data)
+        use_address = {
+            'for_billing': form.cleaned_data['use_address_for_billing'],
+            'for_post': form.cleaned_data['use_address_for_post']
+        }
+        admission.residence_address = residence_address
+        admission.billing_address = billing_address
+        billing_address, residence_address = _update_or_create_billing_and_post_address(
+            address,
+            {'address': billing_address, 'form': billing_address_form},
+            {'address': residence_address, 'form': residence_address_form},
+            use_address,
+        )
         admission = form.save(commit=False)
         admission.billing_address = billing_address
         admission.residence_address = residence_address
@@ -122,3 +118,21 @@ def registration_edit(request, admission_id):
         errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))
         display_errors(request, errors)
     return render(request, 'registration_form.html', locals())
+
+
+def _update_or_create_billing_and_post_address(address, billing, residence, use_address):
+    if use_address['for_billing']:
+        billing_address = address
+    else:
+        if billing['address'] == address:
+            billing_address, created = Address.objects.get_or_create(**billing['form'].cleaned_data)
+        else:
+            Address.objects.filter(id=billing['address'].id).update(**billing['form'].cleaned_data)
+    if use_address['for_post']:
+        residence_address = address
+    else:
+        if residence['address'] == address:
+            residence_address, created = Address.objects.get_or_create(**residence['form'].cleaned_data)
+        else:
+            Address.objects.filter(id=residence['address'].id).update(**residence['form'].cleaned_data)
+    return billing_address, residence_address
