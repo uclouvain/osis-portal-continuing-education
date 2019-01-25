@@ -184,7 +184,7 @@ class Admission(SerializableModel):
         verbose_name=_("Registration type")
     )
     use_address_for_billing = models.BooleanField(
-        default=False,
+        default=True,
         verbose_name=_("Use address for billing")
     )
     billing_address = models.ForeignKey(
@@ -255,7 +255,7 @@ class Admission(SerializableModel):
 
     # Post
     use_address_for_post = models.BooleanField(
-        default=False,
+        default=True,
         verbose_name=_("Use address for post")
     )
     residence_address = models.ForeignKey(
@@ -374,5 +374,8 @@ def search(**kwargs):
 
     if "state" in kwargs:
         qs = qs.filter(state=kwargs['state'])
+
+    if "state__in" in kwargs:
+        qs = qs.filter(state__in=kwargs['state__in'])
 
     return qs
