@@ -123,16 +123,15 @@ def registration_edit(request, admission_id):
 def _update_or_create_billing_and_post_address(address, billing, residence, use_address):
     if use_address['for_billing']:
         billing_address = address
+    elif billing['address'] == address:
+        billing_address, created = Address.objects.get_or_create(**billing['form'].cleaned_data)
     else:
-        if billing['address'] == address:
-            billing_address, created = Address.objects.get_or_create(**billing['form'].cleaned_data)
-        else:
-            Address.objects.filter(id=billing['address'].id).update(**billing['form'].cleaned_data)
+        Address.objects.filter(id=billing['address'].id).update(**billing['form'].cleaned_data)
+
     if use_address['for_post']:
         residence_address = address
+    elif residence['address'] == address:
+        residence_address, created = Address.objects.get_or_create(**residence['form'].cleaned_data)
     else:
-        if residence['address'] == address:
-            residence_address, created = Address.objects.get_or_create(**residence['form'].cleaned_data)
-        else:
-            Address.objects.filter(id=residence['address'].id).update(**residence['form'].cleaned_data)
+        Address.objects.filter(id=residence['address'].id).update(**residence['form'].cleaned_data)
     return billing_address, residence_address
