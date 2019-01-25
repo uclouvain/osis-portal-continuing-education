@@ -49,8 +49,9 @@ from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.views.admission import admission_form, get_admission_submission_errors, \
+from continuing_education.views.admission import admission_form, \
     MAX_ADMISSION_FILE_NAME_LENGTH
+from continuing_education.views.common import get_submission_errors
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -347,7 +348,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_submittable(self):
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertFalse(
             errors
@@ -362,7 +363,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.admission.address.save()
         self.admission.last_degree_level = ''
         self.admission.save()
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
             errors,
@@ -377,7 +378,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_admission_data(self):
         self.admission.last_degree_level = ''
         self.admission.save()
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
             errors,
@@ -389,7 +390,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_person_information_data(self):
         self.admission.person_information.birth_country = None
         self.admission.person_information.save()
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
             errors,
@@ -401,7 +402,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_address_data(self):
         self.admission.address.postal_code = ''
         self.admission.address.save()
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
             errors,
@@ -413,7 +414,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_person_data(self):
         self.admission.person_information.person.gender = None
         self.admission.person_information.person.save()
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
             errors,
