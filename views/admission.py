@@ -242,7 +242,6 @@ def remove_file(request, file_uuid, admission_uuid):
         url + "/delete",
         headers=headers_to_delete
     )
-
     if request_to_delete.status_code == status.HTTP_204_NO_CONTENT:
         display_success_messages(request, _("File correctly deleted"))
     else:
