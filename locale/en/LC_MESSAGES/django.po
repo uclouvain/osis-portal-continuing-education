@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-24 15:10+0100\n"
+"POT-Creation-Date: 2019-01-25 08:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: tests/views/test_admission.py:478 tests/views/test_admission.py:540
-#: views/admission.py:155
+#: views/admission.py:144
 msgid "A problem occured : the document is not uploaded"
 msgstr ""
 
-#: views/admission.py:308
+#: views/admission.py:248
 msgid "A problem occured during delete"
+msgstr ""
+
+#: models/enums/admission_state_choices.py:12
+msgid "Accepted"
 msgstr ""
 
 #: templates/fragment/files_panel.html:40
@@ -76,7 +80,7 @@ msgstr ""
 msgid "Associative"
 msgstr ""
 
-#: templates/admission_detail.html:160 templates/admission_form.html:181
+#: templates/admission_detail.html:160 templates/admission_form.html:187
 #: templates/django_registration/complete_account_registration.html:55
 msgid "Awareness"
 msgstr ""
@@ -113,7 +117,7 @@ msgstr ""
 msgid "Awareness press"
 msgstr ""
 
-#: templates/registration_detail.html:78 templates/registration_form.html:49
+#: templates/registration_detail.html:88 templates/registration_form.html:49
 #: templates/registration_form.html:114
 msgid "Billing"
 msgstr ""
@@ -123,18 +127,18 @@ msgid "Billing address"
 msgstr ""
 
 #: forms/account.py:23 models/continuing_education_person.py:38
-#: templates/admission_detail.html:91 templates/registration_detail.html:59
+#: templates/admission_detail.html:91 templates/registration_detail.html:69
 #: tests/views/test_admission.py:371 tests/views/test_admission.py:397
 msgid "Birth country"
 msgstr ""
 
 #: forms/account.py:29 models/continuing_education_person.py:24
-#: templates/admission_detail.html:89 templates/registration_detail.html:57
+#: templates/admission_detail.html:89 templates/registration_detail.html:67
 msgid "Birth date"
 msgstr ""
 
 #: forms/account.py:35 models/continuing_education_person.py:30
-#: templates/admission_detail.html:90 templates/registration_detail.html:58
+#: templates/admission_detail.html:90 templates/registration_detail.html:68
 msgid "Birth location"
 msgstr ""
 
@@ -143,7 +147,7 @@ msgid "Browse"
 msgstr ""
 
 #: templates/django_registration/registration_form.html:52
-#: templates/fragment/submit_confirmation_modal.html:40
+#: templates/fragment/submit_confirmation_modal.html:50
 msgid "Cancel"
 msgstr ""
 
@@ -151,22 +155,22 @@ msgstr ""
 msgid "Change my password"
 msgstr ""
 
-#: models/admission.py:244 templates/registration_detail.html:69
+#: models/admission.py:244 templates/registration_detail.html:79
 msgid "Children number"
 msgstr ""
 
 #: forms/admission.py:26 models/admission.py:37
-#: templates/admission_detail.html:86 templates/registration_detail.html:54
+#: templates/admission_detail.html:86 templates/registration_detail.html:64
 msgid "Citizenship"
 msgstr ""
 
 #: models/address.py:25 templates/admission_detail.html:104
-#: templates/registration_detail.html:86 templates/registration_detail.html:101
+#: templates/registration_detail.html:96 templates/registration_detail.html:111
 #: templates/registration_form.html:122 templates/registration_form.html:159
 msgid "City"
 msgstr ""
 
-#: models/admission.py:206 templates/registration_detail.html:91
+#: models/admission.py:206 templates/registration_detail.html:101
 msgid "Company number"
 msgstr ""
 
@@ -174,7 +178,7 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
-#: templates/admission_form.html:50 templates/registration_form.html:52
+#: templates/admission_form.html:51 templates/registration_form.html:52
 msgid "Contact information"
 msgstr ""
 
@@ -185,7 +189,7 @@ msgid "Continuing Education"
 msgstr ""
 
 #: forms/address.py:12 models/address.py:32 templates/admission_detail.html:105
-#: templates/registration_detail.html:87 templates/registration_detail.html:102
+#: templates/registration_detail.html:97 templates/registration_detail.html:112
 #: templates/registration_form.html:125 templates/registration_form.html:162
 msgid "Country"
 msgstr ""
@@ -202,7 +206,7 @@ msgstr ""
 msgid "Current occupation"
 msgstr ""
 
-#: templates/admission_form.html:53
+#: templates/admission_form.html:55
 msgid "Curriculum"
 msgstr ""
 
@@ -210,15 +214,15 @@ msgstr ""
 msgid "Divorced"
 msgstr ""
 
-#: templates/admission_detail.html:73 templates/admission_form.html:62
+#: templates/admission_detail.html:73 templates/admission_form.html:67
 msgid "Documents"
 msgstr ""
 
-#: templates/admission_form.html:67
+#: models/enums/admission_state_choices.py:18 templates/admission_form.html:73
 msgid "Draft"
 msgstr ""
 
-#: templates/admission_detail.html:51 templates/registration_detail.html:40
+#: templates/admission_detail.html:51 templates/registration_detail.html:50
 msgid "Edit"
 msgstr ""
 
@@ -255,12 +259,12 @@ msgstr ""
 msgid "Female"
 msgstr ""
 
-#: views/admission.py:306
+#: views/admission.py:246
 msgid "File correctly deleted"
 msgstr ""
 
 #: forms/person.py:16 templates/admission_detail.html:83
-#: templates/registration_detail.html:51
+#: templates/registration_detail.html:61
 msgid "First name"
 msgstr ""
 
@@ -270,7 +274,7 @@ msgid "Forgot your password ?"
 msgstr ""
 
 #: models/admission.py:29 templates/admission_detail.html:152
-#: templates/admission_detail.html:155 templates/admission_form.html:56
+#: templates/admission_detail.html:155 templates/admission_form.html:59
 #: templates/continuing_education/home.html:59
 #: templates/continuing_education/home.html:97
 msgid "Formation"
@@ -289,11 +293,11 @@ msgid "Formations"
 msgstr ""
 
 #: forms/person.py:27 templates/admission_detail.html:85
-#: templates/registration_detail.html:53 tests/views/test_admission.py:421
+#: templates/registration_detail.html:63 tests/views/test_admission.py:421
 msgid "Gender"
 msgstr ""
 
-#: models/admission.py:201 templates/registration_detail.html:90
+#: models/admission.py:201 templates/registration_detail.html:100
 msgid "Head office name"
 msgstr ""
 
@@ -310,7 +314,7 @@ msgstr ""
 msgid "High school graduation year"
 msgstr ""
 
-#: models/admission.py:223 templates/registration_detail.html:63
+#: models/admission.py:223 templates/registration_detail.html:73
 msgid "ID card number"
 msgstr ""
 
@@ -322,7 +326,7 @@ msgstr ""
 
 #: templates/admission_detail.html:80 templates/admission_form.html:47
 #: templates/django_registration/complete_account_registration.html:40
-#: templates/registration_detail.html:48 templates/registration_form.html:46
+#: templates/registration_detail.html:58 templates/registration_form.html:46
 msgid "Identification"
 msgstr ""
 
@@ -334,8 +338,12 @@ msgstr ""
 msgid "Informations"
 msgstr ""
 
-#: templates/fragment/submit_confirmation_modal.html:37
+#: templates/fragment/submit_confirmation_modal.html:44
 msgid "It is not possible to edit an admission once submitted"
+msgstr ""
+
+#: templates/fragment/submit_confirmation_modal.html:46
+msgid "It is not possible to edit an registration once submitted"
 msgstr ""
 
 #: models/enums/enums.py:30
@@ -361,7 +369,7 @@ msgid "Last degree level"
 msgstr ""
 
 #: forms/person.py:21 templates/admission_detail.html:84
-#: templates/registration_detail.html:52
+#: templates/registration_detail.html:62
 msgid "Last name"
 msgstr ""
 
@@ -369,7 +377,7 @@ msgstr ""
 msgid "Last update"
 msgstr ""
 
-#: templates/admission_form.html:106
+#: templates/admission_form.html:112
 msgid "Legal address"
 msgstr ""
 
@@ -378,7 +386,7 @@ msgid "Legal cohabitant"
 msgstr ""
 
 #: models/address.py:15 templates/admission_detail.html:102
-#: templates/registration_detail.html:84 templates/registration_detail.html:99
+#: templates/registration_detail.html:94 templates/registration_detail.html:109
 #: templates/registration_form.html:116 templates/registration_form.html:153
 msgid "Location"
 msgstr ""
@@ -397,7 +405,7 @@ msgstr ""
 msgid "Male"
 msgstr ""
 
-#: models/admission.py:234 templates/registration_detail.html:67
+#: models/admission.py:234 templates/registration_detail.html:77
 msgid "Marital status"
 msgstr ""
 
@@ -418,7 +426,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: models/admission.py:218 templates/registration_detail.html:62
+#: models/admission.py:218 templates/registration_detail.html:72
 msgid "National registry number"
 msgstr ""
 
@@ -426,9 +434,9 @@ msgstr ""
 msgid "New admission"
 msgstr ""
 
-#: templates/admission_form.html:94 templates/admission_form.html:122
-#: templates/admission_form.html:159 templates/admission_form.html:174
-#: templates/admission_form.html:214 templates/registration_form.html:105
+#: templates/admission_form.html:100 templates/admission_form.html:128
+#: templates/admission_form.html:165 templates/admission_form.html:180
+#: templates/admission_form.html:220 templates/registration_form.html:105
 #: templates/registration_form.html:143
 msgid "Next"
 msgstr ""
@@ -454,7 +462,7 @@ msgid "No registration yet"
 msgstr ""
 
 #: models/enums/enums.py:32 models/enums/enums.py:40
-#: templates/admission_detail.html:187 templates/admission_form.html:197
+#: templates/admission_detail.html:187 templates/admission_form.html:203
 msgid "Other"
 msgstr ""
 
@@ -462,7 +470,7 @@ msgstr ""
 msgid "Other educational background"
 msgstr ""
 
-#: models/admission.py:228 templates/registration_detail.html:64
+#: models/admission.py:228 templates/registration_detail.html:74
 msgid "Passport number"
 msgstr ""
 
@@ -500,33 +508,33 @@ msgid ""
 "account."
 msgstr ""
 
-#: templates/admission_form.html:223
+#: templates/admission_form.html:229
 msgid "Please save your admission before uploading documents"
 msgstr ""
 
-#: templates/registration_detail.html:96 templates/registration_form.html:151
+#: templates/registration_detail.html:106 templates/registration_form.html:151
 msgid "Post"
 msgstr ""
 
 #: models/address.py:20 templates/admission_detail.html:103
-#: templates/registration_detail.html:85 templates/registration_detail.html:100
+#: templates/registration_detail.html:95 templates/registration_detail.html:110
 #: templates/registration_form.html:119 templates/registration_form.html:156
 #: tests/views/test_admission.py:372 tests/views/test_admission.py:409
 msgid "Postal code"
 msgstr ""
 
-#: templates/admission_form.html:119 templates/admission_form.html:156
-#: templates/admission_form.html:171 templates/admission_form.html:211
-#: templates/admission_form.html:233 templates/registration_form.html:140
+#: templates/admission_form.html:125 templates/admission_form.html:162
+#: templates/admission_form.html:177 templates/admission_form.html:217
+#: templates/admission_form.html:239 templates/registration_form.html:140
 #: templates/registration_form.html:169
 msgid "Previous"
 msgstr ""
 
-#: models/admission.py:253 templates/registration_detail.html:73
+#: models/admission.py:253 templates/registration_detail.html:83
 msgid "Previous NOMA"
 msgstr ""
 
-#: models/admission.py:248 templates/registration_detail.html:72
+#: models/admission.py:248 templates/registration_detail.html:82
 #: templates/registration_form.html:96
 msgid "Previous UCL registration"
 msgstr ""
@@ -543,7 +551,7 @@ msgstr ""
 msgid "Professional"
 msgstr ""
 
-#: templates/admission_detail.html:127 templates/admission_form.html:143
+#: templates/admission_detail.html:127 templates/admission_form.html:149
 msgid "Professional background"
 msgstr ""
 
@@ -567,7 +575,7 @@ msgstr ""
 msgid "Public servant"
 msgstr ""
 
-#: templates/admission_form.html:59
+#: templates/admission_form.html:63
 msgid "References"
 msgstr ""
 
@@ -576,7 +584,7 @@ msgid "Registered"
 msgstr ""
 
 #: templates/continuing_education/home.html:50
-#: templates/registration_detail.html:33 templates/registration_detail.html:43
+#: templates/registration_detail.html:33 templates/registration_detail.html:53
 #: templates/registration_form.html:33 templates/registration_form.html:38
 msgid "Registration"
 msgstr ""
@@ -593,19 +601,23 @@ msgstr ""
 msgid "Registration submitted"
 msgstr ""
 
-#: models/admission.py:184 templates/registration_detail.html:81
+#: models/admission.py:184 templates/registration_detail.html:91
 msgid "Registration type"
+msgstr ""
+
+#: models/enums/admission_state_choices.py:13
+msgid "Rejected"
 msgstr ""
 
 #: models/admission.py:266
 msgid "Residence address"
 msgstr ""
 
-#: models/admission.py:272 templates/registration_detail.html:105
+#: models/admission.py:272 templates/registration_detail.html:115
 msgid "Residence phone"
 msgstr ""
 
-#: templates/admission_form.html:69 templates/registration_form.html:57
+#: templates/admission_form.html:75 templates/registration_form.html:57
 msgid "Save"
 msgstr ""
 
@@ -633,7 +645,7 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-#: models/admission.py:239 templates/registration_detail.html:68
+#: models/admission.py:239 templates/registration_detail.html:78
 msgid "Spouse name"
 msgstr ""
 
@@ -656,18 +668,26 @@ msgstr ""
 #: templates/django_registration/complete_account_registration.html:66
 #: templates/django_registration/registration_form.html:48
 #: templates/django_registration/registration_form.html:49
-#: templates/fragment/submit_confirmation_modal.html:41
+#: templates/fragment/submit_confirmation_modal.html:51
 #: templates/registration/continuing_education_password_reset_form.html:40
 msgid "Submit"
 msgstr ""
 
-#: templates/admission_detail.html:42
+#: templates/admission_detail.html:42 templates/registration_detail.html:42
 msgctxt "admission"
 msgid "Submit"
 msgstr ""
 
-#: templates/fragment/submit_confirmation_modal.html:33
+#: templates/fragment/submit_confirmation_modal.html:34
 msgid "Submit admission form ?"
+msgstr ""
+
+#: templates/fragment/submit_confirmation_modal.html:38
+msgid "Submit registration form ?"
+msgstr ""
+
+#: models/enums/admission_state_choices.py:19
+msgid "Submitted"
 msgstr ""
 
 #: templates/authentication/logged_out.html:38
@@ -691,11 +711,11 @@ msgid "The activation key you provided is invalid."
 msgstr ""
 
 #: tests/views/test_admission.py:465 tests/views/test_admission.py:527
-#: views/admission.py:146
+#: views/admission.py:135
 msgid "The document is uploaded correctly"
 msgstr ""
 
-#: tests/views/test_admission.py:559 views/admission.py:150
+#: tests/views/test_admission.py:559 views/admission.py:139
 #, python-format
 msgid "The name of the file is too long : maximum %(length)s characters."
 msgstr ""
@@ -744,8 +764,12 @@ msgstr ""
 msgid "Username and password not matching"
 msgstr ""
 
-#: models/admission.py:211 templates/registration_detail.html:92
+#: models/admission.py:211 templates/registration_detail.html:102
 msgid "VAT number"
+msgstr ""
+
+#: models/enums/admission_state_choices.py:14
+msgid "Waiting"
 msgstr ""
 
 #: templates/admission_detail.html:67
@@ -764,7 +788,7 @@ msgstr ""
 msgid "You already have an account"
 msgstr ""
 
-#: views/admission.py:114
+#: views/admission.py:103
 msgid ""
 "You can save an application form and access it later until it is submitted"
 msgstr ""
@@ -773,7 +797,7 @@ msgstr ""
 msgid "You don't have an account"
 msgstr ""
 
-#: views/admission.py:123
+#: views/admission.py:112
 #, python-format
 msgid ""
 "Your admission file has been saved. You are still able to edit the form. Do "
@@ -781,11 +805,10 @@ msgid ""
 "admission file page</b></a> !"
 msgstr ""
 
-#: tests/views/test_admission.py:112 tests/views/test_admission.py:254
-#: views/admission.py:257
+#: views/common.py:169
 msgid ""
-"Your admission file is not submittable because you did not provide the "
-"following data : "
+"Your file is not submittable because you did not provide the following "
+"data : "
 msgstr ""
 
 #: views/account_activation.py:375

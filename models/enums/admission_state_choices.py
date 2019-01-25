@@ -9,14 +9,14 @@ SUBMITTED = 'Submitted'
 REGISTRATION_SUBMITTED = 'Registration submitted'
 
 ADMIN_STATE_CHOICES = (
-    (ACCEPTED, _(ACCEPTED)),
-    (REJECTED, _(REJECTED)),
-    (WAITING, _(WAITING)),
+    (ACCEPTED, _('Accepted')),
+    (REJECTED, _('Rejected')),
+    (WAITING, _('Waiting')),
 )
 
 STUDENT_STATE_CHOICES = (
-    (DRAFT, _(DRAFT)),
-    (SUBMITTED, _(SUBMITTED)),
+    (DRAFT, _('Draft')),
+    (SUBMITTED, _('Submitted')),
     (REGISTRATION_SUBMITTED, _('Registration submitted'))
 )
 

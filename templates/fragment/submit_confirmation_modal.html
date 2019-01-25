@@ -29,12 +29,22 @@
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">
-                {% trans 'Submit admission form ?' %}
-            </h4>
+            {% if admission.state == 'Draft' %}
+                <h4 class="modal-title">
+                    {% trans 'Submit admission form ?' %}
+                </h4>
+            {% elif admission.state == 'Accepted' %}
+                <h4 class="modal-title">
+                    {% trans 'Submit registration form ?' %}
+                </h4>
+            {% endif %}
         </div>
           <div class="modal-body">
-            {% trans 'It is not possible to edit an admission once submitted' %}
+              {% if admission.state == 'Draft' %}
+                {% trans 'It is not possible to edit an admission once submitted' %}
+              {% elif admission.state == 'Accepted' %}
+                {% trans 'It is not possible to edit an registration once submitted' %}
+              {% endif %}
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default text-capitalize" data-dismiss="modal">{% trans 'Cancel' %}</button>

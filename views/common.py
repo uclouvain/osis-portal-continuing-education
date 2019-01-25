@@ -23,17 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from collections import OrderedDict
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import login as django_login
-from django.shortcuts import redirect
+from django.forms import model_to_dict
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import translation
-from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 from base.models import person as person_mdl
 from base.views import layout
 from base.views.layout import render
+from continuing_education.forms.account import ContinuingEducationPersonForm
+from continuing_education.forms.address import StrictAddressForm
+from continuing_education.forms.admission import StrictAdmissionForm
+from continuing_education.forms.person import StrictPersonForm
+from continuing_education.forms.registration import StrictRegistrationForm
+from continuing_education.models.admission import Admission
 
 
 def display_errors(request, errors):
@@ -95,3 +105,78 @@ def display_messages(request, messages_to_display, level, extra_tags=None):
 
     for msg in messages_to_display:
         messages.add_message(request, level, _(msg), extra_tags=extra_tags)
+
+
+def get_submission_errors(admission, is_registration=False):
+    errors_field = []
+    errors = OrderedDict()
+
+    if is_registration:
+        address_form = StrictAddressForm(
+            data=model_to_dict(admission.billing_address)
+        )
+        adm_form = StrictRegistrationForm(
+            data=model_to_dict(admission)
+        )
+        _update_errors([address_form, adm_form], errors, errors_field)
+
+        if not admission.use_address_for_post:
+            residence_address_form = StrictAddressForm(
+                data=model_to_dict(admission.residence_address)
+            )
+            _update_errors([residence_address_form], errors, errors_field)
+    else:
+        person_form = StrictPersonForm(
+            data=model_to_dict(admission.person_information.person)
+        )
+        person_information_form = ContinuingEducationPersonForm(
+            data=model_to_dict(admission.person_information)
+        )
+        address_form = StrictAddressForm(
+            data=model_to_dict(admission.address)
+        )
+        adm_form = StrictAdmissionForm(
+            data=model_to_dict(admission)
+        )
+        forms = [person_form, person_information_form, address_form, adm_form]
+        _update_errors(forms, errors, errors_field)
+
+    return errors, errors_field
+
+
+def _update_errors(forms, errors, errors_field):
+    for form in forms:
+        for field in form.errors:
+            errors.update({form[field].label: form.errors[field]})
+            errors_field.append(field)
+
+
+def _find_user_admission_by_id(admission_id, user):
+    return get_object_or_404(
+        Admission,
+        pk=admission_id,
+        person_information__person__user=user
+    )
+
+
+def _build_warning_from_errors_dict(errors):
+    warning_message = ugettext(
+        "Your file is not submittable because you did not provide the following data : "
+    )
+
+    warning_message = \
+        "<strong>" + \
+        warning_message + \
+        "</strong><br>" + \
+        " · ".join([ugettext(key) for key in errors.keys()])
+
+    return mark_safe(warning_message)
+
+
+def _show_submit_warning(admission_submission_errors, request):
+    if request.method == 'GET':
+        messages.add_message(
+            request=request,
+            level=messages.WARNING,
+            message=_build_warning_from_errors_dict(admission_submission_errors),
+        )
