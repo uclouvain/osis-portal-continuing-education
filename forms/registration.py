@@ -51,7 +51,6 @@ class StrictRegistrationForm(RegistrationForm):
             'registration_type',
             'national_registry_number',
             'id_card_number',
-            'passport_number',
             'marital_status',
             'previous_ucl_registration',
         ]
