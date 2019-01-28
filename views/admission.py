@@ -63,6 +63,7 @@ from continuing_education.views.common import display_errors, display_success_me
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
     if admission.state == admission_state_choices.DRAFT:
+        _show_admission_saved(request, admission.id)
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
@@ -106,16 +107,20 @@ def _show_save_before_submit(request):
 
 
 def _show_admission_saved(request, admission_id):
+    title = "Your admission file has been saved. Please consider the following information:"
+    items = [
+        "You are still able to edit the form.",
+        "You can upload documents via the 'Documents' tab",
+        "Do not forget to submit your file when it is complete",
+    ]
+    message = "<strong>{}</strong><br>".format(_(title)) + \
+        "".join(["<li>{}</i>".format(_(item)) for item in items])
+
     messages.add_message(
         request=request,
         level=messages.INFO,
-        message=mark_safe(
-            _('Your admission file has been saved. '
-              'You are still able to edit the form. '
-              'Do not forget to submit it when it is complete via '
-              '<a href="%(url)s"><b>the admission file page</b></a> !'
-              ) % {'url': reverse('admission_detail', kwargs={'admission_id': admission_id})}
-        ))
+        message=mark_safe(message)
+    )
 
 
 MAX_ADMISSION_FILE_NAME_LENGTH = 100
@@ -322,10 +327,9 @@ def admission_form(request, admission_id=None, **kwargs):
         admission.save()
         if request.session.get('formation_id'):
             del request.session['formation_id']
-        _show_admission_saved(request, admission.id)
         errors, errors_fields = get_submission_errors(admission)
         return redirect(
-            reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab_anchor,
+            reverse('admission_detail', kwargs={'admission_id': admission.id}),
         )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
