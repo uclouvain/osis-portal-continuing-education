@@ -49,8 +49,9 @@ from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.views.admission import admission_form, get_admission_submission_errors, \
+from continuing_education.views.admission import admission_form, \
     MAX_ADMISSION_FILE_NAME_LENGTH
+from continuing_education.views.common import get_submission_errors
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -107,7 +108,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertIn(
-            ugettext("Your admission file is not submittable because you did not provide the following data : "),
+            ugettext("Your file is not submittable because you did not provide the following data : "),
             str(messages_list[0])
         )
         self.assertIn(
@@ -249,7 +250,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertIn(
-            ugettext("Your admission file is not submittable because you did not provide the following data : "),
+            ugettext("Your file is not submittable because you did not provide the following data : "),
             str(messages_list[0])
         )
         self.assertIn(
@@ -345,7 +346,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_submittable(self):
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertFalse(
             errors
@@ -360,7 +361,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.admission.address.save()
         self.admission.last_degree_level = ''
         self.admission.save()
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
             errors,
@@ -375,7 +376,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_admission_data(self):
         self.admission.last_degree_level = ''
         self.admission.save()
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
             errors,
@@ -387,7 +388,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_person_information_data(self):
         self.admission.person_information.birth_country = None
         self.admission.person_information.save()
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
             errors,
@@ -399,7 +400,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_address_data(self):
         self.admission.address.postal_code = ''
         self.admission.address.save()
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
             errors,
@@ -411,7 +412,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_person_data(self):
         self.admission.person_information.person.gender = None
         self.admission.person_information.person.save()
-        errors, errors_fields = get_admission_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
             errors,
@@ -458,7 +459,7 @@ class AdmissionFileTestCase(TestCase):
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return response
 
-    def mocked_failed_put_request_name_too_long(self, **kwargs):
+    def mocked_failed_post_request_name_too_long(self, **kwargs):
         response = Response()
         response.status_code = status.HTTP_406_NOT_ACCEPTABLE
         return response
@@ -491,7 +492,7 @@ class AdmissionFileTestCase(TestCase):
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
 
-    @mock.patch('requests.post', side_effect=mocked_failed_put_request_name_too_long)
+    @mock.patch('requests.post', side_effect=mocked_failed_post_request_name_too_long)
     def test_upload_file_error_name_too_long(self, mock_fail):
         url = reverse('upload_file', args=[self.admission.uuid])
         redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
@@ -560,7 +561,8 @@ class AdmissionFileTestCase(TestCase):
 
     def get_mocked_file_response(self, headers):
         response = HttpResponse(status=status.HTTP_200_OK)
-        response.content = '{"content": "'+str(base64.b64encode(b'test'))+'", "path":"test_name.pdf"}'
+        response.content = '{"content": "'+str(base64.b64encode(b'test'))+\
+                           '", "path":"test_name.pdf", "name":"test_name.pdf"}'
         return response
 
     @mock.patch('requests.get', side_effect=get_mocked_file_response)

@@ -2,6 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from base.models.entity_version import EntityVersion
+from base.models.enums.entity_type import FACULTY
 from continuing_education.models.enums import admission_state_choices, enums
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
@@ -182,7 +184,7 @@ class Admission(SerializableModel):
         verbose_name=_("Registration type")
     )
     use_address_for_billing = models.BooleanField(
-        default=False,
+        default=True,
         verbose_name=_("Use address for billing")
     )
     billing_address = models.ForeignKey(
@@ -253,7 +255,7 @@ class Admission(SerializableModel):
 
     # Post
     use_address_for_post = models.BooleanField(
-        default=False,
+        default=True,
         verbose_name=_("Use address for post")
     )
     residence_address = models.ForeignKey(
@@ -330,6 +332,31 @@ class Admission(SerializableModel):
         else:
             raise(PermissionDenied('To submit an admission, its state must be DRAFT.'))
 
+    def submit_registration(self):
+        if self.state == admission_state_choices.ACCEPTED:
+            self.state = admission_state_choices.REGISTRATION_SUBMITTED
+            self.save()
+        else:
+            raise(PermissionDenied('To submit a registration, its state must be ACCEPTED.'))
+
+    def get_faculty(self):
+        education_group_year = self.formation
+        if education_group_year:
+            management_entity = education_group_year.management_entity
+            entity = EntityVersion.objects.filter(entity=management_entity).first()
+            if entity and entity.entity_type == FACULTY:
+                return management_entity
+            else:
+                return _get_faculty_parent(management_entity)
+        else:
+            return None
+
+
+def _get_faculty_parent(management_entity):
+    faculty = EntityVersion.objects.filter(entity=management_entity).first()
+    if faculty:
+        return faculty.parent
+
 
 def find_by_id(a_id):
     try:
@@ -347,5 +374,8 @@ def search(**kwargs):
 
     if "state" in kwargs:
         qs = qs.filter(state=kwargs['state'])
+
+    if "state__in" in kwargs:
+        qs = qs.filter(state__in=kwargs['state__in'])
 
     return qs

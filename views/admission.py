@@ -26,7 +26,6 @@
 import base64
 import io
 import itertools
-from collections import OrderedDict
 from mimetypes import MimeTypes
 
 import requests
@@ -36,11 +35,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.forms import model_to_dict
 from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext
+from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from rest_framework import status
@@ -50,21 +48,22 @@ from rest_framework.renderers import MultiPartRenderer
 from base.models import person as mdl_person
 from base.models.person import Person
 from continuing_education.forms.account import ContinuingEducationPersonForm
-from continuing_education.forms.address import AddressForm, StrictAddressForm
-from continuing_education.forms.admission import AdmissionForm, StrictAdmissionForm
-from continuing_education.forms.person import PersonForm, StrictPersonForm
+from continuing_education.forms.address import AddressForm
+from continuing_education.forms.admission import AdmissionForm
+from continuing_education.forms.person import PersonForm
 from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.common import display_errors, display_success_messages, display_error_messages
+from continuing_education.views.common import display_errors, display_success_messages, display_error_messages, \
+    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _build_warning_from_errors_dict
 
 
 @login_required
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
     if admission.state == admission_state_choices.DRAFT:
-        admission_submission_errors, errors_fields = get_admission_submission_errors(admission)
+        admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
@@ -199,61 +198,12 @@ def admission_submit(request):
     admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
 
     if admission.state == admission_state_choices.DRAFT:
-        admission_submission_errors, errors_fields = get_admission_submission_errors(admission)
+        admission_submission_errors, errors_fields = get_submission_errors(admission)
         if request.POST.get("submit") and not admission_submission_errors:
             admission.submit()
             return redirect('admission_detail', admission.pk)
 
     raise PermissionDenied
-
-
-def get_admission_submission_errors(admission):
-    errors_field = []
-    errors = OrderedDict()
-
-    person_form = StrictPersonForm(
-        data=model_to_dict(admission.person_information.person)
-    )
-    for field in person_form.errors:
-        errors.update({person_form[field].label: person_form.errors[field]})
-        errors_field.append(field)
-
-    person_information_form = ContinuingEducationPersonForm(
-        data=model_to_dict(admission.person_information)
-    )
-    for field in person_information_form.errors:
-        errors.update({person_information_form[field].label: person_information_form.errors[field]})
-        errors_field.append(field)
-
-    address_form = StrictAddressForm(
-        data=model_to_dict(admission.address)
-    )
-    for field in address_form.errors:
-        errors.update({address_form[field].label: address_form.errors[field]})
-        errors_field.append(field)
-
-    adm_form = StrictAdmissionForm(
-        data=model_to_dict(admission)
-    )
-    for field in adm_form.errors:
-        errors.update({adm_form[field].label: adm_form.errors[field]})
-        errors_field.append(field)
-
-    return errors, errors_field
-
-
-def _build_warning_from_errors_dict(errors):
-    warning_message = ugettext(
-        "Your admission file is not submittable because you did not provide the following data : "
-    )
-
-    warning_message = \
-        "<strong>" + \
-        warning_message + \
-        "</strong><br>" + \
-        " · ".join([ugettext(key) for key in errors.keys()])
-
-    return mark_safe(warning_message)
 
 
 @login_required
@@ -270,11 +220,11 @@ def download_file(request, file_uuid, admission_uuid):
     if request_to_get.status_code == status.HTTP_200_OK:
         stream = io.BytesIO(request_to_get.content)
         admission_file = JSONParser().parse(stream)
-        name = admission_file['path'].rsplit('/', 1)[-1]
-        mime_type = MimeTypes().guess_type(admission_file['path'])
+        name = get_valid_filename(admission_file['name'])
+        mime_type = MimeTypes().guess_type(admission_file['name'])
         response_file = base64.b64decode(admission_file['content'])
         response = HttpResponse(response_file, mime_type)
-        response['Content-Disposition'] = 'attachment; filename=%s' % name
+        response['Content-Disposition'] = "attachment; filename=%s" % name
         return response
     else:
         return HttpResponse(status=404)
@@ -325,7 +275,7 @@ def admission_form(request, admission_id=None, **kwargs):
         _show_save_before_submit(request)
 
     if admission and not request.POST:
-        admission_submission_errors, errors_fields = get_admission_submission_errors(admission)
+        admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
@@ -361,11 +311,13 @@ def admission_form(request, admission_id=None, **kwargs):
         admission = adm_form.save(commit=False)
         admission.person_information = person
         admission.address = address
+        admission.billing_address = address
+        admission.residence_address = address
         admission.save()
         if request.session.get('formation_id'):
             del request.session['formation_id']
         _show_admission_saved(request, admission.id)
-        errors, errors_fields = get_admission_submission_errors(admission)
+        errors, errors_fields = get_submission_errors(admission)
         return redirect(
             reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab_anchor,
         )
@@ -385,12 +337,4 @@ def admission_form(request, admission_id=None, **kwargs):
             'list_files': list_files,
             'errors_fields': errors_fields
         }
-    )
-
-
-def _find_user_admission_by_id(admission_id, user):
-    return get_object_or_404(
-        Admission,
-        pk=admission_id,
-        person_information__person__user=user
     )

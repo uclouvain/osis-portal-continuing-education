@@ -38,18 +38,23 @@
         <h2>{% trans 'Registration' %}</h2>
     </div>
 
+    {% include 'template_messages.html' %}
+
     <div class="panel panel-default">
             <form id="form" method="POST" class="post-form">
                 {% csrf_token %}
                 <ul id="tabs" class="nav nav-tabs">
                     <li role="presentation" class="active"><a href="#identification" role="tab" data-toggle="tab">
                         {% trans 'Identification' %}
+                        <span class="badge badge-warning"></span>
                     </a></li>
                     <li role="presentation"><a href="#billing" role="tab" data-toggle="tab">
                         {% trans 'Billing' %}
+                        <span class="badge badge-warning"></span>
                     </a></li>
                     <li role="presentation"><a href="#contact" role="tab" data-toggle="tab">
                         {% trans 'Contact information' %}
+                        <span class="badge badge-warning"></span>
                     </a></li>
                     <div class="form-button-group pull-right">
                         <input type="hidden" id="landing_tab" name="tab">
@@ -81,16 +86,22 @@
                                     {% bootstrap_field form.id_card_number %}
                                 </div>
                             </div>
-                            {% bootstrap_field form.passport_number %}
                             <div class="row">
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.passport_number %}
+                                </div>
                                 <div class="col-md-6">
                                     {% bootstrap_field form.marital_status %}
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-6">
                                     {% bootstrap_field form.spouse_name %}
                                 </div>
+                                <div class="col-md-6">
+                                    {% bootstrap_field form.children_number %}
+                                </div>
                             </div>
-                            {% bootstrap_field form.children_number %}
                             <div class="row">
                                 <div class="col-md-6">
                                     {% bootstrap_field form.previous_ucl_registration label=_("Previous UCL registration")%}
@@ -225,27 +236,39 @@
             postal_code: "{{address.postal_code | escapejs}}",
             city: "{{address.city | escapejs}}",
             country: "{{address.country_id | escapejs}}",
-        }
+        };
+        let billing_address = {
+            location: "{{admission.billing_address.location | escapejs}}",
+            postal_code: "{{admission.billing_address.postal_code | escapejs}}",
+            city: "{{admission.billing_address.city | escapejs}}",
+            country: "{{admission.billing_address.country_id | escapejs}}",
+        };
+        let residence_address = {
+            location: "{{admission.residence_address.location | escapejs}}",
+            postal_code: "{{admission.residence_address.postal_code | escapejs}}",
+            city: "{{admission.residence_address.city | escapejs}}",
+            country: "{{admission.residence_address.country_id | escapejs}}",
+        };
 
         $("#id_use_address_for_billing:checkbox").change(function(){
             if(this.checked){
                 copy_address("billing");
             } else {
-                empty_address("billing");
+                empty_address("billing", billing_address);
             }
         });
         //check when page is loaded
-        $("#id_use_address_for_billing:checkbox").prop('checked')?copy_address("billing"):empty_address(("billing"));
+        $("#id_use_address_for_billing:checkbox").prop('checked')?copy_address("billing"):empty_address(("billing"), billing_address);
 
         $("#id_use_address_for_post:checkbox").change(function(){
             if(this.checked){
                 copy_address("residence");
             } else {
-                empty_address("residence");
+                empty_address("residence", residence_address);
             }
         });
         //check when page is loaded
-        $("#id_use_address_for_post:checkbox").prop('checked')?copy_address("residence"):empty_address(("residence"));
+        $("#id_use_address_for_post:checkbox").prop('checked')?copy_address("residence"):empty_address(("residence"), residence_address);
 
         //re-enable disabled field on form submit
         $( "#form" ).submit(function( event ) {
@@ -261,14 +284,29 @@
             $("#id_"+e+"-country").prop("disabled", true);
         }
 
-        function empty_address(e){
+        function empty_address(e, address){
             ["location", "postal_code", "city"].forEach(function(field) {
-                $("#id_"+e+"-"+field).val('');
+                $("#id_"+e+"-"+field).val(address[field]);
                 $("#id_"+e+"-"+field).prop("readonly", false);
             });
-            $("#id_"+e+"-country").val('');
+            $("#id_"+e+"-country").val(address['country']);
             $("#id_"+e+"-country").prop("disabled", false);
         }
+        //show missing fields in red
+        let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
+        errors_fields = JSON.parse(errors_fields);
+        for(field of errors_fields)
+            $('#id_'+field).parent().addClass('has-warning');
+
+
+        $('.tab-pane').each(function(){
+            let tabId = $(this)[0].id;
+            let countWarning = $(this).find('.has-warning').length;
+            if(countWarning>0){
+                let tabBadge = $('a[href="#'+tabId+'"]').find('.badge')[0];
+                tabBadge.innerText = countWarning;
+            }
+        })
 
     </script>
 {% endblock %}

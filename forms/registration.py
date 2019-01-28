@@ -41,3 +41,19 @@ class RegistrationForm(ModelForm):
             'assessment_succeeded',
             'sessions'
         ]
+
+
+class StrictRegistrationForm(RegistrationForm):
+    def __init__(self, data, **kwargs):
+        super().__init__(data, **kwargs)
+
+        required_fields = [
+            'registration_type',
+            'national_registry_number',
+            'id_card_number',
+            'marital_status',
+            'previous_ucl_registration',
+        ]
+
+        for required_field in required_fields:
+            self.fields[required_field].required = True

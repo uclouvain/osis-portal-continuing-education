@@ -23,23 +23,39 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase
+from django.utils.translation import ugettext, ugettext_lazy as _
 
-from continuing_education.tests.factories.address import AddressFactory
+from base.tests.factories.person import PersonFactory
+from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
+from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
+from continuing_education.views.common import get_submission_errors
 
 
 class ViewStudentRegistrationTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
-        self.admission_accepted = AdmissionFactory(state="accepted")
-        self.admission_rejected = AdmissionFactory(state="rejected")
+        self.person = PersonFactory(user=self.user)
+        self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        self.admission_accepted = AdmissionFactory(
+            state="Accepted",
+            person_information=self.person_information
+        )
+        self.admission_rejected = AdmissionFactory(
+            state="Rejected",
+            person_information=self.person_information
+        )
+        self.registration_submitted = AdmissionFactory(
+            state="Registration submitted",
+            person_information=self.person_information
+        )
 
     def test_registration_detail(self):
         url = reverse('registration_detail', args=[self.admission_accepted.id])
@@ -47,11 +63,90 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration_detail.html')
 
+        self.assertEqual(response.context['admission'], self.admission_accepted)
+        self.assertTrue(response.context['registration_is_submittable'])
+
+    def test_registration_detail_not_submittable(self):
+        self.admission_accepted.national_registry_number = ''
+        self.admission_accepted.save()
+
+        url = reverse('registration_detail', args=[self.admission_accepted.pk])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration_detail.html')
+
+        self.assertEqual(response.context['admission'], self.admission_accepted)
+        self.assertFalse(response.context['registration_is_submittable'])
+
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertIn(
+            ugettext("Your file is not submittable because you did not provide the following data : "),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("National registry number"),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.WARNING)
+
+    def test_registration_submitted_detail(self):
+        url = reverse('registration_detail', args=[self.registration_submitted.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration_detail.html')
+
+        self.assertEqual(response.context['admission'], self.registration_submitted)
+        self.assertFalse(response.context['registration_is_submittable'])
+
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 0)
+
     def test_registration_detail_not_found(self):
         response = self.client.get(reverse('registration_detail', kwargs={
             'admission_id': 0,
         }))
         self.assertEqual(response.status_code, 404)
+
+    def test_registration_submit(self):
+        url = reverse('registration_submit')
+        response = self.client.post(
+            url,
+            follow=True,
+            data={
+                "submit": True,
+                "admission_id": self.admission_accepted.pk
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['admission'].state, admission_state_choices.REGISTRATION_SUBMITTED)
+        self.assertTemplateUsed(response, 'registration_detail.html')
+
+    def test_registration_submit_not_registration_submitted(self):
+        url = reverse('registration_submit')
+        response = self.client.post(
+            url,
+            data={
+                "submit": True,
+                "admission_id": self.registration_submitted.pk
+            }
+        )
+        self.assertEqual(response.status_code, 401)
+
+    def test_registration_submit_not_complete(self):
+        self.admission_accepted.national_registry_number = ''
+        self.admission_accepted.save()
+
+        url = reverse('registration_submit')
+        response = self.client.post(
+            url,
+            data={
+                "submit": True,
+                "admission_id": self.admission_accepted.pk
+            }
+        )
+        self.assertEqual(response.status_code, 401)
 
     def test_registration_edit_not_found(self):
         response = self.client.get(reverse('registration_edit', kwargs={
@@ -74,28 +169,18 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertTemplateUsed(response, 'registration_form.html')
 
     def test_edit_post_registration_found(self):
-        address = AddressFactory()
         registration = {
             'previous_ucl_registration': False,
             'children_number': 2,
             'company_number': '1-61667-638-8',
             'head_office_name': 'Campbell-Tanner',
             'registration_type': 'PRIVATE',
-            'state': 'accepted',
-            'billing_address': address.pk,
-            'billing-location' : address.location,
-            'billing-postal_code' : address.postal_code,
-            'billing-city': address.city,
-            'billing-country': address.country.pk,
-            'residence_address': address.pk,
-            'residence-location': address.location,
-            'residence-postal_code': address.postal_code,
-            'residence-city': address.city,
-            'residence-country': address.country.pk,
+            'state': 'Accepted',
+            'use_address_for_billing': True,
         }
         url = reverse('registration_edit', args=[self.admission_accepted.pk])
         response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
+        self.assertRedirects(response, reverse('registration_edit', args=[self.admission_accepted.id]))
         self.admission_accepted.refresh_from_db()
 
         # verifying that fields are correctly updated
@@ -105,3 +190,73 @@ class ViewStudentRegistrationTestCase(TestCase):
                 if isinstance(field_value, models.Model):
                     field_value = field_value.pk
                 self.assertEqual(field_value, registration[key], key)
+
+    def test_edit_post_registration_found_with_other_address(self):
+        registration = {
+            'previous_ucl_registration': False,
+            'use_address_for_billing': False,
+            'billing-city': 'Brux-city'
+        }
+        url = reverse('registration_edit', args=[self.admission_accepted.pk])
+        response = self.client.post(url, data=registration)
+        self.assertRedirects(response, reverse('registration_edit', args=[self.admission_accepted.id]))
+        self.admission_accepted.refresh_from_db()
+        self.admission_accepted.billing_address.refresh_from_db()
+
+        field_value = self.admission_accepted.billing_address.__getattribute__('city')
+        self.assertEqual(field_value, registration['billing-city'])
+
+
+class RegistrationSubmissionErrorsTestCase(TestCase):
+    def setUp(self):
+        self.admission = AdmissionFactory(
+        )
+
+    def test_registration_is_submittable(self):
+        errors, errors_fields = get_submission_errors(self.admission)
+
+        self.assertFalse(
+            errors
+        )
+
+    def test_registration_is_not_submittable_missing_data_in_all_objects(self):
+        self.admission.residence_address.postal_code = ''
+        self.admission.residence_address.save()
+        self.admission.billing_address.postal_code = ''
+        self.admission.billing_address.save()
+        self.admission.national_registry_number = ''
+        self.admission.save()
+        errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
+
+        self.assertDictEqual(
+            errors,
+            {
+                _("Postal code"): [_("This field is required.")],
+                _("Postal code"): [_("This field is required.")],
+                _("National registry number"): [_("This field is required.")]
+            }
+        )
+
+    def test_registration_is_not_submittable_missing_registration_data(self):
+        self.admission.national_registry_number = ''
+        self.admission.save()
+        errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
+
+        self.assertDictEqual(
+            errors,
+            {
+                _("National registry number"): [_("This field is required.")]
+            }
+        )
+
+    def test_registration_is_not_submittable_missing_address_data(self):
+        self.admission.billing_address.postal_code = ''
+        self.admission.billing_address.save()
+        errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
+
+        self.assertDictEqual(
+            errors,
+            {
+                _("Postal code"): [_("This field is required.")],
+            }
+        )
