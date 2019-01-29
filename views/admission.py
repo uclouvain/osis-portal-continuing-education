@@ -115,7 +115,7 @@ def _show_admission_saved(request, admission_id):
             _("Do not forget to submit your file when it is complete"),
         ]
         message = "<strong>{}</strong><br>".format(title) + \
-            "".join(["<li>{}</i>".format(item) for item in items])
+            "".join(["- {}<br>".format(item) for item in items])
 
         messages.add_message(
             request=request,
