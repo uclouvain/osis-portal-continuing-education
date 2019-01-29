@@ -107,14 +107,14 @@ def _show_save_before_submit(request):
 
 
 def _show_admission_saved(request, admission_id):
-    title = "Your admission file has been saved. Please consider the following information:"
+    title = _("Your admission file has been saved. Please consider the following information:")
     items = [
-        "You are still able to edit the form.",
-        "You can upload documents via the 'Documents' tab",
-        "Do not forget to submit your file when it is complete",
+        _("You are still able to edit the form"),
+        _("You can upload documents via the 'Documents' tab"),
+        _("Do not forget to submit your file when it is complete"),
     ]
-    message = "<strong>{}</strong><br>".format(_(title)) + \
-        "".join(["<li>{}</i>".format(_(item)) for item in items])
+    message = "<strong>{}</strong><br>".format(title) + \
+        "".join(["<li>{}</i>".format(item) for item in items])
 
     messages.add_message(
         request=request,
