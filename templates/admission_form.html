@@ -222,11 +222,6 @@
 
 {% block script %}
 <script>
-    $('#tabs a').click(function (e) {
-      e.preventDefault();
-      $('#landing_tab').val($(this).context.hash.substring(1));
-      $(this).tab('show');
-    });
     function showTab(tab) {
         $('#tabs a[href="#' + tab + '"]').tab('show');
     }
@@ -243,12 +238,6 @@
         return $('#id_awareness_other_checkbox').prop('checked');
     }
 
-    $("#save-btn").click(function(){
-        if(!$('#id_formation').val()){
-            showTab("identification");
-        }
-    });
-
     $( "#form" ).submit(function( event ) {
         if(other_selected() && !$('#other-text-field input').val()){
             event.preventDefault();
@@ -258,17 +247,7 @@
         enableFields(fields_to_enable);
     });
 
-    let anchor = location.hash;
-    landing_tab = anchor.substring(1);
-    $('#landing_tab').val(landing_tab);
-    showTab(landing_tab);
-
-    $('#customFile').change(function(e) {
-        $('#custom-file-label').text(this.files[0].name);
-        $('#btn-upload').removeAttr("disabled")
-    });
-
-    //show missing fields in red
+    //show missing fields in golden
     let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
     errors_fields = JSON.parse(errors_fields);
     for(field of errors_fields)

@@ -272,9 +272,6 @@ def admission_form(request, admission_id=None, **kwargs):
 
     id_form = PersonForm(request.POST or None, instance=base_person)
 
-    landing_tab = request.POST.get("tab") or kwargs.get('landing_tab')
-    landing_tab_anchor = "#{}".format(landing_tab) if landing_tab else ""
-
     errors_fields = []
 
     if not admission and not request.POST:
