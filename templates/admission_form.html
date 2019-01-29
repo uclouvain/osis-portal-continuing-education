@@ -246,6 +246,13 @@
         enableFields(fields_to_enable);
     });
 
+    //show tab with missing mandatory input
+    $("#save-btn").click(function(){
+        if(!$('#id_formation').val()){
+            showTab("identification");
+        }
+    });
+
     //show missing fields in golden
     let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
     errors_fields = JSON.parse(errors_fields);
