@@ -107,20 +107,21 @@ def _show_save_before_submit(request):
 
 
 def _show_admission_saved(request, admission_id):
-    title = _("Your admission file has been saved. Please consider the following information:")
-    items = [
-        _("You are still able to edit the form"),
-        _("You can upload documents via the 'Documents' tab"),
-        _("Do not forget to submit your file when it is complete"),
-    ]
-    message = "<strong>{}</strong><br>".format(title) + \
-        "".join(["<li>{}</i>".format(item) for item in items])
+    if request.method == 'GET':
+        title = _("Your admission file has been saved. Please consider the following information :")
+        items = [
+            _("You are still able to edit the form"),
+            _("You can upload documents via the 'Documents'"),
+            _("Do not forget to submit your file when it is complete"),
+        ]
+        message = "<strong>{}</strong><br>".format(title) + \
+            "".join(["- {}<br>".format(item) for item in items])
 
-    messages.add_message(
-        request=request,
-        level=messages.INFO,
-        message=mark_safe(message)
-    )
+        messages.add_message(
+            request=request,
+            level=messages.INFO,
+            message=mark_safe(message)
+        )
 
 
 MAX_ADMISSION_FILE_NAME_LENGTH = 100
