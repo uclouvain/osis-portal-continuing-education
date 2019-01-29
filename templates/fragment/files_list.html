@@ -1,0 +1,64 @@
+{% load i18n %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% if not list_files %}
+    <div class="jumbotron">
+        <span>{% trans 'No document available' %}</span>
+    </div>
+{% endif %}
+{% if list_files %}
+    <table id="table_education_groups" class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th id="name">{% trans 'Name' %}</th>
+                <th id="size">{% trans 'Size' %}</th>
+                <th id="last_update">{% trans 'Last update' %}</th>
+                <th id="uploaded_by">{% trans 'Uploaded by' %}</th>
+                <th id="actions">{% trans 'Actions' %}</th>
+            </tr>
+        </thead>
+        {% for file in list_files %}
+            <tr>
+                <td> {{file.name}} </td>
+                <td> {{file.size|filesizeformat}} </td>
+                <td> {{file.created_date | date:'d/m/Y h:i'}} </td>
+                <td> {{file.uploaded_by.first_name}} {{file.uploaded_by.last_name}}</td>
+                <td>
+                    <a class="button" role="button" href="{% url 'download_file' file.uuid admission.uuid %}">
+                        <span class="glyphicon glyphicon-download-alt btn-space btn-file"
+                              aria-hidden="true"></span>
+                    </a>
+                    {% if file.is_deletable %}
+                        <a class="button" role="button"
+                            href="{% url 'remove_file' file.uuid admission.uuid %}">
+                            <span class="glyphicon glyphicon-remove-circle btn-space btn-file" aria-hidden="true"></span>
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
