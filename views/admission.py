@@ -27,7 +27,6 @@ import base64
 import io
 import itertools
 from mimetypes import MimeTypes
-from pprint import pprint
 
 import requests
 from dateutil import parser
@@ -257,7 +256,7 @@ def admission_form(request, admission_uuid=None, **kwargs):
         raise PermissionDenied
     person_information = get_data_list_from_osis("persons", "person", str(base_person))[0]
     adm_form = AdmissionForm(admission)
-    pprint(adm_form)
+
     person_form = ContinuingEducationPersonForm(initial=person_information)
 
     current_address = admission['main_address'] if admission else None

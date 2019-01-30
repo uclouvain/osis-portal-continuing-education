@@ -18,7 +18,7 @@ class FormationChoiceField(forms.ModelChoiceField):
             formation.academic_year,
         )
 
-
+#Pays de naissance · Pays · Formation · Nationalité · Informations personnelles ·
 class AdmissionForm(Form):
     formation = FormationChoiceField(queryset=EducationGroupYear.objects.all())
     state = forms.ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)
@@ -130,30 +130,37 @@ class AdmissionForm(Form):
     # Awareness
     awareness_ucl_website = forms.BooleanField(
         initial=False,
+        required=False,
         label=_("Awareness UCL website")
     )
     awareness_formation_website = forms.BooleanField(
         initial=False,
+        required=False,
         label=_("Awareness formation website")
     )
     awareness_press = forms.BooleanField(
         initial=False,
+        required=False,
         label=_("Awareness press")
     )
     awareness_facebook = forms.BooleanField(
         initial=False,
+        required=False,
         label=_("Awareness Facebook")
     )
     awareness_linkedin = forms.BooleanField(
         initial=False,
+        required=False,
         label=_("Awareness LinkedIn")
     )
     awareness_customized_mail = forms.BooleanField(
         initial=False,
+        required=False,
         label=_("Awareness customized mail")
     )
     awareness_emailing = forms.BooleanField(
         initial=False,
+        required=False,
         label=_("Awareness emailing")
     )
     awareness_other = forms.CharField(

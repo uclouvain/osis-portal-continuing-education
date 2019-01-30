@@ -102,7 +102,7 @@
                                 <div class="col-md-3">{% bootstrap_label _("Location") %} <br/> {{ admission.main_address.location | default:"-" }} </div>
                                 <div class="col-md-3">{% bootstrap_label _("Postal code") %} <br/> {{ admission.main_address.postal_code | default:"-" }} </div>
                                 <div class="col-md-3">{% bootstrap_label _("City") %} <br/> {{ admission.main_address.city | default:"-" }} </div>
-                                <div class="col-md-3">{% bootstrap_label _("Country") %} <br/> {{ admission.main_address.country | default:"-" }} </div>
+                                <div class="col-md-3">{% bootstrap_label _("Country") %} <br/> {{ admission.main_address.country_text | default:"-" }} </div>
                             </div>
                         </div>
 

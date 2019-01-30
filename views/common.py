@@ -48,6 +48,7 @@ from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
 from continuing_education.models.admission import Admission
+from reference.models.country import Country
 
 
 def display_errors(request, errors):
@@ -151,6 +152,7 @@ def get_submission_errors(admission, is_registration=False):
 
 def _update_errors(forms, errors, errors_field):
     for form in forms:
+        print(form.errors)
         for field in form.errors:
             errors.update({form[field].label: form.errors[field]})
             errors_field.append(field)
@@ -192,6 +194,11 @@ def transform_response_to_data(response):
     data = JSONParser().parse(stream)
     if 'results' in data:
         data = data['results']
+    data['main_address']['country'] = Country.objects.get(iso_code=data['main_address']['country']).id
+    data['person_information']['birth_country'] = Country.objects.get(
+        iso_code=data['person_information']['birth_country']
+    ).id
+    print(data['formation'])
     return data
 
 
