@@ -118,7 +118,7 @@ def registration_edit(request, admission_id):
         admission.save()
         errors, errors_fields = get_submission_errors(admission, is_registration=True)
         return redirect(
-            reverse('registration_edit', kwargs={'admission_id': admission_id})
+            reverse('registration_detail', kwargs={'admission_id': admission_id})
         )
     else:
         errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))

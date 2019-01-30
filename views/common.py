@@ -190,7 +190,9 @@ def _show_submit_warning(admission_submission_errors, request):
 
 
 def _get_files_list(admission, url_continuing_education_file_api):
-    # get files list of an admission with OSIS IUFC API
+    """
+    Get files list of an admission with OSIS IUFC API
+    """
     files_list = []
     response = requests.get(
         url=url_continuing_education_file_api,
@@ -200,7 +202,6 @@ def _get_files_list(admission, url_continuing_education_file_api):
         stream = io.BytesIO(response.content)
         files_list = JSONParser().parse(stream)['results']
         for file in files_list:
-            # date : parse str to datetime
             file['created_date'] = parser.parse(
                 file['created_date']
             )
