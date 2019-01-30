@@ -220,9 +220,7 @@ def _prepare_headers(method):
 
 
 def _is_file_uploaded_by_admission_person(admission, file):
-    return _get_uploadedby_uuid(file) == str(admission.person_information.person.uuid)
-
-
-def _get_uploadedby_uuid(file):
     uploaded_by = file.get('uploaded_by', None)
-    return uploaded_by.get('uuid', None) if uploaded_by else None
+    uploader_uuid = uploaded_by.get('uuid', None) if uploaded_by else None
+    return uploader_uuid == str(admission.person_information.person.uuid)
+
