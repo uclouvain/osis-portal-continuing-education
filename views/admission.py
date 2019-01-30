@@ -27,6 +27,7 @@ import base64
 import io
 import itertools
 from mimetypes import MimeTypes
+from pprint import pprint
 
 import requests
 from dateutil import parser
@@ -51,18 +52,17 @@ from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
-from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
-from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.common import display_errors, display_success_messages, display_error_messages, \
-    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _build_warning_from_errors_dict
+    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _build_warning_from_errors_dict, \
+    get_data_from_osis, get_data_list_from_osis
 
 
 @login_required
-def admission_detail(request, admission_id):
-    admission = _find_user_admission_by_id(admission_id, user=request.user)
-    if admission.state == admission_state_choices.DRAFT:
+def admission_detail(request, admission_uuid):
+    admission = get_data_from_osis("admissions", admission_uuid)
+    if admission["state"] == admission_state_choices.DRAFT:
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
@@ -72,7 +72,7 @@ def admission_detail(request, admission_id):
 
     list_files = _get_files_list(
         admission,
-        settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
+        settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/"
     )
 
     return render(
@@ -92,12 +92,12 @@ MAX_ADMISSION_FILE_NAME_LENGTH = 100
 @login_required
 def upload_file(request, admission_uuid):
     admission_file = request.FILES['myfile'] if 'myfile' in request.FILES else None
-    admission = Admission.objects.get(uuid=admission_uuid)
-    person = admission.person_information.person
+    admission = get_data_from_osis("admissions", admission_uuid)
+    person = admission['person_information']['person']
     data = {
-        'uploaded_by': person.uuid,
+        'uploaded_by': person['uuid'],
     }
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/"
     headers_to_upload = {
         'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
     }
@@ -141,7 +141,7 @@ def _show_save_before_submit(request):
     )
 
 
-def _show_admission_saved(request, admission_id):
+def _show_admission_saved(request, admission_uuid):
     messages.add_message(
         request=request,
         level=messages.INFO,
@@ -150,7 +150,7 @@ def _show_admission_saved(request, admission_id):
               'You are still able to edit the form. '
               'Do not forget to submit it when it is complete via '
               '<a href="%(url)s"><b>the admission file page</b></a> !'
-              ) % {'url': reverse('admission_detail', kwargs={'admission_id': admission_id})}
+              ) % {'url': reverse('admission_detail', kwargs={'admission_uuid': admission_uuid})}
         ))
 
 
@@ -173,7 +173,7 @@ def _get_files_list(admission, url_continuing_education_file_api):
 
 
 def _file_uploaded_by_admission_person(admission, file):
-    return _get_uploadedby_uuid(file) == str(admission.person_information.person.uuid)
+    return _get_uploadedby_uuid(file) == str(admission['person_information']['person']['uuid'])
 
 
 def _get_uploadedby_uuid(file):
@@ -250,19 +250,22 @@ def remove_file(request, file_uuid, admission_uuid):
 
 
 @login_required
-def admission_form(request, admission_id=None, **kwargs):
+def admission_form(request, admission_uuid=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
-    admission = _find_user_admission_by_id(admission_id, user=request.user) if admission_id else None
-    if admission and admission.state != admission_state_choices.DRAFT:
+    admission = get_data_from_osis("admissions", admission_uuid) if admission_uuid else None
+    if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
-    person_information = continuing_education_person.find_by_person(person=base_person)
-    adm_form = AdmissionForm(request.POST or None, instance=admission)
-    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
+    person_information = get_data_list_from_osis("persons", "person", str(base_person))[0]
+    adm_form = AdmissionForm(admission)
+    pprint(adm_form)
+    person_form = ContinuingEducationPersonForm(initial=person_information)
 
-    current_address = admission.address if admission else None
-    old_admission = Admission.objects.filter(person_information=person_information).last()
+    current_address = admission['main_address'] if admission else None
+    # old_admission = Admission.objects.filter(person_information=person_information).last()
+    old_admission = get_data_list_from_osis("admissions", "person_information__uuid", str(person_information['uuid']))
     address = current_address if current_address else (old_admission.address if old_admission else None)
-    address_form = AddressForm(request.POST or None, instance=address)
+
+    address_form = AddressForm(initial=address)
 
     id_form = PersonForm(request.POST or None, instance=base_person)
 
@@ -282,7 +285,7 @@ def admission_form(request, admission_id=None, **kwargs):
     if admission:
         list_files = _get_files_list(
             admission,
-            settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
+            settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission['uuid']) + "/files/"
         )
     else:
         list_files = []

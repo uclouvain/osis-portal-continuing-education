@@ -6,18 +6,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.forms import ModelForm
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
-from continuing_education.models.continuing_education_person import ContinuingEducationPerson
 from osis_common.messaging import message_config, send_message as message_service
 from reference.models.country import Country
 
 
-class ContinuingEducationPersonForm(ModelForm):
+class ContinuingEducationPersonForm(forms.Form):
     birth_country = forms.ModelChoiceField(
         queryset=Country.objects.all().order_by('name'),
         label=_("Birth country"),
@@ -36,10 +34,9 @@ class ContinuingEducationPersonForm(ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-
+        self.instance = kwargs.pop('instance', None)
         super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
-
-        if self.instance.pk:
+        if self.instance:
             self._disable_existing_person_fields()
 
     def _disable_existing_person_fields(self):
@@ -50,14 +47,6 @@ class ContinuingEducationPersonForm(ModelForm):
             self.fields[field].widget.attrs['readonly'] = True
             if field in fields_to_disable:
                 self.fields[field].widget.attrs['disabled'] = True
-
-    class Meta:
-        model = ContinuingEducationPerson
-        fields = [
-            'birth_date',
-            'birth_location',
-            'birth_country',
-        ]
 
 
 class ContinuingEducationPasswordResetForm(forms.Form):

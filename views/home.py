@@ -30,8 +30,9 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 
 from base.models import person as mdl_person
-from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
+from continuing_education.models import admission
 from continuing_education.models.enums import admission_state_choices
+from continuing_education.views.common import get_data_list_from_osis
 
 
 def formations_list(request):
@@ -56,10 +57,10 @@ def main_view(request, formation_id=None):
         request.session['formation_id'] = formation_id
     if request.user.is_authenticated:
         person = mdl_person.find_by_user(request.user)
-        continuing_education_person = mdl_continuing_education_person.find_by_person(person=person)
-        admissions = admission.search(person=continuing_education_person)
+        continuing_education_person = get_data_list_from_osis("persons", "person", str(person))[0]
+        admissions = get_data_list_from_osis("admissions", "person", str(person))
         registrations = admission.search(
-            person=continuing_education_person,
+            person__uuid=continuing_education_person['person']['uuid'],
             state__in=[admission_state_choices.ACCEPTED, admission_state_choices.REGISTRATION_SUBMITTED],
         )
         return render(request, "continuing_education/home.html", locals())

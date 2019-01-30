@@ -23,8 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import io
 from collections import OrderedDict
 
+import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import login as django_login
@@ -34,6 +37,7 @@ from django.urls import reverse
 from django.utils import translation
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ugettext
+from rest_framework.parsers import JSONParser
 
 from base.models import person as person_mdl
 from base.views import layout
@@ -112,6 +116,7 @@ def get_submission_errors(admission, is_registration=False):
     errors = OrderedDict()
 
     if is_registration:
+        admission = Admission.objects.get(uuid=admission['uuid'])
         address_form = StrictAddressForm(
             data=model_to_dict(admission.billing_address)
         )
@@ -127,16 +132,16 @@ def get_submission_errors(admission, is_registration=False):
             _update_errors([residence_address_form], errors, errors_field)
     else:
         person_form = StrictPersonForm(
-            data=model_to_dict(admission.person_information.person)
+            data=admission['person_information']['person']
         )
         person_information_form = ContinuingEducationPersonForm(
-            data=model_to_dict(admission.person_information)
+            data=admission['person_information']
         )
         address_form = StrictAddressForm(
-            data=model_to_dict(admission.address)
+            data=admission['main_address']
         )
         adm_form = StrictAdmissionForm(
-            data=model_to_dict(admission)
+            data=admission
         )
         forms = [person_form, person_information_form, address_form, adm_form]
         _update_errors(forms, errors, errors_field)
@@ -180,3 +185,33 @@ def _show_submit_warning(admission_submission_errors, request):
             level=messages.WARNING,
             message=_build_warning_from_errors_dict(admission_submission_errors),
         )
+
+
+def transform_response_to_data(response):
+    stream = io.BytesIO(response.content)
+    data = JSONParser().parse(stream)
+    if 'results' in data:
+        data = data['results']
+    return data
+
+
+def get_data_list_from_osis(object_name, filter_field=None, filter_value=None):
+    header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_name + "/"
+    if filter_field and filter_value:
+        url = url + "?" + filter_field + "=" + filter_value
+    response = requests.get(
+        url=url,
+        headers=header_to_get
+    )
+    return transform_response_to_data(response)
+
+
+def get_data_from_osis(object_name, uuid):
+    header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_name + "/" + str(uuid)
+    response = requests.get(
+        url=url,
+        headers=header_to_get
+    )
+    return transform_response_to_data(response)

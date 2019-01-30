@@ -63,7 +63,7 @@
                         {% for admission in admissions %}
                             {% if admission.state != "Accepted" and admission.state != "Registration submitted" %}
                             <tr>
-                                <td><a href="{% url 'admission_detail' admission_id=admission.id %}">{{ admission.formation }}</a></td>
+                                <td><a href="{% url 'admission_detail' admission_uuid=admission.uuid %}">{{ admission.formation.acronym }} - {{ admission.formation.code }} : {{ admission.formation.academic_year }}</a></td>
                                 <td class="admission-state">
                                     {% if admission.state == "Waiting" %}
                                         <span class="label label-primary show">{% trans admission.state %}</span>
