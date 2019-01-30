@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from unittest.mock import patch
+
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -30,6 +32,7 @@ from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase
 from django.utils.translation import ugettext, ugettext_lazy as _
+from requests import Response
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.enums import admission_state_choices
@@ -56,6 +59,13 @@ class ViewStudentRegistrationTestCase(TestCase):
             state="Registration submitted",
             person_information=self.person_information
         )
+
+        self.patcher = patch(
+            "continuing_education.views.registration._get_files_list",
+            return_value=Response()
+        )
+        self.mocked_called_api_function = self.patcher.start()
+        self.addCleanup(self.patcher.stop)
 
     def test_registration_detail(self):
         url = reverse('registration_detail', args=[self.admission_accepted.id])
@@ -180,7 +190,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         }
         url = reverse('registration_edit', args=[self.admission_accepted.pk])
         response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_edit', args=[self.admission_accepted.id]))
+        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
         self.admission_accepted.refresh_from_db()
 
         # verifying that fields are correctly updated
@@ -199,7 +209,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         }
         url = reverse('registration_edit', args=[self.admission_accepted.pk])
         response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_edit', args=[self.admission_accepted.id]))
+        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
         self.admission_accepted.refresh_from_db()
         self.admission_accepted.billing_address.refresh_from_db()
 

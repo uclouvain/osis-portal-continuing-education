@@ -25,6 +25,7 @@
 ##############################################################################
 import itertools
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
@@ -40,6 +41,7 @@ from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
+from continuing_education.views.admission import _get_files_list
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
     _show_submit_warning
 
@@ -55,6 +57,10 @@ def registration_detail(request, admission_id):
             _show_submit_warning(registration_submission_errors, request)
     else:
         registration_is_submittable = False
+    list_files = _get_files_list(
+        admission,
+        settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
+    )
     return render(request, "registration_detail.html", locals())
 
 
@@ -112,7 +118,7 @@ def registration_edit(request, admission_id):
         admission.save()
         errors, errors_fields = get_submission_errors(admission, is_registration=True)
         return redirect(
-            reverse('registration_edit', kwargs={'admission_id': admission_id})
+            reverse('registration_detail', kwargs={'admission_id': admission_id})
         )
     else:
         errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))
