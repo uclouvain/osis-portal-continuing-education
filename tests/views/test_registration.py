@@ -190,7 +190,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         }
         url = reverse('registration_edit', args=[self.admission_accepted.pk])
         response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_edit', args=[self.admission_accepted.id]))
+        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
         self.admission_accepted.refresh_from_db()
 
         # verifying that fields are correctly updated
@@ -209,7 +209,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         }
         url = reverse('registration_edit', args=[self.admission_accepted.pk])
         response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_edit', args=[self.admission_accepted.id]))
+        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
         self.admission_accepted.refresh_from_db()
         self.admission_accepted.billing_address.refresh_from_db()
 
