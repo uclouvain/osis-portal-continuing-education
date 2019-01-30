@@ -33,7 +33,7 @@ from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
 from continuing_education.forms.account import ContinuingEducationPersonForm
-from continuing_education.forms.address import AddressForm
+from continuing_education.forms.address import AddressModelForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.forms.registration import RegistrationForm
 from continuing_education.models import continuing_education_person
@@ -47,7 +47,7 @@ from continuing_education.views.common import display_errors, get_submission_err
 @login_required
 def registration_detail(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
-
+    print(vars(admission))
     if admission.state == admission_state_choices.ACCEPTED:
         registration_submission_errors, errors_fields = get_submission_errors(admission, is_registration=True)
         registration_is_submittable = not registration_submission_errors
@@ -73,9 +73,10 @@ def registration_submit(request):
 @login_required
 def registration_edit(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
+
     form = RegistrationForm(request.POST or None, instance=admission)
-    billing_address_form = AddressForm(request.POST or None, instance=admission.billing_address, prefix="billing")
-    residence_address_form = AddressForm(request.POST or None, instance=admission.residence_address, prefix="residence")
+    billing_address_form = AddressModelForm(request.POST or None, instance=admission.billing_address, prefix="billing")
+    residence_address_form = AddressModelForm(request.POST or None, instance=admission.residence_address, prefix="residence")
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
     person_information = continuing_education_person.find_by_person(person=base_person)

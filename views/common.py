@@ -43,12 +43,11 @@ from base.models import person as person_mdl
 from base.views import layout
 from base.views.layout import render
 from continuing_education.forms.account import ContinuingEducationPersonForm
-from continuing_education.forms.address import StrictAddressForm
+from continuing_education.forms.address import StrictAddressForm, StrictAddressModelForm
 from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
 from continuing_education.models.admission import Admission
-from reference.models.country import Country
 
 
 def display_errors(request, errors):
@@ -117,8 +116,7 @@ def get_submission_errors(admission, is_registration=False):
     errors = OrderedDict()
 
     if is_registration:
-        admission = Admission.objects.get(uuid=admission['uuid'])
-        address_form = StrictAddressForm(
+        address_form = StrictAddressModelForm(
             data=model_to_dict(admission.billing_address)
         )
         adm_form = StrictRegistrationForm(
@@ -127,7 +125,7 @@ def get_submission_errors(admission, is_registration=False):
         _update_errors([address_form, adm_form], errors, errors_field)
 
         if not admission.use_address_for_post:
-            residence_address_form = StrictAddressForm(
+            residence_address_form = StrictAddressModelForm(
                 data=model_to_dict(admission.residence_address)
             )
             _update_errors([residence_address_form], errors, errors_field)
@@ -194,11 +192,6 @@ def transform_response_to_data(response):
     data = JSONParser().parse(stream)
     if 'results' in data:
         data = data['results']
-    data['main_address']['country'] = Country.objects.get(iso_code=data['main_address']['country']).id
-    data['person_information']['birth_country'] = Country.objects.get(
-        iso_code=data['person_information']['birth_country']
-    ).id
-    print(data['formation'])
     return data
 
 
