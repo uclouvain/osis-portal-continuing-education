@@ -29,7 +29,6 @@ import itertools
 from mimetypes import MimeTypes
 
 import requests
-from dateutil import parser
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -56,7 +55,7 @@ from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.common import display_errors, display_success_messages, display_error_messages, \
-    get_submission_errors, _find_user_admission_by_id, _show_submit_warning
+    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _get_files_list, _prepare_headers
 
 
 @login_required
@@ -159,44 +158,6 @@ def _upload_file(request, file, admission, **kwargs):
             reverse('admission_detail', kwargs={'admission_id': admission.id}) + '#documents',
             args=kwargs
         )
-
-
-def _get_files_list(admission, url_continuing_education_file_api):
-    files_list = []
-    if admission:
-        response = requests.get(
-            url=url_continuing_education_file_api,
-            headers=_prepare_headers('GET'),
-        )
-        if response.status_code == status.HTTP_200_OK:
-            stream = io.BytesIO(response.content)
-            files_list = JSONParser().parse(stream)['results']
-            for file in files_list:
-                file['created_date'] = parser.parse(
-                    file['created_date']
-                )
-                file['is_deletable'] = _file_uploaded_by_admission_person(admission, file)
-    return files_list
-
-
-def _file_uploaded_by_admission_person(admission, file):
-    return _get_uploadedby_uuid(file) == str(admission.person_information.person.uuid)
-
-
-def _get_uploadedby_uuid(file):
-    uploaded_by = file.get('uploaded_by', None)
-    return uploaded_by.get('uuid', None) if uploaded_by else None
-
-
-def _prepare_headers(method):
-    if method in ['GET', 'DELETE']:
-        return {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    elif method == 'POST':
-        return {
-            'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
-            'Content-Disposition': 'attachment; filename=name.jpeg',
-            'Content-Type': MultiPartRenderer.media_type
-        }
 
 
 @login_required

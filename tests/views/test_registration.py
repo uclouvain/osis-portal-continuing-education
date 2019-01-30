@@ -61,13 +61,11 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
 
         self.patcher = patch(
-            "continuing_education.views.admission._get_files_list",
+            "continuing_education.views.registration._get_files_list",
             return_value=Response()
         )
         self.mocked_called_api_function = self.patcher.start()
-
-    def tearDown(self):
-        self.patcher.stop()
+        self.addCleanup(self.patcher.stop)
 
     def test_registration_detail(self):
         url = reverse('registration_detail', args=[self.admission_accepted.id])

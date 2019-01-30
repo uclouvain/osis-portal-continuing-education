@@ -23,8 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import io
 from collections import OrderedDict
 
+import requests
+from dateutil.parser import parser
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import login as django_login
@@ -34,6 +38,9 @@ from django.urls import reverse
 from django.utils import translation
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ugettext
+from rest_framework import status
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import MultiPartRenderer
 
 from base.models import person as person_mdl
 from base.views import layout
@@ -180,3 +187,42 @@ def _show_submit_warning(admission_submission_errors, request):
             level=messages.WARNING,
             message=_build_warning_from_errors_dict(admission_submission_errors),
         )
+
+
+def _get_files_list(admission, url_continuing_education_file_api):
+    files_list = []
+    if admission:
+        print(url_continuing_education_file_api)
+        response = requests.get(
+            url=url_continuing_education_file_api,
+            headers=_prepare_headers('GET'),
+        )
+        if response.status_code == status.HTTP_200_OK:
+            stream = io.BytesIO(response.content)
+            files_list = JSONParser().parse(stream)['results']
+            for file in files_list:
+                file['created_date'] = parser.parse(
+                    file['created_date']
+                )
+                file['is_deletable'] = _file_uploaded_by_admission_person(admission, file)
+    return files_list
+
+
+def _prepare_headers(method):
+    if method in ['GET', 'DELETE']:
+        return {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    elif method == 'POST':
+        return {
+            'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
+            'Content-Disposition': 'attachment; filename=name.jpeg',
+            'Content-Type': MultiPartRenderer.media_type
+        }
+
+
+def _file_uploaded_by_admission_person(admission, file):
+    return _get_uploadedby_uuid(file) == str(admission.person_information.person.uuid)
+
+
+def _get_uploadedby_uuid(file):
+    uploaded_by = file.get('uploaded_by', None)
+    return uploaded_by.get('uuid', None) if uploaded_by else None
