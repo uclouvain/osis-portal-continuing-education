@@ -27,7 +27,7 @@ import io
 from collections import OrderedDict
 
 import requests
-from dateutil.parser import parser
+from dateutil import parser
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
@@ -190,20 +190,21 @@ def _show_submit_warning(admission_submission_errors, request):
 
 
 def _get_files_list(admission, url_continuing_education_file_api):
+    # get files list of an admission with OSIS IUFC API
     files_list = []
-    if admission:
-        response = requests.get(
-            url=url_continuing_education_file_api,
-            headers=_prepare_headers('GET'),
-        )
-        if response.status_code == status.HTTP_200_OK:
-            stream = io.BytesIO(response.content)
-            files_list = JSONParser().parse(stream)['results']
-            for file in files_list:
-                file['created_date'] = parser.parse(
-                    file['created_date']
-                )
-                file['is_deletable'] = _is_file_uploaded_by_admission_person(admission, file)
+    response = requests.get(
+        url=url_continuing_education_file_api,
+        headers=_prepare_headers('GET'),
+    )
+    if response.status_code == status.HTTP_200_OK:
+        stream = io.BytesIO(response.content)
+        files_list = JSONParser().parse(stream)['results']
+        for file in files_list:
+            # date : parse str to datetime
+            file['created_date'] = parser.parse(
+                file['created_date']
+            )
+            file['is_deletable'] = _is_file_uploaded_by_admission_person(admission, file)
     return files_list
 
 
