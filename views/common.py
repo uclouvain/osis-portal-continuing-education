@@ -203,7 +203,7 @@ def _get_files_list(admission, url_continuing_education_file_api):
                 file['created_date'] = parser.parse(
                     file['created_date']
                 )
-                file['is_deletable'] = _file_uploaded_by_admission_person(admission, file)
+                file['is_deletable'] = _is_file_uploaded_by_admission_person(admission, file)
     return files_list
 
 
@@ -218,7 +218,7 @@ def _prepare_headers(method):
         }
 
 
-def _file_uploaded_by_admission_person(admission, file):
+def _is_file_uploaded_by_admission_person(admission, file):
     return _get_uploadedby_uuid(file) == str(admission.person_information.person.uuid)
 
 
