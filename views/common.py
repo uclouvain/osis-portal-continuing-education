@@ -192,7 +192,6 @@ def _show_submit_warning(admission_submission_errors, request):
 def _get_files_list(admission, url_continuing_education_file_api):
     files_list = []
     if admission:
-        print(url_continuing_education_file_api)
         response = requests.get(
             url=url_continuing_education_file_api,
             headers=_prepare_headers('GET'),
