@@ -223,4 +223,3 @@ def _is_file_uploaded_by_admission_person(admission, file):
     uploaded_by = file.get('uploaded_by', None)
     uploader_uuid = uploaded_by.get('uuid', None) if uploaded_by else None
     return uploader_uuid == str(admission.person_information.person.uuid)
-
