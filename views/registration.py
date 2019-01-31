@@ -70,6 +70,7 @@ def registration_detail(request, admission_id):
                 file,
                 admission,
                 list_files=list_files,
+                registration_is_submittable=registration_is_submittable,
                 registration=True,
             )
 
