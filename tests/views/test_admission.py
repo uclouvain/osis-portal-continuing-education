@@ -49,9 +49,8 @@ from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.views.admission import admission_form, \
-    MAX_ADMISSION_FILE_NAME_LENGTH
-from continuing_education.views.common import get_submission_errors
+from continuing_education.views.admission import admission_form
+from continuing_education.views.common import get_submission_errors, MAX_ADMISSION_FILE_NAME_LENGTH
 
 
 class ViewStudentAdmissionTestCase(TestCase):
