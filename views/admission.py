@@ -42,7 +42,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from rest_framework import status
 from rest_framework.parsers import JSONParser
-from rest_framework.renderers import MultiPartRenderer
 
 from base.models import person as mdl_person
 from base.models.person import Person
@@ -55,7 +54,7 @@ from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.common import display_errors, display_success_messages, display_error_messages, \
-    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _get_files_list, _prepare_headers
+    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _get_files_list, _upload_file
 
 
 @login_required
@@ -83,7 +82,7 @@ def admission_detail(request, admission_id):
                 admission,
                 list_files=list_files,
                 admission_is_submittable=admission_is_submittable,
-                form=False,
+                registration=False,
             )
 
     return render(
@@ -120,43 +119,6 @@ def _show_admission_saved(request, admission_id):
             request=request,
             level=messages.INFO,
             message=mark_safe(message)
-        )
-
-
-MAX_ADMISSION_FILE_NAME_LENGTH = 100
-
-
-def _upload_file(request, file, admission, **kwargs):
-    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
-    data = {
-        'file': file,
-        'admission_id': str(admission.uuid)
-    }
-    request_to_put_file = requests.put(
-        url_continuing_education_file_api,
-        data=MultiPartRenderer().render(data=data),
-        headers=_prepare_headers('POST')
-    )
-    if request_to_put_file.status_code == status.HTTP_201_CREATED:
-        display_success_messages(request, _("The document is uploaded correctly"))
-    elif request_to_put_file.status_code == status.HTTP_406_NOT_ACCEPTABLE:
-        display_error_messages(
-            request,
-            _("The name of the file is too long : maximum %(length)s characters.") % {
-                    'length': MAX_ADMISSION_FILE_NAME_LENGTH
-                }
-        )
-    else:
-        display_error_messages(request, _("A problem occured : the document is not uploaded"))
-    kwargs.update({'admission': admission})
-    if kwargs['form']:
-        return redirect(
-            reverse('admission_edit', kwargs={'admission_id': admission.id}) + "#documents",
-        )
-    else:
-        return redirect(
-            reverse('admission_detail', kwargs={'admission_id': admission.id}) + '#documents',
-            args=kwargs
         )
 
 
@@ -251,11 +213,6 @@ def admission_form(request, admission_id=None, **kwargs):
         )
     else:
         list_files = []
-
-    if request.method == 'POST':
-        file = request.FILES['myfile'] if 'myfile' in request.FILES else None
-        if file:
-            return _upload_file(request, file, admission, list_files=list_files, form=True)
 
     if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
         if current_address:

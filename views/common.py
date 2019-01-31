@@ -52,6 +52,8 @@ from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
 from continuing_education.models.admission import Admission
 
+MAX_ADMISSION_FILE_NAME_LENGTH = 100
+
 
 def display_errors(request, errors):
     for error in errors:
@@ -224,3 +226,37 @@ def _is_file_uploaded_by_admission_person(admission, file):
     uploaded_by = file.get('uploaded_by', None)
     uploader_uuid = uploaded_by.get('uuid', None) if uploaded_by else None
     return uploader_uuid == str(admission.person_information.person.uuid)
+
+
+def _upload_file(request, file, admission, **kwargs):
+    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
+    data = {
+        'file': file,
+        'admission_id': str(admission.uuid)
+    }
+    request_to_put_file = requests.put(
+        url_continuing_education_file_api,
+        data=MultiPartRenderer().render(data=data),
+        headers=_prepare_headers('POST')
+    )
+    if request_to_put_file.status_code == status.HTTP_201_CREATED:
+        display_success_messages(request, _("The document is uploaded correctly"))
+    elif request_to_put_file.status_code == status.HTTP_406_NOT_ACCEPTABLE:
+        display_error_messages(
+            request,
+            _("The name of the file is too long : maximum %(length)s characters.") % {
+                    'length': MAX_ADMISSION_FILE_NAME_LENGTH
+                }
+        )
+    else:
+        display_error_messages(request, _("A problem occured : the document is not uploaded"))
+    kwargs.update({'admission': admission})
+    if kwargs['registration']:
+        return redirect(
+            reverse('registration_detail', kwargs={'admission_id': admission.id}) + "#documents",
+        )
+    else:
+        return redirect(
+            reverse('admission_detail', kwargs={'admission_id': admission.id}) + '#documents',
+            args=kwargs
+        )
