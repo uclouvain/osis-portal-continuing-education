@@ -140,5 +140,18 @@
             console.log($(this).find(":selected").val());
             $('.high_school_graduation_year').toggle($(this).find(":selected").val());
         });
+
+        $('#tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+
+        var anchor = location.hash;
+        $('#tabs a[href="' + anchor + '"]').tab('show');
+
+        $('#customFile').change(function(e) {
+            $('#custom-file-label').text(this.files[0].name);
+            $('#btn-upload').removeAttr("disabled")
+        });
     </script>
 {% endblock %}
