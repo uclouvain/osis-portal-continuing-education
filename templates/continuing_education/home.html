@@ -104,7 +104,7 @@
                                 <td><a href="{% url 'registration_detail' admission_id=registration.id %}">{{ registration.formation }}</a></td>
                                 <td>{{ registration.get_faculty }}</td>
                                 <td style="vertical-align: middle;">
-                                {% if registration.registration_complete %}
+                                {% if registration.ucl_registration_complete %}
                                         <span class="label label-success show">{% trans 'Yes' %}</span>
                                 {% else %}
                                         <span class="label label-danger show">{% trans 'No' %}</span>

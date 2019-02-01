@@ -273,7 +273,7 @@ class Admission(SerializableModel):
     )
 
     # Student Sheet
-    registration_complete = models.BooleanField(
+    ucl_registration_complete = models.BooleanField(
         default=False,
         verbose_name=_("Registration complete")
     )
