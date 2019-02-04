@@ -110,16 +110,35 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertFalse(response.context['registration_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(len(messages_list), 2)
+
+        self.assertIn(
+            ugettext("Your registration file has been saved. Please consider the following information :"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("You are still able to edit the form"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("You can upload documents via the 'Documents'"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("Do not forget to submit your file when it is complete"),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
         self.assertIn(
             ugettext("Your file is not submittable because you did not provide the following data : "),
-            str(messages_list[0])
+            str(messages_list[1])
         )
         self.assertIn(
             ugettext("National registry number"),
-            str(messages_list[0])
+            str(messages_list[1])
         )
-        self.assertEqual(messages_list[0].level, messages.WARNING)
+        self.assertEqual(messages_list[1].level, messages.WARNING)
 
     def test_registration_submitted_detail(self):
         url = reverse('registration_detail', args=[self.registration_submitted.pk])
