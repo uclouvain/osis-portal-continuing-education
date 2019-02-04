@@ -44,7 +44,7 @@ from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.admission import _get_files_list
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
-    _show_submit_warning, _upload_file, add_informations_message_on_file
+    _show_submit_warning, _upload_file, add_informations_message_on_submittable_file
 
 
 @login_required
@@ -52,7 +52,7 @@ def registration_detail(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
 
     if admission.state == admission_state_choices.ACCEPTED:
-        add_informations_message_on_file(
+        add_informations_message_on_submittable_file(
             request=request,
             title=_("Your registration file has been saved. Please consider the following information :")
         )

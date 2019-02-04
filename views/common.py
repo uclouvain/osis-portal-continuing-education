@@ -262,7 +262,7 @@ def _upload_file(request, file, admission, **kwargs):
         )
 
 
-def add_informations_message_on_file(request, title):
+def add_informations_message_on_submittable_file(request, title):
     if request.method == 'GET':
         items = [
             _("You are still able to edit the form"),

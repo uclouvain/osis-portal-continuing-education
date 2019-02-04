@@ -36,7 +36,6 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.utils.safestring import mark_safe
 from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
@@ -55,14 +54,14 @@ from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.common import display_errors, display_success_messages, display_error_messages, \
     get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _get_files_list, _upload_file, \
-    add_informations_message_on_file
+    add_informations_message_on_submittable_file
 
 
 @login_required
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
     if admission.state == admission_state_choices.DRAFT:
-        add_informations_message_on_file(
+        add_informations_message_on_submittable_file(
             request=request,
             title=_("Your admission file has been saved. Please consider the following information :")
         )
