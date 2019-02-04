@@ -76,6 +76,26 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(response.context['admission'], self.admission_accepted)
         self.assertTrue(response.context['registration_is_submittable'])
 
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertIn(
+            ugettext("Your registration file has been saved. Please consider the following information :"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("You are still able to edit the form"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("You can upload documents via the 'Documents'"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("Do not forget to submit your file when it is complete"),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
     def test_registration_detail_not_submittable(self):
         self.admission_accepted.national_registry_number = ''
         self.admission_accepted.save()
