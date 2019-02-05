@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-05 14:44+0100\n"
+"POT-Creation-Date: 2019-02-05 14:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "A problem occured : the document is not uploaded"
 msgstr ""
 
-#: views/admission.py:178
+#: views/admission.py:163
 msgid "A problem occured during delete"
 msgstr ""
 
@@ -215,7 +215,8 @@ msgstr ""
 msgid "Divorced"
 msgstr ""
 
-#: views/admission.py:113
+#: tests/views/test_registration.py:95 tests/views/test_registration.py:129
+#: views/common.py:270
 msgid "Do not forget to submit your file when it is complete"
 msgstr ""
 
@@ -264,7 +265,7 @@ msgstr ""
 msgid "Female"
 msgstr ""
 
-#: views/admission.py:176
+#: views/admission.py:161
 msgid "File correctly deleted"
 msgstr ""
 
@@ -437,8 +438,8 @@ msgid "Name"
 msgstr ""
 
 #: models/admission.py:218 templates/registration_detail.html:84
-#: tests/views/test_registration.py:99 tests/views/test_registration.py:246
-#: tests/views/test_registration.py:258
+#: tests/views/test_registration.py:139 tests/views/test_registration.py:298
+#: tests/views/test_registration.py:310
 msgid "National registry number"
 msgstr ""
 
@@ -525,8 +526,8 @@ msgstr ""
 #: templates/registration_detail.html:107
 #: templates/registration_detail.html:122 templates/registration_form.html:119
 #: templates/registration_form.html:146 tests/views/test_admission.py:362
-#: tests/views/test_admission.py:399 tests/views/test_registration.py:244
-#: tests/views/test_registration.py:245 tests/views/test_registration.py:270
+#: tests/views/test_admission.py:399 tests/views/test_registration.py:296
+#: tests/views/test_registration.py:297 tests/views/test_registration.py:322
 msgid "Postal code"
 msgstr ""
 
@@ -736,9 +737,9 @@ msgstr ""
 #: tests/views/test_admission.py:362 tests/views/test_admission.py:363
 #: tests/views/test_admission.py:375 tests/views/test_admission.py:387
 #: tests/views/test_admission.py:399 tests/views/test_admission.py:411
-#: tests/views/test_registration.py:244 tests/views/test_registration.py:245
-#: tests/views/test_registration.py:246 tests/views/test_registration.py:258
-#: tests/views/test_registration.py:270
+#: tests/views/test_registration.py:296 tests/views/test_registration.py:297
+#: tests/views/test_registration.py:298 tests/views/test_registration.py:310
+#: tests/views/test_registration.py:322
 msgid "This field is required."
 msgstr ""
 
@@ -794,16 +795,18 @@ msgstr ""
 msgid "You already have an account"
 msgstr ""
 
-#: views/admission.py:111
+#: tests/views/test_registration.py:87 tests/views/test_registration.py:121
+#: views/common.py:268
 msgid "You are still able to edit the form"
 msgstr ""
 
-#: views/admission.py:103
+#: views/admission.py:106
 msgid ""
 "You can save an application form and access it later until it is submitted"
 msgstr ""
 
-#: views/admission.py:112
+#: tests/views/test_registration.py:91 tests/views/test_registration.py:125
+#: views/common.py:269
 msgid "You can upload documents via the 'Documents'"
 msgstr ""
 
@@ -811,14 +814,14 @@ msgstr ""
 msgid "You don't have an account"
 msgstr ""
 
-#: views/admission.py:109
+#: views/admission.py:66
 msgid ""
 "Your admission file has been saved. Please consider the following "
 "information :"
 msgstr ""
 
 #: tests/views/test_admission.py:112 tests/views/test_admission.py:244
-#: tests/views/test_registration.py:95 views/common.py:173
+#: tests/views/test_registration.py:135 views/common.py:173
 msgid ""
 "Your file is not submittable because you did not provide the following "
 "data : "
@@ -826,6 +829,13 @@ msgstr ""
 
 #: views/account_activation.py:375
 msgid "Your password was successfully changed."
+msgstr ""
+
+#: tests/views/test_registration.py:83 tests/views/test_registration.py:117
+#: views/registration.py:58
+msgid ""
+"Your registration file has been saved. Please consider the following "
+"information :"
 msgstr ""
 
 #: templates/django_registration/registration_complete.html:32
