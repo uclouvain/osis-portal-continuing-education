@@ -42,6 +42,7 @@ from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
+from continuing_education.models.enums.admission_state_choices import ACCEPTED
 from continuing_education.views.admission import _get_files_list
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
     _show_submit_warning, _upload_file, add_informations_message_on_submittable_file
@@ -96,7 +97,7 @@ def registration_submit(request):
 
 @login_required
 def registration_edit(request, admission_id):
-    admission = get_object_or_404(Admission, pk=admission_id)
+    admission = get_object_or_404(Admission, pk=admission_id, state=ACCEPTED)
     form = RegistrationForm(request.POST or None, instance=admission)
     billing_address_form = AddressForm(request.POST or None, instance=admission.billing_address, prefix="billing")
     residence_address_form = AddressForm(request.POST or None, instance=admission.residence_address, prefix="residence")
