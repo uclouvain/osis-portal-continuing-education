@@ -36,7 +36,6 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.utils.safestring import mark_safe
 from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
@@ -54,14 +53,18 @@ from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.common import display_errors, display_success_messages, display_error_messages, \
-    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _get_files_list, _upload_file
+    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _get_files_list, _upload_file, \
+    add_informations_message_on_submittable_file
 
 
 @login_required
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
     if admission.state == admission_state_choices.DRAFT:
-        _show_admission_saved(request, admission.id)
+        add_informations_message_on_submittable_file(
+            request=request,
+            title=_("Your admission file has been saved. Please consider the following information :")
+        )
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
@@ -102,24 +105,6 @@ def _show_save_before_submit(request):
         level=messages.INFO,
         message=_("You can save an application form and access it later until it is submitted"),
     )
-
-
-def _show_admission_saved(request, admission_id):
-    if request.method == 'GET':
-        title = _("Your admission file has been saved. Please consider the following information :")
-        items = [
-            _("You are still able to edit the form"),
-            _("You can upload documents via the 'Documents'"),
-            _("Do not forget to submit your file when it is complete"),
-        ]
-        message = "<strong>{}</strong><br>".format(title) + \
-            "".join(["- {}<br>".format(item) for item in items])
-
-        messages.add_message(
-            request=request,
-            level=messages.INFO,
-            message=mark_safe(message)
-        )
 
 
 @login_required
