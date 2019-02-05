@@ -1,0 +1,169 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load bootstrap3 %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {{ root.verbose_title }}
+    </title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat|Montserrat:bold|Garamond|Garamond:bold' rel='stylesheet'>
+    <style type="text/css">
+        body {
+            font-family: 'Garamond';
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat';
+        }
+        @page {
+            size: A4 portrait;
+            margin: 2cm 1cm 2cm 1cm;
+
+            @top-right {
+                content: "{% trans 'Academic year' %} {{ root.academic_year }} \A {{ root.verbose_title|safe }}";
+                white-space: pre-line;
+                font-size: 11px;
+            }
+
+            @top-left {
+                background: url("{% static 'img/logo_uclouvain.png' %}") no-repeat;
+                display: inline-block;
+                width: 92mm;
+                padding-top: 65px;
+                font-size: 9px;
+                text-align: center;
+                content: "";
+            }
+
+            @bottom-left {
+                content: "({{ created | date:'d/m/y' }})";
+                font-size: 11px;
+            }
+
+            @bottom-right {
+                content: "Page " counter(page);
+                font-size: 11px;
+            }
+
+            @bottom-center {
+                background:
+                {% if language == "en" %}
+                    url("{% static 'img/education_group_year/legend_en.png' %}")
+                {% else %}
+                    url("{% static 'img/education_group_year/legend_fr.png' %}")
+                {% endif %}
+                no-repeat;
+                width: 400px;
+                content: "";
+                text-align: center;
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        td, th, tr {
+            font-size: 11px;
+        }
+
+    </style>
+</head>
+<body>
+    <h2><div>{% trans 'Identification' %}</div></h2>
+    <div><strong>{% trans "First name" %}:</strong>
+         {{ admission.person_information.person.first_name | default:"-" }} </div>
+    <div><strong>{% trans "Last name" %}:</strong>
+         {{ admission.person_information.person.last_name | default:"-" }} </div>
+    <div><strong>{% trans "Gender" %}:</strong>
+         {{ admission.person_information.person.gender | default:"-" }} </div>
+    <div><strong>{% trans "Citizenship" %}:</strong>
+         {{ admission.citizenship | default:"-" }} </div>
+    <div><strong>{% trans "Birth date" %}:</strong>
+         {{ admission.person_information.birth_date | default:"-" }} </div>
+    <div><strong>{% trans "Birth location" %}:</strong>
+         {{ admission.person_information.birth_location | default:"-" }} </div>
+    <div><strong>{% trans "Birth country" %}:</strong>
+         {{ admission.person_information.birth_country | default:"-" }} </div>
+    <div><strong>{% trans "National registry number" %}:</strong>
+         {{ admission.national_registry_number | default_if_none:"-" }} </div>
+    <div><strong>{% trans "ID card number" %}:</strong>
+         {{ admission.id_card_number | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Passport number" %}:</strong>
+         {{ admission.passport_number | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Marital status" %}:</strong>
+         {{ admission.get_marital_status_display | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Spouse name" %}:</strong>
+         {{ admission.spouse_name | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Children number" %}:</strong>
+         {{ admission.children_number | default_if_none:"-" }} </div>
+    <div class="col-md-6"><strong>{% trans "Previous UCL registration" %}</strong>
+         {{ admission.previous_ucl_registration | yesno }} </div>
+    <div><strong>{% trans "Previous NOMA" %}:</strong>
+         {{ admission.previous_noma | default_if_none:"-" }} </div>
+
+    <h2><div>{% trans 'Education' %}</div></h2>
+    <div><strong>{% trans "High school diploma" %}:</strong>
+         {{ admission.high_school_diploma | yesno }} </div>
+    <div><strong>{% trans "High school graduation year" %}:</strong>
+         {{ admission.high_school_graduation_year | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Last degree level" %}:</strong>
+         {{ admission.last_degree_level | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Last degree field" %}:</strong>
+         {{ admission.last_degree_field | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Last degree institution" %}:</strong>
+         {{ admission.last_degree_institution | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Last degree graduation year" %}:</strong>
+         {{ admission.last_degree_graduation_year | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Other educational background" %}:</strong>
+         {{ admission.other_educational_background | default_if_none:"-" }} </div>
+
+    <h2><div>{% trans 'Professional background' %}</div></h2>
+    <div><strong>{% trans "Professional status" %}:</strong>
+         {{ admission.professional_status | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Current occupation" %}:</strong>
+         {{ admission.current_occupation | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Current employer" %}:</strong>
+         {{ admission.current_employer | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Activity sector" %}:</strong>
+         {{ admission.activity_sector | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Past professional activities" %}:</strong>
+         {{ admission.past_professional_activities | default_if_none:"-" }} </div>
+
+    <h2><div>{% trans 'Motivation' %}</div></h2>
+    <div><strong>{% trans "Motivation" %}:</strong>
+         {{ admission.motivation | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Professional impact" %}:</strong>
+         {{ admission.professional_impact | default_if_none:"-" }} </div>
+
+    <h2><div>{% trans 'Billing' %}</div></h2>
+    <div><strong>{% trans "Registration type" %}:</strong>
+         {{ admission.get_registration_type_display | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Location" %}:</strong>
+         {{ admission.billing_address.location | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Postal code" %}:</strong>
+         {{ admission.billing_address.postal_code | default_if_none:"-" }} </div>
+    <div><strong>{% trans "City" %}:</strong>
+         {{ admission.billing_address.city | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Country" %}:</strong>
+         {{ admission.billing_address.country | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Head office name" %}:</strong>
+         {{ admission.head_office_name | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Company number" %}:</strong>
+         {{ admission.company_number | default_if_none:"-" }} </div>
+    <div><strong>{% trans "VAT number" %}:</strong>
+         {{ admission.vat_number | default_if_none:"-" }} </div>
+
+    <h2><div>{% trans 'Post' %}</div></h2>
+    <div><strong>{% trans "Location" %}:</strong>
+         {{ admission.residence_address.location | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Postal code" %}:</strong>
+         {{ admission.residence_address.postal_code | default_if_none:"-" }} </div>
+    <div><strong>{% trans "City" %}:</strong>
+         {{ admission.residence_address.city | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Country" %}:</strong>
+         {{ admission.residence_address.country | default_if_none:"-" }} </div>
+    <div class="col-md-4"><strong>{% trans "Residence phone" %}:</strong>
+         {{ admission.residence_phone | default_if_none:"-" }} </div>
+
+</body>
+</html>
