@@ -260,3 +260,20 @@ def _upload_file(request, file, admission, **kwargs):
             reverse('admission_detail', kwargs={'admission_id': admission.id}) + '#documents',
             args=kwargs
         )
+
+
+def add_informations_message_on_submittable_file(request, title):
+    if request.method == 'GET':
+        items = [
+            _("You are still able to edit the form"),
+            _("You can upload documents via the 'Documents'"),
+            _("Do not forget to submit your file when it is complete"),
+        ]
+        message = "<strong>{}</strong><br>".format(title) + \
+            "".join(["- {}<br>".format(item) for item in items])
+
+        messages.add_message(
+            request=request,
+            level=messages.INFO,
+            message=mark_safe(message)
+        )
