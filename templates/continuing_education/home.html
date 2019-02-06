@@ -61,7 +61,7 @@
                             </tr>
                         </thead>
                         {% for admission in admissions %}
-                            {% if admission.state != "Accepted" and admission.state != "Registration submitted" %}
+                            {% if admission.state != "Accepted" and admission.state != "Registration submitted" and admission.state != "Validated" %}
                             <tr>
                                 <td><a href="{% url 'admission_detail' admission_id=admission.id %}">{{ admission.formation }}</a></td>
                                 <td class="admission-state">
@@ -83,7 +83,11 @@
                         </table>
                     {% else %}
                         <div class="jumbotron">
-                            <span>{% trans 'No admission yet' %}</span>
+                            {% if not registrations %}
+                                <span>{% trans 'No admission yet' %}</span>
+                            {% else %}
+                                <span>{% trans 'At least one of your admission files is now processed as a registration file and is accessible via the registration tab' %}</span>
+                            {% endif %}
                         </div>
                     {% endif %}
                     </div>
