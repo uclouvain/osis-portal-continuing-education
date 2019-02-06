@@ -62,7 +62,7 @@
     background-color: #337ab7;
 }
 
-.admission-detail-state-accepted{
+.admission-detail-state-accepted, .admission-detail-state-validated{
     background-color: #5cb85c;
 }
 
@@ -74,7 +74,7 @@
     background-color: #777777;
 }
 
-.admission-detail-state-submitted{
+.admission-detail-state-submitted, .admission-detail-state-registration-submitted{
     background-color: #5bc0de;
 }
 
