@@ -18,7 +18,7 @@ class FormationChoiceField(forms.ModelChoiceField):
             formation.academic_year,
         )
 
-#Pays de naissance · Pays · Formation · Nationalité · Informations personnelles ·
+
 class AdmissionForm(Form):
     formation = FormationChoiceField(queryset=EducationGroupYear.objects.all())
     state = forms.ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)

@@ -76,7 +76,11 @@ def registration_edit(request, admission_id):
 
     form = RegistrationForm(request.POST or None, instance=admission)
     billing_address_form = AddressModelForm(request.POST or None, instance=admission.billing_address, prefix="billing")
-    residence_address_form = AddressModelForm(request.POST or None, instance=admission.residence_address, prefix="residence")
+    residence_address_form = AddressModelForm(
+        request.POST or None,
+        instance=admission.residence_address,
+        prefix="residence"
+    )
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
     person_information = continuing_education_person.find_by_person(person=base_person)
