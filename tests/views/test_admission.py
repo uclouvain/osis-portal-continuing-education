@@ -49,9 +49,8 @@ from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.views.admission import admission_form, \
-    MAX_ADMISSION_FILE_NAME_LENGTH
-from continuing_education.views.common import get_submission_errors
+from continuing_education.views.admission import admission_form
+from continuing_education.views.common import get_submission_errors, MAX_ADMISSION_FILE_NAME_LENGTH
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -104,18 +103,17 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         self.assertEqual(response.context['admission'], self.admission)
         self.assertFalse(response.context['admission_is_submittable'])
-
-        messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(list(messages.get_messages(response.wsgi_request))[1].level, messages.WARNING)
+        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
+        self.assertEqual(len(messages_list), 2)
         self.assertIn(
             ugettext("Your file is not submittable because you did not provide the following data : "),
-            str(messages_list[0])
+            str(messages_list)
         )
         self.assertIn(
             ugettext("Last degree level"),
-            str(messages_list[0])
+            str(messages_list)
         )
-        self.assertEqual(messages_list[0].level, messages.WARNING)
 
     def test_admission_submitted_detail(self):
         url = reverse('admission_detail', args=[self.admission_submitted.pk])
@@ -206,16 +204,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.post(reverse('admission_new'), data=admission)
         created_admission = Admission.objects.last()
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_edit', args=[created_admission.pk]))
-
-        # An information message should be displayed
-        messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 1)
-        self.assertIn(
-            reverse('admission_detail', kwargs={'admission_id': created_admission.pk}),
-            str(messages_list[0])
-        )
-        self.assertEqual(messages_list[0].level, messages.INFO)
+        self.assertRedirects(response, reverse('admission_detail', args=[created_admission.pk]))
 
     def test_admission_save_with_error(self):
         admission = model_to_dict(AdmissionFactory(
@@ -301,7 +290,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         data.update(admission)
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_edit', args=[self.admission.id]))
+        self.assertRedirects(response, reverse('admission_detail', args=[self.admission.id]))
         self.admission.refresh_from_db()
 
         # verifying that fields are correctly updated
@@ -469,11 +458,11 @@ class AdmissionFileTestCase(TestCase):
         url = reverse('upload_file', args=[self.admission.uuid])
         redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
         response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
-        messages_list = list(messages.get_messages(response.wsgi_request))
+        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEquals(response.status_code, status.HTTP_302_FOUND)
         self.assertIn(
             ugettext(_("The document is uploaded correctly")),
-            str(messages_list[0])
+            messages_list
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
 
@@ -483,12 +472,12 @@ class AdmissionFileTestCase(TestCase):
         redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
 
         response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
-        messages_list = list(messages.get_messages(response.wsgi_request))
+        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEquals(response.status_code, status.HTTP_302_FOUND)
         #an error should raise as the admission is not retrieved from test
         self.assertIn(
             ugettext(_("A problem occured : the document is not uploaded")),
-            str(messages_list[0])
+            messages_list
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
 
@@ -504,13 +493,13 @@ class AdmissionFileTestCase(TestCase):
             content_type="application/pdf"
         )
         response = self.client.post(url, {'myfile': file}, HTTP_REFERER=redirect_url)
-        messages_list = list(messages.get_messages(response.wsgi_request))
+        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEquals(response.status_code, status.HTTP_302_FOUND)
         self.assertIn(
             ugettext(_("The name of the file is too long : maximum %(length)s characters.") % {
                 'length': MAX_ADMISSION_FILE_NAME_LENGTH
             }),
-            str(messages_list[0])
+            messages_list
         )
 
     def mocked_success_delete_request(self, **kwargs):

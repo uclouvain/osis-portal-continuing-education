@@ -29,7 +29,6 @@ import itertools
 from mimetypes import MimeTypes
 
 import requests
-from dateutil import parser
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -43,7 +42,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from rest_framework import status
 from rest_framework.parsers import JSONParser
-from rest_framework.renderers import MultiPartRenderer
 
 from base.models import person as mdl_person
 from base.models.person import Person
@@ -54,14 +52,18 @@ from continuing_education.forms.person import PersonForm
 from continuing_education.models.address import Address
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.common import display_errors, display_success_messages, display_error_messages, \
-    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _build_warning_from_errors_dict, \
-    get_data_from_osis, get_data_list_from_osis
+    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _get_files_list, \
+    add_informations_message_on_submittable_file, get_data_from_osis, get_data_list_from_osis
 
 
 @login_required
 def admission_detail(request, admission_uuid):
-    admission = get_data_from_osis("admissions", admission_uuid)
-    if admission["state"] == admission_state_choices.DRAFT:
+    admission = _find_user_admission_by_id(admission_uuid, user=request.user)
+    if admission.state == admission_state_choices.DRAFT:
+        add_informations_message_on_submittable_file(
+            request=request,
+            title=_("Your admission file has been saved. Please consider the following information :")
+        )
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
@@ -123,15 +125,6 @@ def upload_file(request, admission_uuid):
     return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
 
-def _show_submit_warning(admission_submission_errors, request):
-    if request.method == 'GET':
-        messages.add_message(
-            request=request,
-            level=messages.WARNING,
-            message=_build_warning_from_errors_dict(admission_submission_errors),
-        )
-
-
 def _show_save_before_submit(request):
     messages.add_message(
         request=request,
@@ -151,44 +144,6 @@ def _show_admission_saved(request, admission_uuid):
               '<a href="%(url)s"><b>the admission file page</b></a> !'
               ) % {'url': reverse('admission_detail', kwargs={'admission_uuid': admission_uuid})}
         ))
-
-
-def _get_files_list(admission, url_continuing_education_file_api):
-    files_list = []
-    if admission:
-        response = requests.get(
-            url=url_continuing_education_file_api,
-            headers=_prepare_headers('GET'),
-        )
-        if response.status_code == status.HTTP_200_OK:
-            stream = io.BytesIO(response.content)
-            files_list = JSONParser().parse(stream)['results']
-            for admission_file in files_list:
-                admission_file['created_date'] = parser.parse(
-                    admission_file['created_date']
-                )
-                admission_file['is_deletable'] = _file_uploaded_by_admission_person(admission, admission_file)
-    return files_list
-
-
-def _file_uploaded_by_admission_person(admission, file):
-    return _get_uploadedby_uuid(file) == str(admission['person_information']['person']['uuid'])
-
-
-def _get_uploadedby_uuid(file):
-    uploaded_by = file.get('uploaded_by', None)
-    return uploaded_by.get('uuid', None) if uploaded_by else None
-
-
-def _prepare_headers(method):
-    if method in ['GET', 'DELETE']:
-        return {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    elif method == 'POST':
-        return {
-            'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
-            'Content-Disposition': 'attachment; filename=name.jpeg',
-            'Content-Type': MultiPartRenderer.media_type
-        }
 
 
 @login_required
@@ -268,9 +223,6 @@ def admission_form(request, admission_uuid=None, **kwargs):
 
     id_form = PersonForm(request.POST or None, instance=base_person)
 
-    landing_tab = request.POST.get("tab") or kwargs.get('landing_tab')
-    landing_tab_anchor = "#{}".format(landing_tab) if landing_tab else ""
-
     errors_fields = []
 
     if not admission and not request.POST:
@@ -318,10 +270,9 @@ def admission_form(request, admission_uuid=None, **kwargs):
         admission.save()
         if request.session.get('formation_id'):
             del request.session['formation_id']
-        _show_admission_saved(request, admission.id)
         errors, errors_fields = get_submission_errors(admission)
         return redirect(
-            reverse('admission_edit', kwargs={'admission_id': admission.id}) + landing_tab_anchor,
+            reverse('admission_detail', kwargs={'admission_id': admission.id}),
         )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))

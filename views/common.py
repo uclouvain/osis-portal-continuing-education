@@ -27,6 +27,7 @@ import io
 from collections import OrderedDict
 
 import requests
+from dateutil import parser
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
@@ -37,7 +38,9 @@ from django.urls import reverse
 from django.utils import translation
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _, ugettext
+from rest_framework import status
 from rest_framework.parsers import JSONParser
+from rest_framework.renderers import MultiPartRenderer
 
 from base.models import person as person_mdl
 from base.views import layout
@@ -48,6 +51,8 @@ from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
 from continuing_education.models.admission import Admission
+
+MAX_ADMISSION_FILE_NAME_LENGTH = 100
 
 
 def display_errors(request, errors):
@@ -150,7 +155,6 @@ def get_submission_errors(admission, is_registration=False):
 
 def _update_errors(forms, errors, errors_field):
     for form in forms:
-        print(form.errors)
         for field in form.errors:
             errors.update({form[field].label: form.errors[field]})
             errors_field.append(field)
@@ -184,6 +188,94 @@ def _show_submit_warning(admission_submission_errors, request):
             request=request,
             level=messages.WARNING,
             message=_build_warning_from_errors_dict(admission_submission_errors),
+        )
+
+
+def _get_files_list(admission, url_continuing_education_file_api):
+    """
+    Get files list of an admission with OSIS IUFC API
+    """
+    files_list = []
+    response = requests.get(
+        url=url_continuing_education_file_api,
+        headers=_prepare_headers('GET'),
+    )
+    if response.status_code == status.HTTP_200_OK:
+        stream = io.BytesIO(response.content)
+        files_list = JSONParser().parse(stream)['results']
+        for file in files_list:
+            file['created_date'] = parser.parse(
+                file['created_date']
+            )
+            file['is_deletable'] = _is_file_uploaded_by_admission_person(admission, file)
+    return files_list
+
+
+def _prepare_headers(method):
+    if method in ['GET', 'DELETE']:
+        return {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    elif method == 'POST':
+        return {
+            'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
+            'Content-Disposition': 'attachment; filename=name.jpeg',
+            'Content-Type': MultiPartRenderer.media_type
+        }
+
+
+def _is_file_uploaded_by_admission_person(admission, file):
+    uploaded_by = file.get('uploaded_by', None)
+    uploader_uuid = uploaded_by.get('uuid', None) if uploaded_by else None
+    return uploader_uuid == str(admission.person_information.person.uuid)
+
+
+def _upload_file(request, file, admission, **kwargs):
+    url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
+    data = {
+        'file': file,
+        'admission_id': str(admission.uuid)
+    }
+    request_to_put_file = requests.put(
+        url_continuing_education_file_api,
+        data=MultiPartRenderer().render(data=data),
+        headers=_prepare_headers('POST')
+    )
+    if request_to_put_file.status_code == status.HTTP_201_CREATED:
+        display_success_messages(request, _("The document is uploaded correctly"))
+    elif request_to_put_file.status_code == status.HTTP_406_NOT_ACCEPTABLE:
+        display_error_messages(
+            request,
+            _("The name of the file is too long : maximum %(length)s characters.") % {
+                    'length': MAX_ADMISSION_FILE_NAME_LENGTH
+                }
+        )
+    else:
+        display_error_messages(request, _("A problem occured : the document is not uploaded"))
+    kwargs.update({'admission': admission})
+    if kwargs['registration']:
+        return redirect(
+            reverse('registration_detail', kwargs={'admission_id': admission.id}) + "#documents",
+        )
+    else:
+        return redirect(
+            reverse('admission_detail', kwargs={'admission_id': admission.id}) + '#documents',
+            args=kwargs
+        )
+
+
+def add_informations_message_on_submittable_file(request, title):
+    if request.method == 'GET':
+        items = [
+            _("You are still able to edit the form"),
+            _("You can upload documents via the 'Documents'"),
+            _("Do not forget to submit your file when it is complete"),
+        ]
+        message = "<strong>{}</strong><br>".format(title) + \
+            "".join(["- {}<br>".format(item) for item in items])
+
+        messages.add_message(
+            request=request,
+            level=messages.INFO,
+            message=mark_safe(message)
         )
 
 

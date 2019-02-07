@@ -7,11 +7,13 @@ WAITING = 'Waiting'
 DRAFT = 'Draft'
 SUBMITTED = 'Submitted'
 REGISTRATION_SUBMITTED = 'Registration submitted'
+VALIDATED = 'Validated'
 
 ADMIN_STATE_CHOICES = (
     (ACCEPTED, _('Accepted')),
     (REJECTED, _('Rejected')),
     (WAITING, _('Waiting')),
+    (VALIDATED, _('Validated')),
 )
 
 STUDENT_STATE_CHOICES = (

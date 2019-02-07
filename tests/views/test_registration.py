@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from unittest.mock import patch
+
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -30,9 +32,11 @@ from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase
 from django.utils.translation import ugettext, ugettext_lazy as _
+from requests import Response
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.enums import admission_state_choices
+from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 from continuing_education.views.common import get_submission_errors
@@ -57,6 +61,13 @@ class ViewStudentRegistrationTestCase(TestCase):
             person_information=self.person_information
         )
 
+        self.patcher = patch(
+            "continuing_education.views.registration._get_files_list",
+            return_value=Response()
+        )
+        self.mocked_called_api_function = self.patcher.start()
+        self.addCleanup(self.patcher.stop)
+
     def test_registration_detail(self):
         url = reverse('registration_detail', args=[self.admission_accepted.id])
         response = self.client.get(url)
@@ -65,6 +76,26 @@ class ViewStudentRegistrationTestCase(TestCase):
 
         self.assertEqual(response.context['admission'], self.admission_accepted)
         self.assertTrue(response.context['registration_is_submittable'])
+
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 1)
+        self.assertIn(
+            ugettext("Your registration file has been saved. Please consider the following information :"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("You are still able to edit the form"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("You can upload documents via the 'Documents'"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("Do not forget to submit your file when it is complete"),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.INFO)
 
     def test_registration_detail_not_submittable(self):
         self.admission_accepted.national_registry_number = ''
@@ -80,16 +111,35 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertFalse(response.context['registration_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(len(messages_list), 2)
+
+        self.assertIn(
+            ugettext("Your registration file has been saved. Please consider the following information :"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("You are still able to edit the form"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("You can upload documents via the 'Documents'"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("Do not forget to submit your file when it is complete"),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.INFO)
+
         self.assertIn(
             ugettext("Your file is not submittable because you did not provide the following data : "),
-            str(messages_list[0])
+            str(messages_list[1])
         )
         self.assertIn(
             ugettext("National registry number"),
-            str(messages_list[0])
+            str(messages_list[1])
         )
-        self.assertEqual(messages_list[0].level, messages.WARNING)
+        self.assertEqual(messages_list[1].level, messages.WARNING)
 
     def test_registration_submitted_detail(self):
         url = reverse('registration_detail', args=[self.registration_submitted.pk])
@@ -180,7 +230,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         }
         url = reverse('registration_edit', args=[self.admission_accepted.pk])
         response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_edit', args=[self.admission_accepted.id]))
+        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
         self.admission_accepted.refresh_from_db()
 
         # verifying that fields are correctly updated
@@ -199,12 +249,24 @@ class ViewStudentRegistrationTestCase(TestCase):
         }
         url = reverse('registration_edit', args=[self.admission_accepted.pk])
         response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_edit', args=[self.admission_accepted.id]))
+        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
         self.admission_accepted.refresh_from_db()
         self.admission_accepted.billing_address.refresh_from_db()
 
         field_value = self.admission_accepted.billing_address.__getattribute__('city')
         self.assertEqual(field_value, registration['billing-city'])
+
+    def test_edit_registration_submitted_error(self):
+        self.admission_accepted.state = REGISTRATION_SUBMITTED
+        self.admission_accepted.save()
+        url = reverse('registration_edit', args=[self.admission_accepted.id])
+        get_response = self.client.get(url)
+        self.assertEqual(get_response.status_code, 404)
+        self.assertTemplateUsed(get_response, 'page_not_found.html')
+
+        post_response = self.client.post(url)
+        self.assertEqual(post_response.status_code, 404)
+        self.assertTemplateUsed(post_response, 'page_not_found.html')
 
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
