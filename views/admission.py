@@ -58,8 +58,9 @@ from continuing_education.views.common import display_errors, display_success_me
 
 @login_required
 def admission_detail(request, admission_uuid):
-    admission = _find_user_admission_by_id(admission_uuid, user=request.user)
-    if admission.state == admission_state_choices.DRAFT:
+    admission = get_data_from_osis("admissions", admission_uuid)
+
+    if admission['state'] == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,
             title=_("Your admission file has been saved. Please consider the following information :")
@@ -75,7 +76,7 @@ def admission_detail(request, admission_uuid):
         admission,
         settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/"
     )
-
+    print(admission['main_address'])
     return render(
         request,
         "admission_detail.html",
@@ -149,7 +150,7 @@ def _show_admission_saved(request, admission_uuid):
 @login_required
 @require_http_methods(["POST"])
 def admission_submit(request):
-    admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
+    admission = _find_user_admission_by_id(request.POST.get('admission_uuid'), user=request.user)
 
     if admission.state == admission_state_choices.DRAFT:
         admission_submission_errors, errors_fields = get_submission_errors(admission)
@@ -212,14 +213,16 @@ def admission_form(request, admission_uuid=None, **kwargs):
     person_information = get_data_list_from_osis("persons", "person", str(base_person))[0]
     adm_form = AdmissionForm(admission)
 
-    person_form = ContinuingEducationPersonForm(initial=person_information)
+    person_form = ContinuingEducationPersonForm(person_information, initial=person_information)
 
     current_address = admission['main_address'] if admission else None
     # old_admission = Admission.objects.filter(person_information=person_information).last()
     old_admission = get_data_list_from_osis("admissions", "person_information__uuid", str(person_information['uuid']))
-    address = current_address if current_address else (old_admission.address if old_admission else None)
+    old_admission = old_admission[len(old_admission)-1]
+    old_admission_complete = get_data_from_osis("admissions", old_admission['uuid'])
+    address = current_address if current_address else (old_admission_complete['main_address'] if old_admission_complete else None)
 
-    address_form = AddressForm(initial=address)
+    address_form = AddressForm(address, initial=address)
 
     id_form = PersonForm(request.POST or None, instance=base_person)
 

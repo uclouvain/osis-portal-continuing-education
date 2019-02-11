@@ -45,9 +45,6 @@ from rest_framework.renderers import MultiPartRenderer
 from base.models import person as person_mdl
 from base.views import layout
 from base.views.layout import render
-from continuing_education.forms.account import ContinuingEducationPersonForm
-from continuing_education.forms.address import StrictAddressForm, StrictAddressModelForm
-from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
 from continuing_education.models.admission import Admission
@@ -121,6 +118,7 @@ def get_submission_errors(admission, is_registration=False):
     errors = OrderedDict()
 
     if is_registration:
+        from continuing_education.forms.address import StrictAddressModelForm
         address_form = StrictAddressModelForm(
             data=model_to_dict(admission.billing_address)
         )
@@ -138,12 +136,16 @@ def get_submission_errors(admission, is_registration=False):
         person_form = StrictPersonForm(
             data=admission['person_information']['person']
         )
+        from continuing_education.forms.account import ContinuingEducationPersonForm
         person_information_form = ContinuingEducationPersonForm(
             data=admission['person_information']
         )
+        from continuing_education.forms.address import StrictAddressForm
         address_form = StrictAddressForm(
             data=admission['main_address']
         )
+
+        from continuing_education.forms.admission import StrictAdmissionForm
         adm_form = StrictAdmissionForm(
             data=admission
         )
@@ -155,15 +157,16 @@ def get_submission_errors(admission, is_registration=False):
 
 def _update_errors(forms, errors, errors_field):
     for form in forms:
+        print(form.errors)
         for field in form.errors:
             errors.update({form[field].label: form.errors[field]})
             errors_field.append(field)
 
 
-def _find_user_admission_by_id(admission_id, user):
+def _find_user_admission_by_id(admission_uuid, user):
     return get_object_or_404(
         Admission,
-        pk=admission_id,
+        uuid=admission_uuid,
         person_information__person__user=user
     )
 
@@ -225,7 +228,7 @@ def _prepare_headers(method):
 def _is_file_uploaded_by_admission_person(admission, file):
     uploaded_by = file.get('uploaded_by', None)
     uploader_uuid = uploaded_by.get('uuid', None) if uploaded_by else None
-    return uploader_uuid == str(admission.person_information.person.uuid)
+    return uploader_uuid == str(admission['person_information']['person']['uuid'])
 
 
 def _upload_file(request, file, admission, **kwargs):
@@ -302,6 +305,18 @@ def get_data_list_from_osis(object_name, filter_field=None, filter_value=None):
 def get_data_from_osis(object_name, uuid):
     header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
     url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_name + "/" + str(uuid)
+    response = requests.get(
+        url=url,
+        headers=header_to_get
+    )
+    return transform_response_to_data(response)
+
+
+def get_country_list_from_osis(filter_field=None, filter_value=None):
+    header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    url = 'http://localhost:18000/api/v1/reference/countries/'
+    if filter_field and filter_value:
+        url = url + "?" + filter_field + "=" + filter_value
     response = requests.get(
         url=url,
         headers=header_to_get

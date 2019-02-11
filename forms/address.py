@@ -3,6 +3,7 @@ from django.forms import Form, ModelForm
 from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.address import Address
+from continuing_education.views.common import get_country_list_from_osis
 from reference.models.country import Country
 
 
@@ -24,11 +25,8 @@ class AddressModelForm(ModelForm):
 
 
 class AddressForm(Form):
-    country = forms.ModelChoiceField(
-        queryset=Country.objects.all().order_by('name'),
-        label=_("Country"),
-        required=False,
-    )
+
+    country = forms.CharField()
 
     location = forms.CharField(
         max_length=255,
@@ -45,6 +43,10 @@ class AddressForm(Form):
         required=False,
         label=_("City")
     )
+
+    def __init__(self, data, **kwargs):
+        super().__init__(data, **kwargs)
+        self.fields['country'].choices = get_country_list_from_osis()
 
 
 class StrictAddressForm(AddressForm):

@@ -1,14 +1,12 @@
+import requests
 from django import forms
+from django.conf import settings
 from django.forms import Form
 from django.utils.translation import ugettext_lazy as _
 
-from base.models.academic_year import current_academic_year
-from base.models.education_group_year import EducationGroupYear
-from base.models.enums import education_group_categories
 from continuing_education.models.address import Address
-from continuing_education.models.continuing_education_person import ContinuingEducationPerson
 from continuing_education.models.enums import enums, admission_state_choices
-from reference.models.country import Country
+from continuing_education.views.common import transform_response_to_data, get_country_list_from_osis
 
 
 class FormationChoiceField(forms.ModelChoiceField):
@@ -20,13 +18,20 @@ class FormationChoiceField(forms.ModelChoiceField):
 
 
 class AdmissionForm(Form):
-    formation = FormationChoiceField(queryset=EducationGroupYear.objects.all())
+    def get_training_list_from_osis(self, filter_field=None, filter_value=None):
+        header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+        url = 'http://localhost:18000/api/v1/education_group/trainings/'
+        if filter_field and filter_value:
+            url = url + "?" + filter_field + "=" + filter_value
+        response = requests.get(
+            url=url,
+            headers=header_to_get
+        )
+        return transform_response_to_data(response)
+
+    formation = forms.CharField()
     state = forms.ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)
-    citizenship = forms.ModelChoiceField(
-        queryset=Country.objects.all().order_by('name'),
-        label=_("Citizenship"),
-        required=False,
-    )
+    citizenship = forms.CharField()
     high_school_diploma = forms.TypedChoiceField(
         coerce=lambda x: x == 'True',
         required=False,
@@ -34,11 +39,7 @@ class AdmissionForm(Form):
         label=_("High school diploma")
     )
 
-    person_information = forms.ModelChoiceField(
-        queryset=ContinuingEducationPerson.objects.all(),
-        required=False,
-        label=_("Person information")
-    )
+    person_information = forms.CharField()
 
     # Contact
     address = forms.ModelChoiceField(
@@ -179,18 +180,8 @@ class AdmissionForm(Form):
 
     def __init__(self, data, **kwargs):
         super().__init__(data, **kwargs)
-
-        qs = EducationGroupYear.objects.filter(education_group_type__category=education_group_categories.TRAINING)
-
-        curr_academic_year = current_academic_year()
-        next_academic_year = curr_academic_year.next() if curr_academic_year else None
-
-        if next_academic_year:
-            qs = qs.filter(academic_year=next_academic_year).order_by('acronym')
-        else:
-            qs = qs.order_by('acronym', 'academic_year__year')
-
-        self.fields['formation'].queryset = qs
+        self.fields['citizenship'].choices = get_country_list_from_osis()
+        self.fields['formation'].choices = self.get_training_list_from_osis()
 
 
 class StrictAdmissionForm(AdmissionForm):

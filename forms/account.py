@@ -11,16 +11,12 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
+from continuing_education.views.common import get_country_list_from_osis
 from osis_common.messaging import message_config, send_message as message_service
-from reference.models.country import Country
 
 
 class ContinuingEducationPersonForm(forms.Form):
-    birth_country = forms.ModelChoiceField(
-        queryset=Country.objects.all().order_by('name'),
-        label=_("Birth country"),
-        required=True,
-    )
+    birth_country = forms.CharField()
 
     birth_date = forms.DateField(
         widget=forms.SelectDateWidget(years=range(1900, datetime.now().year)),
@@ -33,9 +29,10 @@ class ContinuingEducationPersonForm(forms.Form):
         label=_("Birth location")
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, data, **kwargs):
         self.instance = kwargs.pop('instance', None)
-        super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
+        super(ContinuingEducationPersonForm, self).__init__(data, **kwargs)
+        self.fields['birth_country'].choices = get_country_list_from_osis()
         if self.instance:
             self._disable_existing_person_fields()
 
