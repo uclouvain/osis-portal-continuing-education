@@ -12,27 +12,23 @@
     <style type="text/css">
         body {
             font-family: 'Garamond';
-            font-size: 12px;
+            font-size: 14px;
         }
-        table {
-            width: 100%;
-        }
+
         .main_table {
+            width: 100%;
             border: 1px solid black;
         }
         h1, h2, h3 {
             font-family: 'Montserrat';
         }
 
-        .pagebreak{
-            orphans: 0;
-        }
         @page {
             size: A4 portrait;
             margin: 2cm 1cm 2cm 1cm;
 
             @top-right {
-                content: "{% trans 'Academic year' %} {{ root.academic_year }} \A {{ root.verbose_title|safe }}";
+                {#content: "{% trans 'Academic year' %} {{ root.academic_year }} \A {{ root.verbose_title|safe }}";#}
                 white-space: pre-line;
                 font-size: 11px;
             }
@@ -41,6 +37,7 @@
                 background: url("{% static 'img/logo_uclouvain.png' %}") no-repeat;
                 display: inline-block;
                 width: 92mm;
+                background-size: 100%;
                 padding-top: 65px;
                 font-size: 9px;
                 text-align: center;
@@ -77,10 +74,40 @@
             font-size: 11px;
         }
 
+        .wrap {
+            display: flex;
+            align-items:center;
+        }
+
     </style>
 </head>
 <body>
-<p class="pagebreak">
+
+<div class="wrap">
+<table>
+    <tr>
+        <td width="75%">
+            {% blocktrans with aca_year=root.academic_year %}<span>Special Enrolment</span> application {{ aca_year }}<br/>
+    Teaching and Training Department<br/>
+    University's Enrolment Office<br/>
+    <strong>PLEASE NOTE! Duplex printing or printing in a reduce format are not allowed</strong>
+{% endblocktrans %}
+        </td>
+        <td width="25%"><table class="main_table">
+        <tr>
+            <th>{% trans 'RESERVED FOR UCL USE' %}</th>
+        </tr>
+        <tr>
+            <td>{% trans 'Date' %}</td>
+        </tr>
+        <tr>
+            <td>{% trans 'Noma' %}</td>
+        </tr>
+    </table></td>
+    </tr>
+</table>
+</div>
+<p> <!-- style="page-break-before: always"> -->
     <h2><div>{% trans 'Identification' %}</div></h2>
     <div><strong>{% trans "Last name" %}:</strong>
          {{ admission.person_information.person.last_name | default:"-" }} </div>
@@ -139,9 +166,11 @@
     <div><strong>{% trans "City" %}:</strong></div>
     <div><strong>{% trans "Country" %}:</strong></div>
     <div class="col-md-4"><strong>{% trans "Residence phone" %}:</strong></div>
+    <div>{% trans 'Which address would you like your post to be sent to? *' %}</div>
+    <div class="footer">{% trans 'An asterisk * indicates you should check one box' %}</div>
 </p>
 
-<p class="pagebreak">
+<p style="page-break-before: always">
     <div>
         <p>
             {% blocktrans %}
@@ -157,7 +186,7 @@
     </div>
 
     <div>
-        <h4>[ ]{% trans 'Individual course(s) or language course at the language institute of UCL (ILV)' %}</h4>
+        <h4>[  ]{% trans 'Individual course(s) or language course at the language institute of UCL (ILV)' %}</h4>
         <table class="main_table">
             <tr>
                 <td>
@@ -171,7 +200,7 @@
     </div>
 
     <div>
-        <h4>[ ]{% trans 'Enrolment on a "Certificat de recherche"' %}</h4>
+        <h4>[  ]{% trans 'Enrolment on a "Certificat de recherche"' %}</h4>
         <table class="main_table">
             <tr>
                 <td>
@@ -185,7 +214,7 @@
     </div>
 
     <div>
-        <h4>[ ]{% trans 'Enrolment on an "Intern"' %}</h4>
+        <h4>[  ]{% trans 'Enrolment on an "Intern"' %}</h4>
         <table class="main_table">
             <tr>
                 <td>
@@ -199,7 +228,7 @@
     </div>
 
     <div>
-        <h4>[ ]{% trans 'Enrolment on a "Inter-university programme"' %}</h4>
+        <h4>[  ]{% trans 'Enrolment on a "Inter-university programme"' %}</h4>
         <table class="main_table">
             <tr>
                 <td>
@@ -213,34 +242,44 @@
     </div>
 
     <div>
-        <h4>[ ]{% trans 'Enrolment on a lifelong learning programme' %}</h4>
+        <h4>[X]{% trans 'Enrolment on a lifelong learning programme' %}</h4>
         <table class="main_table">
             <tr>
                 <td>
-                    {% blocktrans %}
+                    {% blocktrans with hsgy=admission.high_school_graduation_year|default:"-" ldgy=admission.last_degree_graduation_year|default:"-" sector=admission.get_activity_sector_display|default:"-" %}
                         Please complete the questionnaire below<br/>
                         (information provided on a voluntary basis and used for statistical purposes only):
                         <table>
                         <tr>
-                            <td>> If you have obtained a secondary education diploma, please specify the year in which it was earned:</td><td>XXXX</td>
+                            <td>> If you have obtained a secondary education diploma, please specify the year in which it was earned:</td>
+                            <td><strong>{{ hsgy }}</strong></td>
                         </tr>
                         <tr>
-                            <td>> If you have obtained one or more higher education diplomas either within or outside the French-speaking Community of Belgium, please specify the year in which you earned the most recent diploma:</td><td>XXXX</td>
+                            <td>> If you have obtained one or more higher education diplomas either within or outside the French-speaking Community of Belgium, please specify the year in which you earned the most recent diploma:</td>
+                            <td><strong>{{ ldgy }}</strong></td>
                         </tr>
                         </table>
                         <table>
                         <tr>
-                            <td>> What is your professional status?<br/>(you may select more than one)</td><td>Employed [ ] Self-Employed [ ] Unemployed [ ] Other [ ]</td>
+                            <td>> What is your professional status?<br/>(you may select more than one)</td>
+                            <td><strong>{{ sector }}</strong></td>
                         </tr>
                         <tr>
                             <td>> Are you currently seeking employment</td><td>Yes [ ] No [ ]</td>
                         </tr>
-                        </table>
-                        <table>
                         <tr>
-                            <td></td><td>Return application to:</td>
+                            <td></td>
+                            <td>
+                                <table class="main_table">
+                                    <tr>
+                                        <td>Return application to:<br/><br/>
+                                            _______________________________________________________________________</td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                         </table>
+
                     {% endblocktrans %}
                 </td>
             </tr>
@@ -301,21 +340,20 @@
 
 </p>
 
-<p class="pagebreak">
+<p style="page-break-before: always">
     <div>
         <table class="main_table">
             <tr>
                 <td>
-                    {% blocktrans %}
-                        I, the undersigned
+                        {% trans 'I, the undersigned' %}
                         <br/><br/>
                         <table>
                         <tr>
-                            <td>Surname</td><td>First name</td>
+                            <td>{% trans 'Surname' %}: <strong>{{ admission.person_information.person.last_name | default:"-" }}</strong></td>
+                            <td>{% trans 'First name' %}: <strong>{{ admission.person_information.person.first_name | default:"-" }}</strong></td>
                         </tr>
                         </table>
                         <br/>
-                    {% endblocktrans %}
                 </td>
             </tr>
         </table>
@@ -390,17 +428,41 @@
     </div>
 </p>
 <br/>
-<p class="pagebreak">
+<p style="page-break-before: always">
+
+    <div class="wrap">
+<table>
+    <tr>
+        <td width="75%">
+            {% blocktrans with aca_year=root.academic_year %}<strong>Ordering a UCL access card (smartcard)</strong><br/>
+    Teaching and Training Department<br/>
+    Office of the Registrar<br/>
+{% endblocktrans %}
+        </td>
+        <td width="25%"><table class="main_table">
+        <tr>
+            <th>{% trans 'RESERVED FOR UCL USE' %}</th>
+        </tr>
+        <tr>
+            <td>{% trans 'Date' %}</td>
+        </tr>
+        <tr>
+            <td>{% trans 'Noma' %}</td>
+        </tr>
+    </table></td>
+    </tr>
+</table>
+</div>
 
     <table class="main_table">
         <tr>
             <td>{% trans 'Please state you' %}</td>
         </tr>
         <tr>
-            <td>{% trans 'Surname' %}</td>
+            <td>{% trans 'Surname' %}: <strong>{{ admission.person_information.person.last_name | default:"-" }}</strong></td>
         </tr>
         <tr>
-            <td>{% trans 'First name' %}</td>
+            <td>{% trans 'First name' %}: <strong>{{ admission.person_information.person.first_name | default:"-" }}</strong></td>
         </tr>
     </table>
     {% blocktrans %}
@@ -410,9 +472,9 @@
             For more information: https://uclouvain.be/fr/decouvrir/smartcard.html).</p>
 
         <p>Do you already have a smartcard?<br/>
-        [] NO,<br/>I don’t have a UCL access card yet; in this case I have enclosed a photograph in accordance with the
+        [  ] NO,<br/>I don’t have a UCL access card yet; in this case I have enclosed a photograph in accordance with the
             instructions below.<br/>
-        [] YES, I already have a UCL access card (issued only by the Office of the Registrar or the UCL Human Resources
+        [  ] YES, I already have a UCL access card (issued only by the Office of the Registrar or the UCL Human Resources
             Department); in this case, I have checked the box and enclosed this form with my enrolment application
             WITHOUT a photograph.
         </p>

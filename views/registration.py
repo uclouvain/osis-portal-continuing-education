@@ -167,10 +167,10 @@ def _update_or_create_billing_and_post_address(address, billing, residence, use_
 @login_required
 def generate_pdf_registration(request, admission_id):
     admission = get_object_or_404(Admission.objects.select_related(), pk=admission_id)
-    # if not admission.is_registration_submitted():
-    #     return redirect(
-    #         reverse('registration_detail', kwargs={'admission_id': admission_id})
-    #     )
+    if not admission.is_registration_submitted():
+        return redirect(
+            reverse('registration_detail', kwargs={'admission_id': admission_id})
+        )
     context = {
         'root': admission.formation,
         'admission': admission,
