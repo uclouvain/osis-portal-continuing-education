@@ -220,7 +220,8 @@ def admission_form(request, admission_uuid=None, **kwargs):
     old_admission = get_data_list_from_osis("admissions", "person_information__uuid", str(person_information['uuid']))
     old_admission = old_admission[len(old_admission)-1]
     old_admission_complete = get_data_from_osis("admissions", old_admission['uuid'])
-    address = current_address if current_address else (old_admission_complete['main_address'] if old_admission_complete else None)
+    address = current_address if current_address \
+        else (old_admission_complete['main_address'] if old_admission_complete else None)
 
     address_form = AddressForm(address, initial=address)
 
