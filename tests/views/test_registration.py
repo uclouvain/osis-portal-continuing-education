@@ -36,6 +36,7 @@ from requests import Response
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.enums import admission_state_choices
+from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 from continuing_education.views.common import get_submission_errors
@@ -254,6 +255,18 @@ class ViewStudentRegistrationTestCase(TestCase):
 
         field_value = self.admission_accepted.billing_address.__getattribute__('city')
         self.assertEqual(field_value, registration['billing-city'])
+
+    def test_edit_registration_submitted_error(self):
+        self.admission_accepted.state = REGISTRATION_SUBMITTED
+        self.admission_accepted.save()
+        url = reverse('registration_edit', args=[self.admission_accepted.id])
+        get_response = self.client.get(url)
+        self.assertEqual(get_response.status_code, 404)
+        self.assertTemplateUsed(get_response, 'page_not_found.html')
+
+        post_response = self.client.post(url)
+        self.assertEqual(post_response.status_code, 404)
+        self.assertTemplateUsed(post_response, 'page_not_found.html')
 
 
 class RegistrationSubmissionErrorsTestCase(TestCase):

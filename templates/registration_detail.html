@@ -35,20 +35,27 @@
 
 {% block content %}
     <div class="page-header">
-        {% if registration_is_submittable and admission.state == "Accepted" %}
-        <form id="form" method="POST" class="post-form" action="{% url 'registration_submit' %}">
-            {% csrf_token %}
-            <a class="btn btn-primary pull-right" data-toggle="modal" data-target="#submit_confirmation_modal">
-                <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' context "admission" %}
-            </a>
-            <input type="hidden" name="admission_id" value="{{ admission.pk }}" />
-            {% include "fragment/submit_confirmation_modal.html" %}
-        </form>
+        {% if registration_is_submittable and admission.is_accepted %}
+            <form id="form" method="POST" class="post-form" action="{% url 'registration_submit' %}">
+                {% csrf_token %}
+                <a class="btn btn-primary pull-right" data-toggle="modal" data-target="#submit_confirmation_modal">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' context "admission" %}
+                </a>
+                <input type="hidden" name="admission_id" value="{{ admission.pk }}" />
+                {% include "fragment/submit_confirmation_modal.html" %}
+            </form>
         {% endif %}
-        {% if admission.state == "Accepted" %}
-        <a class="btn btn-default btn-space pull-right" href="{% url 'registration_edit' admission_id=admission_id%}">
-            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> {% trans 'Edit' %}
-        </a>
+        {% if admission.is_accepted %}
+            <a class="btn btn-default btn-space pull-right" href="{% url 'registration_edit' admission_id=admission_id%}">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> {% trans 'Edit' %}
+            </a>
+            <span class="admission-detail-state admission-detail-state-draft btn-space pull-right">
+                {% trans "Not submitted" %}
+            </span>
+        {% else %}
+            <span class="admission-detail-state admission-detail-state-{{admission.state|lower|slugify}} btn-space pull-right">
+                {% trans admission.state %}
+            </span>
         {% endif %}
         <h2>{% trans 'Registration' %}</h2>
     </div>

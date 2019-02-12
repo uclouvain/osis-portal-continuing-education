@@ -57,10 +57,19 @@ def main_view(request, formation_id=None):
     if request.user.is_authenticated:
         person = mdl_person.find_by_user(request.user)
         continuing_education_person = mdl_continuing_education_person.find_by_person(person=person)
-        admissions = admission.search(person=continuing_education_person)
+        registration_states = [
+            admission_state_choices.ACCEPTED,
+            admission_state_choices.REGISTRATION_SUBMITTED,
+            admission_state_choices.VALIDATED
+        ]
+        admissions = admission.search(
+            person=continuing_education_person,
+        ).exclude(
+            state__in=registration_states
+        )
         registrations = admission.search(
             person=continuing_education_person,
-            state__in=[admission_state_choices.ACCEPTED, admission_state_choices.REGISTRATION_SUBMITTED],
+            state__in=registration_states,
         )
         return render(request, "continuing_education/home.html", locals())
     else:

@@ -1,9 +1,9 @@
 import os
 
 from django.conf import settings
+from django.core import mail
 from django.core import signing
 from django.test import override_settings
-from django.core import mail
 
 from base.tests.factories.user import UserFactory
 from base.tests.functional.models.user_type import UserMixin
@@ -110,10 +110,12 @@ class TestRegistration(FunctionalTestCase, UserMixin):
         - I should see an activation message
         - I should be able to login with my account
         """
+        from base.models.person import Person
         username, password = self.__register_user()
         self.open_url_by_name('django_registration_activate', {'activation_key': self.__get_activation_key(username)})
         self.wait_until_title_is('Activation Complete')
         self.login(username=username, password=password, login_page_name='continuing_education_login')
+        self.assertIsNotNone(Person.objects.get(user__username=username))
         self.wait_until_title_is(self.continuing_education_config.get('PAGE_TITLE'))
 
     def __go_to_registration_page(self):

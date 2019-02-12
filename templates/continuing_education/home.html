@@ -61,7 +61,6 @@
                             </tr>
                         </thead>
                         {% for admission in admissions %}
-                            {% if admission.state != "Accepted" and admission.state != "Registration submitted" %}
                             <tr>
                                 <td><a href="{% url 'admission_detail' admission_id=admission.id %}">{{ admission.formation }}</a></td>
                                 <td class="admission-state">
@@ -78,12 +77,15 @@
                                     {% endif %}
                                 </td>
                             </tr>
-                            {% endif %}
                         {% endfor %}
                         </table>
                     {% else %}
                         <div class="jumbotron">
-                            <span>{% trans 'No admission yet' %}</span>
+                            {% if not registrations %}
+                                <span>{% trans 'No admission yet' %}</span>
+                            {% else %}
+                                <span>{% trans 'At least one of your admission files is now processed as a registration file and is accessible via the registration tab' %}</span>
+                            {% endif %}
                         </div>
                     {% endif %}
                     </div>
@@ -96,19 +98,21 @@
                             <tr>
                                 <th class="searchable">{% trans 'Formation' %}</th>
                                 <th class="searchable">{% trans 'Faculty' %}</th>
-                                <th class="searchable">{% trans 'Registered' %}</th>
+                                <th class="searchable">{% trans 'State' %}</th>
                             </tr>
                         </thead>
                         {% for registration in registrations %}
                             <tr>
                                 <td><a href="{% url 'registration_detail' admission_id=registration.id %}">{{ registration.formation }}</a></td>
                                 <td>{{ registration.get_faculty }}</td>
-                                <td style="vertical-align: middle;">
-                                {% if registration.ucl_registration_complete %}
-                                        <span class="label label-success show">{% trans 'Yes' %}</span>
-                                {% else %}
-                                        <span class="label label-danger show">{% trans 'No' %}</span>
-                                {% endif %}
+                                <td class="admission-state">
+                                    {% if registration.state == "Registration submitted" %}
+                                        <span class="label label-info show">{% trans registration.state %}</span>
+                                    {% elif registration.state == "Validated" %}
+                                        <span class="label label-success show">{% trans registration.state %}</span>
+                                    {% elif registration.state == "Accepted" %}
+                                        <span class="label label-default show">{% trans "Not submitted" %}</span>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
