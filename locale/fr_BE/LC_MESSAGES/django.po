@@ -637,7 +637,7 @@ msgstr "Genre"
 
 #: templates/registration_detail.html:62
 msgid "Generate PDF"
-msgstr ""
+msgstr "Générer le PDF"
 
 #: models/admission.py:201 templates/registration_detail.html:119
 msgid "Head office name"
