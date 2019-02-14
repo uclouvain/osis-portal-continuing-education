@@ -46,9 +46,6 @@ from continuing_education.forms.registration import StrictRegistrationForm
 from continuing_education.models.admission import Admission
 
 
-# from continuing_education.views.file import MAX_ADMISSION_FILE_NAME_LENGTH
-
-
 def display_errors(request, errors):
     for error in errors:
         for key, value in error.items():
@@ -183,40 +180,6 @@ def _show_submit_warning(admission_submission_errors, request):
             level=messages.WARNING,
             message=_build_warning_from_errors_dict(admission_submission_errors),
         )
-
-
-# def _upload_file(request, file, admission, **kwargs):
-#     url_continuing_education_file_api = settings.URL_CONTINUING_EDUCATION_FILE_API
-#     data = {
-#         'file': file,
-#         'admission_id': str(admission.uuid)
-#     }
-#     request_to_put_file = requests.put(
-#         url_continuing_education_file_api,
-#         data=MultiPartRenderer().render(data=data),
-#         headers=_prepare_headers_for_files('POST')
-#     )
-#     if request_to_put_file.status_code == status.HTTP_201_CREATED:
-#         display_success_messages(request, _("The document is uploaded correctly"))
-#     elif request_to_put_file.status_code == status.HTTP_406_NOT_ACCEPTABLE:
-#         display_error_messages(
-#             request,
-#             _("The name of the file is too long : maximum %(length)s characters.") % {
-#                     'length': MAX_ADMISSION_FILE_NAME_LENGTH
-#                 }
-#         )
-#     else:
-#         display_error_messages(request, _("A problem occured : the document is not uploaded"))
-#     kwargs.update({'admission': admission})
-#     if kwargs['registration']:
-#         return redirect(
-#             reverse('registration_detail', kwargs={'admission_id': admission.id}) + "#documents",
-#         )
-#     else:
-#         return redirect(
-#             reverse('admission_detail', kwargs={'admission_id': admission.id}) + '#documents',
-#             args=kwargs
-#         )
 
 
 def add_informations_message_on_submittable_file(request, title):
