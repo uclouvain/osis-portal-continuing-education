@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load static %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -101,7 +102,6 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field address_form.country label_class="required" %}</div>
-                        <div class="col-md-6">{% bootstrap_field admission_form.residence_phone %}</div>
                     </div>
                 </div>
 
@@ -170,13 +170,20 @@
             <div class="panel-footer text-right">
                 {% include 'fragment/wizard_navbar.html' %}
             </div>
+
         </form>
+
     </div>
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+    {{ admission_form.media }}
 {% endblock %}
 
 
 {% block script %}
+
 <script>
+
     function showTab(tab) {
         $('#tabs a[href="#' + tab + '"]').tab('show');
     }
@@ -245,4 +252,7 @@
     $("#id_formation").val("{{ request.session.formation_id }}");
 </script>
 {% endif %}
+
+
 {% endblock %}
+

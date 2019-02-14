@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from dal import autocomplete
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -11,12 +12,15 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
-from continuing_education.views.common import get_country_list_from_osis
+from continuing_education.views.common import get_countries_list
 from osis_common.messaging import message_config, send_message as message_service
 
 
 class ContinuingEducationPersonForm(forms.Form):
-    birth_country = forms.CharField()
+    birth_country = autocomplete.Select2ListChoiceField(
+        choice_list=get_countries_list,
+        widget=autocomplete.ListSelect2(url='country-autocomplete'),
+    )
 
     birth_date = forms.DateField(
         widget=forms.SelectDateWidget(years=range(1900, datetime.now().year)),
@@ -32,7 +36,6 @@ class ContinuingEducationPersonForm(forms.Form):
     def __init__(self, data, **kwargs):
         self.instance = kwargs.pop('instance', None)
         super(ContinuingEducationPersonForm, self).__init__(data, **kwargs)
-        self.fields['birth_country'].choices = get_country_list_from_osis()
         if self.instance:
             self._disable_existing_person_fields()
 

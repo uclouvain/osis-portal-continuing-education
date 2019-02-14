@@ -1,4 +1,5 @@
 import requests
+from dal import autocomplete
 from django import forms
 from django.conf import settings
 from django.forms import Form
@@ -6,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.address import Address
 from continuing_education.models.enums import enums, admission_state_choices
-from continuing_education.views.common import transform_response_to_data, get_country_list_from_osis
+from continuing_education.views.common import transform_response_to_data, get_countries_list
 
 
 class FormationChoiceField(forms.ModelChoiceField):
@@ -31,7 +32,11 @@ class AdmissionForm(Form):
 
     formation = forms.CharField()
     state = forms.ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)
-    citizenship = forms.CharField()
+
+    citizenship = autocomplete.Select2ListChoiceField(
+        choice_list=get_countries_list,
+        widget=autocomplete.ListSelect2(url='country-autocomplete'),
+    )
     high_school_diploma = forms.TypedChoiceField(
         coerce=lambda x: x == 'True',
         required=False,
@@ -178,9 +183,14 @@ class AdmissionForm(Form):
         label=_("State reason")
     )
 
+    class Media:
+        css = {
+            'all': ('css/select2-bootstrap.css',)
+        }
+
     def __init__(self, data, **kwargs):
         super().__init__(data, **kwargs)
-        self.fields['citizenship'].choices = get_country_list_from_osis()
+        # self.fields['citizenship'].choices = get_countries_list()
         self.fields['formation'].choices = self.get_training_list_from_osis()
 
 

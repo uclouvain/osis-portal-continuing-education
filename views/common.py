@@ -287,6 +287,7 @@ def transform_response_to_data(response):
     data = JSONParser().parse(stream)
     if 'results' in data:
         data = data['results']
+
     return data
 
 
@@ -312,9 +313,38 @@ def get_data_from_osis(object_name, uuid):
     return transform_response_to_data(response)
 
 
-def get_country_list_from_osis(filter_field=None, filter_value=None):
+def get_country_list_from_osis(name_filter=None):
     header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
     url = 'http://localhost:18000/api/v1/reference/countries/'
+    if name_filter:
+        url = url + '?search=' + name_filter
+    response = requests.get(
+        url=url,
+        headers=header_to_get
+    )
+
+    return transform_response_to_data(response)
+
+
+def get_countries_choices_list(name_filter=None):
+    list_countries = get_country_list_from_osis(name_filter=None)
+    list_tuple_countries = []
+    for country in list_countries:
+        list_tuple_countries.append((country['iso_code'], country['name']))
+    return list_tuple_countries
+
+
+def get_countries_list(name_filter=None):
+    list_countries = []
+    list_country = get_country_list_from_osis(name_filter)
+    for country in list_country:
+        list_countries.append(country['name'])
+    return list_countries
+
+
+def get_training_list_from_osis(filter_field=None, filter_value=None):
+    header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    url = 'http://localhost:18000/api/v1/education_group/trainings/'
     if filter_field and filter_value:
         url = url + "?" + filter_field + "=" + filter_value
     response = requests.get(
@@ -322,3 +352,11 @@ def get_country_list_from_osis(filter_field=None, filter_value=None):
         headers=header_to_get
     )
     return transform_response_to_data(response)
+
+
+def get_formations_choices_list():
+    list_formations = get_formations_choices_list()
+    list_tuple_formations = []
+    for formation in list_formations:
+        list_tuple_formations.append((formation['uuid'], formation['acronym']))
+    return list_tuple_formations

@@ -76,7 +76,6 @@ def admission_detail(request, admission_uuid):
         admission,
         settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/"
     )
-    print(admission['main_address'])
     return render(
         request,
         "admission_detail.html",
@@ -208,11 +207,13 @@ def remove_file(request, file_uuid, admission_uuid):
 def admission_form(request, admission_uuid=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = get_data_from_osis("admissions", admission_uuid) if admission_uuid else None
+    admission['citizenship'] = admission['citizenship']['name']
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
     person_information = get_data_list_from_osis("persons", "person", str(base_person))[0]
     adm_form = AdmissionForm(admission)
 
+    person_information['birth_country'] = person_information['birth_country']['name']
     person_form = ContinuingEducationPersonForm(person_information, initial=person_information)
 
     current_address = admission['main_address'] if admission else None
@@ -223,6 +224,7 @@ def admission_form(request, admission_uuid=None, **kwargs):
     address = current_address if current_address \
         else (old_admission_complete['main_address'] if old_admission_complete else None)
 
+    address['country'] = address['country']['name']
     address_form = AddressForm(address, initial=address)
 
     id_form = PersonForm(request.POST or None, instance=base_person)
