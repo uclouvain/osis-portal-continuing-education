@@ -81,13 +81,17 @@ class AdmissionFileTestCase(TestCase):
         return response
 
     def mocked_failed_post_request(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        response = HttpResponse()
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        response.content = _("A problem occured : the document is not uploaded")
         return response
 
     def mocked_failed_post_request_name_too_long(self, **kwargs):
-        response = Response()
+        response = HttpResponse()
         response.status_code = status.HTTP_406_NOT_ACCEPTABLE
+        response.content = _("The name of the file is too long : maximum %(length)s characters.") % {
+                    'length': MAX_ADMISSION_FILE_NAME_LENGTH
+                }
         return response
 
     @mock.patch('requests.post', side_effect=mocked_success_post_request)

@@ -67,15 +67,8 @@ def upload_file(request, admission_uuid):
 
     if request_to_upload.status_code == status.HTTP_201_CREATED:
         display_success_messages(request, _("The document is uploaded correctly"))
-    elif request_to_upload.status_code == status.HTTP_406_NOT_ACCEPTABLE:
-        display_error_messages(
-            request,
-            _("The name of the file is too long : maximum %(length)s characters.") % {
-                    'length': MAX_ADMISSION_FILE_NAME_LENGTH
-                }
-        )
     else:
-        display_error_messages(request, _("A problem occured : the document is not uploaded"))
+        display_error_messages(request, request_to_upload.json())
 
     return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
