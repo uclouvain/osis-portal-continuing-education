@@ -43,9 +43,9 @@ from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import ACCEPTED
-from continuing_education.views.admission import _get_files_list
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
-    _show_submit_warning, _upload_file, add_informations_message_on_submittable_file
+    _show_submit_warning, add_informations_message_on_submittable_file
+from continuing_education.views.file import _get_files_list
 
 
 @login_required
@@ -67,18 +67,6 @@ def registration_detail(request, admission_id):
         admission,
         settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
     )
-
-    if request.method == 'POST' and 'file_submit' in request.POST:
-        file = request.FILES['myfile'] if 'myfile' in request.FILES else None
-        if file:
-            return _upload_file(
-                request,
-                file,
-                admission,
-                list_files=list_files,
-                registration_is_submittable=registration_is_submittable,
-                registration=True,
-            )
 
     return render(request, "registration_detail.html", locals())
 
