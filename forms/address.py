@@ -4,7 +4,7 @@ from django.forms import Form, ModelForm
 from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.address import Address
-from continuing_education.views.common import get_countries_list
+from continuing_education.views.api import get_countries_list
 from reference.models.country import Country
 
 

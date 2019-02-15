@@ -23,25 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import base64
-import io
 import itertools
-from mimetypes import MimeTypes
 
-import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.utils.safestring import mark_safe
-from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from rest_framework import status
-from rest_framework.parsers import JSONParser
 
 from base.models import person as mdl_person
 from base.models.person import Person
@@ -51,9 +42,11 @@ from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.models.address import Address
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.common import display_errors, display_success_messages, display_error_messages, \
-    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _get_files_list, \
-    add_informations_message_on_submittable_file, get_data_from_osis, get_data_list_from_osis
+from continuing_education.views.api import get_data_from_osis, get_data_list_from_osis
+from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
+    _show_submit_warning, \
+    add_informations_message_on_submittable_file
+from continuing_education.views.file import _get_files_list
 
 
 @login_required
@@ -73,9 +66,11 @@ def admission_detail(request, admission_uuid):
         admission_is_submittable = False
 
     list_files = _get_files_list(
+        request,
         admission,
         settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/"
     )
+
     return render(
         request,
         "admission_detail.html",
@@ -87,63 +82,12 @@ def admission_detail(request, admission_uuid):
     )
 
 
-MAX_ADMISSION_FILE_NAME_LENGTH = 100
-
-
-@login_required
-def upload_file(request, admission_uuid):
-    admission_file = request.FILES['myfile'] if 'myfile' in request.FILES else None
-    admission = get_data_from_osis("admissions", admission_uuid)
-    person = admission['person_information']['person']
-    data = {
-        'uploaded_by': person['uuid'],
-    }
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/"
-    headers_to_upload = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
-    }
-
-    request_to_upload = requests.post(
-        url,
-        headers=headers_to_upload,
-        files={'path': admission_file},
-        data=data
-    )
-
-    if request_to_upload.status_code == status.HTTP_201_CREATED:
-        display_success_messages(request, _("The document is uploaded correctly"))
-    elif request_to_upload.status_code == status.HTTP_406_NOT_ACCEPTABLE:
-        display_error_messages(
-            request,
-            _("The name of the file is too long : maximum %(length)s characters.") % {
-                    'length': MAX_ADMISSION_FILE_NAME_LENGTH
-                }
-        )
-    else:
-        display_error_messages(request, _("A problem occured : the document is not uploaded"))
-
-    return redirect(request.META.get('HTTP_REFERER')+'#documents')
-
-
 def _show_save_before_submit(request):
     messages.add_message(
         request=request,
         level=messages.INFO,
         message=_("You can save an application form and access it later until it is submitted"),
     )
-
-
-def _show_admission_saved(request, admission_uuid):
-    messages.add_message(
-        request=request,
-        level=messages.INFO,
-        message=mark_safe(
-            _('Your admission file has been saved. '
-              'You are still able to edit the form. '
-              'Do not forget to submit it when it is complete via '
-              '<a href="%(url)s"><b>the admission file page</b></a> !'
-              ) % {'url': reverse('admission_detail', kwargs={'admission_uuid': admission_uuid})}
-        ))
 
 
 @login_required
@@ -158,49 +102,6 @@ def admission_submit(request):
             return redirect('admission_detail', admission.pk)
 
     raise PermissionDenied
-
-
-@login_required
-def download_file(request, file_uuid, admission_uuid):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
-          "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
-    headers_to_get = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
-    }
-    request_to_get = requests.get(
-        url,
-        headers=headers_to_get
-    )
-    if request_to_get.status_code == status.HTTP_200_OK:
-        stream = io.BytesIO(request_to_get.content)
-        admission_file = JSONParser().parse(stream)
-        name = get_valid_filename(admission_file['name'])
-        mime_type = MimeTypes().guess_type(admission_file['name'])
-        response_file = base64.b64decode(admission_file['content'])
-        response = HttpResponse(response_file, mime_type)
-        response['Content-Disposition'] = "attachment; filename=%s" % name
-        return response
-    else:
-        return HttpResponse(status=404)
-
-
-@login_required
-def remove_file(request, file_uuid, admission_uuid):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
-          "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
-    headers_to_delete = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
-    }
-    request_to_delete = requests.delete(
-        url,
-        headers=headers_to_delete
-    )
-
-    if request_to_delete.status_code == status.HTTP_204_NO_CONTENT:
-        display_success_messages(request, _("File correctly deleted"))
-    else:
-        display_error_messages(request, _("A problem occured during delete"))
-    return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
 
 @login_required
@@ -239,13 +140,6 @@ def admission_form(request, admission_uuid=None, **kwargs):
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
-    if admission:
-        list_files = _get_files_list(
-            admission,
-            settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission['uuid']) + "/files/"
-        )
-    else:
-        list_files = []
 
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
         if current_address:
@@ -293,7 +187,6 @@ def admission_form(request, admission_uuid=None, **kwargs):
             'address_form': address_form,
             'id_form': id_form,
             'admission': admission,
-            'list_files': list_files,
             'errors_fields': errors_fields
         }
     )

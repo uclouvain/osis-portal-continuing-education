@@ -110,6 +110,8 @@
                                         <span class="label label-info show">{% trans registration.state %}</span>
                                     {% elif registration.state == "Validated" %}
                                         <span class="label label-success show">{% trans registration.state %}</span>
+                                    {% elif registration.state == "Accepted" %}
+                                        <span class="label label-default show">{% trans "Not submitted" %}</span>
                                     {% endif %}
                                 </td>
                             </tr>

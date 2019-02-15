@@ -32,7 +32,7 @@ from django.shortcuts import render, redirect
 from base.models import person as mdl_person
 from continuing_education.models import admission
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.common import get_data_list_from_osis
+from continuing_education.views.api import get_data_list_from_osis
 
 
 def formations_list(request):

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-06 12:03+0100\n"
+"POT-Creation-Date: 2019-02-11 08:56+0100\n"
 "PO-Revision-Date: 2019-01-04 16:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -81,11 +81,13 @@ msgstr "A réussi l'épreuve d'évaluation"
 msgid "Associative"
 msgstr "Associatif"
 
-#: templates/continuing_education/home.html:89
+#: templates/continuing_education/home.html:87
 msgid ""
 "At least one of your admission files is now processed as a registration file "
 "and is accessible via the registration tab"
-msgstr "Au moins un de vos dossiers d'admissions est maintenant traité en tant que dossier d'inscription accessible via l'onglet 'Inscription'"
+msgstr ""
+"Au moins un de vos dossiers d'admissions est maintenant traité en tant que "
+"dossier d'inscription accessible via l'onglet 'Inscription'"
 
 #: templates/admission_detail.html:160 templates/admission_form.html:141
 #: templates/django_registration/complete_account_registration.html:55
@@ -267,7 +269,7 @@ msgstr ""
 "Indiquez votre adresse mail ci-dessous, nous vous enverrons un email avec "
 "les instructions pour définir un nouveau mot de passe"
 
-#: templates/continuing_education/home.html:102
+#: templates/continuing_education/home.html:100
 msgid "Faculty"
 msgstr "Faculté"
 
@@ -292,7 +294,7 @@ msgstr "Mot de passe oublié ?"
 #: models/admission.py:29 templates/admission_detail.html:152
 #: templates/admission_detail.html:155 templates/admission_form.html:59
 #: templates/continuing_education/home.html:59
-#: templates/continuing_education/home.html:101
+#: templates/continuing_education/home.html:99
 msgid "Formation"
 msgstr "Formation"
 
@@ -458,11 +460,11 @@ msgstr "Nouvelle admission"
 msgid "Next"
 msgstr "Suivant"
 
-#: models/enums/enums.py:4 templates/continuing_education/home.html:114
+#: models/enums/enums.py:4
 msgid "No"
 msgstr "Non"
 
-#: templates/continuing_education/home.html:87
+#: templates/continuing_education/home.html:85
 msgid "No admission yet"
 msgstr "Vous n'avez pas soumis de formulaire d'admission"
 
@@ -477,6 +479,10 @@ msgstr "Aucun fichier choisi"
 #: templates/continuing_education/home.html:122
 msgid "No registration yet"
 msgstr "Pas de formulaire d'inscription disponible"
+
+#: templates/continuing_education/home.html:114
+msgid "Not submitted"
+msgstr "Non-soumise"
 
 #: models/enums/enums.py:32 models/enums/enums.py:40
 #: templates/admission_detail.html:187 templates/admission_form.html:157
@@ -593,10 +599,6 @@ msgstr "Fonctionnaire"
 msgid "References"
 msgstr "Références"
 
-#: templates/continuing_education/home.html:103
-msgid "Registered"
-msgstr "Inscrit"
-
 #: templates/continuing_education/home.html:50
 #: templates/registration_detail.html:33 templates/registration_detail.html:57
 #: templates/registration_form.html:33 templates/registration_form.html:38
@@ -664,6 +666,7 @@ msgid "Spouse name"
 msgstr "Nom du conjoint"
 
 #: models/admission.py:171 templates/continuing_education/home.html:60
+#: templates/continuing_education/home.html:101
 msgid "State"
 msgstr "Statut"
 
@@ -800,7 +803,7 @@ msgstr "Raison de la mise en attente"
 msgid "Widowed"
 msgstr "Veuf(ve)"
 
-#: models/enums/enums.py:5 templates/continuing_education/home.html:112
+#: models/enums/enums.py:5
 msgid "Yes"
 msgstr "Oui"
 
@@ -881,3 +884,6 @@ msgstr ""
 #: tests/views/test_admission.py:493
 msgid "length"
 msgstr ""
+
+#~ msgid "Registered"
+#~ msgstr "Inscrit"

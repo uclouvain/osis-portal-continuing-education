@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-06 12:03+0100\n"
+"POT-Creation-Date: 2019-02-11 08:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,7 @@ msgstr ""
 msgid "Associative"
 msgstr ""
 
-#: templates/continuing_education/home.html:89
+#: templates/continuing_education/home.html:87
 msgid ""
 "At least one of your admission files is now processed as a registration file "
 "and is accessible via the registration tab"
@@ -263,7 +263,7 @@ msgid ""
 "new password."
 msgstr ""
 
-#: templates/continuing_education/home.html:102
+#: templates/continuing_education/home.html:100
 msgid "Faculty"
 msgstr ""
 
@@ -288,7 +288,7 @@ msgstr ""
 #: models/admission.py:29 templates/admission_detail.html:152
 #: templates/admission_detail.html:155 templates/admission_form.html:59
 #: templates/continuing_education/home.html:59
-#: templates/continuing_education/home.html:101
+#: templates/continuing_education/home.html:99
 msgid "Formation"
 msgstr ""
 
@@ -453,11 +453,11 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: models/enums/enums.py:4 templates/continuing_education/home.html:114
+#: models/enums/enums.py:4
 msgid "No"
 msgstr ""
 
-#: templates/continuing_education/home.html:87
+#: templates/continuing_education/home.html:85
 msgid "No admission yet"
 msgstr ""
 
@@ -471,6 +471,10 @@ msgstr ""
 
 #: templates/continuing_education/home.html:122
 msgid "No registration yet"
+msgstr ""
+
+#: templates/continuing_education/home.html:114
+msgid "Not submitted"
 msgstr ""
 
 #: models/enums/enums.py:32 models/enums/enums.py:40
@@ -586,10 +590,6 @@ msgstr ""
 msgid "References"
 msgstr ""
 
-#: templates/continuing_education/home.html:103
-msgid "Registered"
-msgstr ""
-
 #: templates/continuing_education/home.html:50
 #: templates/registration_detail.html:33 templates/registration_detail.html:57
 #: templates/registration_form.html:33 templates/registration_form.html:38
@@ -657,6 +657,7 @@ msgid "Spouse name"
 msgstr ""
 
 #: models/admission.py:171 templates/continuing_education/home.html:60
+#: templates/continuing_education/home.html:101
 msgid "State"
 msgstr ""
 
@@ -793,7 +794,7 @@ msgstr ""
 msgid "Widowed"
 msgstr ""
 
-#: models/enums/enums.py:5 templates/continuing_education/home.html:112
+#: models/enums/enums.py:5
 msgid "Yes"
 msgstr ""
 

@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from continuing_education.models.address import Address
 from continuing_education.models.enums import enums, admission_state_choices
-from continuing_education.views.common import transform_response_to_data, get_countries_list
+from continuing_education.views.api import transform_response_to_data, get_countries_list
 
 
 class FormationChoiceField(forms.ModelChoiceField):

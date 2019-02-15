@@ -39,6 +39,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
@@ -47,16 +48,15 @@ from django_registration import signals
 from django_registration.exceptions import ActivationError
 from django_registration.views import RegistrationView, ActivationView
 
-from base.views.layout import render
 from base.models import person as mdl_person
+from base.models.person import Person
+from base.views.layout import render
 from continuing_education.forms.account import ContinuingEducationPersonForm, ContinuingEducationPasswordResetForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.views.common import display_errors
 from osis_common.messaging import message_config, send_message as message_service
-
-from django.utils.translation import ugettext_lazy as _
 
 REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
 
@@ -192,6 +192,7 @@ class ContinuingEducationActivationView(ActivationView):
         user = self.get_user(username)
         user.is_active = True
         user.save()
+        Person.objects.get_or_create(user=user, defaults={'language': 'fr-be'})
         self.request.session['formation_id'] = formation_id
         return user
 

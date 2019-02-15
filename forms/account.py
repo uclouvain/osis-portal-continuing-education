@@ -12,7 +12,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
-from continuing_education.views.common import get_countries_list
+from continuing_education.views.api import get_countries_list
 from osis_common.messaging import message_config, send_message as message_service
 
 
