@@ -34,6 +34,9 @@ from django.test import TestCase
 from django.utils.translation import ugettext, ugettext_lazy as _
 from requests import Response
 
+from base.models.enums import education_group_categories
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
@@ -271,11 +274,17 @@ class ViewStudentRegistrationTestCase(TestCase):
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
+        ac = AcademicYearFactory()
+        AcademicYearFactory(year=ac.year+1)
         self.admission = AdmissionFactory(
+            formation=EducationGroupYearFactory(
+                academic_year=ac,
+                education_group_type__category=education_group_categories.TRAINING
+            )
         )
 
     def test_registration_is_submittable(self):
-        errors, errors_fields = get_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
 
         self.assertFalse(
             errors
