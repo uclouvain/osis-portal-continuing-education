@@ -23,24 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import base64
-import io
 import itertools
-from mimetypes import MimeTypes
 
-import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from rest_framework import status
-from rest_framework.parsers import JSONParser
 
 from base.models import person as mdl_person
 from base.models.person import Person
@@ -52,9 +44,9 @@ from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.common import display_errors, display_success_messages, display_error_messages, \
-    get_submission_errors, _find_user_admission_by_id, _show_submit_warning, _get_files_list, _upload_file, \
-    add_informations_message_on_submittable_file
+from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
+    _show_submit_warning, add_informations_message_on_submittable_file
+from continuing_education.views.file import _get_files_list
 
 
 @login_required
@@ -76,17 +68,6 @@ def admission_detail(request, admission_id):
         admission,
         settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
     )
-    if request.method == 'POST' and 'file_submit' in request.POST:
-        file = request.FILES['myfile'] if 'myfile' in request.FILES else None
-        if file:
-            return _upload_file(
-                request,
-                file,
-                admission,
-                list_files=list_files,
-                admission_is_submittable=admission_is_submittable,
-                registration=False,
-            )
 
     return render(
         request,
@@ -119,49 +100,6 @@ def admission_submit(request):
             return redirect('admission_detail', admission.pk)
 
     raise PermissionDenied
-
-
-@login_required
-def download_file(request, file_uuid, admission_uuid):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
-          "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
-    headers_to_get = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
-    }
-    request_to_get = requests.get(
-        url,
-        headers=headers_to_get
-    )
-    if request_to_get.status_code == status.HTTP_200_OK:
-        stream = io.BytesIO(request_to_get.content)
-        file = JSONParser().parse(stream)
-        name = get_valid_filename(file['name'])
-        mime_type = MimeTypes().guess_type(file['name'])
-        response_file = base64.b64decode(file['content'])
-        response = HttpResponse(response_file, mime_type)
-        response['Content-Disposition'] = "attachment; filename=%s" % name
-        return response
-    else:
-        return HttpResponse(status=404)
-
-
-@login_required
-def remove_file(request, file_uuid, admission_uuid):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
-          "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
-    headers_to_delete = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
-    }
-    request_to_delete = requests.delete(
-        url + "/delete",
-        headers=headers_to_delete
-    )
-
-    if request_to_delete.status_code == status.HTTP_204_NO_CONTENT:
-        display_success_messages(request, _("File correctly deleted"))
-    else:
-        display_error_messages(request, _("A problem occured during delete"))
-    return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
 
 @login_required
@@ -199,7 +137,7 @@ def admission_form(request, admission_id=None, **kwargs):
     else:
         list_files = []
 
-    if adm_form.is_valid() and person_form.is_valid() and address_form.is_valid() and id_form.is_valid():
+    if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
         if current_address:
             address = address_form.save()
         else:
