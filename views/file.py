@@ -116,23 +116,26 @@ def remove_file(request, file_uuid, admission_uuid):
     return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
 
-def _get_files_list(admission, url_continuing_education_file_api):
+def _get_files_list(request, admission, url_continuing_education_file_api):
     """
     Get files list of an admission with OSIS IUFC API
     """
     files_list = []
-    response = requests.get(
-        url=url_continuing_education_file_api,
-        headers=_prepare_headers_for_files('GET'),
-    )
-    if response.status_code == status.HTTP_200_OK:
-        stream = io.BytesIO(response.content)
-        files_list = JSONParser().parse(stream)['results']
-        for file in files_list:
-            file['created_date'] = parser.parse(
-                file['created_date']
-            )
-            file['is_deletable'] = _is_file_uploaded_by_admission_person(admission, file)
+    try:
+        response = requests.get(
+            url=url_continuing_education_file_api,
+            headers=_prepare_headers_for_files('GET'),
+        )
+        if response.status_code == status.HTTP_200_OK:
+            stream = io.BytesIO(response.content)
+            files_list = JSONParser().parse(stream)['results']
+            for file in files_list:
+                file['created_date'] = parser.parse(
+                    file['created_date']
+                )
+                file['is_deletable'] = _is_file_uploaded_by_admission_person(admission, file)
+    except requests.exceptions.ConnectionError:
+        display_error_messages(request, _('Unexpected error occurred'))
     return files_list
 
 

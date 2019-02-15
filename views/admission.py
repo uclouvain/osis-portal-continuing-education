@@ -65,6 +65,7 @@ def admission_detail(request, admission_id):
         admission_is_submittable = False
 
     list_files = _get_files_list(
+        request,
         admission,
         settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
     )
@@ -129,13 +130,6 @@ def admission_form(request, admission_id=None, **kwargs):
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
-    if admission:
-        list_files = _get_files_list(
-            admission,
-            settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
-        )
-    else:
-        list_files = []
 
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
         if current_address:
@@ -183,7 +177,6 @@ def admission_form(request, admission_id=None, **kwargs):
             'address_form': address_form,
             'id_form': id_form,
             'admission': admission,
-            'list_files': list_files,
             'errors_fields': errors_fields
         }
     )

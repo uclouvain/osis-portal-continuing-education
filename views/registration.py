@@ -64,6 +64,7 @@ def registration_detail(request, admission_id):
     else:
         registration_is_submittable = False
     list_files = _get_files_list(
+        request,
         admission,
         settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
     )
