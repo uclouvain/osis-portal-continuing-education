@@ -44,7 +44,6 @@ from base.tests.factories.person import PersonFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.views.file import MAX_ADMISSION_FILE_NAME_LENGTH
 
 
 class AdmissionFileTestCase(TestCase):
@@ -81,17 +80,15 @@ class AdmissionFileTestCase(TestCase):
         return response
 
     def mocked_failed_post_request(self, **kwargs):
-        response = HttpResponse()
+        response = Response()
         response.status_code = status.HTTP_400_BAD_REQUEST
-        response.content = _("A problem occured : the document is not uploaded")
+        response.json = lambda *args, **kwargs: "BAD REQUEST"
         return response
 
     def mocked_failed_post_request_name_too_long(self, **kwargs):
-        response = HttpResponse()
+        response = Response()
         response.status_code = status.HTTP_406_NOT_ACCEPTABLE
-        response.content = _("The name of the file is too long : maximum %(length)s characters.") % {
-                    'length': MAX_ADMISSION_FILE_NAME_LENGTH
-                }
+        response.json = lambda *args, **kwargs: "NAME TOO LONG"
         return response
 
     @mock.patch('requests.post', side_effect=mocked_success_post_request)
@@ -115,10 +112,7 @@ class AdmissionFileTestCase(TestCase):
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEquals(response.status_code, status.HTTP_302_FOUND)
         # an error should raise as the admission is not retrieved from test
-        self.assertIn(
-            ugettext(_("A problem occured : the document is not uploaded")),
-            messages_list
-        )
+        self.assertIn("BAD REQUEST",messages_list)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
 
     @mock.patch('requests.post', side_effect=mocked_failed_post_request_name_too_long)
@@ -135,12 +129,7 @@ class AdmissionFileTestCase(TestCase):
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEquals(response.status_code, status.HTTP_302_FOUND)
         # an error should raise as the admission is not retrieved from test
-        self.assertIn(
-            ugettext(_("The name of the file is too long : maximum %(length)s characters.") % {
-                'length': MAX_ADMISSION_FILE_NAME_LENGTH
-            }),
-            messages_list
-        )
+        self.assertIn("NAME TOO LONG", messages_list)
 
     def mocked_success_delete_request(self, **kwargs):
         response = Response()
