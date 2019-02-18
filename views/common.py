@@ -28,7 +28,6 @@ from collections import OrderedDict
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import login as django_login
-from django.forms import model_to_dict
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import translation
@@ -113,16 +112,16 @@ def get_submission_errors(admission, is_registration=False):
 
     if is_registration:
         address_form = StrictAddressForm(
-            data=model_to_dict(admission.billing_address)
+            data=admission['billing_address']
         )
         adm_form = StrictRegistrationForm(
-            data=model_to_dict(admission)
+            data=admission
         )
         _update_errors([address_form, adm_form], errors, errors_field)
 
-        if not admission.use_address_for_post:
+        if not admission['use_address_for_post']:
             residence_address_form = StrictAddressForm(
-                data=model_to_dict(admission.residence_address)
+                data=admission['residence_address']
             )
             _update_errors([residence_address_form], errors, errors_field)
     else:

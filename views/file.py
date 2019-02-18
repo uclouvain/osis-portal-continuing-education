@@ -142,4 +142,4 @@ def _get_files_list(request, admission, url_continuing_education_file_api):
 def _is_file_uploaded_by_admission_person(admission, file):
     uploaded_by = file.get('uploaded_by', None)
     uploader_uuid = uploaded_by.get('uuid', None) if uploaded_by else None
-    return uploader_uuid == str(admission.person_information.person.uuid)
+    return uploader_uuid == str(admission['person_information']['person']['uuid'])
