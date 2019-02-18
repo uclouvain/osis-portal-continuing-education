@@ -53,10 +53,10 @@ urlpatterns = [
         url(r'^', include('django_registration.backends.activation.urls'))])),
     url(r'^admission_new/', admission.admission_form, name='admission_new'),
     url(r'^admission_edit/(?P<admission_id>[0-9]+)$', admission.admission_form, name='admission_edit'),
-    url(r'^admission_detail/(?P<admission_id>[0-9]+)$', admission.admission_detail, name='admission_detail'),
+    url(r'^admission_detail/(?P<admission_uuid>[0-9a-f-]+)$', admission.admission_detail, name='admission_detail'),
     url(r'^admission_submit/', admission.admission_submit, name='admission_submit'),
     url(r'^registration_edit/(?P<admission_id>[0-9]+)$', registration.registration_edit, name='registration_edit'),
-    url(r'^registration_detail/(?P<admission_id>[0-9]+)$', registration.registration_detail,
+    url(r'^registration_detail/(?P<admission_uuid>[0-9a-f-]+)$', registration.registration_detail,
         name='registration_detail'),
     url(r'^registration_submit/', registration.registration_submit, name='registration_submit'),
     url(

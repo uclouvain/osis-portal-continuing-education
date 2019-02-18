@@ -50,8 +50,8 @@ from continuing_education.views.file import _get_files_list
 
 
 @login_required
-def admission_detail(request, admission_id):
-    admission = _find_user_admission_by_id(admission_id, user=request.user)
+def admission_detail(request, admission_uuid):
+    admission = _find_user_admission_by_id(admission_uuid, user=request.user)
     if admission.state == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,

@@ -30,8 +30,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 
 from base.models import person as mdl_person
-from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
 from continuing_education.models.enums import admission_state_choices
+from continuing_education.views.api import get_data_list_from_osis
 
 
 def formations_list(request):
@@ -56,21 +56,23 @@ def main_view(request, formation_id=None):
         request.session['formation_id'] = formation_id
     if request.user.is_authenticated:
         person = mdl_person.find_by_user(request.user)
-        continuing_education_person = mdl_continuing_education_person.find_by_person(person=person)
+        continuing_education_person = get_data_list_from_osis("persons", "person", str(person))[0]
         registration_states = [
             admission_state_choices.ACCEPTED,
             admission_state_choices.REGISTRATION_SUBMITTED,
             admission_state_choices.VALIDATED
         ]
-        admissions = admission.search(
-            person=continuing_education_person,
-        ).exclude(
-            state__in=registration_states
-        )
-        registrations = admission.search(
-            person=continuing_education_person,
-            state__in=registration_states,
-        )
+        # admissions = admission.search(
+        #     person=continuing_education_person,
+        # ).exclude(
+        #     state__in=registration_states
+        # )
+        # registrations = admission.search(
+        #     person=continuing_education_person,
+        #     state__in=registration_states,
+        # )
+        admissions = get_data_list_from_osis("admissions", "person", str(person))
+        registrations = get_data_list_from_osis("registrations", "person", str(person))
         return render(request, "continuing_education/home.html", locals())
     else:
         return render(request, "authentication/login.html")

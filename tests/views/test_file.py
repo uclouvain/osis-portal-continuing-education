@@ -112,7 +112,7 @@ class AdmissionFileTestCase(TestCase):
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEquals(response.status_code, status.HTTP_302_FOUND)
         # an error should raise as the admission is not retrieved from test
-        self.assertIn("BAD REQUEST",messages_list)
+        self.assertIn("BAD REQUEST", messages_list)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
 
     @mock.patch('requests.post', side_effect=mocked_failed_post_request_name_too_long)
@@ -158,7 +158,6 @@ class AdmissionFileTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission.pk]) + '#documents')
-
 
     @mock.patch('requests.delete', side_effect=mocked_failed_delete_request)
     def test_delete_file_error(self, mock_delete):
