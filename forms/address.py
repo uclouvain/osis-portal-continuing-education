@@ -2,7 +2,7 @@ from dal import autocomplete
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from base.views.autocomplete.country import get_country_list_from_osis
+from continuing_education.views.api import get_country_list_from_osis
 
 
 class AddressForm(forms.Form):

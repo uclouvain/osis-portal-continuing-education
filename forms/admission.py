@@ -6,10 +6,9 @@ from django.forms import ChoiceField, ModelChoiceField, Form
 from django.utils.translation import ugettext_lazy as _
 
 from base.models.education_group_year import EducationGroupYear
-from base.views.autocomplete.country import get_country_list_from_osis
 from continuing_education.models.address import Address
 from continuing_education.models.enums import enums, admission_state_choices
-from continuing_education.views.api import transform_response_to_data
+from continuing_education.views.api import transform_response_to_data, get_country_list_from_osis
 
 
 class FormationChoiceField(ModelChoiceField):

@@ -30,6 +30,8 @@ from django.conf import settings
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import MultiPartRenderer
 
+from base.views.autocomplete.common import get_list_from_osis
+
 
 def transform_response_to_data(response):
     stream = io.BytesIO(response.content)
@@ -70,3 +72,11 @@ def _prepare_headers_for_files(method):
             'Content-Disposition': 'attachment; filename=name.jpeg',
             'Content-Type': MultiPartRenderer.media_type
         }
+
+
+def get_country_list_from_osis():
+    return get_list_from_osis(settings.URL_COUNTRY_API)
+
+
+def get_training_list_from_osis():
+    return get_list_from_osis(settings.URL_TRAINING_API)
