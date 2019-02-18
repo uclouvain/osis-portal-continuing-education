@@ -284,7 +284,7 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
         )
 
     def test_registration_is_submittable(self):
-        errors, errors_fields = get_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
 
         self.assertFalse(
             errors
