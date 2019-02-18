@@ -44,6 +44,7 @@ from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
+from continuing_education.views.api import get_data_from_osis
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
     _show_submit_warning, add_informations_message_on_submittable_file
 from continuing_education.views.file import _get_files_list
@@ -51,8 +52,8 @@ from continuing_education.views.file import _get_files_list
 
 @login_required
 def admission_detail(request, admission_uuid):
-    admission = _find_user_admission_by_id(admission_uuid, user=request.user)
-    if admission.state == admission_state_choices.DRAFT:
+    admission = get_data_from_osis("admissions", admission_uuid)
+    if admission['state'] == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,
             title=_("Your admission file has been saved. Please consider the following information :")
@@ -67,7 +68,7 @@ def admission_detail(request, admission_uuid):
     list_files = _get_files_list(
         request,
         admission,
-        settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
+        settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/"
     )
 
     return render(

@@ -49,8 +49,8 @@ from continuing_education.views.file import _get_files_list
 
 
 @login_required
-def registration_detail(request, admission_id):
-    admission = get_object_or_404(Admission, pk=admission_id)
+def registration_detail(request, admission_uuid):
+    admission = get_object_or_404(Admission, uuid=admission_uuid)
 
     if admission.state == admission_state_choices.ACCEPTED:
         add_informations_message_on_submittable_file(

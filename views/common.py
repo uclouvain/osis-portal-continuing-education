@@ -127,16 +127,16 @@ def get_submission_errors(admission, is_registration=False):
             _update_errors([residence_address_form], errors, errors_field)
     else:
         person_form = StrictPersonForm(
-            data=model_to_dict(admission.person_information.person)
+            data=admission['person_information']['person']
         )
         person_information_form = ContinuingEducationPersonForm(
-            data=model_to_dict(admission.person_information)
+            data=admission['person_information']
         )
         address_form = StrictAddressForm(
-            data=model_to_dict(admission.address)
+            data=admission['main_address']
         )
         adm_form = StrictAdmissionForm(
-            data=model_to_dict(admission)
+            data=admission
         )
         forms = [person_form, person_information_form, address_form, adm_form]
         _update_errors(forms, errors, errors_field)
