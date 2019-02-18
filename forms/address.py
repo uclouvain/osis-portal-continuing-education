@@ -1,26 +1,31 @@
+from dal import autocomplete
 from django import forms
-from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 
-from continuing_education.models.address import Address
-from reference.models.country import Country
+from base.views.autocomplete.country import get_country_list_from_osis
 
 
-class AddressForm(ModelForm):
-    country = forms.ModelChoiceField(
-        queryset=Country.objects.all().order_by('name'),
-        label=_("Country"),
-        required=False,
+class AddressForm(forms.Form):
+    country = autocomplete.Select2ListChoiceField(
+        choice_list=get_country_list_from_osis,
+        widget=autocomplete.ListSelect2(url='country-autocomplete'),
     )
 
-    class Meta:
-        model = Address
-        fields = [
-            'location',
-            'postal_code',
-            'city',
-            'country'
-        ]
+    location = forms.CharField(
+        max_length=255,
+        required=False,
+        label=_("Location")
+    )
+    postal_code = forms.CharField(
+        max_length=20,
+        required=False,
+        label=_("Postal code")
+    )
+    city = forms.CharField(
+        max_length=255,
+        required=False,
+        label=_("City")
+    )
 
 
 class StrictAddressForm(AddressForm):
