@@ -43,7 +43,11 @@ urlpatterns = [
         url(r'^register/$',
             account_activation.ContinuingEducationRegistrationView.as_view(form_class=RegistrationFormUniqueEmail),
             name='django_registration_register'),
-        url(r'^complete_account_registration/$', account_activation.complete_account_registration, name='complete_account_registration'),
+        url(
+            r'^complete_account_registration/$',
+            account_activation.complete_account_registration,
+            name='complete_account_registration'
+        ),
         url(r'^activate/(?P<formation_id>[\w]+)/(?P<activation_key>[-:\w]+)/$',
             account_activation.ContinuingEducationActivationView.as_view(),
             name='django_registration_activate'),
@@ -55,7 +59,11 @@ urlpatterns = [
     url(r'^admission_edit/(?P<admission_uuid>[0-9a-f-]+)$', admission.admission_form, name='admission_edit'),
     url(r'^admission_detail/(?P<admission_uuid>[0-9a-f-]+)$', admission.admission_detail, name='admission_detail'),
     url(r'^admission_submit/', admission.admission_submit, name='admission_submit'),
-    url(r'^registration_edit/(?P<admission_uuid>[0-9a-f-]+)$', registration.registration_edit, name='registration_edit'),
+    url(
+        r'^registration_edit/(?P<admission_uuid>[0-9a-f-]+)$',
+        registration.registration_edit,
+        name='registration_edit'
+    ),
     url(r'^registration_detail/(?P<admission_uuid>[0-9a-f-]+)$', registration.registration_detail,
         name='registration_detail'),
     url(r'^registration_submit/', registration.registration_submit, name='registration_submit'),

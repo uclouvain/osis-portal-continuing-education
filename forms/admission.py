@@ -1,14 +1,12 @@
-import requests
 from dal import autocomplete
 from django import forms
-from django.conf import settings
 from django.forms import ChoiceField, ModelChoiceField, Form
 from django.utils.translation import ugettext_lazy as _
 
-from base.models.education_group_year import EducationGroupYear
 from continuing_education.models.address import Address
 from continuing_education.models.enums import enums, admission_state_choices
-from continuing_education.views.api import transform_response_to_data, get_country_list_from_osis
+from continuing_education.views.api import get_country_list_from_osis, \
+    get_training_list_from_osis
 
 
 class FormationChoiceField(ModelChoiceField):
@@ -20,18 +18,12 @@ class FormationChoiceField(ModelChoiceField):
 
 
 class AdmissionForm(Form):
-    def get_training_list_from_osis(self, filter_field=None, filter_value=None):
-        header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-        url = 'http://localhost:18000/api/v1/education_group/trainings/'
-        if filter_field and filter_value:
-            url = url + "?" + filter_field + "=" + filter_value
-        response = requests.get(
-            url=url,
-            headers=header_to_get
-        )
-        return transform_response_to_data(response)
 
-    formation = FormationChoiceField(queryset=EducationGroupYear.objects.all())
+    formation = autocomplete.Select2ListChoiceField(
+        choice_list=get_training_list_from_osis,
+        widget=autocomplete.ListSelect2(url='training-autocomplete'),
+    )
+
     state = ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)
     citizenship = autocomplete.Select2ListChoiceField(
         choice_list=get_country_list_from_osis,
@@ -182,11 +174,6 @@ class AdmissionForm(Form):
         required=False,
         label=_("State reason")
     )
-
-    def __init__(self, data, **kwargs):
-        super().__init__(data, **kwargs)
-        # self.fields['citizenship'].choices = get_countries_list()
-        self.fields['formation'].choices = self.get_training_list_from_osis()
 
 
 class StrictAdmissionForm(AdmissionForm):
