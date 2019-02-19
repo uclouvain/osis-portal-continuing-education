@@ -23,9 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import ast
 import itertools
-import json
 
 from django.conf import settings
 from django.contrib import messages
@@ -42,7 +40,8 @@ from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.api import get_data_from_osis, get_data_list_from_osis, update_data_to_osis
+from continuing_education.views.api import get_data_from_osis, get_data_list_from_osis, update_data_to_osis, \
+    post_data_to_osis, prepare_admission_data
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
     _show_submit_warning, add_informations_message_on_submittable_file
 from continuing_education.views.file import _get_files_list
@@ -114,8 +113,9 @@ def admission_form(request, admission_uuid=None, **kwargs):
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
     current_address = admission['main_address'] if admission else None
-    old_admission = get_data_list_from_osis("admissions", "person", str(base_person))
-
+    old_admission = get_data_list_from_osis("admissions", "person", str(base_person))[-1]
+    if old_admission:
+        old_admission = get_data_from_osis("admissions", old_admission['uuid'])
     address = current_address if current_address else (old_admission['main_address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, initial=address)
 
@@ -133,11 +133,16 @@ def admission_form(request, admission_uuid=None, **kwargs):
 
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
         prepare_admission_data(address_form, adm_form, admission, person_form)
-
-        update_data_to_osis(adm_form.cleaned_data, "admissions")
+        if admission:
+            update_data_to_osis(adm_form.cleaned_data, "admissions")
+            errors, errors_fields = get_submission_errors(admission)
+        else:
+            post_data_to_osis(adm_form.cleaned_data, "admissions")
+            errors, errors_fields = get_submission_errors(adm_form.cleaned_data)
         if request.session.get('formation_id'):
             del request.session['formation_id']
-        errors, errors_fields = get_submission_errors(admission)
+
+################## ERROR !!!!!!!!!! NO UUID WHEN CREATING !!!! ###################################################
         return redirect(
             reverse('admission_detail', kwargs={'admission_uuid': admission['uuid']}),
         )
@@ -157,17 +162,3 @@ def admission_form(request, admission_uuid=None, **kwargs):
             'errors_fields': errors_fields
         }
     )
-
-
-def prepare_admission_data(address_form, adm_form, admission, person_form):
-    adm_form.cleaned_data['uuid'] = admission['uuid']
-    adm_form.cleaned_data['citizenship'] = json.loads(adm_form.cleaned_data['citizenship'].replace("\'", '"'))[
-        'iso_code']
-
-    address_form.cleaned_data['country'] = json.loads(address_form.cleaned_data['country'].replace("\'", '"'))[
-        'iso_code']
-    adm_form.cleaned_data['main_address'] = address_form.cleaned_data
-    person_form.cleaned_data['birth_date'] = person_form.cleaned_data['birth_date'].__str__()
-    adm_form.cleaned_data['person_information'] = person_form.cleaned_data
-    adm_form.cleaned_data['formation'] = ast.literal_eval(adm_form.cleaned_data['formation'])
-
