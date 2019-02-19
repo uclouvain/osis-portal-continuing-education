@@ -12,7 +12,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
-from continuing_education.views.api import get_country_list_from_osis
+from base.views.autocomplete.common import get_country_list_from_osis
 from osis_common.messaging import message_config, send_message as message_service
 
 
@@ -20,6 +20,7 @@ class ContinuingEducationPersonForm(forms.Form):
     birth_country = autocomplete.Select2ListChoiceField(
         choice_list=get_country_list_from_osis,
         widget=autocomplete.ListSelect2(url='country-autocomplete'),
+        required=False
     )
 
     birth_date = forms.DateField(
@@ -42,12 +43,12 @@ class ContinuingEducationPersonForm(forms.Form):
 
     def _disable_existing_person_fields(self):
         fields_to_disable = ["birth_country", "birth_date"]
-
         for field in self.fields.keys():
-            self.fields[field].initial = getattr(self.instance, field)
+            self.fields[field].initial = self.instance[field]
             self.fields[field].widget.attrs['readonly'] = True
+
             if field in fields_to_disable:
-                self.fields[field].widget.attrs['disabled'] = True
+                self.fields[field].widget.attrs['disabled'] = 'disabled'
 
 
 class ContinuingEducationPasswordResetForm(forms.Form):

@@ -23,7 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import ast
 import itertools
+import json
 
 from django.conf import settings
 from django.contrib import messages
@@ -35,16 +37,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
-from base.models.person import Person
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
-from continuing_education.models import continuing_education_person
-from continuing_education.models.address import Address
-from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.api import get_data_from_osis
+from continuing_education.views.api import get_data_from_osis, get_data_list_from_osis, update_data_to_osis
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
     _show_submit_warning, add_informations_message_on_submittable_file
 from continuing_education.views.file import _get_files_list
@@ -105,24 +103,25 @@ def admission_submit(request):
 
 
 @login_required
-def admission_form(request, admission_id=None, **kwargs):
+def admission_form(request, admission_uuid=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
-    admission = _find_user_admission_by_id(admission_id, user=request.user) if admission_id else None
-    if admission and admission.state != admission_state_choices.DRAFT:
+    admission = get_data_from_osis("admissions", admission_uuid) if admission_uuid else None
+    if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
-    person_information = continuing_education_person.find_by_person(person=base_person)
-    adm_form = AdmissionForm(request.POST or None, instance=admission)
+    person_information = get_data_list_from_osis("persons", "person", str(base_person))[0]
+    adm_form = AdmissionForm(request.POST or None, initial=admission)
+
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
-    current_address = admission.address if admission else None
-    old_admission = Admission.objects.filter(person_information=person_information).last()
-    address = current_address if current_address else (old_admission.address if old_admission else None)
-    address_form = AddressForm(request.POST or None, instance=address)
+    current_address = admission['main_address'] if admission else None
+    old_admission = get_data_list_from_osis("admissions", "person", str(base_person))
+
+    address = current_address if current_address else (old_admission['main_address'] if old_admission else None)
+    address_form = AddressForm(request.POST or None, initial=address)
 
     id_form = PersonForm(request.POST or None, instance=base_person)
 
     errors_fields = []
-
     if not admission and not request.POST:
         _show_save_before_submit(request)
 
@@ -133,37 +132,14 @@ def admission_form(request, admission_id=None, **kwargs):
             _show_submit_warning(admission_submission_errors, request)
 
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
-        if current_address:
-            address = address_form.save()
-        else:
-            address = Address(**address_form.cleaned_data)
-            address.save()
+        prepare_admission_data(address_form, adm_form, admission, person_form)
 
-        identity = Person.objects.filter(user=request.user)
-
-        if not identity:
-            identity, id_created = Person.objects.get_or_create(**id_form.cleaned_data)
-            identity.user = request.user
-            identity.save()
-        else:
-            identity.update(**id_form.cleaned_data)
-            identity = identity.first()
-
-        person = person_form.save(commit=False)
-        person.person_id = identity.pk
-        person.save()
-
-        admission = adm_form.save(commit=False)
-        admission.person_information = person
-        admission.address = address
-        admission.billing_address = address
-        admission.residence_address = address
-        admission.save()
+        update_data_to_osis(adm_form.cleaned_data, "admissions")
         if request.session.get('formation_id'):
             del request.session['formation_id']
         errors, errors_fields = get_submission_errors(admission)
         return redirect(
-            reverse('admission_detail', kwargs={'admission_id': admission.id}),
+            reverse('admission_detail', kwargs={'admission_uuid': admission['uuid']}),
         )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
@@ -181,3 +157,17 @@ def admission_form(request, admission_id=None, **kwargs):
             'errors_fields': errors_fields
         }
     )
+
+
+def prepare_admission_data(address_form, adm_form, admission, person_form):
+    adm_form.cleaned_data['uuid'] = admission['uuid']
+    adm_form.cleaned_data['citizenship'] = json.loads(adm_form.cleaned_data['citizenship'].replace("\'", '"'))[
+        'iso_code']
+
+    address_form.cleaned_data['country'] = json.loads(address_form.cleaned_data['country'].replace("\'", '"'))[
+        'iso_code']
+    adm_form.cleaned_data['main_address'] = address_form.cleaned_data
+    person_form.cleaned_data['birth_date'] = person_form.cleaned_data['birth_date'].__str__()
+    adm_form.cleaned_data['person_information'] = person_form.cleaned_data
+    adm_form.cleaned_data['formation'] = ast.literal_eval(adm_form.cleaned_data['formation'])
+

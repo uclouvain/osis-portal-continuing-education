@@ -30,8 +30,6 @@ from django.conf import settings
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import MultiPartRenderer
 
-from base.views.autocomplete.common import get_list_from_osis
-
 
 def transform_response_to_data(response):
     stream = io.BytesIO(response.content)
@@ -74,9 +72,23 @@ def _prepare_headers_for_files(method):
         }
 
 
-def get_country_list_from_osis():
-    return get_list_from_osis(settings.URL_COUNTRY_API)
+def post_data_to_osis(object, object_name):
+    header_to_post = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_name + "/"
+    response = requests.post(
+        url=url,
+        headers=header_to_post,
+        data=object
+    )
+    return response
 
 
-def get_training_list_from_osis():
-    return get_list_from_osis(settings.URL_TRAINING_API)
+def update_data_to_osis(object, object_name):
+    header_to_put = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_name + "/" + object['uuid']
+    response = requests.patch(
+        url=url,
+        headers=header_to_put,
+        json=object,
+    )
+    return response

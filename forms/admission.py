@@ -3,10 +3,8 @@ from django import forms
 from django.forms import ChoiceField, ModelChoiceField, Form
 from django.utils.translation import ugettext_lazy as _
 
-from continuing_education.models.address import Address
+from base.views.autocomplete.common import get_country_list_from_osis, get_training_list_from_osis
 from continuing_education.models.enums import enums, admission_state_choices
-from continuing_education.views.api import get_country_list_from_osis, \
-    get_training_list_from_osis
 
 
 class FormationChoiceField(ModelChoiceField):
@@ -22,12 +20,17 @@ class AdmissionForm(Form):
     formation = autocomplete.Select2ListChoiceField(
         choice_list=get_training_list_from_osis,
         widget=autocomplete.ListSelect2(url='training-autocomplete'),
+        required=False,
     )
 
-    state = ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)
+    state = ChoiceField(
+        choices=admission_state_choices.STUDENT_STATE_CHOICES,
+        required=False
+    )
     citizenship = autocomplete.Select2ListChoiceField(
         choice_list=get_country_list_from_osis,
         widget=autocomplete.ListSelect2(url='country-autocomplete'),
+        required=False,
     )
     high_school_diploma = forms.TypedChoiceField(
         coerce=lambda x: x == 'True',
@@ -36,13 +39,13 @@ class AdmissionForm(Form):
         label=_("High school diploma")
     )
 
-    person_information = forms.CharField()
+    person_information = forms.CharField(
+        required=False,
+    )
 
     # Contact
-    address = forms.ModelChoiceField(
-        queryset=Address.objects.all(),
+    address = forms.CharField(
         required=False,
-        label=_("Address")
     )
     phone_mobile = forms.CharField(
         max_length=30,

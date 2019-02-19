@@ -80,7 +80,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field person_form.birth_location label_class="required" %}</div>
-                        <div class="col-md-6">{% bootstrap_field person_form.birth_country label_class="required" %}</div>
+                        <div class="col-md-6">{% bootstrap_field person_form.birth_country %}</div>
                     </div>
 
                     {% bootstrap_field admission_form.citizenship label_class="required" %}
@@ -101,7 +101,6 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field address_form.country label_class="required" %}</div>
-                        <div class="col-md-6">{% bootstrap_field admission_form.residence_phone %}</div>
                     </div>
                 </div>
 
@@ -172,6 +171,10 @@
             </div>
         </form>
     </div>
+
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+    {{ admission_form.media }}
 {% endblock %}
 
 
