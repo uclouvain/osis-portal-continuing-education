@@ -31,7 +31,7 @@ msgid ""
 "card or residence permit."
 msgstr ""
 "Accompagné de deux photos d’identité et d’une copie recto/verso de la "
-"carted’identité ou du titre de séjour."
+"carte d’identité ou du titre de séjour."
 
 #: templates/fragment/files_panel.html:40
 msgid "Actions"
@@ -881,7 +881,7 @@ msgid ""
 "Your registration is submitted. Some tasks are remaining to complete the "
 "registration :"
 msgstr ""
-"Votre inscription a été soumise. Il reste quelques actions à effectuer pour"
+"Votre inscription a été soumise. Il reste quelques actions à effectuer pour "
  "compléter l'enregistrement :"
 
 #: templates/django_registration/registration_complete.html:32
