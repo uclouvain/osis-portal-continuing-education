@@ -99,14 +99,21 @@ def update_data_to_osis(object, object_name):
 def prepare_admission_data(address_form, adm_form, admission, person_form):
     if admission:
         adm_form.cleaned_data['uuid'] = admission['uuid']
+
     if adm_form.cleaned_data['citizenship']:
         adm_form.cleaned_data['citizenship'] = json.loads(adm_form.cleaned_data['citizenship'].replace("\'", '"'))[
             'iso_code']
+
     if address_form.cleaned_data['country']:
         address_form.cleaned_data['country'] = json.loads(address_form.cleaned_data['country'].replace("\'", '"'))[
             'iso_code']
-
     adm_form.cleaned_data['address'] = address_form.cleaned_data
+
+    if person_form.cleaned_data['birth_country']:
+        person_form.cleaned_data['birth_country'] = json.loads(
+            person_form.cleaned_data['birth_country'].replace("\'", '"')
+        )['iso_code']
+
     person_form.cleaned_data['birth_date'] = person_form.cleaned_data['birth_date'].__str__()
     adm_form.cleaned_data['person_information'] = person_form.cleaned_data
     if adm_form.cleaned_data['formation']:
