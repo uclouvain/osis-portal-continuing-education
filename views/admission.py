@@ -105,6 +105,7 @@ def admission_submit(request):
 def admission_form(request, admission_uuid=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = get_data_from_osis("admissions", admission_uuid) if admission_uuid else None
+
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
     person_information = get_data_list_from_osis("persons", "person", str(base_person))[0]
@@ -112,11 +113,11 @@ def admission_form(request, admission_uuid=None, **kwargs):
 
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
-    current_address = admission['main_address'] if admission else None
+    current_address = admission['address'] if admission else None
     old_admission = get_data_list_from_osis("admissions", "person", str(base_person))[-1]
     if old_admission:
         old_admission = get_data_from_osis("admissions", old_admission['uuid'])
-    address = current_address if current_address else (old_admission['main_address'] if old_admission else None)
+    address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, initial=address)
 
     id_form = PersonForm(request.POST or None, instance=base_person)
@@ -142,9 +143,8 @@ def admission_form(request, admission_uuid=None, **kwargs):
         if request.session.get('formation_id'):
             del request.session['formation_id']
 
-################## ERROR !!!!!!!!!! NO UUID WHEN CREATING !!!! ###################################################
         return redirect(
-            reverse('admission_detail', kwargs={'admission_uuid': admission['uuid']}),
+            reverse('admission_detail', kwargs={'admission_uuid': admission['uuid'] if 'uuid' in admission else None}),
         )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))

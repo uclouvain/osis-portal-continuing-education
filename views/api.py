@@ -106,8 +106,8 @@ def prepare_admission_data(address_form, adm_form, admission, person_form):
         address_form.cleaned_data['country'] = json.loads(address_form.cleaned_data['country'].replace("\'", '"'))[
             'iso_code']
 
-    adm_form.cleaned_data['main_address'] = address_form.cleaned_data
+    adm_form.cleaned_data['address'] = address_form.cleaned_data
     person_form.cleaned_data['birth_date'] = person_form.cleaned_data['birth_date'].__str__()
     adm_form.cleaned_data['person_information'] = person_form.cleaned_data
     if adm_form.cleaned_data['formation']:
-        adm_form.cleaned_data['formation'] = ast.literal_eval(adm_form.cleaned_data['formation'])
+        adm_form.cleaned_data['formation'] = ast.literal_eval(adm_form.cleaned_data['formation'])['uuid']

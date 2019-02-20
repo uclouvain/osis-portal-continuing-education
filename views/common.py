@@ -132,7 +132,7 @@ def get_submission_errors(admission, is_registration=False):
             data=admission['person_information']
         )
         address_form = StrictAddressForm(
-            data=admission['main_address']
+            data=admission['address']
         )
         adm_form = StrictAdmissionForm(
             data=admission
