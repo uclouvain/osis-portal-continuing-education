@@ -154,7 +154,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertFalse(response.context['registration_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(len(messages_list), 2)
 
         self.assertIn(
             ugettext("Your registration is submitted. Some tasks are remaining to complete the registration :"),
@@ -175,6 +175,11 @@ class ViewStudentRegistrationTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
+        self.assertIn(
+            ugettext("If you want to edit again your registration, please contact the program manager."),
+            str(messages_list[1])
+        )
+        self.assertEqual(messages_list[1].level, messages.WARNING)
 
     def test_registration_detail_not_found(self):
         response = self.client.get(reverse('registration_detail', kwargs={

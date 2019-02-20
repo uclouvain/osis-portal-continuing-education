@@ -215,3 +215,12 @@ def add_remaining_tasks_message(request):
         level=messages.INFO,
         message=mark_safe(message)
     )
+
+
+def add_contact_for_edit_message(request):
+    message = _("If you want to edit again your registration, please contact the program manager.")
+    messages.add_message(
+        request=request,
+        level=messages.WARNING,
+        message=mark_safe(message)
+    )

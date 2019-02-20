@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-20 15:14+0100\n"
+"POT-Creation-Date: 2019-02-11 08:56+0100\n"
 "PO-Revision-Date: 2019-01-04 16:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -351,6 +351,14 @@ msgstr "IUFC - Formation Continue"
 #: templates/registration_detail.html:72 templates/registration_form.html:48
 msgid "Identification"
 msgstr "Identification"
+
+#: views/common.py:203
+msgid ""
+"If you want to edit again your registration, please contact the program "
+"manager."
+msgstr ""
+"Si vous souhaitez encore éditer votre inscription, veuillez prendre contact "
+"avec le gestionnaire de la formation."
 
 #: templates/django_registration/complete_account_registration.html:48
 msgid "Information"

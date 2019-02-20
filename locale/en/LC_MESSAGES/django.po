@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-20 15:14+0100\n"
+"POT-Creation-Date: 2019-02-11 08:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -342,6 +342,12 @@ msgstr ""
 #: templates/django_registration/complete_account_registration.html:40
 #: templates/registration_detail.html:72 templates/registration_form.html:48
 msgid "Identification"
+msgstr ""
+
+#: views/common.py:203
+msgid ""
+"If you want to edit again your registration, please contact the program "
+"manager."
 msgstr ""
 
 #: templates/django_registration/complete_account_registration.html:48
@@ -849,7 +855,7 @@ msgid "Your password was successfully changed."
 msgstr ""
 
 #: tests/views/test_registration.py:86 tests/views/test_registration.py:120
-#: views/registration.py:59
+#: views/registration.py:58
 msgid ""
 "Your registration file has been saved. Please consider the following "
 "information :"
