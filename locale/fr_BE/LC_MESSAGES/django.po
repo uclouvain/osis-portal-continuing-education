@@ -355,10 +355,10 @@ msgstr "Identification"
 #: views/common.py:203
 msgid ""
 "If you want to edit again your registration, please contact the program "
-"manager :"
+"manager."
 msgstr ""
 "Si vous souhaitez encore éditer votre inscription, veuillez prendre contact "
-"avec le gestionnaire de la formation :"
+"avec le gestionnaire de la formation."
 
 #: templates/django_registration/complete_account_registration.html:48
 msgid "Information"

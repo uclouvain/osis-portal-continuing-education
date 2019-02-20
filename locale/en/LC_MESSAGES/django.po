@@ -347,7 +347,7 @@ msgstr ""
 #: views/common.py:203
 msgid ""
 "If you want to edit again your registration, please contact the program "
-"manager :"
+"manager."
 msgstr ""
 
 #: templates/django_registration/complete_account_registration.html:48

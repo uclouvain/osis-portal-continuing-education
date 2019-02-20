@@ -157,7 +157,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(len(messages_list), 2)
 
         self.assertIn(
-            ugettext("Your registration is submitted. Some tasks are remaining to complete the registration :"),
+            ugettext("Your registration is submitted. Some tasks are remaining to complete the registration."),
             str(messages_list[0])
         )
         self.assertIn(
