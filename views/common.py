@@ -199,6 +199,24 @@ def add_informations_message_on_submittable_file(request, title):
         )
 
 
+def add_remaining_tasks_message(request):
+    items = [
+        _("Print the completed registration form"),
+        _("Sign it and send it by post to the address of the program manager"),
+        _("Accompanied by two passport photos and a copy of both sides of the identity card or residence permit."),
+    ]
+
+    title = _("Your registration is submitted. Some tasks are remaining to complete the registration :")
+    message = "<strong>{}</strong><br>".format(title) + \
+              "".join(["- {}<br>".format(item) for item in items])
+
+    messages.add_message(
+        request=request,
+        level=messages.INFO,
+        message=mark_safe(message)
+    )
+
+
 def add_contact_for_edit_message(request):
     message = _("If you want to edit again your registration, please contact the program manager :")
     messages.add_message(

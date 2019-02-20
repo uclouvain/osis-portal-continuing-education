@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-20 15:28+0100\n"
+"POT-Creation-Date: 2019-02-11 08:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,12 @@ msgstr ""
 
 #: models/enums/admission_state_choices.py:13
 msgid "Accepted"
+msgstr ""
+
+#: views/common.py:206
+msgid ""
+"Accompanied by two passport photos and a copy of both sides of the identity "
+"card or residence permit."
 msgstr ""
 
 #: templates/fragment/files_panel.html:40
@@ -553,6 +559,10 @@ msgstr ""
 msgid "Previous UCL registration"
 msgstr ""
 
+#: views/common.py:204
+msgid "Print the completed registration form"
+msgstr ""
+
 #: models/admission.py:295
 msgid "Prior experience validation"
 msgstr ""
@@ -641,6 +651,10 @@ msgstr ""
 
 #: models/admission.py:310
 msgid "Sessions"
+msgstr ""
+
+#: views/common.py:205
+msgid "Sign it and send it by post to the address of the program manager"
 msgstr ""
 
 #: templates/authentication/login.html:82
@@ -845,6 +859,12 @@ msgstr ""
 msgid ""
 "Your registration file has been saved. Please consider the following "
 "information :"
+msgstr ""
+
+#: views/common.py:209
+msgid ""
+"Your registration is submitted. Some tasks are remaining to complete the "
+"registration :"
 msgstr ""
 
 #: templates/django_registration/registration_complete.html:32

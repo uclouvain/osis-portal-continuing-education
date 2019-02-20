@@ -44,7 +44,8 @@ from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import ACCEPTED
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
-    _show_submit_warning, add_informations_message_on_submittable_file, add_contact_for_edit_message
+    _show_submit_warning, add_informations_message_on_submittable_file, add_contact_for_edit_message, \
+    add_remaining_tasks_message
 from continuing_education.views.file import _get_files_list
 
 
@@ -52,6 +53,7 @@ from continuing_education.views.file import _get_files_list
 def registration_detail(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id)
     if admission.state == admission_state_choices.REGISTRATION_SUBMITTED:
+        add_remaining_tasks_message(request)
         add_contact_for_edit_message(request)
     if admission.state == admission_state_choices.ACCEPTED:
         add_informations_message_on_submittable_file(

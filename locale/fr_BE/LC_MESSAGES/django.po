@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-20 15:28+0100\n"
+"POT-Creation-Date: 2019-02-11 08:56+0100\n"
 "PO-Revision-Date: 2019-01-04 16:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -24,6 +24,14 @@ msgstr "Un problème est survenu durant la suppression"
 #: models/enums/admission_state_choices.py:13
 msgid "Accepted"
 msgstr "Accepté"
+
+#: views/common.py:206
+msgid ""
+"Accompanied by two passport photos and a copy of both sides of the identity "
+"card or residence permit."
+msgstr ""
+"Accompagné de deux photos d’identité et d’une copie recto/verso de la "
+"carte d’identité ou du titre de séjour."
 
 #: templates/fragment/files_panel.html:40
 msgid "Actions"
@@ -564,6 +572,10 @@ msgstr "Précédent NOMA"
 msgid "Previous UCL registration"
 msgstr "Avez-vous déjà été inscrit(e) à l'UCL ?"
 
+#: views/common.py:204
+msgid "Print the completed registration form"
+msgstr "Imprimer le formulaire d'inscription complété"
+
 #: models/admission.py:295
 msgid "Prior experience validation"
 msgstr "Valorisation des Acquis d'Experience"
@@ -653,6 +665,12 @@ msgstr "Séparé"
 #: models/admission.py:310
 msgid "Sessions"
 msgstr "Sessions"
+
+#: views/common.py:205
+msgid "Sign it and send it by post to the address of the program manager"
+msgstr ""
+"Le signer et l’envoyer par courrier postal à l’adresse du gestionnaire du "
+"programme"
 
 #: templates/authentication/login.html:82
 msgid "Signup"
@@ -858,13 +876,21 @@ msgid "Your password was successfully changed."
 msgstr "Votre mot de passe à été modifié avec succès."
 
 #: tests/views/test_registration.py:86 tests/views/test_registration.py:120
-#: views/registration.py:58
+#: views/registration.py:59
 msgid ""
 "Your registration file has been saved. Please consider the following "
 "information :"
 msgstr ""
 "Votre dossier d'inscription a été enregistré. Veuillez prendre en compte les "
 "informations suivantes :"
+
+#: views/common.py:209
+msgid ""
+"Your registration is submitted. Some tasks are remaining to complete the "
+"registration :"
+msgstr ""
+"Votre inscription a été soumise. Il reste quelques actions à effectuer pour "
+ "compléter l'enregistrement :"
 
 #: templates/django_registration/registration_complete.html:32
 msgid ""
