@@ -154,7 +154,27 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertFalse(response.context['registration_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 0)
+        self.assertEqual(len(messages_list), 1)
+
+        self.assertIn(
+            ugettext("Your registration is submitted. Some tasks are remaining to complete the registration :"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("Print the completed registration form"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("Sign it and send it by post to the address of the program manager"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext(
+                "Accompanied by two passport photos and a copy of both sides of the identity card or residence permit."
+            ),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.INFO)
 
     def test_registration_detail_not_found(self):
         response = self.client.get(reverse('registration_detail', kwargs={
