@@ -100,21 +100,19 @@ def prepare_admission_data(address_form, adm_form, admission, person_form):
     if admission:
         adm_form.cleaned_data['uuid'] = admission['uuid']
 
-    if adm_form.cleaned_data['citizenship']:
-        adm_form.cleaned_data['citizenship'] = json.loads(adm_form.cleaned_data['citizenship'].replace("\'", '"'))[
-            'iso_code']
+    format_data_for_country(adm_form, 'citizenship')
 
-    if address_form.cleaned_data['country']:
-        address_form.cleaned_data['country'] = json.loads(address_form.cleaned_data['country'].replace("\'", '"'))[
-            'iso_code']
+    format_data_for_country(address_form, 'country')
     adm_form.cleaned_data['address'] = address_form.cleaned_data
 
-    if person_form.cleaned_data['birth_country']:
-        person_form.cleaned_data['birth_country'] = json.loads(
-            person_form.cleaned_data['birth_country'].replace("\'", '"')
-        )['iso_code']
-
+    format_data_for_country(person_form, 'birth_country')
     person_form.cleaned_data['birth_date'] = person_form.cleaned_data['birth_date'].__str__()
     adm_form.cleaned_data['person_information'] = person_form.cleaned_data
+
     if adm_form.cleaned_data['formation']:
         adm_form.cleaned_data['formation'] = ast.literal_eval(adm_form.cleaned_data['formation'])['uuid']
+
+
+def format_data_for_country(form, field):
+    if form.cleaned_data[field]:
+        form.cleaned_data[field] = json.loads(form.cleaned_data[field].replace("\'", '"'))['iso_code']
