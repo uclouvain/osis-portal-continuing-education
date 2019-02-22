@@ -33,7 +33,6 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
-from django.http import HttpResponseForbidden
 from django.test import TestCase, RequestFactory
 from django.utils.translation import ugettext_lazy as _, gettext
 from requests import Response
@@ -134,7 +133,8 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(len(messages_list), 1)
 
         self.assertIn(
-            gettext("If you want to edit again your admission, please contact the program manager."),
+            gettext("If you want to edit again your admission, please contact the program manager : %(mail)s")
+            % {'mail': "xxx.yyy@uclouvain.be"},
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.WARNING)
