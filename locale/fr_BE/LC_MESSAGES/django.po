@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-11 08:56+0100\n"
+"POT-Creation-Date: 2019-02-22 08:24+0100\n"
 "PO-Revision-Date: 2019-01-04 16:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -25,15 +25,15 @@ msgstr "Un problème est survenu durant la suppression"
 msgid "Accepted"
 msgstr "Accepté"
 
-#: views/common.py:206
+#: tests/views/test_registration.py:173 views/common.py:206
 msgid ""
 "Accompanied by two passport photos and a copy of both sides of the identity "
 "card or residence permit."
 msgstr ""
-"Accompagné de deux photos d’identité et d’une copie recto/verso de la "
-"carte d’identité ou du titre de séjour."
+"Accompagné de deux photos d’identité et d’une copie recto/verso de la carte "
+"d’identité ou du titre de séjour."
 
-#: templates/fragment/files_panel.html:40
+#: templates/fragment/files_panel.html:41
 msgid "Actions"
 msgstr "Actions"
 
@@ -155,7 +155,7 @@ msgstr "Date de naissance"
 msgid "Birth location"
 msgstr "Lieu de naissance"
 
-#: templates/fragment/files_panel.html:80
+#: templates/fragment/files_panel.html:82
 msgid "Browse"
 msgstr "Parcourir"
 
@@ -163,6 +163,10 @@ msgstr "Parcourir"
 #: templates/fragment/submit_confirmation_modal.html:50
 msgid "Cancel"
 msgstr "Annuler"
+
+#: templates/fragment/files_panel.html:37
+msgid "Category"
+msgstr "Catégorie"
 
 #: templates/registration/continuing_education_password_reset_confirm.html:39
 msgid "Change my password"
@@ -352,7 +356,7 @@ msgstr "IUFC - Formation Continue"
 msgid "Identification"
 msgstr "Identification"
 
-#: views/common.py:203
+#: tests/views/test_registration.py:179 views/common.py:221
 msgid ""
 "If you want to edit again your registration, please contact the program "
 "manager."
@@ -404,7 +408,7 @@ msgstr "Niveau du dernier diplôme"
 msgid "Last name"
 msgstr "Nom"
 
-#: templates/fragment/files_panel.html:38
+#: templates/fragment/files_panel.html:39
 msgid "Last update"
 msgstr "Dernière modification"
 
@@ -459,8 +463,8 @@ msgid "Name"
 msgstr "Nom"
 
 #: models/admission.py:218 templates/registration_detail.html:86
-#: tests/views/test_registration.py:142 tests/views/test_registration.py:307
-#: tests/views/test_registration.py:319
+#: tests/views/test_registration.py:142 tests/views/test_registration.py:332
+#: tests/views/test_registration.py:344
 msgid "National registry number"
 msgstr "Numéro de registre national belge"
 
@@ -484,7 +488,7 @@ msgstr "Vous n'avez pas soumis de formulaire d'admission"
 msgid "No document available"
 msgstr "Pas de document disponible"
 
-#: templates/fragment/files_panel.html:71
+#: templates/fragment/files_panel.html:73
 msgid "No file chosen"
 msgstr "Aucun fichier choisi"
 
@@ -554,8 +558,8 @@ msgstr "Courrier"
 #: templates/registration_detail.html:109
 #: templates/registration_detail.html:124 templates/registration_form.html:119
 #: templates/registration_form.html:146 tests/views/test_admission.py:356
-#: tests/views/test_admission.py:393 tests/views/test_registration.py:305
-#: tests/views/test_registration.py:306 tests/views/test_registration.py:331
+#: tests/views/test_admission.py:393 tests/views/test_registration.py:330
+#: tests/views/test_registration.py:331 tests/views/test_registration.py:356
 msgid "Postal code"
 msgstr "Code postal"
 
@@ -572,7 +576,7 @@ msgstr "Précédent NOMA"
 msgid "Previous UCL registration"
 msgstr "Avez-vous déjà été inscrit(e) à l'UCL ?"
 
-#: views/common.py:204
+#: tests/views/test_registration.py:164 views/common.py:204
 msgid "Print the completed registration form"
 msgstr "Imprimer le formulaire d'inscription complété"
 
@@ -666,7 +670,7 @@ msgstr "Séparé"
 msgid "Sessions"
 msgstr "Sessions"
 
-#: views/common.py:205
+#: tests/views/test_registration.py:168 views/common.py:205
 msgid "Sign it and send it by post to the address of the program manager"
 msgstr ""
 "Le signer et l’envoyer par courrier postal à l’adresse du gestionnaire du "
@@ -680,7 +684,7 @@ msgstr "Créer un compte"
 msgid "Single"
 msgstr "Célibataire"
 
-#: templates/fragment/files_panel.html:37
+#: templates/fragment/files_panel.html:38
 msgid "Size"
 msgstr "Taille"
 
@@ -767,9 +771,9 @@ msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 #: tests/views/test_admission.py:356 tests/views/test_admission.py:357
 #: tests/views/test_admission.py:369 tests/views/test_admission.py:381
 #: tests/views/test_admission.py:393 tests/views/test_admission.py:405
-#: tests/views/test_registration.py:305 tests/views/test_registration.py:306
-#: tests/views/test_registration.py:307 tests/views/test_registration.py:319
-#: tests/views/test_registration.py:331
+#: tests/views/test_registration.py:330 tests/views/test_registration.py:331
+#: tests/views/test_registration.py:332 tests/views/test_registration.py:344
+#: tests/views/test_registration.py:356
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
@@ -777,11 +781,11 @@ msgstr "Ce champ est obligatoire."
 msgid "Unexpected error occurred"
 msgstr ""
 
-#: templates/fragment/files_panel.html:77
+#: templates/fragment/files_panel.html:79
 msgid "Upload"
 msgstr "Envoyer"
 
-#: templates/fragment/files_panel.html:39
+#: templates/fragment/files_panel.html:40
 msgid "Uploaded by"
 msgstr "Envoyé par"
 
@@ -876,7 +880,7 @@ msgid "Your password was successfully changed."
 msgstr "Votre mot de passe à été modifié avec succès."
 
 #: tests/views/test_registration.py:86 tests/views/test_registration.py:120
-#: views/registration.py:59
+#: views/registration.py:61
 msgid ""
 "Your registration file has been saved. Please consider the following "
 "information :"
@@ -884,13 +888,13 @@ msgstr ""
 "Votre dossier d'inscription a été enregistré. Veuillez prendre en compte les "
 "informations suivantes :"
 
-#: views/common.py:209
+#: tests/views/test_registration.py:160 views/common.py:209
 msgid ""
 "Your registration is submitted. Some tasks are remaining to complete the "
 "registration :"
 msgstr ""
 "Votre inscription a été soumise. Il reste quelques actions à effectuer pour "
- "compléter l'enregistrement :"
+"compléter l'enregistrement :"
 
 #: templates/django_registration/registration_complete.html:32
 msgid ""
