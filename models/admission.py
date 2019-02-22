@@ -317,6 +317,7 @@ class Admission(SerializableModel):
             self.formation.acronym,
             self.formation.academic_year,
             )
+
     def is_draft(self):
         return self.state == admission_state_choices.DRAFT
 
