@@ -45,6 +45,8 @@ class ContinuingEducationPersonForm(forms.Form):
         fields_to_disable = ["birth_country", "birth_date"]
         for field in self.fields.keys():
             self.fields[field].initial = self.instance[field]
+            if field == 'birth_country':
+                self.fields[field].choices = [(self.instance[field], self.instance[field])]
             self.fields[field].widget.attrs['readonly'] = True
 
             if field in fields_to_disable:
