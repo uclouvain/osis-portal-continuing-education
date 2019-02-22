@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-21 14:41+0100\n"
+"POT-Creation-Date: 2019-02-22 09:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -344,7 +344,12 @@ msgstr ""
 msgid "Identification"
 msgstr ""
 
-#: tests/views/test_registration.py:179 views/common.py:221
+#: views/common.py:224
+msgid ""
+"If you want to edit again your admission, please contact the program manager."
+msgstr ""
+
+#: tests/views/test_registration.py:179 views/common.py:222
 msgid ""
 "If you want to edit again your registration, please contact the program "
 "manager."
@@ -827,7 +832,7 @@ msgstr ""
 msgid "You are still able to edit the form"
 msgstr ""
 
-#: views/admission.py:88
+#: views/admission.py:90
 msgid ""
 "You can save an application form and access it later until it is submitted"
 msgstr ""
@@ -841,7 +846,7 @@ msgstr ""
 msgid "You don't have an account"
 msgstr ""
 
-#: views/admission.py:58
+#: views/admission.py:60
 msgid ""
 "Your admission file has been saved. Please consider the following "
 "information :"

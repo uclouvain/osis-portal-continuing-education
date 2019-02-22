@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-21 14:41+0100\n"
+"POT-Creation-Date: 2019-02-22 09:04+0100\n"
 "PO-Revision-Date: 2019-01-04 16:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -352,7 +352,14 @@ msgstr "IUFC - Formation Continue"
 msgid "Identification"
 msgstr "Identification"
 
-#: tests/views/test_registration.py:179 views/common.py:221
+#: views/common.py:224
+msgid ""
+"If you want to edit again your admission, please contact the program manager."
+msgstr ""
+"Si vous souhaitez encore éditer votre admission, veuillez prendre contact "
+"avec le gestionnaire de la formation."
+
+#: tests/views/test_registration.py:179 views/common.py:222
 msgid ""
 "If you want to edit again your registration, please contact the program "
 "manager."
@@ -842,7 +849,7 @@ msgstr "Vous avez déjà un compte"
 msgid "You are still able to edit the form"
 msgstr "Vous pouvez encore le modifier"
 
-#: views/admission.py:88
+#: views/admission.py:90
 msgid ""
 "You can save an application form and access it later until it is submitted"
 msgstr ""
@@ -858,7 +865,7 @@ msgstr "Vous pouvez uploader des documents via l'onglet 'Documents'"
 msgid "You don't have an account"
 msgstr "Vous n'avez pas encore de compte"
 
-#: views/admission.py:58
+#: views/admission.py:60
 msgid ""
 "Your admission file has been saved. Please consider the following "
 "information :"

@@ -121,7 +121,13 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertFalse(response.context['admission_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 0)
+        self.assertEqual(len(messages_list), 1)
+
+        self.assertIn(
+            ugettext("If you want to edit again your admission, please contact the program manager."),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.WARNING)
 
     def test_admission_detail_not_found(self):
         response = self.client.get(reverse('admission_detail', kwargs={
