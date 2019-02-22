@@ -33,6 +33,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
+from django.http import HttpResponseForbidden
 from django.test import TestCase, RequestFactory
 from django.utils.translation import ugettext_lazy as _, ugettext
 from requests import Response
@@ -86,6 +87,15 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         self.assertEqual(response.context['admission'], self.admission)
         self.assertTrue(response.context['admission_is_submittable'])
+
+    def test_admission_detail_access_denied(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+        url = reverse('admission_detail', args=[self.admission.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 401)
+        self.assertTemplateUsed(response, "access_denied.html")
+
 
     def test_admission_detail_not_submittable(self):
         self.admission.last_degree_level = ''
@@ -174,7 +184,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         admission = AdmissionFactory()
         url = reverse('admission_detail', args=[admission.pk])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 401)
 
     def test_admission_new(self):
         url = reverse('admission_new')
@@ -221,7 +231,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         admission = AdmissionFactory()
         url = reverse('admission_detail', args=[admission.pk])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 401)
 
     def test_edit_get_admission_found_incomplete(self):
         self.admission.last_degree_level = ''
