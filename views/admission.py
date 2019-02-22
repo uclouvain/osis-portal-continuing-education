@@ -47,9 +47,11 @@ from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
     _show_submit_warning, add_informations_message_on_submittable_file, add_contact_for_edit_message
 from continuing_education.views.file import _get_files_list
+from continuing_education.business import perms
 
 
 @login_required
+@perms.has_participant_access
 def admission_detail(request, admission_id):
     admission = _find_user_admission_by_id(admission_id, user=request.user)
     if admission.state == admission_state_choices.SUBMITTED:
@@ -106,6 +108,7 @@ def admission_submit(request):
 
 
 @login_required
+@perms.has_participant_access
 def admission_form(request, admission_id=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = _find_user_admission_by_id(admission_id, user=request.user) if admission_id else None
