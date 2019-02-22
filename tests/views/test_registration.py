@@ -31,7 +31,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _, gettext
 from requests import Response
 
 from base.models.enums import education_group_categories
@@ -184,7 +184,8 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
         self.assertIn(
-            ugettext("If you want to edit again your registration, please contact the program manager."),
+            gettext("If you want to edit again your registration, please contact the program manager : %(mail)s")
+            % {'mail': 'xxx.yyy@uclouvain.be'},
             str(messages_list[1])
         )
         self.assertEqual(messages_list[1].level, messages.WARNING)
