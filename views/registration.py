@@ -90,6 +90,7 @@ def registration_submit(request):
 
 
 @login_required
+@perms.has_participant_access
 def registration_edit(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id, state=ACCEPTED)
     form = RegistrationForm(request.POST or None, instance=admission)

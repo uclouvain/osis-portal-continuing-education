@@ -30,9 +30,10 @@ from base.views.common import access_denied
 
 
 def has_participant_access(view_func):
-    def f_has_participant_access(request, admission_id):
-        admission = get_object_or_404(Admission, pk=admission_id)
-        if admission and admission.person_information.person.user != request.user:
-            return access_denied(request)
+    def f_has_participant_access(request, admission_id=None):
+        if admission_id:
+            admission = get_object_or_404(Admission, pk=admission_id)
+            if admission and admission.person_information.person.user != request.user:
+                return access_denied(request)
         return view_func(request, admission_id)
     return f_has_participant_access

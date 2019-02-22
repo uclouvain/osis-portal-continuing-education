@@ -106,6 +106,7 @@ def admission_submit(request):
 
 
 @login_required
+@perms.has_participant_access
 def admission_form(request, admission_id=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = _find_user_admission_by_id(admission_id, user=request.user) if admission_id else None
@@ -182,6 +183,3 @@ def admission_form(request, admission_id=None, **kwargs):
             'errors_fields': errors_fields
         }
     )
-
-
-
