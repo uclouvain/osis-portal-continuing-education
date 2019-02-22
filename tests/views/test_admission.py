@@ -34,7 +34,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase, RequestFactory
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _, gettext
 from requests import Response
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
@@ -103,11 +103,11 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEqual(len(messages_list), 2)
         self.assertIn(
-            ugettext("Your file is not submittable because you did not provide the following data : "),
+            gettext("Your file is not submittable because you did not provide the following data : "),
             str(messages_list)
         )
         self.assertIn(
-            ugettext("Last degree level"),
+            gettext("Last degree level"),
             str(messages_list)
         )
 
@@ -121,7 +121,13 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertFalse(response.context['admission_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 0)
+        self.assertEqual(len(messages_list), 1)
+
+        self.assertIn(
+            gettext("If you want to edit again your admission, please contact the program manager."),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.WARNING)
 
     def test_admission_detail_not_found(self):
         response = self.client.get(reverse('admission_detail', kwargs={
@@ -235,11 +241,11 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertIn(
-            ugettext("Your file is not submittable because you did not provide the following data : "),
+            gettext("Your file is not submittable because you did not provide the following data : "),
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("Last degree level"),
+            gettext("Last degree level"),
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.WARNING)
