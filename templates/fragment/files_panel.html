@@ -34,6 +34,7 @@
         <thead>
             <tr>
                 <th id="name">{% trans 'Name' %}</th>
+                <th id="name">{% trans 'Category' %}</th>
                 <th id="size">{% trans 'Size' %}</th>
                 <th id="last_update">{% trans 'Last update' %}</th>
                 <th id="uploaded_by">{% trans 'Uploaded by' %}</th>
@@ -43,6 +44,7 @@
         {% for file in list_files %}
             <tr>
                 <td> {{file.name}} </td>
+                <td> {{file.file_category_text}} </td>
                 <td> {{file.size|filesizeformat}} </td>
                 <td> {{file.created_date | date:'d/m/Y h:i'}} </td>
                 <td> {{file.uploaded_by.first_name}} {{file.uploaded_by.last_name}}</td>

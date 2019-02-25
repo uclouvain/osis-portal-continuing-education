@@ -308,7 +308,7 @@ msgid ""
 "card or residence permit."
 msgstr ""
 
-#: templates/fragment/files_panel.html:40
+#: templates/fragment/files_panel.html:41
 msgid "Actions"
 msgstr ""
 
@@ -433,13 +433,17 @@ msgstr ""
 msgid "Birth location"
 msgstr ""
 
-#: templates/fragment/files_panel.html:80
+#: templates/fragment/files_panel.html:82
 msgid "Browse"
 msgstr ""
 
 #: templates/django_registration/registration_form.html:52
 #: templates/fragment/submit_confirmation_modal.html:50
 msgid "Cancel"
+msgstr ""
+
+#: templates/fragment/files_panel.html:37
+msgid "Category"
 msgstr ""
 
 #: templates/registration/continuing_education_password_reset_confirm.html:39
@@ -743,7 +747,7 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-#: templates/fragment/files_panel.html:38
+#: templates/fragment/files_panel.html:39
 msgid "Last update"
 msgstr ""
 
@@ -829,7 +833,7 @@ msgstr ""
 msgid "No document available"
 msgstr ""
 
-#: templates/fragment/files_panel.html:71
+#: templates/fragment/files_panel.html:73
 msgid "No file chosen"
 msgstr ""
 
@@ -1062,7 +1066,7 @@ msgstr ""
 msgid "Single"
 msgstr ""
 
-#: templates/fragment/files_panel.html:37
+#: templates/fragment/files_panel.html:38
 msgid "Size"
 msgstr ""
 
@@ -1168,11 +1172,11 @@ msgstr ""
 msgid "Unexpected error occurred"
 msgstr ""
 
-#: templates/fragment/files_panel.html:77
+#: templates/fragment/files_panel.html:79
 msgid "Upload"
 msgstr ""
 
-#: templates/fragment/files_panel.html:39
+#: templates/fragment/files_panel.html:40
 msgid "Uploaded by"
 msgstr ""
 
