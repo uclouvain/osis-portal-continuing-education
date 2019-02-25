@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-25 09:47+0100\n"
+"POT-Creation-Date: 2019-02-25 14:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -805,7 +805,7 @@ msgstr ""
 
 #: models/admission.py:218 templates/registration_detail.html:91
 #: templates/registration_pdf.html:124 tests/views/test_registration.py:151
-#: tests/views/test_registration.py:342 tests/views/test_registration.py:354
+#: tests/views/test_registration.py:349 tests/views/test_registration.py:361
 msgid "National registry number"
 msgstr ""
 
@@ -912,8 +912,8 @@ msgstr ""
 #: templates/registration_detail.html:129 templates/registration_form.html:119
 #: templates/registration_form.html:146 templates/registration_pdf.html:154
 #: templates/registration_pdf.html:165 tests/views/test_admission.py:372
-#: tests/views/test_admission.py:409 tests/views/test_registration.py:340
-#: tests/views/test_registration.py:341 tests/views/test_registration.py:366
+#: tests/views/test_admission.py:409 tests/views/test_registration.py:347
+#: tests/views/test_registration.py:348 tests/views/test_registration.py:373
 msgid "Postal code"
 msgstr ""
 
@@ -1158,9 +1158,9 @@ msgstr ""
 #: tests/views/test_admission.py:372 tests/views/test_admission.py:373
 #: tests/views/test_admission.py:385 tests/views/test_admission.py:397
 #: tests/views/test_admission.py:409 tests/views/test_admission.py:421
-#: tests/views/test_registration.py:340 tests/views/test_registration.py:341
-#: tests/views/test_registration.py:342 tests/views/test_registration.py:354
-#: tests/views/test_registration.py:366
+#: tests/views/test_registration.py:347 tests/views/test_registration.py:348
+#: tests/views/test_registration.py:349 tests/views/test_registration.py:361
+#: tests/views/test_registration.py:373
 msgid "This field is required."
 msgstr ""
 
