@@ -35,6 +35,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from requests import Response
 
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.user import SuperUserFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
 from continuing_education.tests.factories.admission import AdmissionFactory
@@ -322,3 +323,10 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
                 _("Postal code"): [_("This field is required.")],
             }
         )
+
+    def test_pdf_content(self):
+        a_superuser = SuperUserFactory()
+        self.client.force_login(a_superuser)
+        url = reverse("registration_pdf", args=[self.registration_submitted.id])
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, 'registration_pdf.html')
