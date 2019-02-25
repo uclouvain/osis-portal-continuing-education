@@ -38,6 +38,7 @@ from base.models.enums import education_group_categories
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.user import SuperUserFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
 from continuing_education.tests.factories.admission import AdmissionFactory
@@ -304,6 +305,13 @@ class ViewStudentRegistrationTestCase(TestCase):
         post_response = self.client.post(url)
         self.assertEqual(post_response.status_code, 404)
         self.assertTemplateUsed(post_response, 'page_not_found.html')
+
+    def test_pdf_content(self):
+        a_superuser = SuperUserFactory()
+        self.client.force_login(a_superuser)
+        url = reverse("registration_pdf", args=[self.registration_submitted.id])
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, 'registration_pdf.html')
 
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
