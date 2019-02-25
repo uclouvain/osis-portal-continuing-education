@@ -217,8 +217,13 @@ def add_remaining_tasks_message(request):
     )
 
 
-def add_contact_for_edit_message(request):
-    message = _("If you want to edit again your registration, please contact the program manager.")
+def add_contact_for_edit_message(request, is_registration=False):
+    if is_registration:
+        message = _("If you want to edit again your registration, please contact the program manager : %(mail)s") \
+                  % {'mail': "xxx.yyy@uclouvain.be"}
+    else:
+        message = _("If you want to edit again your admission, please contact the program manager : %(mail)s") \
+                  % {'mail': "xxx.yyy@uclouvain.be"}
     messages.add_message(
         request=request,
         level=messages.WARNING,

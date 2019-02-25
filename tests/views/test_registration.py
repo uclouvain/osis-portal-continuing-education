@@ -31,13 +31,14 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _, gettext
 from requests import Response
 
 from base.models.enums import education_group_categories
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.user import SuperUserFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
 from continuing_education.tests.factories.admission import AdmissionFactory
@@ -99,6 +100,14 @@ class ViewStudentRegistrationTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
+
+    def test_registration_detail_access_denied(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+        url = reverse('registration_detail', args=[self.admission_accepted.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 401)
+        self.assertTemplateUsed(response, "access_denied.html")
 
     def test_registration_detail_not_submittable(self):
         self.admission_accepted.national_registry_number = ''
@@ -176,7 +185,8 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
         self.assertIn(
-            ugettext("If you want to edit again your registration, please contact the program manager."),
+            gettext("If you want to edit again your registration, please contact the program manager : %(mail)s")
+            % {'mail': 'xxx.yyy@uclouvain.be'},
             str(messages_list[1])
         )
         self.assertEqual(messages_list[1].level, messages.WARNING)
@@ -295,6 +305,13 @@ class ViewStudentRegistrationTestCase(TestCase):
         post_response = self.client.post(url)
         self.assertEqual(post_response.status_code, 404)
         self.assertTemplateUsed(post_response, 'page_not_found.html')
+
+    def test_pdf_content(self):
+        a_superuser = SuperUserFactory()
+        self.client.force_login(a_superuser)
+        url = reverse("registration_pdf", args=[self.registration_submitted.id])
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, 'registration_pdf.html')
 
 
 class RegistrationSubmissionErrorsTestCase(TestCase):

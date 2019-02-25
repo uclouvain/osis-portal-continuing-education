@@ -57,6 +57,11 @@
                 {% trans admission.state %}
             </span>
         {% endif %}
+        {% if admission.is_registration_submitted %}
+            <a class="btn btn-default btn-space pull-right" href="{% url 'registration_pdf' admission_id=admission_id%}">
+                <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> {% trans 'Generate PDF' %}
+            </a>
+        {% endif %}
         <h2>{% trans 'Registration' %}</h2>
     </div>
     {% include 'template_messages.html' %}
