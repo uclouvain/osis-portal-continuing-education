@@ -306,6 +306,13 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(post_response.status_code, 404)
         self.assertTemplateUsed(post_response, 'page_not_found.html')
 
+    def test_pdf_content(self):
+        a_superuser = SuperUserFactory()
+        self.client.force_login(a_superuser)
+        url = reverse("registration_pdf", args=[self.registration_submitted.id])
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, 'registration_pdf.html')
+
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
@@ -366,10 +373,3 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
                 _("Postal code"): [_("This field is required.")],
             }
         )
-
-    def test_pdf_content(self):
-        a_superuser = SuperUserFactory()
-        self.client.force_login(a_superuser)
-        url = reverse("registration_pdf", args=[self.registration_submitted.id])
-        response = self.client.get(url)
-        self.assertTemplateUsed(response, 'registration_pdf.html')
