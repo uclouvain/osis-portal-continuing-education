@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-25 14:26+0100\n"
-"PO-Revision-Date: 2019-02-25 15:11+0100\n"
+"POT-Creation-Date: 2019-02-25 15:52+0100\n"
+"PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr_BE\n"
@@ -268,7 +268,7 @@ msgstr ""
 "                            <td><strong>%(sector)s</strong></td>\n"
 "                        </tr>\n"
 "                        <tr>\n"
-"                            <td>>Êtes-vous en recherche d’emploi ?</td><td>Yes [  ] No [  ]</td>\n"
+"                            <td>>Êtes-vous en recherche d’emploi ?</td><td>Oui [  ] Non [  ]</td>\n"
 "                        </tr>\n"
 "                        <tr>\n"
 "                            <td></td>\n"
@@ -599,10 +599,8 @@ msgid "Contact"
 msgstr "Contact"
 
 #: templates/registration_pdf.html:144
-#, fuzzy
-#| msgid "Contact"
 msgid "Contact details"
-msgstr "Contact"
+msgstr "Coordonnées"
 
 #: templates/admission_form.html:51 templates/registration_form.html:56
 msgid "Contact information"
@@ -773,10 +771,8 @@ msgid "Home address"
 msgstr "Domicile légal"
 
 #: templates/registration_pdf.html:151 templates/registration_pdf.html:163
-#, fuzzy
-#| msgid "Spouse name"
 msgid "House name"
-msgstr "Nom du conjoint"
+msgstr "Lieu-dit (éventuellement)"
 
 #: templates/registration_pdf.html:348
 msgid "I, the undersigned"
@@ -1007,7 +1003,7 @@ msgstr "Veuillez compléter le formulaire suivant pour finaliser la création de
 
 #: templates/registration_pdf.html:459
 msgid "Please state you"
-msgstr ""
+msgstr "Veuillez indiquer votre"
 
 #: templates/registration_detail.html:125 templates/registration_form.html:141
 msgid "Post"
@@ -1082,7 +1078,7 @@ msgstr "Fonctionnaire"
 
 #: templates/registration_pdf.html:98 templates/registration_pdf.html:444
 msgid "RESERVED FOR UCL USE"
-msgstr ""
+msgstr "CADRE RÉSERVÉ À L'UCL"
 
 #: templates/admission_form.html:63
 msgid "References"
@@ -1160,7 +1156,7 @@ msgstr "Créer un compte"
 
 #: templates/registration_pdf.html:420
 msgid "Signed in"
-msgstr ""
+msgstr "Fait à"
 
 #: templates/authentication/login.html:82
 msgid "Signup"
@@ -1222,14 +1218,12 @@ msgid "Succesfull logout"
 msgstr "Vous êtes à présent déconnecté."
 
 #: templates/registration_pdf.html:352 templates/registration_pdf.html:462
-#, fuzzy
-#| msgid "Spouse name"
 msgid "Surname"
-msgstr "Nom du conjoint"
+msgstr "Nom de famille"
 
 #: templates/registration_pdf.html:162
 msgid "Term-time address (student accommodation)"
-msgstr ""
+msgstr "Résidence universitaire (kot)"
 
 #: views/account_activation.py:181
 msgid "The account you attempted to activate is invalid."
@@ -1260,12 +1254,10 @@ msgstr "Ce compte a expiré."
 msgid "This email does not exist in our database: %(mail)s"
 msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 
-#: tests/views/test_admission.py:370 tests/views/test_admission.py:371
-#: tests/views/test_admission.py:372 tests/views/test_admission.py:373
-#: tests/views/test_admission.py:385 tests/views/test_admission.py:397
-#: tests/views/test_admission.py:409 tests/views/test_admission.py:421
-#: tests/views/test_registration.py:347 tests/views/test_registration.py:348
-#: tests/views/test_registration.py:349 tests/views/test_registration.py:361
+#: tests/views/test_admission.py:370 tests/views/test_admission.py:371 tests/views/test_admission.py:372
+#: tests/views/test_admission.py:373 tests/views/test_admission.py:385 tests/views/test_admission.py:397
+#: tests/views/test_admission.py:409 tests/views/test_admission.py:421 tests/views/test_registration.py:347
+#: tests/views/test_registration.py:348 tests/views/test_registration.py:349 tests/views/test_registration.py:361
 #: tests/views/test_registration.py:373
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
@@ -1320,7 +1312,7 @@ msgstr "Raison de la mise en attente"
 
 #: templates/registration_pdf.html:169
 msgid "Which address would you like your post to be sent to? *"
-msgstr ""
+msgstr "À quelle adresse souhaitez-vous recevoir votre courrier? *"
 
 #: models/enums/enums.py:16
 msgid "Widowed"
