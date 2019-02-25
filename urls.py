@@ -27,7 +27,7 @@ from django.conf.urls import url, include
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from continuing_education.views import account_activation
-from continuing_education.views import (home, admission, registration, common)
+from continuing_education.views import (home, admission, registration, common, file)
 from continuing_education.views.account_activation import ContinuingEducationPasswordResetView, \
     ContinuingEducationPasswordResetConfirmView
 
@@ -63,12 +63,17 @@ urlpatterns = [
     url(r'^registration_submit/', registration.registration_submit, name='registration_submit'),
     url(
         r'^download_file/(?P<file_uuid>[0-9a-f-]+)/(?P<admission_uuid>[0-9a-f-]+)',
-        admission.download_file,
+        file.download_file,
         name="download_file"
     ),
     url(
         r'^remove_file/(?P<file_uuid>[0-9a-f-]+)/(?P<admission_uuid>[0-9a-f-]+)',
-        admission.remove_file,
+        file.remove_file,
         name="remove_file"
+    ),
+    url(
+        r'^upload_file/(?P<admission_uuid>[0-9a-f-]+)',
+        file.upload_file,
+        name="upload_file"
     ),
 ]

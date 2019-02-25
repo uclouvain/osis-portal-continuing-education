@@ -31,9 +31,12 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _, gettext
 from requests import Response
 
+from base.models.enums import education_group_categories
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import SuperUserFactory
 from continuing_education.models.enums import admission_state_choices
@@ -98,6 +101,14 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
 
+    def test_registration_detail_access_denied(self):
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+        url = reverse('registration_detail', args=[self.admission_accepted.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 401)
+        self.assertTemplateUsed(response, "access_denied.html")
+
     def test_registration_detail_not_submittable(self):
         self.admission_accepted.national_registry_number = ''
         self.admission_accepted.save()
@@ -152,7 +163,33 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertFalse(response.context['registration_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 0)
+        self.assertEqual(len(messages_list), 2)
+
+        self.assertIn(
+            ugettext("Your registration is submitted. Some tasks are remaining to complete the registration :"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("Print the completed registration form"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext("Sign it and send it by post to the address of the program manager"),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            ugettext(
+                "Accompanied by two passport photos and a copy of both sides of the identity card or residence permit."
+            ),
+            str(messages_list[0])
+        )
+        self.assertEqual(messages_list[0].level, messages.INFO)
+        self.assertIn(
+            gettext("If you want to edit again your registration, please contact the program manager : %(mail)s")
+            % {'mail': 'xxx.yyy@uclouvain.be'},
+            str(messages_list[1])
+        )
+        self.assertEqual(messages_list[1].level, messages.WARNING)
 
     def test_registration_detail_not_found(self):
         response = self.client.get(reverse('registration_detail', kwargs={
@@ -272,11 +309,17 @@ class ViewStudentRegistrationTestCase(TestCase):
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
+        ac = AcademicYearFactory()
+        AcademicYearFactory(year=ac.year+1)
         self.admission = AdmissionFactory(
+            formation=EducationGroupYearFactory(
+                academic_year=ac,
+                education_group_type__category=education_group_categories.TRAINING
+            )
         )
 
     def test_registration_is_submittable(self):
-        errors, errors_fields = get_submission_errors(self.admission)
+        errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
 
         self.assertFalse(
             errors
