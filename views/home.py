@@ -51,13 +51,9 @@ def formations_list(request):
         to_year=current_academic_year().year+1,
     )
     formations = paginator['results']
-    previous = paginator['previous']
-    next = paginator['next']
     pages_count = round(paginator['count'] / limit)
     return render(request, "continuing_education/formations.html", {
         'formations': formations,
-        'previous': previous,
-        'next': next,
         'pages_count': range(1, pages_count+1),
         'active_page': active_page
     })
