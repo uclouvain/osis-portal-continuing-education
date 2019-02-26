@@ -26,28 +26,40 @@
 import json
 import os
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 
 from base.models import person as mdl_person
+from base.models.academic_year import current_academic_year
+from base.utils.api_utils import get_training_list_from_osis
 from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
 from continuing_education.models.enums import admission_state_choices
 
 
 def formations_list(request):
+    limit = 10
     if request.user.is_authenticated():
         return redirect(main_view)
-    formations = fetch_example_data()
-    paginator = Paginator(formations, 10)
-    page = request.GET.get('page')
     try:
-        formations = paginator.page(page)
-    except PageNotAnInteger:
-        formations = paginator.page(1)
-    except EmptyPage:
-        formations = paginator.page(paginator.num_pages)
+        active_page = int(request.GET.get('page'))
+    except TypeError:
+        active_page = 1
+    paginator = get_training_list_from_osis(
+        type="continue",
+        limit=limit,
+        offset=(active_page-1)*limit,
+        from_year=current_academic_year().year+1,
+        to_year=current_academic_year().year+1,
+    )
+    formations = paginator['results']
+    previous = paginator['previous']
+    next = paginator['next']
+    pages_count = round(paginator['count'] / limit)
     return render(request, "continuing_education/formations.html", {
-        'formations': formations
+        'formations': formations,
+        'previous': previous,
+        'next': next,
+        'pages_count': range(1, pages_count+1),
+        'active_page': active_page
     })
 
 
