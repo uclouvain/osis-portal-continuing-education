@@ -1,12 +1,10 @@
 env:
   global:
-    - CC_TEST_REPORTER_ID=2f16fec2fde9a6e7cedc2e0f1d78ecbb890703af0df55d7c73fdfc3a27763411
-
+    - CC_TEST_REPORTER_ID=0f5097f9008192684ae5748e841b38d1b41496eb17d6e79749ce3c2e565e459b
 
 language: python
-python: "3.5.2"
-services:
-  - postgresql
+python: "3.5.5"
+cache: pip
 addons:
     postgresql: "9.4"
 
@@ -31,9 +29,8 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - python3 manage.py compilemessages && coverage run continuing_education manage.py test continuing_education --exclude-tag=selenium
+  - python3 manage.py compilemessages && coverage run --source continuing_education manage.py test continuing_education --exclude-tag=selenium
 
 after_script:
   - coverage xml
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-
