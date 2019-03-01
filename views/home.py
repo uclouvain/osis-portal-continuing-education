@@ -44,11 +44,11 @@ def formations_list(request):
     except TypeError:
         active_page = 1
     paginator = get_training_list_from_osis(
-        in_type="continue",
         limit=limit,
         offset=(active_page-1)*limit,
         from_year=current_academic_year().year+1,
         to_year=current_academic_year().year+1,
+        continuing_education=True,
     )
     formations = paginator['results']
     pages_count = round(paginator['count'] / limit)
