@@ -75,7 +75,7 @@ def _prepare_headers_for_files(method):
 
 def post_data_to_osis(object_type, object_to_post):
     header_to_post = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_type
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_type + "/"
     response = requests.post(
         url=url,
         headers=header_to_post,
