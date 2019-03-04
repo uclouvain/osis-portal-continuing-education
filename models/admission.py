@@ -306,6 +306,14 @@ class Admission(SerializableModel):
         default=False,
         verbose_name=_("Registration file received")
     )
+    archived = models.BooleanField(
+        default=False,
+        verbose_name=_("Archived")
+    )
+    diploma_produced = models.BooleanField(
+        default=False,
+        verbose_name=_("Diploma produced")
+    )
 
     # TODO:: Add dates of followed courses
     sessions = models.CharField(

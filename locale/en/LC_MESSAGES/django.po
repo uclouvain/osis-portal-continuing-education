@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-04 11:24+0100\n"
+"POT-Creation-Date: 2019-03-04 11:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -350,6 +350,10 @@ msgid ""
 "should receive this email shortly."
 msgstr ""
 
+#: models/admission.py:311
+msgid "Archived"
+msgstr ""
+
 #: models/admission.py:299
 msgid "Assessment presented"
 msgstr ""
@@ -523,6 +527,10 @@ msgstr ""
 
 #: templates/registration_pdf.html:101 templates/registration_pdf.html:447
 msgid "Date"
+msgstr ""
+
+#: models/admission.py:315
+msgid "Diploma produced"
 msgstr ""
 
 #: models/enums/enums.py:17

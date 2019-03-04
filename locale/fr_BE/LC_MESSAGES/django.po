@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-04 11:24+0100\n"
+"POT-Creation-Date: 2019-03-04 11:26+0100\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -556,6 +556,10 @@ msgstr ""
 "Un email vous a été envoyé contenant les instructions de changement de mot "
 "de passe."
 
+#: models/admission.py:311
+msgid "Archived"
+msgstr "Archivé"
+
 #: models/admission.py:299
 msgid "Assessment presented"
 msgstr "A présenté l'épreuve d'évaluation"
@@ -732,6 +736,10 @@ msgstr "Politique de protection des données"
 #: templates/registration_pdf.html:101 templates/registration_pdf.html:447
 msgid "Date"
 msgstr ""
+
+#: models/admission.py:315
+msgid "Diploma produced"
+msgstr "Diplôme produit"
 
 #: models/enums/enums.py:17
 msgid "Divorced"
@@ -1126,10 +1134,8 @@ msgid "Phone mobile"
 msgstr "GSM"
 
 #: forms/prospect.py:38 templates/prospect_form.html:63
-#, fuzzy
-#| msgid "Phone mobile"
 msgid "Phone number"
-msgstr "GSM"
+msgstr "Numéro de téléphone"
 
 #: templates/django_registration/complete_account_registration.html:35
 msgid ""
@@ -1245,10 +1251,8 @@ msgid "Registration completed"
 msgstr "Inscription à la plateforme complétée"
 
 #: models/admission.py:307
-#, fuzzy
-#| msgid "Registration completed"
 msgid "Registration file received"
-msgstr "Inscription à la plateforme complétée"
+msgstr "Fichier d'inscription reçu"
 
 #: models/enums/admission_state_choices.py:22
 msgid "Registration submitted"
