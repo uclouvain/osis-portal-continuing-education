@@ -29,10 +29,9 @@ import os
 from django.shortcuts import render, redirect
 
 from base.models import person as mdl_person
-from base.models.academic_year import current_academic_year
-from base.utils.api_utils import get_training_list_from_osis
 from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
 from continuing_education.models.enums import admission_state_choices
+from continuing_education.views.api import get_continuing_education_training_list
 
 
 def formations_list(request):
@@ -43,13 +42,7 @@ def formations_list(request):
         active_page = int(request.GET.get('page'))
     except TypeError:
         active_page = 1
-    paginator = get_training_list_from_osis(
-        limit=limit,
-        offset=(active_page-1)*limit,
-        from_year=current_academic_year().year+1,
-        to_year=current_academic_year().year+1,
-        continuing_education=True,
-    )
+    paginator = get_continuing_education_training_list(results_only=False)
     formations = paginator['results']
     pages_count = round(paginator['count'] / limit)
     return render(request, "continuing_education/formations.html", {
