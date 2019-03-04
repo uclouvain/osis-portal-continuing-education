@@ -44,8 +44,11 @@ class ProspectForm(Form):
 
     class Meta:
         fields = [
+            'name',
             'first_name',
-            'last_name',
+            'postal_code',
+            'city'
             'email',
-            'gender'
+            'phone_number',
+            'formation',
         ]
