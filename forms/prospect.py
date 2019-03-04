@@ -3,8 +3,6 @@ from django import forms
 from django.forms import Form
 from django.utils.translation import gettext_lazy as _
 
-from base.utils.api_utils import get_training_list_from_osis
-
 
 class ProspectForm(Form):
 
@@ -38,8 +36,7 @@ class ProspectForm(Form):
         label=_("Phone number")
     )
 
-    formation = autocomplete.Select2ListChoiceField(
-        choice_list=get_training_list_from_osis,
+    formation = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='training-autocomplete'),
         required=True,
         label=_("Formation")
