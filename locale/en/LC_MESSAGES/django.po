@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-04 11:26+0100\n"
+"POT-Creation-Date: 2019-03-04 13:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -350,6 +350,10 @@ msgid ""
 "should receive this email shortly."
 msgstr ""
 
+#: views/file.py:138 views/prospect.py:29
+msgid "An unexpected error occurred"
+msgstr ""
+
 #: models/admission.py:311
 msgid "Archived"
 msgstr ""
@@ -443,6 +447,7 @@ msgstr ""
 
 #: templates/django_registration/registration_form.html:52
 #: templates/fragment/submit_confirmation_modal.html:50
+#: templates/prospect_form.html:41 templates/prospect_form.html:72
 msgid "Cancel"
 msgstr ""
 
@@ -465,7 +470,8 @@ msgstr ""
 msgid "Citizenship"
 msgstr ""
 
-#: models/address.py:25 templates/admission_detail.html:114
+#: forms/prospect.py:25 models/address.py:25
+#: templates/admission_detail.html:114 templates/prospect_form.html:62
 #: templates/registration_detail.html:115
 #: templates/registration_detail.html:130 templates/registration_form.html:122
 #: templates/registration_form.html:149 templates/registration_pdf.html:156
@@ -490,7 +496,7 @@ msgid "Contact information"
 msgstr ""
 
 #: templates/admission_detail.html:31 templates/admission_form.html:30
-#: templates/continuing_education/home.html:32
+#: templates/continuing_education/home.html:32 templates/prospect_form.html:31
 #: templates/registration_detail.html:31 templates/registration_form.html:31
 msgid "Continuing Education"
 msgstr ""
@@ -556,9 +562,10 @@ msgstr ""
 msgid "Education"
 msgstr ""
 
-#: forms/account.py:64 forms/person.py:35 templates/admission_detail.html:109
-#: templates/authentication/login.html:50
-#: templates/authentication/login.html:52 tests/views/test_admission.py:370
+#: forms/account.py:64 forms/person.py:35 forms/prospect.py:30
+#: templates/admission_detail.html:109 templates/authentication/login.html:50
+#: templates/authentication/login.html:52 templates/prospect_form.html:67
+#: tests/views/test_admission.py:370
 msgid "Email"
 msgstr ""
 
@@ -605,9 +612,10 @@ msgstr ""
 msgid "File correctly deleted"
 msgstr ""
 
-#: forms/person.py:16 templates/admission_detail.html:93
-#: templates/registration_detail.html:80 templates/registration_pdf.html:114
-#: templates/registration_pdf.html:353 templates/registration_pdf.html:465
+#: forms/person.py:16 forms/prospect.py:10 templates/admission_detail.html:93
+#: templates/prospect_form.html:59 templates/registration_detail.html:80
+#: templates/registration_pdf.html:114 templates/registration_pdf.html:353
+#: templates/registration_pdf.html:465
 msgid "First name"
 msgstr ""
 
@@ -616,10 +624,10 @@ msgstr ""
 msgid "Forgot your password ?"
 msgstr ""
 
-#: models/admission.py:29 templates/admission_detail.html:162
-#: templates/admission_detail.html:165 templates/admission_form.html:59
-#: templates/continuing_education/home.html:59
-#: templates/continuing_education/home.html:99
+#: forms/prospect.py:41 models/admission.py:29
+#: templates/admission_detail.html:162 templates/admission_detail.html:165
+#: templates/admission_form.html:59 templates/continuing_education/home.html:59
+#: templates/continuing_education/home.html:99 templates/prospect_form.html:55
 msgid "Formation"
 msgstr ""
 
@@ -720,6 +728,10 @@ msgstr ""
 msgid "Informations"
 msgstr ""
 
+#: templates/prospect_form.html:33 templates/prospect_form.html:47
+msgid "Interest form"
+msgstr ""
+
 #: templates/fragment/submit_confirmation_modal.html:44
 msgid "It is not possible to edit an admission once submitted"
 msgstr ""
@@ -811,7 +823,8 @@ msgstr ""
 msgid "NOMA"
 msgstr ""
 
-#: templates/fragment/files_panel.html:36
+#: forms/prospect.py:15 templates/fragment/files_panel.html:36
+#: templates/prospect_form.html:58
 msgid "Name"
 msgstr ""
 
@@ -905,6 +918,10 @@ msgstr ""
 msgid "Phone mobile"
 msgstr ""
 
+#: forms/prospect.py:35 templates/prospect_form.html:66
+msgid "Phone number"
+msgstr ""
+
 #: templates/django_registration/complete_account_registration.html:35
 msgid ""
 "Please complete the following form to finalize the creation of your user "
@@ -919,7 +936,8 @@ msgstr ""
 msgid "Post"
 msgstr ""
 
-#: models/address.py:20 templates/admission_detail.html:113
+#: forms/prospect.py:20 models/address.py:20
+#: templates/admission_detail.html:113 templates/prospect_form.html:63
 #: templates/registration_detail.html:114
 #: templates/registration_detail.html:129 templates/registration_form.html:119
 #: templates/registration_form.html:146 templates/registration_pdf.html:154
@@ -1042,7 +1060,9 @@ msgstr ""
 msgid "Residence phone"
 msgstr ""
 
-#: templates/fragment/wizard_navbar.html:34
+#: templates/fragment/wizard_navbar.html:34 templates/prospect_form.html:43
+#: templates/prospect_form.html:44 templates/prospect_form.html:74
+#: templates/prospect_form.html:75
 msgid "Save"
 msgstr ""
 
@@ -1098,7 +1118,7 @@ msgstr ""
 
 #: templates/admission_detail.html:32 templates/admission_form.html:31
 #: templates/continuing_education/home.html:33
-#: templates/continuing_education/home.html:38
+#: templates/continuing_education/home.html:38 templates/prospect_form.html:32
 #: templates/registration_detail.html:32 templates/registration_form.html:32
 msgid "Student"
 msgstr ""
@@ -1178,10 +1198,6 @@ msgstr ""
 #: tests/views/test_registration.py:349 tests/views/test_registration.py:361
 #: tests/views/test_registration.py:373
 msgid "This field is required."
-msgstr ""
-
-#: views/file.py:138
-msgid "Unexpected error occurred"
 msgstr ""
 
 #: templates/fragment/files_panel.html:79
@@ -1274,6 +1290,10 @@ msgstr ""
 msgid ""
 "Your file is not submittable because you did not provide the following "
 "data : "
+msgstr ""
+
+#: views/prospect.py:26
+msgid "Your form was correctly send."
 msgstr ""
 
 #: views/account_activation.py:376

@@ -27,6 +27,7 @@ import io
 
 import requests
 from django.conf import settings
+from rest_framework import status
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import MultiPartRenderer
 
@@ -70,3 +71,23 @@ def _prepare_headers_for_files(method):
             'Content-Disposition': 'attachment; filename=name.jpeg',
             'Content-Type': MultiPartRenderer.media_type
         }
+
+
+def post_data_to_osis(object_type, object_to_post):
+    header_to_post = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_type + "/"
+    response = requests.post(
+        url=url,
+        headers=header_to_post,
+        data=object_to_post
+    )
+    if response.status_code != status.HTTP_201_CREATED:
+        data = {}
+    else:
+        data = transform_response_to_data(response)
+
+    return data, response.status_code
+
+
+def post_prospect(object_to_post):
+    return post_data_to_osis("prospects", object_to_post)

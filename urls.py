@@ -26,7 +26,7 @@
 from django.conf.urls import url, include
 from django_registration.forms import RegistrationFormUniqueEmail
 
-from continuing_education.views import account_activation
+from continuing_education.views import account_activation, prospect
 from continuing_education.views import (home, admission, registration, common, file)
 from continuing_education.views.account_activation import ContinuingEducationPasswordResetView, \
     ContinuingEducationPasswordResetConfirmView
@@ -76,4 +76,5 @@ urlpatterns = [
         file.upload_file,
         name="upload_file"
     ),
+    url(r'^prospect_form/', prospect.prospect_form, name='prospect_form'),
 ]

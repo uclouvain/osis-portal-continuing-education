@@ -32,10 +32,11 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import get_valid_filename
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
+from continuing_education.business import perms
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.person import PersonForm
@@ -49,7 +50,6 @@ from continuing_education.views.common import display_errors, get_submission_err
     _show_submit_warning, add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
 from continuing_education.views.file import _get_files_list
-from continuing_education.business import perms
 from osis_common.document.pdf_build import render_pdf
 
 
