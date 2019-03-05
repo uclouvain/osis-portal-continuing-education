@@ -60,9 +60,9 @@ class ProspectTestCase(TestCase):
         self.mocked_called_api_function = self.patcher.start()
         self.addCleanup(self.patcher.stop)
 
-    def test_post_prospect_with_missing_formation(self):
+    def test_post_prospect_with_missing_information(self):
         prospect = self.prospect
-        prospect['formation'] = None
+        prospect['name'] = ''
         response = self.client.post(reverse('prospect_form'), data=prospect)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'prospect_form.html')
