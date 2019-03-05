@@ -44,7 +44,6 @@ def formations_list(request):
     except TypeError:
         active_page = 1
     paginator = get_continuing_education_training_list(
-        results_only=False,
         limit=limit,
         offset=(active_page-1)*limit,
     )
