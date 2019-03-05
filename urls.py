@@ -34,7 +34,7 @@ from continuing_education.views.account_activation import ContinuingEducationPas
 urlpatterns = [
     url(r'^$', home.formations_list, name='formations_list'),
     url(r'^home/$', home.main_view, name='continuing_education_home'),
-    url(r'^home/(?P<formation_id>[\w]+)$', home.main_view, name='continuing_education_home'),
+    url(r'^home/(?P<formation_id>(?:[\w]+(?:/[\w]+)?))/$', home.main_view, name='continuing_education_home'),
     url(r'^authentication/', include([
         url(r'^login$', common.login, name='continuing_education_login'),
         url(r'^logout$', common.log_out, name='continuing_education_logout'),
