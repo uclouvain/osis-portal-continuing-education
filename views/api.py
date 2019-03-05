@@ -40,11 +40,13 @@ def transform_response_to_data(response, results_only):
     return data
 
 
-def get_data_list_from_osis(object_name, filter_field=None, filter_value=None, results_only=True):
+def get_data_list_from_osis(object_name, filter_field=None, filter_value=None, results_only=True, **kwargs):
     header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
     url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_name + "/"
     if filter_field and filter_value:
         url = url + "?" + filter_field + "=" + filter_value
+    if 'limit' in kwargs and 'offset' in kwargs:
+        url = url + "?limit="+str(kwargs['limit'])+"&offset="+str(kwargs['offset'])
     response = requests.get(
         url=url,
         headers=header_to_get
@@ -52,8 +54,8 @@ def get_data_list_from_osis(object_name, filter_field=None, filter_value=None, r
     return transform_response_to_data(response, results_only)
 
 
-def get_continuing_education_training_list(filter_field=None, filter_value=None, results_only=True):
-    return get_data_list_from_osis('training', filter_field, filter_value, results_only)
+def get_continuing_education_training_list(filter_field=None, filter_value=None, results_only=True, **kwargs):
+    return get_data_list_from_osis('training', filter_field, filter_value, results_only, **kwargs)
 
 
 def get_data_from_osis(object_name, uuid):

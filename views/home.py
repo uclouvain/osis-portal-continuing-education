@@ -26,6 +26,7 @@
 import json
 import os
 
+from bootstrap3.templatetags.bootstrap3 import bootstrap_pagination
 from django.shortcuts import render, redirect
 
 from base.models import person as mdl_person
@@ -42,7 +43,11 @@ def formations_list(request):
         active_page = int(request.GET.get('page'))
     except TypeError:
         active_page = 1
-    paginator = get_continuing_education_training_list(results_only=False)
+    paginator = get_continuing_education_training_list(
+        results_only=False,
+        limit=limit,
+        offset=(active_page-1)*limit,
+    )
     formations = paginator['results']
     pages_count = round(paginator['count'] / limit)
     return render(request, "continuing_education/formations.html", {
