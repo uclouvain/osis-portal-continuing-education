@@ -12,13 +12,11 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
-from base.views.autocomplete.common import get_country_list_from_osis
 from osis_common.messaging import message_config, send_message as message_service
 
 
 class ContinuingEducationPersonForm(forms.Form):
-    birth_country = autocomplete.Select2ListChoiceField(
-        choice_list=get_country_list_from_osis,
+    birth_country = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='country-autocomplete'),
         required=False
     )

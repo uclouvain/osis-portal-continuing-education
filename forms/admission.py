@@ -3,7 +3,6 @@ from django import forms
 from django.forms import ChoiceField, ModelChoiceField, Form
 from django.utils.translation import ugettext_lazy as _
 
-from base.views.autocomplete.common import get_country_list_from_osis, get_training_list_from_osis
 from continuing_education.models.enums import enums, admission_state_choices
 
 
@@ -17,8 +16,7 @@ class FormationChoiceField(ModelChoiceField):
 
 class AdmissionForm(Form):
 
-    formation = autocomplete.Select2ListChoiceField(
-        choice_list=get_training_list_from_osis,
+    formation = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='training-autocomplete'),
         required=False,
     )
@@ -27,8 +25,7 @@ class AdmissionForm(Form):
         choices=admission_state_choices.STUDENT_STATE_CHOICES,
         required=False
     )
-    citizenship = autocomplete.Select2ListChoiceField(
-        choice_list=get_country_list_from_osis,
+    citizenship = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='country-autocomplete'),
         required=False,
     )

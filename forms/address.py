@@ -2,12 +2,9 @@ from dal import autocomplete
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from base.views.autocomplete.common import get_country_list_from_osis
-
 
 class AddressForm(forms.Form):
-    country = autocomplete.Select2ListChoiceField(
-        choice_list=get_country_list_from_osis,
+    country = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='country-autocomplete'),
         required=False
     )
