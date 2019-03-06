@@ -114,7 +114,7 @@ def admission_form(request, admission_uuid=None, **kwargs):
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
     person_information = get_data_list_from_osis("persons", "person", str(base_person))[0]
-    adm_form = AdmissionForm(request.POST or None, initial=admission)
+    adm_form = AdmissionForm(request.POST or None, instance=admission)
 
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
@@ -123,7 +123,7 @@ def admission_form(request, admission_uuid=None, **kwargs):
     if old_admission:
         old_admission = get_data_from_osis("admissions", old_admission['uuid'])
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
-    address_form = AddressForm(request.POST or None, initial=address)
+    address_form = AddressForm(request.POST or None, instance=address)
 
     id_form = PersonForm(request.POST or None, instance=base_person)
 

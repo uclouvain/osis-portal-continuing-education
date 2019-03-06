@@ -175,6 +175,17 @@ class AdmissionForm(Form):
         label=_("State reason")
     )
 
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance', None)
+        super(AdmissionForm, self).__init__(*args, **kwargs)
+
+        if self.instance:
+            fields_to_set = [('citizenship', 'name'), ('formation', 'acronym')]
+            for field, attribute in fields_to_set:
+                self.instance[field] = self.instance[field][attribute]
+                self.fields[field].choices = [(self.instance[field], self.instance[field])]
+            self.initial = self.instance
+
 
 class StrictAdmissionForm(AdmissionForm):
     def __init__(self, data, **kwargs):
