@@ -23,9 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import ast
 import io
-import json
 
 import requests
 from django.conf import settings
@@ -109,20 +107,18 @@ def post_prospect(object_to_post):
 def prepare_admission_data(address_form, adm_form, admission, person_form):
     if admission:
         adm_form.cleaned_data['uuid'] = admission['uuid']
-
-    format_data_for_country(adm_form, 'citizenship')
-
-    format_data_for_country(address_form, 'country')
+    if adm_form.cleaned_data['formation']:
+        if adm_form.instance['formation'] == adm_form.cleaned_data['formation']:
+            adm_form.cleaned_data['formation'] = adm_form.instance['formation_uuid']
+    if adm_form.cleaned_data['citizenship']:
+        if adm_form.instance['citizenship'] == adm_form.cleaned_data['citizenship']:
+            adm_form.cleaned_data['citizenship'] = adm_form.instance['citizenship_iso']
     adm_form.cleaned_data['address'] = address_form.cleaned_data
 
-    format_data_for_country(person_form, 'birth_country')
+    if person_form.cleaned_data['birth_country']:
+        if person_form.instance['birth_country'] == person_form.cleaned_data['birth_country']:
+            person_form.cleaned_data['birth_country'] = person_form.instance['iso']
+
     person_form.cleaned_data['birth_date'] = person_form.cleaned_data['birth_date'].__str__()
     adm_form.cleaned_data['person_information'] = person_form.cleaned_data
 
-    if adm_form.cleaned_data['formation']:
-        adm_form.cleaned_data['formation'] = ast.literal_eval(adm_form.cleaned_data['formation'])['uuid']
-
-
-def format_data_for_country(form, field):
-    if form.cleaned_data[field]:
-        form.cleaned_data[field] = json.loads(form.cleaned_data[field].replace("\'", '"'))['iso_code']

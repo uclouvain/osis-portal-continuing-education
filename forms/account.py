@@ -37,6 +37,7 @@ class ContinuingEducationPersonForm(forms.Form):
         super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
 
         if self.instance:
+            self.instance['iso'] = self.instance['birth_country']['iso_code']
             self.instance['birth_country'] = self.instance['birth_country']['name']
             self._disable_existing_person_fields()
             self.initial = self.instance
