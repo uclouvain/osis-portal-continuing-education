@@ -31,10 +31,10 @@ from continuing_education.models.admission import Admission
 
 
 def has_participant_access(view_func):
-    def f_has_participant_access(request, admission_id=None):
-        if admission_id:
-            admission = get_object_or_404(Admission, pk=admission_id)
+    def f_has_participant_access(request, admission_uuid=None):
+        if admission_uuid:
+            admission = get_object_or_404(Admission, uuid=admission_uuid)
             if admission and admission.person_information.person.user != request.user:
                 return access_denied(request)
-        return view_func(request, admission_id)
+        return view_func(request, admission_uuid)
     return f_has_participant_access
