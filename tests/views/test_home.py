@@ -55,7 +55,7 @@ class FormationsListTestCase(TestCase):
         today = datetime.today()
         self.an_academic_year = AcademicYearFactory(current=True)
 
-    @mock.patch('base.utils.api_utils.get_list_from_osis')
+    @mock.patch('continuing_education.views.api.get_data_list_from_osis')
     def test_formations_list(self, mock_get_training_list):
         mock_get_training_list.return_value = {
             'count': 11,
