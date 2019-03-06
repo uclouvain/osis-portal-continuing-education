@@ -1,0 +1,511 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load bootstrap3 %}
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {{ root.verbose_title }}
+    </title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat|Montserrat:bold|Garamond|Garamond:bold' rel='stylesheet'>
+    <style type="text/css">
+        body {
+            font-family: 'Garamond';
+            font-size: 14px;
+        }
+
+        .main_table {
+            width: 100%;
+            border: 1px solid black;
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat';
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 2cm 1cm 2cm 1cm;
+
+            @top-right {
+                {#content: "{% trans 'Academic year' %} {{ root.academic_year }} \A {{ root.verbose_title|safe }}";#}
+                white-space: pre-line;
+                font-size: 11px;
+            }
+
+            @top-left {
+                background: url("{% static 'img/logo_uclouvain.png' %}") no-repeat;
+                display: inline-block;
+                width: 92mm;
+                background-size: 100%;
+                padding-top: 65px;
+                font-size: 9px;
+                text-align: center;
+                content: "";
+            }
+
+            @bottom-left {
+                content: "({{ created | date:'d/m/y' }})";
+                font-size: 11px;
+            }
+
+            @bottom-right {
+                content: "Page " counter(page);
+                font-size: 11px;
+            }
+
+            @bottom-center {
+                background:
+                {% if language == "en" %}
+                    url("{% static 'img/education_group_year/legend_en.png' %}")
+                {% else %}
+                    url("{% static 'img/education_group_year/legend_fr.png' %}")
+                {% endif %}
+                no-repeat;
+                width: 400px;
+                content: "";
+                text-align: center;
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        td, th, tr {
+            font-size: 11px;
+        }
+
+        .wrap {
+            display: flex;
+            align-items:center;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+<table>
+    <tr>
+        <td width="75%">
+            {% blocktrans with aca_year=root.academic_year %}<span>Special Enrolment</span> application {{ aca_year }}<br/>
+    Teaching and Training Department<br/>
+    University's Enrolment Office<br/>
+    <strong>PLEASE NOTE! Duplex printing or printing in a reduce format are not allowed</strong>
+{% endblocktrans %}
+        </td>
+        <td width="25%"><table class="main_table">
+        <tr>
+            <th>{% trans 'RESERVED FOR UCL USE' %}</th>
+        </tr>
+        <tr>
+            <td>{% trans 'Date' %}</td>
+        </tr>
+        <tr>
+            <td>{% trans 'Noma' %}</td>
+        </tr>
+    </table></td>
+    </tr>
+</table>
+</div>
+<p> <!-- style="page-break-before: always"> -->
+    <h2><div>{% trans 'Identification' %}</div></h2>
+    <div><strong>{% trans "Last name" %}:</strong>
+         {{ admission.person_information.person.last_name | default:"-" }} </div>
+    <div><strong>{% trans "First name" %}:</strong>
+         {{ admission.person_information.person.first_name | default:"-" }} </div>
+    <div><strong>{% trans "Birth date" %}:</strong>
+         {{ admission.person_information.birth_date | default:"-" }} </div>
+    <div><strong>{% trans "Birth location" %}:</strong>
+         {{ admission.person_information.birth_location | default:"-" }} </div>
+    <div><strong>{% trans "Birth country" %}:</strong>
+         {{ admission.person_information.birth_country | default:"-" }} </div>
+    <div><strong>{% trans "Citizenship" %}:</strong>
+         {{ admission.citizenship | default:"-" }} </div>
+    <div><strong>{% trans "National registry number" %}:</strong>
+         {{ admission.national_registry_number | default_if_none:"-" }} </div>
+    <div><strong>{% trans "ID card number" %}:</strong>
+         {{ admission.id_card_number | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Passport number" %}:</strong>
+         {{ admission.passport_number | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Gender" %}:</strong>
+         {{ admission.person_information.person.gender | default:"-" }} </div>
+    <div><strong>{% trans "Marital status" %}:</strong>
+         {{ admission.get_marital_status_display | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Spouse name" %}:</strong>
+         {{ admission.spouse_name | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Children number" %}:</strong>
+         {{ admission.children_number | default_if_none:"-" }} </div>
+    <div class="col-md-6"><strong>{% trans "Previous UCL registration" %}</strong>
+         {{ admission.previous_ucl_registration | yesno }} </div>
+    <div><strong>{% trans "Previous NOMA" %}:</strong>
+         {{ admission.previous_noma | default_if_none:"-" }} </div>
+
+
+    <h2>{% trans 'Contact details' %}</h2>
+    <h3>{% trans 'Contact' %}</h3>
+    <div class="col-md-4"><strong>{% trans "Mobile phone" %}:</strong>
+         {{ admission.phone_mobile | default_if_none:"-" }} </div>
+    <div class="col-md-4"><strong>{% trans "Private e-mail" %}:</strong>
+         {{ admission.email | default_if_none:"-" }} </div>
+    <h3>{% trans 'Home address' %}</h3>
+    <div><strong>{% trans 'House name' %}</strong></div>
+    <div><strong>{% trans "Location" %}:</strong>
+         {{ admission.residence_address.location | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Postal code" %}:</strong>
+         {{ admission.residence_address.postal_code | default_if_none:"-" }} </div>
+    <div><strong>{% trans "City" %}:</strong>
+         {{ admission.residence_address.city | default_if_none:"-" }} </div>
+    <div><strong>{% trans "Country" %}:</strong>
+         {{ admission.residence_address.country | default_if_none:"-" }} </div>
+    <div class="col-md-4"><strong>{% trans "Residence phone" %}:</strong>
+         {{ admission.residence_phone | default_if_none:"-" }} </div>
+    <h3>{% trans 'Term-time address (student accommodation)' %}</h3>
+    <div><strong>{% trans 'House name' %}</strong></div>
+    <div><strong>{% trans "Location" %}:</strong></div>
+    <div><strong>{% trans "Postal code" %}:</strong></div>
+    <div><strong>{% trans "City" %}:</strong></div>
+    <div><strong>{% trans "Country" %}:</strong></div>
+    <div class="col-md-4"><strong>{% trans "Residence phone" %}:</strong></div>
+    <div>{% trans 'Which address would you like your post to be sent to? *' %}</div>
+    <div class="footer">{% trans 'An asterisk * indicates you should check one box' %}</div>
+</p>
+
+<p style="page-break-before: always">
+    <div>
+        <p>
+            {% blocktrans %}
+                Please enclose the following with your application:<br/>
+                - this document, dated and signed AND, depending on the type of enrolment required
+                    (please mark your choice below), the additional document(s) requested<br/>
+                - the enclosed "University Regulation and Data Protection" document dated and signed<br/>
+                - a colour photo with a white background (of the correct size) glued to the attached
+                    "Ordering a UCL access card" document<br/>
+                - a photocopy of your identity car or passport<br/>
+            {% endblocktrans %}
+        </p>
+    </div>
+
+    <div>
+        <h4>[  ]{% trans 'Individual course(s) or language course at the language institute of UCL (ILV)' %}</h4>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans %}
+                        - official offer of a place ("autorisation d'inscription") in a individual course(s) or language<br/>
+                        <strong>Please return your duly completed and signed application to the UCL University's Enrolment Office</strong>
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h4>[  ]{% trans 'Enrolment on a "Certificat de recherche"' %}</h4>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans %}
+                        - official offer of a place ("autorisation d'inscription") issued by the UCL University's Enrolment Office<br/>
+                        <strong>Please bring your duly completed and signed application to the UCL University's Enrolment Office</strong>
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h4>[  ]{% trans 'Enrolment on an "Intern"' %}</h4>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans %}
+                        - a photocopy of the internship agreement signed by all three parties<br/>
+                        <strong>Please bring your duly completed and signed application to the UCL University's Enrolment Office</strong>
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h4>[  ]{% trans 'Enrolment on a "Inter-university programme"' %}</h4>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans %}
+                        - confirmation of enrolment at your home university<br/>
+                        <strong>Please return your duly completed and signed application for processing to the UCL faculty in which you will be studying</strong>
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h4>[X]{% trans 'Enrolment on a lifelong learning programme' %}</h4>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans with hsgy=admission.high_school_graduation_year|default:"-" ldgy=admission.last_degree_graduation_year|default:"-" sector=admission.get_activity_sector_display|default:"-" %}
+                        Please complete the questionnaire below<br/>
+                        (information provided on a voluntary basis and used for statistical purposes only):
+                        <table>
+                        <tr>
+                            <td>> If you have obtained a secondary education diploma, please specify the year in which it was earned:</td>
+                            <td><strong>{{ hsgy }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>> If you have obtained one or more higher education diplomas either within or outside the French-speaking Community of Belgium, please specify the year in which you earned the most recent diploma:</td>
+                            <td><strong>{{ ldgy }}</strong></td>
+                        </tr>
+                        </table>
+                        <table>
+                        <tr>
+                            <td>> What is your professional status?<br/>(you may select more than one)</td>
+                            <td><strong>{{ sector }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>> Are you currently seeking employment</td><td>Yes [ ] No [ ]</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <table class="main_table">
+                                    <tr>
+                                        <td>Return application to:<br/><br/>
+                                            _______________________________________________________________________</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        </table>
+
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans %}
+                        Irrespective of the type of enrolment you have selected, please date and sign this document
+                        <table>
+                        <tr>
+                            <td>Date</td><td>Signature</td>
+                        </tr>
+                        </table>
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans %}
+                        <h4>Reserved for the UCL faculty</h4><br/>
+                        <small>(for enrolment on either an "Inter-university programme" or lifelong learning programme)</small><br/>
+                        The faculty where the student will study is required to:<br/>
+                        - specify the course title:<br/>
+                        - specify the UCL course code to be used:<br/>
+                        <table>
+                            <tr>
+                                <td>Date</td><td>Signature and stamp of the UCL faculty</td>
+                            </tr>
+                        </table>
+                        Name and telephone extension
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans %}
+                        <h4>Reserved for continuing education</h4>
+                        [ ] This program is concerned with the "66U"
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</p>
+
+<p style="page-break-before: always">
+    <div>
+        <table class="main_table">
+            <tr>
+                <td>
+                        {% trans 'I, the undersigned' %}
+                        <br/><br/>
+                        <table>
+                        <tr>
+                            <td>{% trans 'Surname' %}: <strong>{{ admission.person_information.person.last_name | default:"-" }}</strong></td>
+                            <td>{% trans 'First name' %}: <strong>{{ admission.person_information.person.first_name | default:"-" }}</strong></td>
+                        </tr>
+                        </table>
+                        <br/>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h4>{% trans 'Reglementations' %}</h4>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans %}
+                        In accordance with the information at
+                        <a href="https://uclouvain.be/en/study/inscriptions/reglementations.html">
+                            https://uclouvain.be/en/study/inscriptions/reglementations.html</a>,<br/>
+                        I declare that I have read and accept the terms of the university regulations.
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h4>{% trans 'Data protection policy' %}</h4>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans %}
+                        In accordance with the information at
+                        <a href="https://uclouvain.be/en/study/inscriptions/vie-privee.html">
+                            https://uclouvain.be/en/study/inscriptions/vie-privee.html</a>,<br/>
+                        I declare that I have read and accept the terms of the data protection policy of the University
+                        of Louvain.
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h4>{% trans 'Access to regulates professions' %}</h4>
+        <table class="main_table">
+            <tr>
+                <td>
+                    {% blocktrans %}
+                        In accordance with the information at
+                        <a href="https://uclouvain.be/en/study/inscriptions/acces-aux-professions-reglementees.html">
+                            https://uclouvain.be/en/study/inscriptions/acces-aux-professions-reglementees.html</a>,<br/>
+                        should it apply to me, I declare that I have received the information relating to the admission
+                        and graduation requirements and to the particular rules and restrictions of accreditation and
+                        professional establishment to which the professional or teacher training title is subject and
+                        I accept the terms.
+                    {% endblocktrans %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <table class="main_table">
+            <tr>
+                <td>
+                    <table>
+                    <tr>
+                        <td>{% trans 'Signed in' %}<br/></td>
+                        <td>{% trans 'On' context 'on SIC pdf for date signature'%}<br/></td>
+                        <td>{% trans 'Signature' %}<br/></td>
+                    </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</p>
+<br/>
+<p style="page-break-before: always">
+
+    <div class="wrap">
+<table>
+    <tr>
+        <td width="75%">
+            {% blocktrans with aca_year=root.academic_year %}<strong>Ordering a UCL access card (smartcard)</strong><br/>
+    Teaching and Training Department<br/>
+    Office of the Registrar<br/>
+{% endblocktrans %}
+        </td>
+        <td width="25%"><table class="main_table">
+        <tr>
+            <th>{% trans 'RESERVED FOR UCL USE' %}</th>
+        </tr>
+        <tr>
+            <td>{% trans 'Date' %}</td>
+        </tr>
+        <tr>
+            <td>{% trans 'Noma' %}</td>
+        </tr>
+    </table></td>
+    </tr>
+</table>
+</div>
+
+    <table class="main_table">
+        <tr>
+            <td>{% trans 'Please state you' %}</td>
+        </tr>
+        <tr>
+            <td>{% trans 'Surname' %}: <strong>{{ admission.person_information.person.last_name | default:"-" }}</strong></td>
+        </tr>
+        <tr>
+            <td>{% trans 'First name' %}: <strong>{{ admission.person_information.person.first_name | default:"-" }}</strong></td>
+        </tr>
+    </table>
+    {% blocktrans %}
+        <p>Dear Student,</p>
+        <p>The Université catholique de Louvain (UCL) provides its students with a smartcard to access a growing number
+            of functions (to access buildings, car parks, computer rooms, …
+            For more information: https://uclouvain.be/fr/decouvrir/smartcard.html).</p>
+
+        <p>Do you already have a smartcard?<br/>
+        [  ] NO,<br/>I don’t have a UCL access card yet; in this case I have enclosed a photograph in accordance with the
+            instructions below.<br/>
+        [  ] YES, I already have a UCL access card (issued only by the Office of the Registrar or the UCL Human Resources
+            Department); in this case, I have checked the box and enclosed this form with my enrolment application
+            WITHOUT a photograph.
+        </p>
+        <p>
+        In order to make these smartcards, we need to obtain a colour photograph from each student in accordance with
+            very precise requirements; these requirements are identical to those for
+            renewing an identity card or passport, i.e.:<br/>
+        - Colour photograph taken by a professional photographer (photocopies, computer printouts, etc. are not acceptable)<br/>
+        - Passport size photograph measuring 35 x 45 mm<br/>
+        - Photograph with a white background (photographs with a coloured background are not acceptable)<br/>
+        - Recent photograph of excellent quality<br/>
+        - The photograph must be carefully glued in position (photographs attached using Sellotape, staples, etc. are not acceptable)
+        </p>
+        <p>
+        any photograph supplied that does not meet these specific criteria will not be accepted (see example on
+            https://uclouvain.be/fr/decouvrir/smartcard.html).<br/>
+        In this case, it will not be possible to order an access card, which may make it difficult for you to complete
+            various procedures within the University. To avoid any inconvenience, please make sure that you:<br/>
+        - affix an appropriate photograph in the box provided below for this purpose (a photograph of the right size should cover the grey rectangle)<br/>
+        - attach this document, duly completed, to your enrolment application.
+        </p>
+        <p>No reminders will be issued.</p>
+        <p>The access card will be sent to one of the addresses provided to Office of the Registrar when you enrol.
+            If an address in Belgium has not been provided during enrolment, the card must be collected from
+            the Office of the Registrar (at the start of the new academic year) within ten days of receipt of
+            the enrolment notice.</p>
+        <p>Thank you in advance</p>
+        <p id="signature">Anne Van Laethem<br/>Director, Office of the Registrar</p>
+    {% endblocktrans %}
+
+</p>
+
+</body>
+</html>

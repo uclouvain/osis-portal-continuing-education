@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 import itertools
 
 from django.conf import settings
@@ -30,10 +31,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.translation import ugettext_lazy as _
+from django.utils.text import get_valid_filename
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
+from continuing_education.business import perms
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.person import PersonForm
@@ -48,14 +51,16 @@ from continuing_education.views.common import display_errors, get_submission_err
     _show_submit_warning, add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
 from continuing_education.views.file import _get_files_list
+from osis_common.document.pdf_build import render_pdf
 
 
 @login_required
+@perms.has_participant_access
 def registration_detail(request, admission_uuid):
     admission = get_data_from_osis("registrations", admission_uuid)
     if admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED:
         add_remaining_tasks_message(request)
-        add_contact_for_edit_message(request)
+        add_contact_for_edit_message(request, is_registration=True)
     if admission['state'] == admission_state_choices.ACCEPTED:
         add_informations_message_on_submittable_file(
             request=request,
@@ -89,6 +94,7 @@ def registration_submit(request):
 
 
 @login_required
+@perms.has_participant_access
 def registration_edit(request, admission_id):
     admission = get_object_or_404(Admission, pk=admission_id, state=ACCEPTED)
     form = RegistrationForm(request.POST or None, instance=admission)
@@ -153,3 +159,24 @@ def _update_or_create_billing_and_post_address(address, billing, residence, use_
     else:
         Address.objects.filter(id=residence['address'].id).update(**residence['form'].cleaned_data)
     return billing['address'], residence['address']
+
+
+@login_required
+def generate_pdf_registration(request, admission_id):
+    admission = get_object_or_404(Admission.objects.select_related(), pk=admission_id)
+    if not admission.is_registration_submitted():
+        return redirect(
+            reverse('registration_detail', kwargs={'admission_id': admission_id})
+        )
+    context = {
+        'root': admission.formation,
+        'admission': admission,
+        'created': datetime.datetime.now(),
+    }
+    pdf_filename = get_valid_filename("{}_{}".format(admission.person_information.person, admission.formation.acronym))
+    return render_pdf(
+        request,
+        context=context,
+        filename="{}".format(pdf_filename),
+        template='registration_pdf.html',
+    )

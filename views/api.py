@@ -29,6 +29,7 @@ import json
 
 import requests
 from django.conf import settings
+from rest_framework import status
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import MultiPartRenderer
 
@@ -82,7 +83,12 @@ def post_data_to_osis(object, object_name):
         headers=header_to_post,
         data=object
     )
-    return response
+    if response.status_code != status.HTTP_201_CREATED:
+        data = {}
+    else:
+        data = transform_response_to_data(response)
+
+    return data, response.status_code
 
 
 def update_data_to_osis(object, object_name):
@@ -94,6 +100,10 @@ def update_data_to_osis(object, object_name):
         json=object,
     )
     return response
+
+
+def post_prospect(object_to_post):
+    return post_data_to_osis("prospects", object_to_post)
 
 
 def prepare_admission_data(address_form, adm_form, admission, person_form):

@@ -68,6 +68,16 @@
                 {{ admission.state_reason }}
             </div>
         {% endif %}
+        {% if admission.is_rejected %}
+            <div class="alert alert-danger">
+                {% if  admission.state_reason %}
+                    <label>{% trans 'Refusal state reason' %} : </label>
+                    {{ admission.state_reason }}
+                {% else %}
+                    {% trans admission.state %}
+                {% endif %}
+            </div>
+        {% endif %}
         <ul id="tabs" class="nav nav-tabs">
           <li role="presentation" class="active"><a href="#informations" role="tab" data-toggle="tab">{% trans 'Informations' %}</a></li>
           <li role="presentation"><a href="#documents" role="tab" data-toggle="tab">{% trans 'Documents' %}</a></li>

@@ -35,6 +35,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
+from continuing_education.business import perms
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
@@ -43,13 +44,16 @@ from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.api import get_data_from_osis, get_data_list_from_osis, update_data_to_osis, \
     post_data_to_osis, prepare_admission_data
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
-    _show_submit_warning, add_informations_message_on_submittable_file
+    _show_submit_warning, add_informations_message_on_submittable_file, add_contact_for_edit_message
 from continuing_education.views.file import _get_files_list
 
 
 @login_required
+@perms.has_participant_access
 def admission_detail(request, admission_uuid):
     admission = get_data_from_osis("admissions", admission_uuid)
+    if admission['state'] == admission_state_choices.SUBMITTED:
+        add_contact_for_edit_message(request)
     if admission['state'] == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,
@@ -102,6 +106,7 @@ def admission_submit(request):
 
 
 @login_required
+@perms.has_participant_access
 def admission_form(request, admission_uuid=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = get_data_from_osis("admissions", admission_uuid) if admission_uuid else None

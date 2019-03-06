@@ -30,7 +30,9 @@ from unittest import mock
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.utils.datetime_safe import datetime
 
+from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 
 
@@ -45,23 +47,32 @@ class ViewHomeTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'continuing_education/home.html')
 
+
 class FormationsListTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.person = PersonFactory()
+        today = datetime.today()
+        self.an_academic_year = AcademicYearFactory(current=True)
 
-    @mock.patch('continuing_education.views.home.fetch_example_data')
-    def test_formations_list(self, mock_fetch_example_data):
-        mock_fetch_example_data.return_value = [{
-            'acronym': ''.join([choice(ascii_lowercase) for _ in range(4)]),
-            'title': 'title-{}'.format(i)
-        } for i in range(11)]
-        formations = mock_fetch_example_data.return_value
+    @mock.patch('base.utils.api_utils.get_list_from_osis')
+    def test_formations_list(self, mock_get_training_list):
+        mock_get_training_list.return_value = {
+            'count': 11,
+            'results': [
+                {
+                    'acronym': ''.join([choice(ascii_lowercase) for _ in range(4)]),
+                    'title': 'title-{}'.format(i)
+                }
+                for i in range(11)
+            ]
+        }
+        formations = mock_get_training_list.return_value
         url = reverse('formations_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['formations'].paginator.num_pages, 2)
-        self.assertEqual(response.context['formations'].object_list, formations[:10])
+        self.assertEqual(response.context['pages_count'], range(1,2))
+        self.assertEqual(response.context['formations'], formations['results'])
         self.assertTemplateUsed(response, 'continuing_education/formations.html')
 
     def test_bypass_formations_list_when_logged_in(self):

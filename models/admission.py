@@ -302,6 +302,18 @@ class Admission(SerializableModel):
         default=False,
         verbose_name=_("Assessment succeeded")
     )
+    registration_file_received = models.BooleanField(
+        default=False,
+        verbose_name=_("Registration file received")
+    )
+    archived = models.BooleanField(
+        default=False,
+        verbose_name=_("Archived")
+    )
+    diploma_produced = models.BooleanField(
+        default=False,
+        verbose_name=_("Diploma produced")
+    )
 
     # TODO:: Add dates of followed courses
     sessions = models.CharField(
@@ -309,6 +321,14 @@ class Admission(SerializableModel):
         blank=True,
         verbose_name=_("Sessions")
     )
+
+    @property
+    def formation_display(self):
+        return "{}{} - {}".format(
+            "{} - ".format(self.formation.partial_acronym) if self.formation.partial_acronym else "",
+            self.formation.acronym,
+            self.formation.academic_year,
+            )
 
     def is_draft(self):
         return self.state == admission_state_choices.DRAFT
@@ -324,6 +344,9 @@ class Admission(SerializableModel):
 
     def is_waiting(self):
         return self.state == admission_state_choices.WAITING
+
+    def is_registration_submitted(self):
+        return self.state == admission_state_choices.REGISTRATION_SUBMITTED
 
     def submit(self):
         if self.state == admission_state_choices.DRAFT:

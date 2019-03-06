@@ -135,7 +135,7 @@ def _get_files_list(request, admission, url_continuing_education_file_api):
                 )
                 file['is_deletable'] = _is_file_uploaded_by_admission_person(admission, file)
     except requests.exceptions.ConnectionError:
-        display_error_messages(request, _('Unexpected error occurred'))
+        display_error_messages(request, _('An unexpected error occurred'))
     return files_list
 
 
