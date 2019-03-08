@@ -8,7 +8,7 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 class ContinuingEducationPersonAdmin(SerializableModelAdmin):
     list_display = ('person', 'birth_date',)
-    search_fields = ['first_name', 'last_name']
+    search_fields = ['person__first_name', 'person__last_name']
     list_filter = ('birth_country',)
 
 
