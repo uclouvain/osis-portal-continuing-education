@@ -99,20 +99,16 @@ def admission_submit(request):
         if request.POST.get("submit") and not admission_submission_errors:
             _update_admission_state(admission)
             return redirect('admission_detail', admission['uuid'])
-
-    raise PermissionDenied
+    raise PermissionDenied('To submit an admission, its state must be DRAFT.')
 
 
 def _update_admission_state(admission):
-    if admission['state'] == admission_state_choices.DRAFT:
-        admission['state'] = admission_state_choices.SUBMITTED
-        submitted_admission = {
-            'state': admission_state_choices.SUBMITTED,
-            'uuid': admission['uuid']
-        }
-        update_admission(submitted_admission)
-    else:
-        raise (PermissionDenied('To submit an admission, its state must be DRAFT.'))
+    admission['state'] = admission_state_choices.SUBMITTED
+    submitted_admission = {
+        'state': admission_state_choices.SUBMITTED,
+        'uuid': admission['uuid']
+    }
+    update_admission(submitted_admission)
 
 
 @login_required
@@ -123,15 +119,17 @@ def admission_form(request, admission_uuid=None, **kwargs):
         raise PermissionDenied
 
     base_person = mdl_person.find_by_user(user=request.user)
-    person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))[0]
+
+    person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))[0] if admission else None
+    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
     adm_form = AdmissionForm(request.POST or None, instance=admission)
-    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
     id_form = PersonForm(request.POST or None, instance=base_person)
 
     current_address = admission['address'] if admission else None
-    old_admission = get_data_list_from_osis("admissions", "person", str(base_person.uuid))[-1]
-    if old_admission:
+    old_admission = get_data_list_from_osis("admissions", "person", str(base_person.uuid))
+    if len(old_admission) > 0:
+        old_admission = old_admission[-1]
         old_admission = get_admission(old_admission['uuid'])
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, instance=address)
@@ -145,6 +143,7 @@ def admission_form(request, admission_uuid=None, **kwargs):
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
+
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
         prepare_admission_data(
             admission,

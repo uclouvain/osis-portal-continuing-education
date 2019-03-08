@@ -73,6 +73,10 @@ def get_admission(uuid):
     return get_data_from_osis("admissions", uuid)
 
 
+def get_registration(uuid):
+    return get_data_from_osis("registrations", uuid)
+
+
 def post_data_to_osis(object_name, object):
     response = requests.post(
         url=API_URL % {'object_name': object_name, 'object_uuid': ''},
@@ -108,6 +112,10 @@ def update_admission(object_to_post):
     return update_data_to_osis("admissions", object_to_post)
 
 
+def update_registration(object_to_post):
+    return update_data_to_osis("registrations", object_to_post)
+
+
 def prepare_admission_data(admission, forms):
     if admission:
         forms['admission'].cleaned_data['uuid'] = admission['uuid']
@@ -116,3 +124,11 @@ def prepare_admission_data(admission, forms):
     forms['person'].cleaned_data['person'] = forms['id'].cleaned_data
     forms['person'].cleaned_data['birth_date'] = forms['person'].cleaned_data['birth_date'].__str__()
     forms['admission'].cleaned_data['person_information'] = forms['person'].cleaned_data
+
+
+def prepare_registration_data(registration, forms):
+    if registration:
+        forms['registration'].cleaned_data['uuid'] = registration['uuid']
+
+    forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
+    forms['registration'].cleaned_data['billing_address'] = forms['billing'].cleaned_data

@@ -1,7 +1,7 @@
 from dal import autocomplete
 from django import forms
 from django.forms import ChoiceField, ModelChoiceField, Form
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from continuing_education.models.enums import enums, admission_state_choices
 

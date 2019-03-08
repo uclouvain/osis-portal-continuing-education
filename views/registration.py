@@ -40,14 +40,13 @@ from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.forms.registration import RegistrationForm
-from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.models.enums.admission_state_choices import ACCEPTED
-from continuing_education.views.api import get_data_from_osis
-from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
-    _show_submit_warning, add_informations_message_on_submittable_file, add_contact_for_edit_message, \
+from continuing_education.views.api import get_registration, get_data_list_from_osis, \
+    prepare_registration_data, update_registration
+from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
+    add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
 from continuing_education.views.file import _get_files_list, FILES_URL
 from osis_common.document.pdf_build import render_pdf
@@ -55,8 +54,8 @@ from osis_common.document.pdf_build import render_pdf
 
 @login_required
 @perms.has_participant_access
-def registration_detail(request, admission_uuid):
-    admission = get_data_from_osis("registrations", admission_uuid)
+def registration_detail(request, registration_uuid):
+    admission = get_registration(registration_uuid)
     if admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED:
         add_remaining_tasks_message(request)
         add_contact_for_edit_message(request, is_registration=True)
@@ -74,7 +73,7 @@ def registration_detail(request, admission_uuid):
     list_files = _get_files_list(
         request,
         admission,
-        FILES_URL % {'admission_uuid': str(admission_uuid)}
+        FILES_URL % {'admission_uuid': str(registration_uuid)}
     )
 
     return render(request, "registration_detail.html", locals())
@@ -83,59 +82,74 @@ def registration_detail(request, admission_uuid):
 @login_required
 @require_http_methods(["POST"])
 def registration_submit(request):
-    admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
-    if admission.state == admission_state_choices.ACCEPTED:
-        registration_submission_errors, errors_fields = get_submission_errors(admission, is_registration=True)
+    registration = get_registration(request.POST.get('registration_uuid'))
+    if registration['state'] == admission_state_choices.ACCEPTED:
+        registration_submission_errors, errors_fields = get_submission_errors(registration, is_registration=True)
         if request.POST.get("submit") and not registration_submission_errors:
-            admission.submit_registration()
-            return redirect('registration_detail', admission.pk)
-    raise PermissionDenied
+            registration['state'] = admission_state_choices.REGISTRATION_SUBMITTED
+            update_registration(registration)
+            return redirect('registration_detail', registration['uuid'])
+    raise PermissionDenied('To submit a registration, its state must be ACCEPTED.')
 
 
 @login_required
 @perms.has_participant_access
-def registration_edit(request, admission_id):
-    admission = get_object_or_404(Admission, pk=admission_id, state=ACCEPTED)
-    form = RegistrationForm(request.POST or None, instance=admission)
-    billing_address_form = AddressForm(request.POST or None, instance=admission.billing_address, prefix="billing")
-    residence_address_form = AddressForm(request.POST or None, instance=admission.residence_address, prefix="residence")
+def registration_edit(request, registration_uuid):
+    registration = get_registration(registration_uuid)
+    if registration and registration['state'] != admission_state_choices.ACCEPTED:
+        raise PermissionDenied
+
+    form = RegistrationForm(request.POST or None, initial=registration)
+    billing_address_form = AddressForm(request.POST or None, instance=registration['billing_address'], prefix="billing")
+    residence_address_form = AddressForm(
+        request.POST or None,
+        instance=registration['residence_address'],
+        prefix="residence"
+    )
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
-    person_information = continuing_education_person.find_by_person(person=base_person)
+    person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))[0]
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
-    address = admission.address
-    residence_address = admission.residence_address
-    billing_address = admission.billing_address
+    address = registration['address']
+    residence_address = registration['residence_address']
+    billing_address = registration['billing_address']
 
     errors = []
     errors_fields = []
-    if admission and not request.POST:
-        registration_submission_errors, errors_fields = get_submission_errors(admission, is_registration=True)
+    if registration and not request.POST:
+        registration_submission_errors, errors_fields = get_submission_errors(registration, is_registration=True)
         admission_is_submittable = not registration_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(registration_submission_errors, request)
 
-    if form.is_valid() and billing_address_form.is_valid() and residence_address_form.is_valid():
-        use_address = {
-            'for_billing': form.cleaned_data['use_address_for_billing'],
-            'for_post': form.cleaned_data['use_address_for_post']
-        }
-        admission.residence_address = residence_address
-        admission.billing_address = billing_address
-        billing_address, residence_address = _update_or_create_billing_and_post_address(
-            address,
-            {'address': billing_address, 'form': billing_address_form},
-            {'address': residence_address, 'form': residence_address_form},
-            use_address,
+    if all([form.is_valid(), billing_address_form.is_valid(), residence_address_form.is_valid()]):
+        # use_address = {
+        #     'for_billing': form.cleaned_data['use_address_for_billing'],
+        #     'for_post': form.cleaned_data['use_address_for_post']
+        # }
+        # admission['residence_address'] = residence_address
+        # admission['billing_address'] = billing_address
+        # billing_address, residence_address = _update_or_create_billing_and_post_address(
+        #     address,
+        #     {'address': billing_address, 'form': billing_address_form},
+        #     {'address': residence_address, 'form': residence_address_form},
+        #     use_address,
+        # )
+        #
+        # admission['billing_address'] = billing_address
+        # admission['residence_address'] = residence_address
+        prepare_registration_data(
+            registration,
+            forms={
+                'registration': form,
+                'residence': residence_address_form,
+                'billing': billing_address_form,
+            }
         )
-        admission = form.save(commit=False)
-        admission.billing_address = billing_address
-        admission.residence_address = residence_address
-        admission.save()
-        errors, errors_fields = get_submission_errors(admission, is_registration=True)
+        update_registration(form.cleaned_data)
         return redirect(
-            reverse('registration_detail', kwargs={'admission_id': admission_id})
+            reverse('registration_detail', kwargs={'admission_uuid': registration_uuid})
         )
     else:
         errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))

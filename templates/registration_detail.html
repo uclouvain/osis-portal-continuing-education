@@ -35,13 +35,13 @@
 
 {% block content %}
     <div class="page-header">
-        {% if registration_is_submittable and admission.is_accepted %}
+        {% if registration_is_submittable and admission.state == "Accepted" %}
             <form id="form" method="POST" class="post-form" action="{% url 'registration_submit' %}">
                 {% csrf_token %}
                 <a class="btn btn-primary pull-right" data-toggle="modal" data-target="#submit_confirmation_modal">
                     <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' context "admission" %}
                 </a>
-                <input type="hidden" name="admission_id" value="{{ admission.pk }}" />
+                <input type="hidden" name="registration_uuid" value="{{ admission.uuid }}" />
                 {% include "fragment/submit_confirmation_modal.html" %}
             </form>
         {% endif %}
@@ -93,7 +93,7 @@
                         <div class="col-md-3">{% bootstrap_label _("Passport number") %} <br/> {{ admission.passport_number | default_if_none:"-" }} </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Marital status") %} <br/> {{ admission.get_marital_status_display | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Marital status") %} <br/> {{ admission.marital_status_text | default_if_none:"-" }} </div>
                         <div class="col-md-3">{% bootstrap_label _("Spouse name") %} <br/> {{ admission.spouse_name | default_if_none:"-" }} </div>
                         <div class="col-md-3">{% bootstrap_label _("Children number") %} <br/> {{ admission.children_number | default_if_none:"-" }} </div>
                     </div>
@@ -107,7 +107,7 @@
                 <div class="panel-heading">{% trans 'Billing' %}</div>
                 <div class="panel panel-body">
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Registration type") %} <br/> {{ admission.get_registration_type_display | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Registration type") %} <br/> {{ admission.registration_type_text | default_if_none:"-" }} </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-md-3">{% bootstrap_label _("Location") %} <br/> {{ admission.billing_address.location | default_if_none:"-" }} </div>
