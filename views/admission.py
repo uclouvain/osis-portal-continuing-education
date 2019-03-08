@@ -156,7 +156,6 @@ def admission_form(request, admission_uuid=None, **kwargs):
         if admission:
             update_data_to_osis(adm_form.cleaned_data, "admissions")
             errors, errors_fields = get_submission_errors(admission)
-            print(errors)
         else:
             data, status = post_data_to_osis(adm_form.cleaned_data, "admissions")
             Person.objects.create(

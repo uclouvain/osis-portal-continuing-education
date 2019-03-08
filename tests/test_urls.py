@@ -54,7 +54,7 @@ class UrlsTestCase(TestCase):
                 pattern_name='continuing_education_home',
             ),
             dict(
-                url_path='/continuing_education/home/1',
+                url_path='/continuing_education/home/1/',
                 pattern_name='continuing_education_home',
                 kwargs={'formation_id': 1}
             ),

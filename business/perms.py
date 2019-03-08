@@ -32,12 +32,20 @@ from continuing_education.views.api import get_data_from_osis
 def has_participant_access(view_func):
     def f_has_participant_access(request, admission_uuid=None):
         if admission_uuid:
+            person_uuid = str(Person.objects.get(user=request.user).uuid)
             admission = get_data_from_osis("admissions", admission_uuid)
-            if not admission.get('uuid'):
-                admission = get_data_from_osis("registrations", admission_uuid)
-            if admission and \
-                    admission['person_information']['person']['uuid'] != \
-                    str(Person.objects.get(user=request.user).uuid):
+            registration = get_data_from_osis("registrations", admission_uuid)
+            if (admission.get('uuid') and _no_admission_access(admission, person_uuid)) or \
+                    (registration.get('uuid') and _no_registration_access(registration, person_uuid)):
                 return access_denied(request)
         return view_func(request, admission_uuid)
+
     return f_has_participant_access
+
+
+def _no_admission_access(admission, person_uuid):
+    return admission['person_information']['person']['uuid'] != person_uuid
+
+
+def _no_registration_access(registration, person_uuid):
+    return registration['person_information']['person']['uuid'] != person_uuid
