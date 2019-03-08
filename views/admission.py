@@ -34,14 +34,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
-from base.models.person import Person
 from continuing_education.business import perms
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.api import get_data_from_osis, get_data_list_from_osis, prepare_admission_data, \
+from continuing_education.views.api import get_data_list_from_osis, prepare_admission_data, \
     post_admission, update_admission, get_admission
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message
@@ -119,24 +118,23 @@ def _update_admission_state(admission):
 @login_required
 @perms.has_participant_access
 def admission_form(request, admission_uuid=None, **kwargs):
-    base_person = mdl_person.find_by_user(user=request.user)
     admission = get_admission(admission_uuid) if admission_uuid else None
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
 
-    person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))[0] if admission else None
-    adm_form = AdmissionForm(request.POST or None, instance=admission)
+    base_person = mdl_person.find_by_user(user=request.user)
+    person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))[0]
 
+    adm_form = AdmissionForm(request.POST or None, instance=admission)
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
+    id_form = PersonForm(request.POST or None, instance=base_person)
 
     current_address = admission['address'] if admission else None
     old_admission = get_data_list_from_osis("admissions", "person", str(base_person.uuid))[-1]
     if old_admission:
-        old_admission = get_data_from_osis("admissions", old_admission['uuid'])
+        old_admission = get_admission(old_admission['uuid'])
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, instance=address)
-
-    id_form = PersonForm(request.POST or None, instance=base_person)
 
     errors_fields = []
     if not admission and not request.POST:
@@ -147,22 +145,21 @@ def admission_form(request, admission_uuid=None, **kwargs):
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
-
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
-        person_form.cleaned_data['person'] = id_form.cleaned_data
-        prepare_admission_data(address_form, adm_form, admission, person_form)
+        prepare_admission_data(
+            admission,
+            forms={
+                'admission': adm_form,
+                'address': address_form,
+                'person': person_form,
+                'id': id_form
+            }
+        )
 
         if admission:
             update_admission(adm_form.cleaned_data)
-            errors, errors_fields = get_submission_errors(admission)
         else:
-            data, status = post_admission(adm_form.cleaned_data)
-            Person.objects.create(
-                user=request.user,
-                **id_form.cleaned_data
-            )
-            admission = {'uuid': data['uuid']}
-            errors, errors_fields = get_submission_errors(adm_form.cleaned_data)
+            admission, status = post_admission(adm_form.cleaned_data)
 
         if request.session.get('formation_id'):
             del request.session['formation_id']

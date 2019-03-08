@@ -28,11 +28,9 @@ class AddressForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
         super(AddressForm, self).__init__(*args, **kwargs)
-
         if self.instance:
-            self.instance['country_iso'] = self.instance['country']['iso_code']
-            self.instance['country'] = self.instance['country']['name']
-            self.fields['country'].choices = [(self.instance['country'], self.instance['country'])]
+            self.instance['country'] = (self.instance['country']['iso_code'], self.instance['country']['name'])
+            self.fields['country'].choices = [self.instance['country']]
             self.initial = self.instance
 
 

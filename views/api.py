@@ -44,7 +44,6 @@ def transform_response_to_data(response, results_only=True):
 
 def get_data_list_from_osis(object_name, filter_field=None, filter_value=None, **kwargs):
     url = API_URL % {'object_name': object_name, 'object_uuid': ''}
-    print(url)
     results_only = 'limit' not in kwargs or 'offset' not in kwargs
     if filter_field and filter_value:
         url = url + "?" + filter_field + "=" + filter_value
@@ -109,24 +108,11 @@ def update_admission(object_to_post):
     return update_data_to_osis("admissions", object_to_post)
 
 
-def prepare_admission_data(address_form, adm_form, admission, person_form):
+def prepare_admission_data(admission, forms):
     if admission:
-        adm_form.cleaned_data['uuid'] = admission['uuid']
-    if adm_form.instance:
-        if adm_form.cleaned_data['formation']:
-            if adm_form.instance['formation'] == adm_form.cleaned_data['formation']:
-                adm_form.cleaned_data['formation'] = adm_form.instance['formation_uuid']
-        if adm_form.cleaned_data['citizenship']:
-            if adm_form.instance['citizenship'] == adm_form.cleaned_data['citizenship']:
-                adm_form.cleaned_data['citizenship'] = adm_form.instance['citizenship_iso']
-    if address_form.instance:
-        if address_form.cleaned_data['country']:
-            if address_form.instance['country'] == address_form.cleaned_data['country']:
-                address_form.cleaned_data['country'] = address_form.instance['country_iso']
-    adm_form.cleaned_data['address'] = address_form.cleaned_data
-    if person_form.instance:
-        if person_form.cleaned_data['birth_country']:
-            if person_form.instance['birth_country'] == person_form.cleaned_data['birth_country']:
-                person_form.cleaned_data['birth_country'] = person_form.instance['iso']
-    person_form.cleaned_data['birth_date'] = person_form.cleaned_data['birth_date'].__str__()
-    adm_form.cleaned_data['person_information'] = person_form.cleaned_data
+        forms['admission'].cleaned_data['uuid'] = admission['uuid']
+
+    forms['admission'].cleaned_data['address'] = forms['address'].cleaned_data
+    forms['person'].cleaned_data['person'] = forms['id'].cleaned_data
+    forms['person'].cleaned_data['birth_date'] = forms['person'].cleaned_data['birth_date'].__str__()
+    forms['admission'].cleaned_data['person_information'] = forms['person'].cleaned_data

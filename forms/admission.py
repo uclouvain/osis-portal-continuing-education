@@ -180,13 +180,10 @@ class AdmissionForm(Form):
         super(AdmissionForm, self).__init__(*args, **kwargs)
 
         if self.instance:
-            fields_to_set = [('citizenship', 'name'), ('formation', 'acronym')]
-            self.instance['formation_uuid'] = self.instance['formation']['uuid']
-            self.instance['citizenship_iso'] = self.instance['citizenship']['iso_code']
-            for field, attribute in fields_to_set:
-                self.instance[field] = self.instance[field][attribute]
-
-                self.fields[field].choices = [(self.instance[field], self.instance[field])]
+            fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', 'acronym', 'uuid')]
+            for field, attribute, slug in fields_to_set:
+                self.instance[field] = (self.instance[field][slug], self.instance[field][attribute])
+                self.fields[field].choices = [self.instance[field]]
             self.initial = self.instance
 
 
