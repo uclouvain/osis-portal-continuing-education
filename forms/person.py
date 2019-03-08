@@ -38,7 +38,7 @@ class PersonForm(ModelForm):
         for field in self.fields.keys():
             attr = getattr(self.instance, field)
             if attr and attr != 'U':
-                self.fields[field].initial = getattr(self.instance, field)
+                self.fields[field].initial = attr
                 self.fields[field].widget.attrs['readonly'] = True
                 if field is "gender":
                     self.fields[field].widget.attrs['disabled'] = True
