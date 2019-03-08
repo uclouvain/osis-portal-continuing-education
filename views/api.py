@@ -29,7 +29,9 @@ import requests
 from django.conf import settings
 from rest_framework import status
 from rest_framework.parsers import JSONParser
-from rest_framework.renderers import MultiPartRenderer
+
+REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "%(object_name)s/%(object_uuid)s"
 
 
 def transform_response_to_data(response, results_only=True):
@@ -41,16 +43,17 @@ def transform_response_to_data(response, results_only=True):
 
 
 def get_data_list_from_osis(object_name, filter_field=None, filter_value=None, **kwargs):
+    url = API_URL % {'object_name': object_name, 'object_uuid': ''}
+    print(url)
     results_only = 'limit' not in kwargs or 'offset' not in kwargs
-    header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_name + "/"
     if filter_field and filter_value:
         url = url + "?" + filter_field + "=" + filter_value
     if not results_only:
         url = url + "?limit="+str(kwargs['limit'])+"&offset="+str(kwargs['offset'])
+
     response = requests.get(
         url=url,
-        headers=header_to_get
+        headers=REQUEST_HEADER
     )
     return transform_response_to_data(response, results_only)
 
@@ -60,32 +63,21 @@ def get_continuing_education_training_list(filter_field=None, filter_value=None,
 
 
 def get_data_from_osis(object_name, uuid):
-    header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_name + "/" + str(uuid)
     response = requests.get(
-        url=url,
-        headers=header_to_get
+        url=API_URL % {'object_name': object_name, 'object_uuid': str(uuid)},
+        headers=REQUEST_HEADER
     )
     return transform_response_to_data(response)
 
 
-def _prepare_headers_for_files(method):
-    if method in ['GET', 'DELETE']:
-        return {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    elif method == 'POST':
-        return {
-            'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
-            'Content-Disposition': 'attachment; filename=name.jpeg',
-            'Content-Type': MultiPartRenderer.media_type
-        }
+def get_admission(uuid):
+    return get_data_from_osis("admissions", uuid)
 
 
-def post_data_to_osis(object, object_name):
-    header_to_post = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_name + "/"
+def post_data_to_osis(object_name, object):
     response = requests.post(
-        url=url,
-        headers=header_to_post,
+        url=API_URL % {'object_name': object_name, 'object_uuid': ''},
+        headers=REQUEST_HEADER,
         json=object
     )
     if response.status_code != status.HTTP_201_CREATED:
@@ -96,12 +88,10 @@ def post_data_to_osis(object, object_name):
     return data, response.status_code
 
 
-def update_data_to_osis(object, object_name):
-    header_to_put = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + object_name + "/" + object['uuid']
+def update_data_to_osis(object_name, object):
     response = requests.patch(
-        url=url,
-        headers=header_to_put,
+        url=API_URL % {'object_name': object_name, 'object_uuid': object['uuid']},
+        headers=REQUEST_HEADER,
         json=object,
     )
     return response
@@ -109,6 +99,14 @@ def update_data_to_osis(object, object_name):
 
 def post_prospect(object_to_post):
     return post_data_to_osis("prospects", object_to_post)
+
+
+def post_admission(object_to_post):
+    return post_data_to_osis("admissions", object_to_post)
+
+
+def update_admission(object_to_post):
+    return update_data_to_osis("admissions", object_to_post)
 
 
 def prepare_admission_data(address_form, adm_form, admission, person_form):

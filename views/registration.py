@@ -26,7 +26,6 @@
 import datetime
 import itertools
 
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
@@ -50,7 +49,7 @@ from continuing_education.views.api import get_data_from_osis
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
     _show_submit_warning, add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
-from continuing_education.views.file import _get_files_list
+from continuing_education.views.file import _get_files_list, FILES_URL
 from osis_common.document.pdf_build import render_pdf
 
 
@@ -75,7 +74,7 @@ def registration_detail(request, admission_uuid):
     list_files = _get_files_list(
         request,
         admission,
-        settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/"
+        FILES_URL % {'admission_uuid': str(admission_uuid)}
     )
 
     return render(request, "registration_detail.html", locals())

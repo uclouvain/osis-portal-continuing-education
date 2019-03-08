@@ -38,29 +38,25 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 
-from continuing_education.models.admission import Admission
-from continuing_education.views.api import _prepare_headers_for_files
+from continuing_education.views.api import REQUEST_HEADER, get_admission
 from continuing_education.views.common import display_error_messages, display_success_messages
 
 MAX_ADMISSION_FILE_NAME_LENGTH = 100
+FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/%(admission_uuid)s/files/"
 
 
 @login_required
 def upload_file(request, admission_uuid):
     admission_file = request.FILES['myfile'] if 'myfile' in request.FILES else None
-    admission = Admission.objects.get(uuid=admission_uuid)
-    person = admission.person_information.person
+    admission = get_admission(admission_uuid)
+    person = admission['person_information']['person']
     data = {
-        'uploaded_by': person.uuid,
-    }
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission.uuid) + "/files/"
-    headers_to_upload = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
+        'uploaded_by': person['uuid'],
     }
 
     request_to_upload = requests.post(
-        url,
-        headers=headers_to_upload,
+        FILES_URL % {'admission_uuid': str(admission_uuid)},
+        headers=REQUEST_HEADER,
         files={'path': admission_file},
         data=data
     )
@@ -75,14 +71,9 @@ def upload_file(request, admission_uuid):
 
 @login_required
 def download_file(request, file_uuid, admission_uuid):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
-          "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
-    headers_to_get = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
-    }
     request_to_get = requests.get(
-        url,
-        headers=headers_to_get
+        FILES_URL % {'admission_uuid': str(admission_uuid)} + str(file_uuid),
+        headers=REQUEST_HEADER
     )
     if request_to_get.status_code == status.HTTP_200_OK:
         stream = io.BytesIO(request_to_get.content)
@@ -99,14 +90,9 @@ def download_file(request, file_uuid, admission_uuid):
 
 @login_required
 def remove_file(request, file_uuid, admission_uuid):
-    url = settings.URL_CONTINUING_EDUCATION_FILE_API + \
-          "admissions/" + str(admission_uuid) + "/files/" + str(file_uuid)
-    headers_to_delete = {
-        'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN
-    }
     request_to_delete = requests.delete(
-        url,
-        headers=headers_to_delete
+        FILES_URL % {'admission_uuid': str(admission_uuid)} + str(file_uuid),
+        headers=REQUEST_HEADER
     )
 
     if request_to_delete.status_code == status.HTTP_204_NO_CONTENT:
@@ -124,7 +110,7 @@ def _get_files_list(request, admission, url_continuing_education_file_api):
     try:
         response = requests.get(
             url=url_continuing_education_file_api,
-            headers=_prepare_headers_for_files('GET'),
+            headers=REQUEST_HEADER,
         )
         if response.status_code == status.HTTP_200_OK:
             stream = io.BytesIO(response.content)

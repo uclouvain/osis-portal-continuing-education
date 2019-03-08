@@ -25,7 +25,6 @@
 ##############################################################################
 import itertools
 
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -42,17 +41,17 @@ from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.api import get_data_from_osis, get_data_list_from_osis, update_data_to_osis, \
-    post_data_to_osis, prepare_admission_data
+from continuing_education.views.api import get_data_from_osis, get_data_list_from_osis, prepare_admission_data, \
+    post_admission, update_admission, get_admission
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message
-from continuing_education.views.file import _get_files_list
+from continuing_education.views.file import _get_files_list, FILES_URL
 
 
 @login_required
 @perms.has_participant_access
 def admission_detail(request, admission_uuid):
-    admission = get_data_from_osis("admissions", admission_uuid)
+    admission = get_admission(admission_uuid)
     if admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request)
     if admission['state'] == admission_state_choices.DRAFT:
@@ -70,7 +69,7 @@ def admission_detail(request, admission_uuid):
     list_files = _get_files_list(
         request,
         admission,
-        settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/" + str(admission_uuid) + "/files/"
+        FILES_URL % {'admission_uuid': str(admission_uuid)}
     )
 
     return render(
@@ -95,7 +94,7 @@ def _show_save_before_submit(request):
 @login_required
 @require_http_methods(["POST"])
 def admission_submit(request):
-    admission = get_data_from_osis("admissions", request.POST.get('admission_uuid'))
+    admission = get_admission(request.POST.get('admission_uuid'))
     if admission['state'] == admission_state_choices.DRAFT:
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         if request.POST.get("submit") and not admission_submission_errors:
@@ -112,7 +111,7 @@ def _update_admission_state(admission):
             'state': admission_state_choices.SUBMITTED,
             'uuid': admission['uuid']
         }
-        update_data_to_osis(submitted_admission, "admissions")
+        update_admission(submitted_admission)
     else:
         raise (PermissionDenied('To submit an admission, its state must be DRAFT.'))
 
@@ -121,7 +120,7 @@ def _update_admission_state(admission):
 @perms.has_participant_access
 def admission_form(request, admission_uuid=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
-    admission = get_data_from_osis("admissions", admission_uuid) if admission_uuid else None
+    admission = get_admission(admission_uuid) if admission_uuid else None
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
 
@@ -154,10 +153,10 @@ def admission_form(request, admission_uuid=None, **kwargs):
         prepare_admission_data(address_form, adm_form, admission, person_form)
 
         if admission:
-            update_data_to_osis(adm_form.cleaned_data, "admissions")
+            update_admission(adm_form.cleaned_data)
             errors, errors_fields = get_submission_errors(admission)
         else:
-            data, status = post_data_to_osis(adm_form.cleaned_data, "admissions")
+            data, status = post_admission(adm_form.cleaned_data)
             Person.objects.create(
                 user=request.user,
                 **id_form.cleaned_data
