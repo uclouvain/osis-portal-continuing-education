@@ -23,8 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
-import os
 
 from django.shortcuts import render, redirect
 
@@ -64,32 +62,13 @@ def main_view(request, formation_id=None):
         request.session['formation_id'] = formation_id
     if request.user.is_authenticated:
         person = mdl_person.find_by_user(request.user)
-        continuing_education_person = get_data_list_from_osis("persons", "person", str(person))[0]
         registration_states = [
             admission_state_choices.ACCEPTED,
             admission_state_choices.REGISTRATION_SUBMITTED,
             admission_state_choices.VALIDATED
         ]
-        # admissions = admission.search(
-        #     person=continuing_education_person,
-        # ).exclude(
-        #     state__in=registration_states
-        # )
-        # registrations = admission.search(
-        #     person=continuing_education_person,
-        #     state__in=registration_states,
-        # )
-        admissions = get_data_list_from_osis("admissions", "person", str(person))
-        registrations = get_data_list_from_osis("registrations", "person", str(person))
+        admissions = get_data_list_from_osis("admissions", "person", str(person.uuid))
+        registrations = get_data_list_from_osis("registrations", "person", str(person.uuid))
         return render(request, "continuing_education/home.html", locals())
     else:
         return render(request, "authentication/login.html")
-
-
-def fetch_example_data():
-    # get formations from temporary file
-    module_dir = os.path.dirname(__file__)
-    file_path = os.path.join(module_dir, 'example_data.json')
-    with open(file_path) as f:
-        data = json.load(f)
-    return sorted(data, key=lambda k: k['acronym'])

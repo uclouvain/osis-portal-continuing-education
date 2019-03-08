@@ -134,9 +134,12 @@ def get_submission_errors(admission, is_registration=False):
         address_form = StrictAddressForm(
             data=admission['address']
         )
+        print(admission)
         adm_form = StrictAdmissionForm(
             data=admission
         )
+        adm_form.is_valid()
+        print(person_form.errors)
         forms = [person_form, person_information_form, address_form, adm_form]
         _update_errors(forms, errors, errors_field)
 

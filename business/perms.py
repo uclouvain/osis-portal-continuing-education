@@ -24,17 +24,20 @@
 #
 ##############################################################################
 
-from django.shortcuts import get_object_or_404
-
+from base.models.person import Person
 from base.views.common import access_denied
-from continuing_education.models.admission import Admission
+from continuing_education.views.api import get_data_from_osis
 
 
 def has_participant_access(view_func):
     def f_has_participant_access(request, admission_uuid=None):
         if admission_uuid:
-            admission = get_object_or_404(Admission, uuid=admission_uuid)
-            if admission and admission.person_information.person.user != request.user:
+            admission = get_data_from_osis("admissions", admission_uuid)
+            if not admission.get('uuid'):
+                admission = get_data_from_osis("registrations", admission_uuid)
+            if admission and \
+                    admission['person_information']['person']['uuid'] != \
+                    str(Person.objects.get(user=request.user).uuid):
                 return access_denied(request)
         return view_func(request, admission_uuid)
     return f_has_participant_access

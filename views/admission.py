@@ -35,6 +35,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
+from base.models.person import Person
 from continuing_education.business import perms
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
@@ -43,8 +44,8 @@ from continuing_education.forms.person import PersonForm
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.api import get_data_from_osis, get_data_list_from_osis, update_data_to_osis, \
     post_data_to_osis, prepare_admission_data
-from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
-    _show_submit_warning, add_informations_message_on_submittable_file, add_contact_for_edit_message
+from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
+    add_informations_message_on_submittable_file, add_contact_for_edit_message
 from continuing_education.views.file import _get_files_list
 
 
@@ -94,15 +95,26 @@ def _show_save_before_submit(request):
 @login_required
 @require_http_methods(["POST"])
 def admission_submit(request):
-    admission = _find_user_admission_by_id(request.POST.get('admission_id'), user=request.user)
-
-    if admission.state == admission_state_choices.DRAFT:
+    admission = get_data_from_osis("admissions", request.POST.get('admission_uuid'))
+    if admission['state'] == admission_state_choices.DRAFT:
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         if request.POST.get("submit") and not admission_submission_errors:
-            admission.submit()
-            return redirect('admission_detail', admission.pk)
+            _update_admission_state(admission)
+            return redirect('admission_detail', admission['uuid'])
 
     raise PermissionDenied
+
+
+def _update_admission_state(admission):
+    if admission['state'] == admission_state_choices.DRAFT:
+        admission['state'] = admission_state_choices.SUBMITTED
+        submitted_admission = {
+            'state': admission_state_choices.SUBMITTED,
+            'uuid': admission['uuid']
+        }
+        update_data_to_osis(submitted_admission, "admissions")
+    else:
+        raise (PermissionDenied('To submit an admission, its state must be DRAFT.'))
 
 
 @login_required
@@ -110,16 +122,16 @@ def admission_submit(request):
 def admission_form(request, admission_uuid=None, **kwargs):
     base_person = mdl_person.find_by_user(user=request.user)
     admission = get_data_from_osis("admissions", admission_uuid) if admission_uuid else None
-
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
-    person_information = get_data_list_from_osis("persons", "person", str(base_person))[0]
+
+    person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))[0] if admission else None
     adm_form = AdmissionForm(request.POST or None, instance=admission)
 
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
     current_address = admission['address'] if admission else None
-    old_admission = get_data_list_from_osis("admissions", "person", str(base_person))[-1]
+    old_admission = get_data_list_from_osis("admissions", "person", str(base_person.uuid))[-1]
     if old_admission:
         old_admission = get_data_from_osis("admissions", old_admission['uuid'])
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
@@ -138,18 +150,27 @@ def admission_form(request, admission_uuid=None, **kwargs):
             _show_submit_warning(admission_submission_errors, request)
 
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
+        person_form.cleaned_data['person'] = id_form.cleaned_data
         prepare_admission_data(address_form, adm_form, admission, person_form)
+
         if admission:
             update_data_to_osis(adm_form.cleaned_data, "admissions")
             errors, errors_fields = get_submission_errors(admission)
+            print(errors)
         else:
-            post_data_to_osis(adm_form.cleaned_data, "admissions")
+            data, status = post_data_to_osis(adm_form.cleaned_data, "admissions")
+            Person.objects.create(
+                user=request.user,
+                **id_form.cleaned_data
+            )
+            admission = {'uuid': data['uuid']}
             errors, errors_fields = get_submission_errors(adm_form.cleaned_data)
+
         if request.session.get('formation_id'):
             del request.session['formation_id']
 
         return redirect(
-            reverse('admission_detail', kwargs={'admission_uuid': admission['uuid'] if 'uuid' in admission else None}),
+            reverse('admission_detail', kwargs={'admission_uuid': admission['uuid'] if admission else ''}),
         )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))

@@ -79,7 +79,7 @@ def post_data_to_osis(object, object_name):
     response = requests.post(
         url=url,
         headers=header_to_post,
-        data=object
+        json=object
     )
     if response.status_code != status.HTTP_201_CREATED:
         data = {}
@@ -107,18 +107,21 @@ def post_prospect(object_to_post):
 def prepare_admission_data(address_form, adm_form, admission, person_form):
     if admission:
         adm_form.cleaned_data['uuid'] = admission['uuid']
-    if adm_form.cleaned_data['formation']:
-        if adm_form.instance['formation'] == adm_form.cleaned_data['formation']:
-            adm_form.cleaned_data['formation'] = adm_form.instance['formation_uuid']
-    if adm_form.cleaned_data['citizenship']:
-        if adm_form.instance['citizenship'] == adm_form.cleaned_data['citizenship']:
-            adm_form.cleaned_data['citizenship'] = adm_form.instance['citizenship_iso']
+    if adm_form.instance:
+        if adm_form.cleaned_data['formation']:
+            if adm_form.instance['formation'] == adm_form.cleaned_data['formation']:
+                adm_form.cleaned_data['formation'] = adm_form.instance['formation_uuid']
+        if adm_form.cleaned_data['citizenship']:
+            if adm_form.instance['citizenship'] == adm_form.cleaned_data['citizenship']:
+                adm_form.cleaned_data['citizenship'] = adm_form.instance['citizenship_iso']
+    if address_form.instance:
+        if address_form.cleaned_data['country']:
+            if address_form.instance['country'] == address_form.cleaned_data['country']:
+                address_form.cleaned_data['country'] = address_form.instance['country_iso']
     adm_form.cleaned_data['address'] = address_form.cleaned_data
-
-    if person_form.cleaned_data['birth_country']:
-        if person_form.instance['birth_country'] == person_form.cleaned_data['birth_country']:
-            person_form.cleaned_data['birth_country'] = person_form.instance['iso']
-
+    if person_form.instance:
+        if person_form.cleaned_data['birth_country']:
+            if person_form.instance['birth_country'] == person_form.cleaned_data['birth_country']:
+                person_form.cleaned_data['birth_country'] = person_form.instance['iso']
     person_form.cleaned_data['birth_date'] = person_form.cleaned_data['birth_date'].__str__()
     adm_form.cleaned_data['person_information'] = person_form.cleaned_data
-
