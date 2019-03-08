@@ -36,10 +36,12 @@ class PersonForm(ModelForm):
 
     def _disable_existing_person_fields(self):
         for field in self.fields.keys():
-            self.fields[field].initial = getattr(self.instance, field)
-            self.fields[field].widget.attrs['readonly'] = True
-            if field is "gender":
-                self.fields[field].widget.attrs['disabled'] = True
+            attr = getattr(self.instance, field)
+            if attr and attr != 'U':
+                self.fields[field].initial = getattr(self.instance, field)
+                self.fields[field].widget.attrs['readonly'] = True
+                if field is "gender":
+                    self.fields[field].widget.attrs['disabled'] = True
 
     class Meta:
         model = Person
