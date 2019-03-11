@@ -123,7 +123,6 @@ def admission_form(request, admission_uuid=None, **kwargs):
 
     person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))[0] if admission else None
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
-    print(admission)
     adm_form = AdmissionForm(request.POST or None, instance=admission)
     id_form = PersonForm(request.POST or None, instance=base_person)
 
