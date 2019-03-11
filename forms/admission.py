@@ -18,7 +18,7 @@ class AdmissionForm(Form):
 
     formation = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='training-autocomplete'),
-        required=False,
+        required=True,
     )
 
     state = ChoiceField(
@@ -182,8 +182,9 @@ class AdmissionForm(Form):
         if self.instance:
             fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', 'acronym', 'uuid')]
             for field, attribute, slug in fields_to_set:
-                self.instance[field] = (self.instance[field][slug], self.instance[field][attribute])
-                self.fields[field].choices = [self.instance[field]]
+                if self.instance[field]:
+                    self.instance[field] = (self.instance[field][slug], self.instance[field][attribute])
+                    self.fields[field].choices = [self.instance[field]]
             self.initial = self.instance
 
 

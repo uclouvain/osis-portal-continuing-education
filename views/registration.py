@@ -44,7 +44,7 @@ from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.api import get_registration, get_data_list_from_osis, \
-    prepare_registration_data, update_registration
+    prepare_registration_data, update_registration, prepare_registration_for_submit
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
@@ -83,6 +83,7 @@ def registration_detail(request, registration_uuid):
 @require_http_methods(["POST"])
 def registration_submit(request):
     registration = get_registration(request.POST.get('registration_uuid'))
+    prepare_registration_for_submit(registration)
     if registration['state'] == admission_state_choices.ACCEPTED:
         registration_submission_errors, errors_fields = get_submission_errors(registration, is_registration=True)
         if request.POST.get("submit") and not registration_submission_errors:
@@ -112,6 +113,7 @@ def registration_edit(request, registration_uuid):
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
     address = registration['address']
+    address['country'] = (address['country']['iso_code'], address['country']['name'])
     residence_address = registration['residence_address']
     billing_address = registration['billing_address']
 

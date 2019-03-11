@@ -27,11 +27,13 @@ import io
 
 import requests
 from django.conf import settings
+from django.http import Http404
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
 API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "%(object_name)s/%(object_uuid)s"
+NOT_FOUND = 'Pas trouvé.'
 
 
 def transform_response_to_data(response, results_only=True):
@@ -70,7 +72,10 @@ def get_data_from_osis(object_name, uuid):
 
 
 def get_admission(uuid):
-    return get_data_from_osis("admissions", uuid)
+    data = get_data_from_osis("admissions", uuid)
+    if 'detail' in data and data['detail'] == NOT_FOUND:
+        raise Http404
+    return data
 
 
 def get_registration(uuid):
@@ -129,6 +134,13 @@ def prepare_admission_data(admission, forms):
 def prepare_registration_data(registration, forms):
     if registration:
         forms['registration'].cleaned_data['uuid'] = registration['uuid']
-
     forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
     forms['registration'].cleaned_data['billing_address'] = forms['billing'].cleaned_data
+
+
+def prepare_registration_for_submit(registration):
+    registration.pop('person_information')
+    registration.pop('formation')
+    registration.pop('address')
+    registration['residence_address']['country'] = registration['residence_address']['country']['iso_code']
+    registration['billing_address']['country'] = registration['billing_address']['country']['iso_code']

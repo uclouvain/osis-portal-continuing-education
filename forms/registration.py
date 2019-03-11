@@ -18,7 +18,8 @@ class RegistrationForm(forms.Form):
     )
     use_address_for_billing = forms.BooleanField(
         initial=True,
-        label=_("Use address for billing")
+        label=_("Use address for billing"),
+        required=False
     )
     billing_address = forms.CharField(
         required=False,
@@ -80,7 +81,8 @@ class RegistrationForm(forms.Form):
     # Post
     use_address_for_post = forms.BooleanField(
         initial=True,
-        label=_("Use address for post")
+        label=_("Use address for post"),
+        required=False
     )
     residence_address = forms.CharField(
         required=False,

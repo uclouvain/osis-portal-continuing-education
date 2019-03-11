@@ -51,9 +51,9 @@ from continuing_education.views.file import _get_files_list, FILES_URL
 @perms.has_participant_access
 def admission_detail(request, admission_uuid):
     admission = get_admission(admission_uuid)
-    if admission['state'] == admission_state_choices.SUBMITTED:
+    if admission and admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request)
-    if admission['state'] == admission_state_choices.DRAFT:
+    if admission and admission['state'] == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,
             title=_("Your admission file has been saved. Please consider the following information :")
@@ -115,6 +115,7 @@ def _update_admission_state(admission):
 @perms.has_participant_access
 def admission_form(request, admission_uuid=None, **kwargs):
     admission = get_admission(admission_uuid) if admission_uuid else None
+
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
 
@@ -122,7 +123,7 @@ def admission_form(request, admission_uuid=None, **kwargs):
 
     person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))[0] if admission else None
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
-
+    print(admission)
     adm_form = AdmissionForm(request.POST or None, instance=admission)
     id_form = PersonForm(request.POST or None, instance=base_person)
 
@@ -154,7 +155,6 @@ def admission_form(request, admission_uuid=None, **kwargs):
                 'id': id_form
             }
         )
-
         if admission:
             update_admission(adm_form.cleaned_data)
         else:
@@ -162,7 +162,6 @@ def admission_form(request, admission_uuid=None, **kwargs):
 
         if request.session.get('formation_id'):
             del request.session['formation_id']
-
         return redirect(
             reverse('admission_detail', kwargs={'admission_uuid': admission['uuid'] if admission else ''}),
         )
