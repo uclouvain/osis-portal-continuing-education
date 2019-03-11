@@ -115,13 +115,15 @@ def _update_admission_state(admission):
 @perms.has_participant_access
 def admission_form(request, admission_uuid=None, **kwargs):
     admission = get_admission(admission_uuid) if admission_uuid else None
-
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
 
     base_person = mdl_person.find_by_user(user=request.user)
-
-    person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))[0] if admission else None
+    person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))
+    if len(person_information) > 0:
+        person_information = person_information[0]
+    else:
+        person_information = None
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
     adm_form = AdmissionForm(request.POST or None, instance=admission)
     id_form = PersonForm(request.POST or None, instance=base_person)
@@ -129,7 +131,7 @@ def admission_form(request, admission_uuid=None, **kwargs):
     current_address = admission['address'] if admission else None
     old_admission = get_data_list_from_osis("admissions", "person", str(base_person.uuid))
     if len(old_admission) > 0:
-        old_admission = old_admission[-1]
+        old_admission = old_admission[0]
         old_admission = get_admission(old_admission['uuid'])
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, instance=address)

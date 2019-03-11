@@ -27,6 +27,7 @@ import datetime
 from unittest import mock
 from unittest.mock import patch
 
+import factory.fuzzy
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -34,7 +35,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.forms import model_to_dict
 from django.test import TestCase, RequestFactory
-from django.utils.translation import ugettext_lazy as _, gettext
+from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
@@ -342,9 +343,39 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUp(self):
         current_acad_year = create_current_academic_year()
         self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-        self.admission = AdmissionFactory(
+        self.admission_model = AdmissionFactory(
             formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
         )
+
+        self.admission = {
+            'person_information': {
+                'person': model_to_dict(PersonFactory()),
+                'birth_country': factory.Sequence(lambda n: 'Country - %d' % n),
+                'birth_location': 'ABCCity',
+                'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
+            },
+            'address': {
+                'location': factory.Faker('street_name'),
+                'postal_code': 1348,
+                'country': factory.Sequence(lambda n: 'Country - %d' % n),
+                'city': factory.Faker('city')
+            },
+            'last_degree_level': 'ACV',
+            'formation': 'ABUS1FP',
+            'citizenship': factory.Sequence(lambda n: 'Country - %d' % n),
+            'phone_mobile': 1234567890,
+            'email': 'a@b.de',
+            'high_school_diploma': True,
+            'last_degree_field': 'BBB',
+            'last_degree_institution': 'CCC',
+            'last_degree_graduation_year': 2016,
+            'professional_status': 'EMPLOYEE',
+            'current_occupation': 'FFF',
+            'current_employer': 'GGG',
+            'activity_sector': 'PRIVATE',
+            'motivation': 'III',
+            'professional_impact': 'KKK',
+        }
 
     def test_admission_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission)
@@ -354,14 +385,10 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_not_submittable_missing_data_in_all_objects(self):
-        self.admission.person_information.person.email = ''
-        self.admission.person_information.person.save()
-        self.admission.person_information.birth_country = None
-        self.admission.person_information.save()
-        self.admission.address.postal_code = ''
-        self.admission.address.save()
-        self.admission.last_degree_level = ''
-        self.admission.save()
+        self.admission['person_information']['person']['email'] = ''
+        self.admission['person_information']['birth_country'] = ''
+        self.admission['address']['postal_code'] = ''
+        self.admission['last_degree_level'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
@@ -375,8 +402,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_not_submittable_missing_admission_data(self):
-        self.admission.last_degree_level = ''
-        self.admission.save()
+        self.admission['last_degree_level'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
@@ -387,8 +413,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_not_submittable_missing_person_information_data(self):
-        self.admission.person_information.birth_country = None
-        self.admission.person_information.save()
+        self.admission['person_information']['birth_country'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
@@ -399,8 +424,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_not_submittable_missing_address_data(self):
-        self.admission.address.postal_code = ''
-        self.admission.address.save()
+        self.admission['address']['postal_code'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
@@ -411,8 +435,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_not_submittable_missing_person_data(self):
-        self.admission.person_information.person.gender = None
-        self.admission.person_information.person.save()
+        self.admission['person_information']['person']['gender'] = None
         errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(

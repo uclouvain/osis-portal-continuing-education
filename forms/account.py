@@ -18,7 +18,8 @@ from osis_common.messaging import message_config, send_message as message_servic
 class ContinuingEducationPersonForm(forms.Form):
     birth_country = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='country-autocomplete'),
-        required=False
+        required=True,
+        label=_("Birth country")
     )
 
     birth_date = forms.DateField(
@@ -35,7 +36,6 @@ class ContinuingEducationPersonForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
         super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
-
         if self.instance:
             self.instance['birth_country'] = (
                 self.instance['birth_country']['iso_code'],
