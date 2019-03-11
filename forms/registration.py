@@ -10,7 +10,6 @@ class RegistrationForm(forms.Form):
         coerce=lambda x: x == 'True',
         choices=YES_NO_CHOICES
     )
-    
     # Billing
     registration_type = forms.ChoiceField(
         required=False,
@@ -25,7 +24,6 @@ class RegistrationForm(forms.Form):
         required=False,
         label=_("Billing address")
     )
-
     head_office_name = forms.CharField(
         max_length=255,
         required=False,
@@ -36,7 +34,6 @@ class RegistrationForm(forms.Form):
         required=False,
         label=_("Company number")
     )
-    
     vat_number = forms.CharField(
         max_length=255,
         required=False,
