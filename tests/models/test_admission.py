@@ -26,16 +26,22 @@
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 
+from base.tests.factories.education_group import EducationGroupFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from continuing_education.models import admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 
 
 class TestAdmission(TestCase):
     def setUp(self):
-        self.admission = AdmissionFactory()
+        education_group = EducationGroupFactory()
+        EducationGroupYearFactory(education_group=education_group)
+        self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
+        self.admission = AdmissionFactory(formation=self.formation)
         self.person = ContinuingEducationPersonFactory()
 
     def test_find_by_id(self):

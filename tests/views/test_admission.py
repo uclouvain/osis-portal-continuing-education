@@ -190,7 +190,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_admission_detail_unauthorized(self):
-        admission = AdmissionFactory()
+        admission = AdmissionFactory(formation=self.formation)
         url = reverse('admission_detail', args=[admission.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
@@ -223,6 +223,7 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_admission_save_with_error(self):
         admission = model_to_dict(AdmissionFactory(
+            formation=self.formation,
             formation__academic_year=self.next_acad_year
         ))
         admission['person_information'] = "no valid pk"
@@ -237,7 +238,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_admission_edit_unauthorized(self):
-        admission = AdmissionFactory()
+        admission = AdmissionFactory(formation=self.formation)
         url = reverse('admission_detail', args=[admission.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
@@ -345,8 +346,11 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUp(self):
         current_acad_year = create_current_academic_year()
         self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        education_group = EducationGroupFactory()
+        EducationGroupYearFactory(education_group=education_group)
+        self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.admission = AdmissionFactory(
-            formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
+            formation=self.formation
         )
 
     def test_admission_is_submittable(self):

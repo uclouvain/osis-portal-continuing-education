@@ -36,12 +36,14 @@ from requests import Response
 
 from base.models.enums import education_group_categories
 from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import SuperUserFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
 from continuing_education.tests.factories.admission import AdmissionFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 from continuing_education.views.common import get_submission_errors
 
@@ -52,17 +54,23 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.client.force_login(self.user)
         self.person = PersonFactory(user=self.user)
         self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        education_group = EducationGroupFactory()
+        EducationGroupYearFactory(education_group=education_group)
+        self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.admission_accepted = AdmissionFactory(
             state="Accepted",
-            person_information=self.person_information
+            person_information=self.person_information,
+            formation=self.formation
         )
         self.admission_rejected = AdmissionFactory(
             state="Rejected",
-            person_information=self.person_information
+            person_information=self.person_information,
+            formation=self.formation
         )
         self.registration_submitted = AdmissionFactory(
             state="Registration submitted",
-            person_information=self.person_information
+            person_information=self.person_information,
+            formation=self.formation
         )
 
         self.patcher = patch(
@@ -318,11 +326,11 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
         ac = AcademicYearFactory()
         AcademicYearFactory(year=ac.year+1)
+        education_group = EducationGroupFactory()
+        EducationGroupYearFactory(education_group=education_group)
+        self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.admission = AdmissionFactory(
-            formation=EducationGroupYearFactory(
-                academic_year=ac,
-                education_group_type__category=education_group_categories.TRAINING
-            )
+            formation=self.formation
         )
 
     def test_registration_is_submittable(self):
