@@ -23,39 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import random
 
-from django.forms import model_to_dict
 from django.test import TestCase
 
-from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
-from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.person import PersonFactory
 from continuing_education.forms.admission import AdmissionForm
-from continuing_education.models.enums.admission_state_choices import ADMIN_STATE_CHOICES
-from continuing_education.models.enums.enums import get_enum_keys
-from continuing_education.tests.factories.admission import AdmissionFactory
+from continuing_education.models.enums.admission_state_choices import ACCEPTED
+from continuing_education.tests.factories.admission import AdmissionDictFactory
 from reference.models import country
 
 
 class TestAdmissionForm(TestCase):
-    def setUp(self):
-        current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-        self.formation = EducationGroupYearFactory(academic_year=self.next_acad_year)
-
     def test_valid_form(self):
-        admission = AdmissionFactory(formation=self.formation)
-        data = model_to_dict(admission)
-        form = AdmissionForm(data)
+        admission = AdmissionDictFactory(PersonFactory().uuid)
+        form = AdmissionForm(admission)
         self.assertTrue(form.is_valid(), form.errors)
 
     def test_invalid_student_state(self):
-        admission = AdmissionFactory(
-            formation=self.formation,
-            state=random.choice(get_enum_keys(ADMIN_STATE_CHOICES))
-        )
-        data = model_to_dict(admission)
-        form = AdmissionForm(data)
+        admission = AdmissionDictFactory(PersonFactory().uuid, state=ACCEPTED)
+        form = AdmissionForm(admission)
         self.assertFalse(form.is_valid(), form.errors)
 
 

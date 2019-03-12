@@ -79,7 +79,10 @@ def get_admission(uuid):
 
 
 def get_registration(uuid):
-    return get_data_from_osis("registrations", uuid)
+    data = get_data_from_osis("registrations", uuid)
+    if 'detail' in data and data['detail'] == NOT_FOUND:
+        raise Http404
+    return data
 
 
 def post_data_to_osis(object_name, object):

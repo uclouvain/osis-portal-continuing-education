@@ -34,7 +34,7 @@ from django.utils.translation import gettext, gettext_lazy as _
 from rest_framework import status
 
 from base.tests.factories.person import PersonFactory
-from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
+from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 
 
 class ProspectTestCase(TestCase):
@@ -42,7 +42,7 @@ class ProspectTestCase(TestCase):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
         self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
         self.prospect = {
             'name': 'NameTest',
             'first_name': 'FirstNameTest',

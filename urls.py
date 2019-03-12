@@ -66,7 +66,7 @@ urlpatterns = [
     ),
     url(r'^registration_detail/(?P<admission_uuid>[0-9a-f-]+)$', registration.registration_detail,
         name='registration_detail'),
-    url(r'^registration_pdf/(?P<admission_id>[0-9]+)$', registration.generate_pdf_registration,
+    url(r'^registration_pdf/(?P<admission_uuid>[0-9a-f-]+)$', registration.generate_pdf_registration,
         name='registration_pdf'),
     url(r'^registration_submit/', registration.registration_submit, name='registration_submit'),
     url(

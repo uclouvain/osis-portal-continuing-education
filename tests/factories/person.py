@@ -27,17 +27,21 @@ import datetime
 
 import factory.fuzzy
 
-from base.tests.factories.person import PersonFactory
-from reference.tests.factories.country import CountryFactory
 
-
-class ContinuingEducationPersonFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'continuing_education.ContinuingEducationPerson'
-
-    person = factory.SubFactory(PersonFactory)
-
-    # Identification
-    birth_location = factory.Faker('city')
-    birth_country = factory.SubFactory(CountryFactory)
-    birth_date = factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
+def ContinuingEducationPersonDictFactory(person_uuid):
+    person = {
+        'person': {
+            'uuid': str(person_uuid),
+            'email': 'a@b.de',
+            'first_name': 'Ben',
+            'last_name': 'Dau',
+            'gender': 'M'
+        },
+        'birth_country': {
+            'name': 'BElgique',
+            'iso_code': 'BE'
+        },
+        'birth_location': 'ABCCity',
+        'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
+    }
+    return person

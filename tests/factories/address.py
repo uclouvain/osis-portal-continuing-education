@@ -26,14 +26,16 @@
 
 import factory
 
-from reference.tests.factories.country import CountryFactory
 
+def AddressDictFactory():
+    address = {
+        'location': factory.Faker('street_name'),
+        'postal_code': 1348,
+        'country': {
+            'name': 'BElgique',
+            'iso_code': 'BE'
+        },
+        'city': factory.Faker('city')
+    }
+    return address
 
-class AddressFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'continuing_education.address'
-
-    location = factory.Faker('street_name')
-    postal_code = factory.Faker('zipcode')
-    city = factory.Faker('city')
-    country = factory.SubFactory(CountryFactory)

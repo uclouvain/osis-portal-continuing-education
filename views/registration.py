@@ -29,7 +29,7 @@ import itertools
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
@@ -41,8 +41,8 @@ from continuing_education.forms.address import AddressForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.forms.registration import RegistrationForm
 from continuing_education.models.address import Address
-from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
+from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
 from continuing_education.views.api import get_registration, get_data_list_from_osis, \
     prepare_registration_data, update_registration, prepare_registration_for_submit
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
@@ -126,21 +126,6 @@ def registration_edit(request, registration_uuid):
             _show_submit_warning(registration_submission_errors, request)
 
     if all([form.is_valid(), billing_address_form.is_valid(), residence_address_form.is_valid()]):
-        # use_address = {
-        #     'for_billing': form.cleaned_data['use_address_for_billing'],
-        #     'for_post': form.cleaned_data['use_address_for_post']
-        # }
-        # admission['residence_address'] = residence_address
-        # admission['billing_address'] = billing_address
-        # billing_address, residence_address = _update_or_create_billing_and_post_address(
-        #     address,
-        #     {'address': billing_address, 'form': billing_address_form},
-        #     {'address': residence_address, 'form': residence_address_form},
-        #     use_address,
-        # )
-        #
-        # admission['billing_address'] = billing_address
-        # admission['residence_address'] = residence_address
         prepare_registration_data(
             registration,
             forms={
@@ -177,18 +162,22 @@ def _update_or_create_billing_and_post_address(address, billing, residence, use_
 
 
 @login_required
-def generate_pdf_registration(request, admission_id):
-    admission = get_object_or_404(Admission.objects.select_related(), pk=admission_id)
-    if not admission.is_registration_submitted():
+def generate_pdf_registration(request, admission_uuid):
+    admission = get_registration(admission_uuid)
+    if admission['state'] != REGISTRATION_SUBMITTED:
         return redirect(
-            reverse('registration_detail', kwargs={'admission_id': admission_id})
+            reverse('registration_detail', kwargs={'admission_uuid': admission_uuid})
         )
     context = {
-        'root': admission.formation,
+        'root': admission['formation'],
         'admission': admission,
         'created': datetime.datetime.now(),
     }
-    pdf_filename = get_valid_filename("{}_{}".format(admission.person_information.person, admission.formation.acronym))
+    pdf_filename = get_valid_filename("{}_{}".format(
+        admission['person_information']['person'],
+        admission['formation']['acronym'])
+    )
+
     return render_pdf(
         request,
         context=context,

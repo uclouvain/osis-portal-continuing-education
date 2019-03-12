@@ -30,16 +30,17 @@ from unittest import mock
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from django.utils.datetime_safe import datetime
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
+from continuing_education.tests.factories.admission import AdmissionDictFactory
 
 
 class ViewHomeTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
+        PersonFactory(user=self.user)
 
     def test_main_view(self):
         url = reverse('continuing_education_home')
@@ -51,8 +52,7 @@ class ViewHomeTestCase(TestCase):
 class FormationsListTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.person = PersonFactory()
-        today = datetime.today()
+        self.person = PersonFactory(user=self.user)
         self.an_academic_year = AcademicYearFactory(current=True)
 
     @mock.patch('continuing_education.views.api.get_data_list_from_osis')
@@ -75,9 +75,16 @@ class FormationsListTestCase(TestCase):
         self.assertEqual(response.context['formations'], formations['results'])
         self.assertTemplateUsed(response, 'continuing_education/formations.html')
 
-    def test_bypass_formations_list_when_logged_in(self):
+    @mock.patch('continuing_education.views.api.get_data_list_from_osis')
+    def test_bypass_formations_list_when_logged_in(self, mock_get_admissions):
         self.client.force_login(self.user)
         url = reverse('formations_list')
+        mock_get_admissions.return_value = {
+            'count': 1,
+            'results': [
+                AdmissionDictFactory(self.person.uuid)
+            ]
+        }
         response = self.client.get(url)
         self.assertTrue(self.user.is_authenticated)
         self.assertRedirects(response, "/continuing_education/home/")

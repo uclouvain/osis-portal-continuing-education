@@ -26,15 +26,15 @@
 
 from base.models.person import Person
 from base.views.common import access_denied
-from continuing_education.views.api import get_data_from_osis
+from continuing_education.views.api import get_admission, get_registration
 
 
 def has_participant_access(view_func):
     def f_has_participant_access(request, admission_uuid=None):
         if admission_uuid:
             person_uuid = str(Person.objects.get(user=request.user).uuid)
-            admission = get_data_from_osis("admissions", admission_uuid)
-            registration = get_data_from_osis("registrations", admission_uuid)
+            admission = get_admission(admission_uuid)
+            registration = get_registration(admission_uuid)
             if (admission.get('uuid') and _no_admission_access(admission, person_uuid)) or \
                     (registration.get('uuid') and _no_registration_access(registration, person_uuid)):
                 return access_denied(request)
