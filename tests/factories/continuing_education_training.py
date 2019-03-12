@@ -23,25 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import random
 
-from django.db import models
+import factory
 
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
-
-
-class PersonTrainingAdmin(SerializableModelAdmin):
-    list_display = ('person', 'training',)
-    search_fields = ['person']
-    raw_id_fields = ('person', 'training',)
+from base.tests.factories.education_group import EducationGroupFactory
+from continuing_education.models.continuing_education_training import ContinuingEducationTraining
 
 
-class PersonTraining(SerializableModel):
-    person = models.ForeignKey(
-        'base.Person',
-        on_delete=models.CASCADE
-    )
+class ContinuingEducationTrainingFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = ContinuingEducationTraining
 
-    training = models.ForeignKey(
-        'continuing_education.ContinuingEducationTraining',
-        on_delete=models.CASCADE
-    )
+    active = random.choice([True, False])
+    education_group = factory.SubFactory(EducationGroupFactory)
