@@ -26,6 +26,7 @@
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 
+from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from continuing_education.models import admission
@@ -38,8 +39,12 @@ from continuing_education.tests.factories.person import ContinuingEducationPerso
 
 class TestAdmission(TestCase):
     def setUp(self):
+        academic_year = AcademicYearFactory(year=2018)
         education_group = EducationGroupFactory()
-        EducationGroupYearFactory(education_group=education_group)
+        EducationGroupYearFactory(
+            education_group=education_group,
+            academic_year=academic_year
+        )
         self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.admission = AdmissionFactory(formation=self.formation)
         self.person = ContinuingEducationPersonFactory()

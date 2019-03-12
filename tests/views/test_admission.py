@@ -60,8 +60,12 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.request = RequestFactory()
         self.person = PersonFactory(user=self.user)
         self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        academic_year = AcademicYearFactory(year=2018)
         education_group = EducationGroupFactory()
-        EducationGroupYearFactory(education_group=education_group)
+        EducationGroupYearFactory(
+            education_group=education_group,
+            academic_year=academic_year
+        )
         self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.admission = AdmissionFactory(
             person_information=self.person_information,
@@ -344,10 +348,12 @@ class ViewStudentAdmissionTestCase(TestCase):
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUp(self):
-        current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        academic_year = AcademicYearFactory(year=2018)
         education_group = EducationGroupFactory()
-        EducationGroupYearFactory(education_group=education_group)
+        EducationGroupYearFactory(
+            education_group=education_group,
+            academic_year=academic_year
+        )
         self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.admission = AdmissionFactory(
             formation=self.formation

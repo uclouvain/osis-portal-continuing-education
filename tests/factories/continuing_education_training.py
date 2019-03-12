@@ -35,5 +35,5 @@ class ContinuingEducationTrainingFactory(factory.DjangoModelFactory):
     class Meta:
         model = ContinuingEducationTraining
 
-    active = random.choice([True, False])
+    active = True
     education_group = factory.SubFactory(EducationGroupFactory)

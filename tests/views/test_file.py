@@ -50,10 +50,12 @@ from continuing_education.tests.factories.person import ContinuingEducationPerso
 
 class AdmissionFileTestCase(TestCase):
     def setUp(self):
-        current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        academic_year = AcademicYearFactory(year=2018)
         education_group = EducationGroupFactory()
-        EducationGroupYearFactory(education_group=education_group)
+        EducationGroupYearFactory(
+            education_group=education_group,
+            academic_year=academic_year
+        )
         self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)

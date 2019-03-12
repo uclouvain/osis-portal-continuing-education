@@ -44,11 +44,19 @@ class TestAdmissionForm(TestCase):
         current_acad_year = create_current_academic_year()
         self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
         education_group = EducationGroupFactory()
-        EducationGroupYearFactory(education_group=education_group)
-        self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
+        EducationGroupYearFactory(
+            education_group=education_group,
+            academic_year=current_acad_year
+        )
+        self.formation = ContinuingEducationTrainingFactory(
+            education_group=education_group,
+            active=True
+        )
 
     def test_valid_form(self):
-        admission = AdmissionFactory(formation=self.formation)
+        admission = AdmissionFactory(
+            formation=self.formation
+        )
         data = model_to_dict(admission)
         form = AdmissionForm(data)
         self.assertTrue(form.is_valid(), form.errors)

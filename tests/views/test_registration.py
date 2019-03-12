@@ -54,8 +54,12 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.client.force_login(self.user)
         self.person = PersonFactory(user=self.user)
         self.person_information = ContinuingEducationPersonFactory(person=self.person)
+        academic_year = AcademicYearFactory(year=2018)
         education_group = EducationGroupFactory()
-        EducationGroupYearFactory(education_group=education_group)
+        EducationGroupYearFactory(
+            education_group=education_group,
+            academic_year=academic_year
+        )
         self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.admission_accepted = AdmissionFactory(
             state="Accepted",
@@ -324,10 +328,12 @@ class ViewStudentRegistrationTestCase(TestCase):
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
-        ac = AcademicYearFactory()
-        AcademicYearFactory(year=ac.year+1)
+        academic_year = AcademicYearFactory(year=2018)
         education_group = EducationGroupFactory()
-        EducationGroupYearFactory(education_group=education_group)
+        EducationGroupYearFactory(
+            education_group=education_group,
+            academic_year=academic_year
+        )
         self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.admission = AdmissionFactory(
             formation=self.formation
