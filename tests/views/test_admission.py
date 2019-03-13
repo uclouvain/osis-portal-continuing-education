@@ -38,11 +38,13 @@ from django.utils.translation import ugettext_lazy as _, gettext
 from requests import Response
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
+from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 from continuing_education.views.admission import admission_form
 from continuing_education.views.common import get_submission_errors
@@ -58,7 +60,13 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.request = RequestFactory()
         self.person = PersonFactory(user=self.user)
         self.person_information = ContinuingEducationPersonFactory(person=self.person)
-        self.formation = EducationGroupYearFactory(academic_year=self.next_acad_year)
+        academic_year = AcademicYearFactory(year=2018)
+        education_group = EducationGroupFactory()
+        EducationGroupYearFactory(
+            education_group=education_group,
+            academic_year=academic_year
+        )
+        self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.admission = AdmissionFactory(
             person_information=self.person_information,
             state=admission_state_choices.DRAFT,
@@ -94,7 +102,6 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
         self.assertTemplateUsed(response, "access_denied.html")
-
 
     def test_admission_detail_not_submittable(self):
         self.admission.last_degree_level = ''
@@ -187,7 +194,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_admission_detail_unauthorized(self):
-        admission = AdmissionFactory()
+        admission = AdmissionFactory(formation=self.formation)
         url = reverse('admission_detail', args=[admission.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
@@ -198,7 +205,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
 
-        #info message should be displayed
+        # info message should be displayed
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
 
@@ -220,6 +227,7 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_admission_save_with_error(self):
         admission = model_to_dict(AdmissionFactory(
+            formation=self.formation,
             formation__academic_year=self.next_acad_year
         ))
         admission['person_information'] = "no valid pk"
@@ -234,7 +242,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_admission_edit_unauthorized(self):
-        admission = AdmissionFactory()
+        admission = AdmissionFactory(formation=self.formation)
         url = reverse('admission_detail', args=[admission.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
@@ -247,7 +255,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
 
-        #A warning message should be displayed
+        # A warning message should be displayed
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertIn(
@@ -340,10 +348,15 @@ class ViewStudentAdmissionTestCase(TestCase):
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUp(self):
-        current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        academic_year = AcademicYearFactory(year=2018)
+        education_group = EducationGroupFactory()
+        EducationGroupYearFactory(
+            education_group=education_group,
+            academic_year=academic_year
+        )
+        self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.admission = AdmissionFactory(
-            formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
+            formation=self.formation
         )
 
     def test_admission_is_submittable(self):

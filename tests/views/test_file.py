@@ -39,18 +39,24 @@ from requests import Response
 from rest_framework import status
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
+from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 
 
 class AdmissionFileTestCase(TestCase):
     def setUp(self):
-        current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-
+        academic_year = AcademicYearFactory(year=2018)
+        education_group = EducationGroupFactory()
+        EducationGroupYearFactory(
+            education_group=education_group,
+            academic_year=academic_year
+        )
+        self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
         self.request = RequestFactory()
@@ -59,7 +65,7 @@ class AdmissionFileTestCase(TestCase):
         self.admission = AdmissionFactory(
             person_information=self.person_information,
             state=admission_state_choices.DRAFT,
-            formation=EducationGroupYearFactory(academic_year=self.next_acad_year)
+            formation=self.formation
         )
         self.admission_file = SimpleUploadedFile(
             name='upload_test.pdf',
