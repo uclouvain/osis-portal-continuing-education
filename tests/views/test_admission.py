@@ -63,6 +63,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.admission = AdmissionDictFactory(self.person.uuid)
 
         self.admission_submitted = AdmissionDictFactory(self.person.uuid, SUBMITTED)
+
         self.patcher = patch(
             "continuing_education.views.admission._get_files_list",
             return_value=Response()
@@ -71,11 +72,24 @@ class ViewStudentAdmissionTestCase(TestCase):
             "continuing_education.views.api.get_data_from_osis",
             return_value=self.admission
         )
+        self.get_list_patcher = patch(
+            "continuing_education.views.api.get_admission_list",
+            return_value=[self.admission]
+        )
+        self.get_list_person_patcher = patch(
+            "continuing_education.views.api.get_persons_list",
+            return_value=[self.person_information]
+        )
+
         self.mocked_called_api_function = self.patcher.start()
         self.mocked_called_api_function_get = self.get_patcher.start()
+        self.mocked_called_api_function_get_list = self.get_list_patcher.start()
+        self.mocked_called_api_function_get_persons = self.get_list_person_patcher.start()
 
         self.addCleanup(self.patcher.stop)
         self.addCleanup(self.get_patcher.stop)
+        self.addCleanup(self.get_list_patcher.stop)
+        self.addCleanup(self.get_list_person_patcher.stop)
 
     def test_admission_detail(self):
         url = reverse('admission_detail', args=[self.admission['uuid']])

@@ -59,6 +59,14 @@ def get_data_list_from_osis(object_name, filter_field=None, filter_value=None, *
     return transform_response_to_data(response, results_only)
 
 
+def get_admission_list(filter_field=None, filter_value=None, **kwargs):
+    return get_data_list_from_osis('admissions', filter_field, filter_value, **kwargs)
+
+
+def get_persons_list(filter_field=None, filter_value=None, **kwargs):
+    return get_data_list_from_osis('persons', filter_field, filter_value, **kwargs)
+
+
 def get_continuing_education_training_list(filter_field=None, filter_value=None, **kwargs):
     return get_data_list_from_osis('training', filter_field, filter_value, **kwargs)
 

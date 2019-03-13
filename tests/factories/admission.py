@@ -44,21 +44,30 @@ def AdmissionDictFactory(person_uuid, state=DRAFT):
                 'last_name': 'Dau',
                 'gender': 'M'
             },
-            'birth_country': factory.Sequence(lambda n: 'Country - %d' % n),
+            'birth_country': {
+                'name': factory.Sequence(lambda n: 'Country - %d' % n),
+                'iso_code': 'XX'
+            },
             'birth_location': 'ABCCity',
             'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
         },
         'address': {
             'location': factory.Faker('street_name'),
             'postal_code': 1348,
-            'country': factory.Sequence(lambda n: 'Country - %d' % n),
+            'country': {
+                'name': factory.Sequence(lambda n: 'Country - %d' % n),
+                'iso_code': 'XX'
+            },
             'city': factory.Faker('city')
         },
         'last_degree_level': 'ACV',
         'formation': {
             'acronym': 'ABUS1FP',
         },
-        'citizenship': factory.Sequence(lambda n: 'Country - %d' % n),
+        'citizenship': {
+                'name': factory.Sequence(lambda n: 'Country - %d' % n),
+                'iso_code': 'XX'
+            },
         'phone_mobile': 1234567890,
         'email': 'a@b.de',
         'high_school_diploma': True,
