@@ -21,7 +21,7 @@ def prospect_form(request, formation_uuid=None):
             'city': request.POST.get('city'),
             'postal_code': request.POST.get('postal_code'),
             'email': request.POST.get('email'),
-            'formation': request.POST.get('formation'),
+            'formation': formation_uuid,
             'phone_number': request.POST.get('phone_number')
         }
         data, response_status_code = post_prospect(prospect)
