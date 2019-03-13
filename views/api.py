@@ -32,7 +32,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import MultiPartRenderer
 
 
-def transform_response_to_data(response, results_only):
+def transform_response_to_data(response, results_only=True):
     stream = io.BytesIO(response.content)
     data = JSONParser().parse(stream)
     if 'results' in data and results_only:
@@ -67,6 +67,10 @@ def get_data_from_osis(object_name, uuid):
         headers=header_to_get
     )
     return transform_response_to_data(response)
+
+
+def get_continuing_education_training(uuid):
+    return get_data_from_osis("training", uuid)
 
 
 def _prepare_headers_for_files(method):

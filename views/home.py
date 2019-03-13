@@ -26,8 +26,8 @@
 import json
 import os
 
-from bootstrap3.templatetags.bootstrap3 import bootstrap_pagination
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from base.models import person as mdl_person
 from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
@@ -78,6 +78,10 @@ def main_view(request, formation_id=None):
         )
         return render(request, "continuing_education/home.html", locals())
     else:
+        if formation_id:
+            cet = get_continuing_education_training_list("acronym", formation_id)[0]
+            if not cet['active']:
+                return redirect(reverse('prospect_form', kwargs={'formation_uuid': cet['uuid']}))
         return render(request, "authentication/login.html")
 
 
