@@ -81,7 +81,7 @@
                             </tr>
                         </tfoot>
                         {% for formation in formations %}
-                        <tr id="{{ formation.education_group.acronym }}" class="formation-item" onclick="select(this)">
+                        <tr id="{{ formation.education_group.acronym }}" active="{{ formation.active }}" uuid="{{ formation.uuid }}" class="formation-item" onclick="select(this)">
                             <td>{{ formation.education_group.acronym }}</td>
                             <td>{{ formation.education_group.title }}</td>
                         </tr>

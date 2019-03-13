@@ -30,6 +30,8 @@ from continuing_education.views import account_activation, prospect
 from continuing_education.views import (home, admission, registration, common, file)
 from continuing_education.views.account_activation import ContinuingEducationPasswordResetView, \
     ContinuingEducationPasswordResetConfirmView
+from continuing_education.views.autocomplete.continuing_education_training import \
+    ContinuingEducationTrainingAutocomplete
 
 urlpatterns = [
     url(r'^$', home.formations_list, name='formations_list'),
@@ -76,5 +78,11 @@ urlpatterns = [
         file.upload_file,
         name="upload_file"
     ),
-    url(r'^prospect_form/', prospect.prospect_form, name='prospect_form'),
+    url(r'^prospect_form/(?P<formation_uuid>[0-9a-f-]+)/$', prospect.prospect_form, name='prospect_form'),
+    url(r'^prospect_form/$', prospect.prospect_form, name='prospect_form'),
+    url(
+        r'^cetraining-autocomplete/$',
+        ContinuingEducationTrainingAutocomplete.as_view(),
+        name='cetraining-autocomplete',
+    ),
 ]
