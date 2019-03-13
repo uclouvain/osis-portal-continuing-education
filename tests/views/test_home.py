@@ -60,7 +60,7 @@ class ViewHomeTestCase(TestCase):
         self.assertTemplateUsed(response, 'continuing_education/home.html')
 
     @mock.patch('continuing_education.views.api.get_data_from_osis')
-    def test_redirect_to_prospect_form_if_formation_in_url(self, mock_get):
+    def test_redirect_to_prospect_form_if_formation_not_activated_in_url(self, mock_get):
         self.client.logout()
 
         url = reverse('continuing_education_home', kwargs={'formation_id': self.cet['acronym']})
