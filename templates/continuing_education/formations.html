@@ -113,16 +113,8 @@
     }
 
     function enableLink(){
-        let isActive = selectedElem.getAttribute('active');
-        let url;
-        if(isActive === "True") {
-            url = "{% url 'continuing_education_home' %}";
-            url += selectedElem.id;
-        }
-        else{
-            url = "{% url 'prospect_form' %}";
-            url += selectedElem.getAttribute('uuid');
-        }
+        let url = "{% url 'continuing_education_home' %}";
+        url += selectedElem.id;
         let continue_button = $("#formation-continue-button");
         continue_button.attr({
             "href": url,
