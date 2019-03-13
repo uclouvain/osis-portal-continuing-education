@@ -23,12 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import random
+import uuid
 
 import factory
 
 from base.tests.factories.education_group import EducationGroupFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from continuing_education.models.continuing_education_training import ContinuingEducationTraining
+
+
+def ContinuingEducationTrainingDictFactory(active=True):
+    ed = EducationGroupFactory()
+    edy = EducationGroupYearFactory(education_group=ed)
+    cet = {
+        'uuid': uuid.uuid4(),
+        'active': active,
+        'education_group': ed.pk,
+        'acronym': edy.acronym
+    }
+    return cet
 
 
 class ContinuingEducationTrainingFactory(factory.DjangoModelFactory):
