@@ -48,7 +48,6 @@ from django_registration import signals
 from django_registration.exceptions import ActivationError
 from django_registration.views import RegistrationView, ActivationView
 
-from base.models import person as mdl_person
 from base.models.person import Person
 from base.views.layout import render
 from continuing_education.forms.account import ContinuingEducationPersonForm, ContinuingEducationPasswordResetForm
@@ -284,11 +283,7 @@ class ContinuingEducationActivationView(ActivationView):
                 self.BAD_USERNAME_MESSAGE,
                 code='bad_username'
             )
-        person = mdl_person.find_by_user(user)
-        if person:
-            return force_text(reverse("continuing_education_home"))
-        else:
-            return force_text(reverse("complete_account_registration"))
+        return force_text(reverse("complete_account_registration"))
 
 
 class ContinuingEducationPasswordResetView(PasswordContextMixin, FormView):
