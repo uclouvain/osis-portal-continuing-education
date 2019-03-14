@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="{% static '/css/continuing_education_style.css' %}">
 {% endblock %}
 
-{% block title %}Continuing Education{% endblock %}
+{% block title %}{% trans 'Continuing Education' %}{% endblock %}
 
 {% block content %}
     <div class="page-header">
@@ -75,7 +75,7 @@
                                       </ul>
                                     </nav>
                                     <a id="formation-continue-button" class="btn btn-primary pull-right" disabled>
-                                        Continue
+                                        {% trans 'Continue' %}
                                     </a>
                                 </td>
                             </tr>
