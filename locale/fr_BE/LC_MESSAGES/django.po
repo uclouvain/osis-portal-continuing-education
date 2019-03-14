@@ -561,8 +561,6 @@ msgstr ""
 "de passe."
 
 #: views/file.py:138
-#, fuzzy
-#| msgid "An unexpected error occurred."
 msgid "An unexpected error occurred"
 msgstr "Une erreur innatendue s'est produite."
 
@@ -783,7 +781,7 @@ msgstr "Education"
 
 #: models/continuing_education_training.py:62
 msgid "EducationGroup must have at least one EducationGroupYear"
-msgstr ""
+msgstr "Une organisation de formation doit avoir au moins une occurence annualisée."
 
 #: forms/account.py:64 forms/person.py:35 forms/prospect.py:31
 #: templates/admission_detail.html:109 templates/authentication/login.html:50
