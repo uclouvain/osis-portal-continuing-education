@@ -120,7 +120,7 @@ def admission_form(request, admission_id=None, **kwargs):
     formation = None
     if request.session.get('formation_id'):
         # formation = get_continuing_education_training(request.session.get('formation_id'))
-        formation = ContinuingEducationTraining.objects.get(uuid=formation['uuid'])
+        formation = ContinuingEducationTraining.objects.get(uuid=request.session.get('formation_id'))
     person_information = continuing_education_person.find_by_person(person=base_person)
     adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
