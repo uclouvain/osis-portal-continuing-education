@@ -26,7 +26,7 @@ class AdmissionForm(ModelForm):
     )
 
     def __init__(self, data, **kwargs):
-        formation = kwargs.pop('formation')
+        formation = kwargs.pop('formation', None)
         super().__init__(data, **kwargs)
         if formation:
             self.initial['formation'] = formation

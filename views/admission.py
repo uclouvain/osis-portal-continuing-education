@@ -190,7 +190,6 @@ def admission_form(request, admission_id=None, **kwargs):
             'address_form': address_form,
             'id_form': id_form,
             'admission': admission,
-            'errors_fields': errors_fields,
-            'formation': formation
+            'errors_fields': errors_fields
         }
     )

@@ -46,8 +46,8 @@ class ViewHomeTestCase(TestCase):
             active=False
         )
         self.patcher = patch(
-            "continuing_education.views.api.get_data_list_from_osis",
-            return_value=[self.cet]
+            "continuing_education.views.api.get_data_from_osis",
+            return_value=self.cet
         )
         self.mocked_called_api_function = self.patcher.start()
 
@@ -59,11 +59,10 @@ class ViewHomeTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'continuing_education/home.html')
 
-    @mock.patch('continuing_education.views.api.get_data_from_osis')
-    def test_redirect_to_prospect_form_if_formation_not_activated_in_url(self, mock_get):
+    def test_redirect_to_prospect_form_if_formation_not_activated_in_url(self):
         self.client.logout()
 
-        url = reverse('continuing_education_home', kwargs={'formation_id': self.cet['acronym']})
+        url = reverse('continuing_education_home', kwargs={'formation_id': self.cet['uuid']})
         response = self.client.get(url)
         self.assertRedirects(response, reverse('prospect_form', kwargs={'formation_uuid': self.cet['uuid']}))
 
