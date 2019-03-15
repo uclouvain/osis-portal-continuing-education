@@ -32,7 +32,7 @@ from django.urls import reverse
 from base.models import person as mdl_person
 from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.api import get_continuing_education_training_list
+from continuing_education.views.api import get_continuing_education_training_list, get_continuing_education_training
 
 
 def formations_list(request):
@@ -79,9 +79,9 @@ def main_view(request, formation_id=None):
         return render(request, "continuing_education/home.html", locals())
     else:
         if formation_id:
-            cet = get_continuing_education_training_list("acronym", formation_id)[0]
-            if not cet['active']:
-                return redirect(reverse('prospect_form', kwargs={'formation_uuid': cet['uuid']}))
+            is_active = get_continuing_education_training(formation_id)['active']
+            if not is_active:
+                return redirect(reverse('prospect_form', kwargs={'formation_uuid': formation_id}))
         return render(request, "authentication/login.html")
 
 

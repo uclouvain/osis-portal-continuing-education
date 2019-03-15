@@ -44,6 +44,7 @@ from continuing_education.forms.person import PersonForm
 from continuing_education.models import continuing_education_person
 from continuing_education.models.address import Address
 from continuing_education.models.admission import Admission
+from continuing_education.models.continuing_education_training import ContinuingEducationTraining
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.common import display_errors, get_submission_errors, _find_user_admission_by_id, \
     _show_submit_warning, add_informations_message_on_submittable_file, add_contact_for_edit_message
@@ -110,13 +111,17 @@ def admission_submit(request):
 @login_required
 @perms.has_participant_access
 def admission_form(request, admission_id=None, **kwargs):
+
     base_person = mdl_person.find_by_user(user=request.user)
     admission = _find_user_admission_by_id(admission_id, user=request.user) if admission_id else None
 
     if admission and admission.state != admission_state_choices.DRAFT:
         raise PermissionDenied
+    formation = None
+    if request.session.get('formation_id'):
+        formation = ContinuingEducationTraining.objects.get(uuid=request.session.get('formation_id'))
     person_information = continuing_education_person.find_by_person(person=base_person)
-    adm_form = AdmissionForm(request.POST or None, instance=admission)
+    adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
 
     current_address = admission.address if admission else None
@@ -138,6 +143,7 @@ def admission_form(request, admission_id=None, **kwargs):
             _show_submit_warning(admission_submission_errors, request)
 
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
+
         if current_address:
             address = address_form.save()
         else:
