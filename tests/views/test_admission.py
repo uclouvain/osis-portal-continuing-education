@@ -47,7 +47,7 @@ from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
 from continuing_education.views.admission import admission_form
-from continuing_education.views.common import get_submission_errors
+from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -138,10 +138,10 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
-
+        mails = _get_managers_mails(self.admission_submitted.formation)
         self.assertIn(
             gettext("If you want to edit again your admission, please contact the program manager : %(mail)s")
-            % {'mail': "xxx.yyy@uclouvain.be"},
+            % {'mail': mails},
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.WARNING)
