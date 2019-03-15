@@ -26,7 +26,10 @@ class AdmissionForm(ModelForm):
     )
 
     def __init__(self, data, **kwargs):
+        formation = kwargs.pop('formation')
         super().__init__(data, **kwargs)
+        if formation:
+            self.initial['formation'] = formation
         qs = self.fields['formation'].queryset
         self.fields['formation'].queryset = qs.order_by(
             'education_group__educationgroupyear__acronym'
