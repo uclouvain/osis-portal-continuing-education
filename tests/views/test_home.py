@@ -30,10 +30,12 @@ from unittest import mock
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from mock import patch
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.admission import AdmissionDictFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 
 
 class ViewHomeTestCase(TestCase):
@@ -41,12 +43,29 @@ class ViewHomeTestCase(TestCase):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
         PersonFactory(user=self.user)
+        self.cet = ContinuingEducationTrainingDictFactory(
+            active=False
+        )
+        self.patcher = patch(
+            "continuing_education.views.api.get_data_from_osis",
+            return_value=self.cet
+        )
+        self.mocked_called_api_function = self.patcher.start()
+
+        self.addCleanup(self.patcher.stop)
 
     def test_main_view(self):
         url = reverse('continuing_education_home')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'continuing_education/home.html')
+
+    def test_redirect_to_prospect_form_if_formation_not_activated_in_url(self):
+        self.client.logout()
+
+        url = reverse('continuing_education_home', kwargs={'formation_id': self.cet['uuid']})
+        response = self.client.get(url)
+        self.assertRedirects(response, reverse('prospect_form', kwargs={'formation_uuid': self.cet['uuid']}))
 
 
 class FormationsListTestCase(TestCase):

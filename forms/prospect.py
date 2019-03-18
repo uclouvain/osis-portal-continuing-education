@@ -37,10 +37,19 @@ class ProspectForm(Form):
     )
 
     formation = autocomplete.Select2ListCreateChoiceField(
-        widget=autocomplete.ListSelect2(url='training-autocomplete'),
+        widget=autocomplete.ListSelect2(url='cetraining-autocomplete'),
         required=True,
         label=_("Formation")
     )
+
+    def __init__(self, *args, **kwargs):
+        formation = kwargs.pop('ce_training', None)
+        super(ProspectForm, self).__init__(*args, **kwargs)
+        if formation:
+            self.fields['formation'] = forms.CharField(
+                disabled=True
+            )
+            self.initial['formation'] = formation['education_group']['acronym']
 
     class Meta:
         fields = [

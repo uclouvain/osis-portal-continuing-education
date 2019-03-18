@@ -52,7 +52,7 @@ from continuing_education.views.file import _get_files_list, FILES_URL
 def admission_detail(request, admission_uuid):
     admission = get_admission(admission_uuid)
     if admission and admission['state'] == admission_state_choices.SUBMITTED:
-        add_contact_for_edit_message(request)
+        add_contact_for_edit_message(request, formation=admission['formation'])
     if admission and admission['state'] == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,
@@ -124,6 +124,12 @@ def admission_form(request, admission_uuid=None, **kwargs):
         person_information = person_information[0]
     else:
         person_information = None
+
+    # formation = None
+    # if request.session.get('formation_id'):
+    #     formation = ContinuingEducationTraining.objects.get(uuid=request.session.get('formation_id'))
+    # person_information = continuing_education_person.find_by_person(person=base_person)
+    # adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
 
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
     adm_form = AdmissionForm(request.POST or None, instance=admission)

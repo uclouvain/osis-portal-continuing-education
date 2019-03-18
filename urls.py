@@ -30,11 +30,13 @@ from continuing_education.views import account_activation, prospect
 from continuing_education.views import (home, admission, registration, common, file)
 from continuing_education.views.account_activation import ContinuingEducationPasswordResetView, \
     ContinuingEducationPasswordResetConfirmView
+from continuing_education.views.autocomplete.continuing_education_training import \
+    ContinuingEducationTrainingAutocomplete
 
 urlpatterns = [
     url(r'^$', home.formations_list, name='formations_list'),
     url(r'^home/$', home.main_view, name='continuing_education_home'),
-    url(r'^home/(?P<formation_id>(?:[\w]+(?:/[\w]+)?))/$', home.main_view, name='continuing_education_home'),
+    url(r'^home/(?P<formation_id>[0-9a-f-]+)/$', home.main_view, name='continuing_education_home'),
     url(r'^authentication/', include([
         url(r'^login$', common.login, name='continuing_education_login'),
         url(r'^logout$', common.log_out, name='continuing_education_logout'),
@@ -48,7 +50,7 @@ urlpatterns = [
             account_activation.complete_account_registration,
             name='complete_account_registration'
         ),
-        url(r'^activate/(?P<formation_id>[\w]+)/(?P<activation_key>[-:\w]+)/$',
+        url(r'^activate/(?P<formation_id>[0-9a-f-]+)/(?P<activation_key>[-:\w]+)/$',
             account_activation.ContinuingEducationActivationView.as_view(),
             name='django_registration_activate'),
         url(r'^password_reset/$', ContinuingEducationPasswordResetView.as_view(), name='password_reset'),
@@ -84,5 +86,11 @@ urlpatterns = [
         file.upload_file,
         name="upload_file"
     ),
-    url(r'^prospect_form/', prospect.prospect_form, name='prospect_form'),
+    url(r'^prospect_form/(?P<formation_uuid>[0-9a-f-]+)/$', prospect.prospect_form, name='prospect_form'),
+    url(r'^prospect_form/$', prospect.prospect_form, name='prospect_form'),
+    url(
+        r'^cetraining-autocomplete/$',
+        ContinuingEducationTrainingAutocomplete.as_view(),
+        name='cetraining-autocomplete',
+    ),
 ]

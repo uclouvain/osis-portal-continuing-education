@@ -1,17 +1,9 @@
 from dal import autocomplete
 from django import forms
-from django.forms import ChoiceField, ModelChoiceField, Form
+from django.forms import ChoiceField, Form
 from django.utils.translation import gettext_lazy as _
 
 from continuing_education.models.enums import enums, admission_state_choices
-
-
-class FormationChoiceField(ModelChoiceField):
-    def label_from_instance(self, formation):
-        return "{} {}".format(
-            formation.acronym,
-            formation.academic_year,
-        )
 
 
 class AdmissionForm(Form):
@@ -187,6 +179,15 @@ class AdmissionForm(Form):
                     self.fields[field].choices = [self.instance[field]]
             self.initial = self.instance
 
+    # def __init__(self, data, **kwargs):
+    #     formation = kwargs.pop('formation', None)
+    #     super().__init__(data, **kwargs)
+    #     if formation:
+    #         self.initial['formation'] = formation
+    #     qs = self.fields['formation'].queryset
+    #     self.fields['formation'].queryset = qs.order_by(
+    #         'education_group__educationgroupyear__acronym'
+    #     ).distinct()
 
 class StrictAdmissionForm(AdmissionForm):
     def __init__(self, data, **kwargs):

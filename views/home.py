@@ -25,10 +25,11 @@
 ##############################################################################
 
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from base.models import person as mdl_person
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.api import get_continuing_education_training_list
+from continuing_education.views.api import get_continuing_education_training_list, get_continuing_education_training
 from continuing_education.views.api import get_data_list_from_osis
 
 
@@ -67,4 +68,8 @@ def main_view(request, formation_id=None):
         registrations = get_data_list_from_osis("registrations", "person", str(person.uuid))
         return render(request, "continuing_education/home.html", locals())
     else:
+        if formation_id:
+            is_active = get_continuing_education_training(formation_id)['active']
+            if not is_active:
+                return redirect(reverse('prospect_form', kwargs={'formation_uuid': formation_id}))
         return render(request, "authentication/login.html")

@@ -216,15 +216,22 @@ def add_remaining_tasks_message(request):
     )
 
 
-def add_contact_for_edit_message(request, is_registration=False):
+def add_contact_for_edit_message(request, formation=None, is_registration=False):
+    mails = _get_managers_mails(formation)
     if is_registration:
         message = _("If you want to edit again your registration, please contact the program manager : %(mail)s") \
-                  % {'mail': "xxx.yyy@uclouvain.be"}
+                  % {'mail': mails}
     else:
         message = _("If you want to edit again your admission, please contact the program manager : %(mail)s") \
-                  % {'mail': "xxx.yyy@uclouvain.be"}
+                  % {'mail': mails}
     messages.add_message(
         request=request,
         level=messages.WARNING,
         message=mark_safe(message)
     )
+
+
+def _get_managers_mails(formation):
+    managers_mail = formation.managers.all().order_by('last_name').values_list('email', flat=True) \
+        if formation else []
+    return _(" or ").join(managers_mail)

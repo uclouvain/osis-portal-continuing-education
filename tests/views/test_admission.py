@@ -143,10 +143,10 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
-
+        mails = _get_managers_mails(self.admission_submitted.formation)
         self.assertIn(
             gettext("If you want to edit again your admission, please contact the program manager : %(mail)s")
-            % {'mail': "xxx.yyy@uclouvain.be"},
+            % {'mail': mails},
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.WARNING)
@@ -213,7 +213,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
 
-        #info message should be displayed
+        # info message should be displayed
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
 
@@ -261,7 +261,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
 
-        #A warning message should be displayed
+        # A warning message should be displayed
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertIn(

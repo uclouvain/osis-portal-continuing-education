@@ -4,12 +4,16 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
 from continuing_education.forms.prospect import ProspectForm
-from continuing_education.views.api import post_prospect
+from continuing_education.views.api import post_prospect, get_continuing_education_training
 from continuing_education.views.common import display_success_messages
 
 
-def prospect_form(request):
-    form = ProspectForm(request.POST or None)
+def prospect_form(request, formation_uuid=None):
+    cet = None
+    if formation_uuid:
+        cet = get_continuing_education_training(formation_uuid)
+    form = ProspectForm(request.POST or None, ce_training=cet)
+
     if form.is_valid():
         prospect = {
             'name': request.POST.get('name'),
@@ -17,7 +21,7 @@ def prospect_form(request):
             'city': request.POST.get('city'),
             'postal_code': request.POST.get('postal_code'),
             'email': request.POST.get('email'),
-            'formation': request.POST.get('formation'),
+            'formation': formation_uuid,
             'phone_number': request.POST.get('phone_number')
         }
         data, response_status_code = post_prospect(prospect)

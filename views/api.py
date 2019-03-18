@@ -79,6 +79,10 @@ def get_data_from_osis(object_name, uuid):
     return transform_response_to_data(response)
 
 
+def get_continuing_education_training(uuid):
+    return get_data_from_osis("training", uuid)
+
+
 def get_admission(uuid):
     data = get_data_from_osis("admissions", uuid)
     if 'detail' in data and data['detail'] == NOT_FOUND:

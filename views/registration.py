@@ -58,7 +58,7 @@ def registration_detail(request, registration_uuid):
     admission = get_registration(registration_uuid)
     if admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED:
         add_remaining_tasks_message(request)
-        add_contact_for_edit_message(request, is_registration=True)
+        add_contact_for_edit_message(request, formation=admission['formation'], is_registration=True)
     if admission['state'] == admission_state_choices.ACCEPTED:
         add_informations_message_on_submittable_file(
             request=request,

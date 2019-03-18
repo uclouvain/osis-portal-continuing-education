@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="{% static '/css/continuing_education_style.css' %}">
 {% endblock %}
 
-{% block title %}Continuing Education{% endblock %}
+{% block title %}{% trans 'Continuing Education' %}{% endblock %}
 
 {% block content %}
     <div class="page-header">
@@ -75,13 +75,13 @@
                                       </ul>
                                     </nav>
                                     <a id="formation-continue-button" class="btn btn-primary pull-right" disabled>
-                                        Continue
+                                        {% trans 'Continue' %}
                                     </a>
                                 </td>
                             </tr>
                         </tfoot>
                         {% for formation in formations %}
-                        <tr id="{{ formation.education_group.acronym }}" class="formation-item" onclick="select(this)">
+                        <tr id="{{ formation.education_group.acronym }}" active="{{ formation.active }}" uuid="{{ formation.uuid }}" class="formation-item" onclick="select(this)">
                             <td>{{ formation.education_group.acronym }}</td>
                             <td>{{ formation.education_group.title }}</td>
                         </tr>
@@ -114,7 +114,7 @@
 
     function enableLink(){
         let url = "{% url 'continuing_education_home' %}";
-        url += selectedElem.id;
+        url += selectedElem.getAttribute('uuid');
         let continue_button = $("#formation-continue-button");
         continue_button.attr({
             "href": url,
