@@ -41,7 +41,8 @@ from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.api import prepare_admission_data, \
-    post_admission, update_admission, get_admission, get_persons_list, get_admission_list
+    post_admission, update_admission, get_admission, get_persons_list, get_admission_list, \
+    get_continuing_education_training
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message
 from continuing_education.views.file import _get_files_list, FILES_URL
@@ -125,14 +126,12 @@ def admission_form(request, admission_uuid=None, **kwargs):
     else:
         person_information = None
 
-    # formation = None
-    # if request.session.get('formation_id'):
-    #     formation = ContinuingEducationTraining.objects.get(uuid=request.session.get('formation_id'))
-    # person_information = continuing_education_person.find_by_person(person=base_person)
-    # adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
+    formation = None
+    if request.session.get('formation_id'):
+       formation = get_continuing_education_training(request.session.get('formation_id'))
 
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
-    adm_form = AdmissionForm(request.POST or None, instance=admission)
+    adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
     id_form = PersonForm(request.POST or None, instance=base_person)
 
     current_address = admission['address'] if admission else None

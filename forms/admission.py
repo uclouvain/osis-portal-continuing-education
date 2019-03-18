@@ -9,7 +9,7 @@ from continuing_education.models.enums import enums, admission_state_choices
 class AdmissionForm(Form):
 
     formation = autocomplete.Select2ListCreateChoiceField(
-        widget=autocomplete.ListSelect2(url='training-autocomplete'),
+        widget=autocomplete.ListSelect2(url='cetraining-autocomplete'),
         required=True,
     )
 
@@ -169,25 +169,22 @@ class AdmissionForm(Form):
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
+        formation = kwargs.pop('formation', None)
         super(AdmissionForm, self).__init__(*args, **kwargs)
-
+        if formation:
+            self.initial['formation'] = (formation['uuid'], formation['education_group']['acronym'])
+            self.fields['formation'].choices = [self.initial['formation']]
         if self.instance:
             fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', 'acronym', 'uuid')]
             for field, attribute, slug in fields_to_set:
                 if self.instance[field]:
-                    self.instance[field] = (self.instance[field][slug], self.instance[field][attribute])
+                    self.instance[field] = (
+                        self.instance[field][slug],
+                        self.instance[field]['education_group'][attribute]
+                        if field == 'formation' else self.instance[field][attribute]
+                    )
                     self.fields[field].choices = [self.instance[field]]
             self.initial = self.instance
-
-    # def __init__(self, data, **kwargs):
-    #     formation = kwargs.pop('formation', None)
-    #     super().__init__(data, **kwargs)
-    #     if formation:
-    #         self.initial['formation'] = formation
-    #     qs = self.fields['formation'].queryset
-    #     self.fields['formation'].queryset = qs.order_by(
-    #         'education_group__educationgroupyear__acronym'
-    #     ).distinct()
 
 
 class StrictAdmissionForm(AdmissionForm):
