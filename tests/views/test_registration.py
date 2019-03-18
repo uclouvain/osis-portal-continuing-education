@@ -34,7 +34,6 @@ from django.test import TestCase
 from django.utils.translation import ugettext, ugettext_lazy as _, gettext
 from requests import Response
 
-from base.models.enums import education_group_categories
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
@@ -45,7 +44,7 @@ from continuing_education.models.enums.admission_state_choices import REGISTRATI
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from continuing_education.views.common import get_submission_errors
+from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
 
 class ViewStudentRegistrationTestCase(TestCase):
@@ -195,10 +194,11 @@ class ViewStudentRegistrationTestCase(TestCase):
             ),
             str(messages_list[0])
         )
+        mails = _get_managers_mails(self.registration_submitted.formation)
         self.assertEqual(messages_list[0].level, messages.INFO)
         self.assertIn(
             gettext("If you want to edit again your registration, please contact the program manager : %(mail)s")
-            % {'mail': 'xxx.yyy@uclouvain.be'},
+            % {'mail': mails},
             str(messages_list[1])
         )
         self.assertEqual(messages_list[1].level, messages.WARNING)

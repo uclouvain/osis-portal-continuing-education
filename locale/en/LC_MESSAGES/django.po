@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-14 09:16+0100\n"
+"POT-Creation-Date: 2019-03-15 10:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -273,6 +273,10 @@ msgid ""
 "    "
 msgstr ""
 
+#: views/common.py:223 views/common.py:225
+msgid " or "
+msgstr ""
+
 #: templates/registration_pdf.html:90
 #, python-format
 msgid ""
@@ -348,7 +352,7 @@ msgstr ""
 msgid "An asterisk * indicates you should check one box"
 msgstr ""
 
-#: views/account_activation.py:315
+#: views/account_activation.py:310
 msgid ""
 "An email was sent to you with the instructions to change your password. You "
 "should receive this email shortly."
@@ -603,7 +607,7 @@ msgid "Enrolment on an \"Intern\""
 msgstr ""
 
 #: templates/registration/continuing_education_password_reset_confirm.html:32
-#: views/account_activation.py:327
+#: views/account_activation.py:322
 msgid "Enter a new password"
 msgstr ""
 
@@ -713,14 +717,14 @@ msgstr ""
 msgid "Identification"
 msgstr ""
 
-#: tests/views/test_admission.py:143 views/common.py:225
+#: tests/views/test_admission.py:143 views/common.py:230
 #, python-format
 msgid ""
 "If you want to edit again your admission, please contact the program "
 "manager : %(mail)s"
 msgstr ""
 
-#: tests/views/test_registration.py:200 views/common.py:222
+#: tests/views/test_registration.py:200 views/common.py:227
 #, python-format
 msgid ""
 "If you want to edit again your registration, please contact the program "
@@ -907,11 +911,11 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: views/account_activation.py:300
+#: views/account_activation.py:295
 msgid "Password reset"
 msgstr ""
 
-#: views/account_activation.py:389
+#: views/account_activation.py:384
 msgid "Password reset unsuccessful"
 msgstr ""
 
@@ -1174,11 +1178,11 @@ msgstr ""
 msgid "Term-time address (student accommodation)"
 msgstr ""
 
-#: views/account_activation.py:181
+#: views/account_activation.py:180
 msgid "The account you attempted to activate is invalid."
 msgstr ""
 
-#: views/account_activation.py:178
+#: views/account_activation.py:177
 msgid "The account you tried to activate has already been activated."
 msgstr ""
 
@@ -1186,7 +1190,7 @@ msgstr ""
 msgid "The activation failed"
 msgstr ""
 
-#: views/account_activation.py:185
+#: views/account_activation.py:184
 msgid "The activation key you provided is invalid."
 msgstr ""
 
@@ -1194,7 +1198,7 @@ msgstr ""
 msgid "The document is uploaded correctly"
 msgstr ""
 
-#: views/account_activation.py:183
+#: views/account_activation.py:182
 msgid "This account has expired."
 msgstr ""
 
@@ -1309,7 +1313,7 @@ msgstr ""
 msgid "Your form was correctly send."
 msgstr ""
 
-#: views/account_activation.py:376
+#: views/account_activation.py:371
 msgid "Your password was successfully changed."
 msgstr ""
 
