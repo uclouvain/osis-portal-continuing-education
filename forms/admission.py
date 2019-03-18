@@ -189,6 +189,7 @@ class AdmissionForm(Form):
     #         'education_group__educationgroupyear__acronym'
     #     ).distinct()
 
+
 class StrictAdmissionForm(AdmissionForm):
     def __init__(self, data, **kwargs):
         super().__init__(data, **kwargs)
