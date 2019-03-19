@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-15 10:40+0100\n"
+"POT-Creation-Date: 2019-03-19 09:12+0100\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -467,7 +467,7 @@ msgstr ""
 "inscriptions</p>\n"
 "    "
 
-#: views/common.py:223 views/common.py:225
+#: views/common.py:238
 msgid " or "
 msgstr " ou "
 
@@ -508,7 +508,7 @@ msgstr "Accepté"
 msgid "Access to regulates professions"
 msgstr "Condition d'accès à la profession"
 
-#: tests/views/test_registration.py:194 views/common.py:206
+#: tests/views/test_registration.py:193 views/common.py:206
 msgid ""
 "Accompanied by two passport photos and a copy of both sides of the identity "
 "card or residence permit."
@@ -762,7 +762,7 @@ msgstr "Diplôme produit"
 msgid "Divorced"
 msgstr "Divorcé"
 
-#: tests/views/test_registration.py:111 tests/views/test_registration.py:153
+#: tests/views/test_registration.py:110 tests/views/test_registration.py:152
 #: views/common.py:190
 msgid "Do not forget to submit your file when it is complete"
 msgstr "N'oubliez pas de soumettre votre dossier lorsqu'il est complet"
@@ -783,7 +783,7 @@ msgstr "Editer"
 msgid "Education"
 msgstr "Education"
 
-#: models/continuing_education_training.py:62
+#: models/continuing_education_training.py:67
 msgid "EducationGroup must have at least one EducationGroupYear"
 msgstr ""
 "Une organisation de formation doit avoir au moins une occurence annualisée."
@@ -930,7 +930,7 @@ msgstr "IUFC - Formation Continue"
 msgid "Identification"
 msgstr "Identification"
 
-#: tests/views/test_admission.py:143 views/common.py:230
+#: tests/views/test_admission.py:143 views/common.py:226
 #, python-format
 msgid ""
 "If you want to edit again your admission, please contact the program "
@@ -939,7 +939,7 @@ msgstr ""
 "Si vous souhaitez encore éditer votre dossier d'admission, veuillez prendre "
 "contact avec l'un des gestionnaires de la formation : %(mail)s"
 
-#: tests/views/test_registration.py:200 views/common.py:227
+#: tests/views/test_registration.py:200 views/common.py:223
 #, python-format
 msgid ""
 "If you want to edit again your registration, please contact the program "
@@ -1066,7 +1066,7 @@ msgid "Name"
 msgstr "Nom"
 
 #: models/admission.py:218 templates/registration_detail.html:91
-#: templates/registration_pdf.html:124 tests/views/test_registration.py:163
+#: templates/registration_pdf.html:124 tests/views/test_registration.py:162
 #: tests/views/test_registration.py:363 tests/views/test_registration.py:375
 msgid "National registry number"
 msgstr "Numéro de registre national belge"
@@ -1200,7 +1200,7 @@ msgstr "Précédent NOMA"
 msgid "Previous UCL registration"
 msgstr "Avez-vous déjà été inscrit(e) à l'UCL ?"
 
-#: tests/views/test_registration.py:185 views/common.py:204
+#: tests/views/test_registration.py:184 views/common.py:204
 msgid "Print the completed registration form"
 msgstr "Imprimer le formulaire d'inscription complété"
 
@@ -1321,7 +1321,7 @@ msgstr "Séparé"
 msgid "Sessions"
 msgstr "Sessions"
 
-#: tests/views/test_registration.py:189 views/common.py:205
+#: tests/views/test_registration.py:188 views/common.py:205
 msgid "Sign it and send it by post to the address of the program manager"
 msgstr ""
 "Le signer et l’envoyer par courrier postal à l’adresse du gestionnaire du "
@@ -1447,6 +1447,10 @@ msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
+#: models/continuing_education_training.py:60
+msgid "Training aid"
+msgstr "Aide à la formation"
+
 #: templates/fragment/files_panel.html:79
 msgid "Upload"
 msgstr "Envoyer"
@@ -1507,19 +1511,19 @@ msgstr "Oui"
 msgid "You already have an account"
 msgstr "Vous avez déjà un compte"
 
-#: tests/views/test_registration.py:103 tests/views/test_registration.py:145
+#: tests/views/test_registration.py:102 tests/views/test_registration.py:144
 #: views/common.py:188
 msgid "You are still able to edit the form"
 msgstr "Vous pouvez encore le modifier"
 
-#: views/admission.py:92
+#: views/admission.py:93
 msgid ""
 "You can save an application form and access it later until it is submitted"
 msgstr ""
 "Vous pouvez enregistrer et encore modifier les données de votre demande "
 "d’admission, tant que celle-ci n’est pas soumise"
 
-#: tests/views/test_registration.py:107 tests/views/test_registration.py:149
+#: tests/views/test_registration.py:106 tests/views/test_registration.py:148
 #: views/common.py:189
 msgid "You can upload documents via the 'Documents'"
 msgstr "Vous pouvez uploader des documents via l'onglet 'Documents'"
@@ -1528,7 +1532,7 @@ msgstr "Vous pouvez uploader des documents via l'onglet 'Documents'"
 msgid "You don't have an account"
 msgstr "Vous n'avez pas encore de compte"
 
-#: views/admission.py:62
+#: views/admission.py:63
 msgid ""
 "Your admission file has been saved. Please consider the following "
 "information :"
@@ -1537,7 +1541,7 @@ msgstr ""
 "informations suivantes :"
 
 #: tests/views/test_admission.py:122 tests/views/test_admission.py:262
-#: tests/views/test_registration.py:159 views/common.py:164
+#: tests/views/test_registration.py:158 views/common.py:164
 msgid ""
 "Your file is not submittable because you did not provide the following "
 "data : "
@@ -1553,7 +1557,7 @@ msgstr "Votre formulaire a correctement été envoyé."
 msgid "Your password was successfully changed."
 msgstr "Votre mot de passe à été modifié avec succès."
 
-#: tests/views/test_registration.py:99 tests/views/test_registration.py:141
+#: tests/views/test_registration.py:98 tests/views/test_registration.py:140
 #: views/registration.py:66
 msgid ""
 "Your registration file has been saved. Please consider the following "
@@ -1562,7 +1566,7 @@ msgstr ""
 "Votre dossier d'inscription a été enregistré. Veuillez prendre en compte les "
 "informations suivantes :"
 
-#: tests/views/test_registration.py:181 views/common.py:209
+#: tests/views/test_registration.py:180 views/common.py:209
 msgid ""
 "Your registration is submitted. Some tasks are remaining to complete the "
 "registration :"
