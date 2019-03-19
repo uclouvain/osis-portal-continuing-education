@@ -40,11 +40,10 @@ from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.forms.registration import RegistrationForm
-from continuing_education.models.address import Address
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
-from continuing_education.views.api import get_registration, get_data_list_from_osis, \
-    prepare_registration_data, update_registration, prepare_registration_for_submit
+from continuing_education.views.api import get_registration, prepare_registration_data, update_registration, \
+    prepare_registration_for_submit, get_persons_list
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
@@ -109,13 +108,13 @@ def registration_edit(request, registration_uuid):
     )
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
-    person_information = get_data_list_from_osis("persons", "person", str(base_person.uuid))[0]
+    person_information = get_persons_list("person", str(base_person.uuid))
+    if len(person_information) > 0:
+        person_information = person_information[0]
+    else:
+        person_information = None
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
-
     address = registration['address']
-    address['country'] = (address['country']['iso_code'], address['country']['name'])
-    residence_address = registration['residence_address']
-    billing_address = registration['billing_address']
 
     errors = []
     errors_fields = []
@@ -128,11 +127,12 @@ def registration_edit(request, registration_uuid):
     if all([form.is_valid(), billing_address_form.is_valid(), residence_address_form.is_valid()]):
         prepare_registration_data(
             registration,
+            address,
             forms={
                 'registration': form,
                 'residence': residence_address_form,
                 'billing': billing_address_form,
-            }
+            },
         )
         update_registration(form.cleaned_data)
         return redirect(
@@ -142,23 +142,6 @@ def registration_edit(request, registration_uuid):
         errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))
         display_errors(request, errors)
     return render(request, 'registration_form.html', locals())
-
-
-def _update_or_create_billing_and_post_address(address, billing, residence, use_address):
-    if use_address['for_billing']:
-        billing['address'] = address
-    elif billing['address'] == address:
-        billing['address'], created = Address.objects.get_or_create(**billing['form'].cleaned_data)
-    else:
-        Address.objects.filter(id=billing['address'].id).update(**billing['form'].cleaned_data)
-
-    if use_address['for_post']:
-        residence['address'] = address
-    elif residence['address'] == address:
-        residence['address'], created = Address.objects.get_or_create(**residence['form'].cleaned_data)
-    else:
-        Address.objects.filter(id=residence['address'].id).update(**residence['form'].cleaned_data)
-    return billing['address'], residence['address']
 
 
 @login_required

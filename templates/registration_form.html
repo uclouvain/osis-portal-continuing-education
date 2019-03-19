@@ -161,9 +161,9 @@
         </form>
     </div>
     <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
-
-    {{ billing_address_form.media }}
     {{ residence_address_form.media }}
+    {{ billing_address_form.media }}
+
 {% endblock %}
 
 
@@ -256,7 +256,6 @@
                 $("#id_"+e+"-"+field).val(address[field]);
                 $("#id_"+e+"-"+field).prop("readonly", false);
             });
-            $("#id_"+e+"-country").val(address['country']);
             $("#id_"+e+"-country").prop("disabled", false);
         }
         //show missing fields in red

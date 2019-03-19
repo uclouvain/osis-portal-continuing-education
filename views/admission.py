@@ -128,7 +128,7 @@ def admission_form(request, admission_uuid=None, **kwargs):
 
     formation = None
     if request.session.get('formation_id'):
-       formation = get_continuing_education_training(request.session.get('formation_id'))
+        formation = get_continuing_education_training(request.session.get('formation_id'))
 
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
     adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
@@ -141,7 +141,6 @@ def admission_form(request, admission_uuid=None, **kwargs):
         old_admission = get_admission(old_admission['uuid'])
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, instance=address)
-
     errors_fields = []
     if not admission and not request.POST:
         _show_save_before_submit(request)
@@ -175,7 +174,6 @@ def admission_form(request, admission_uuid=None, **kwargs):
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
         display_errors(request, errors)
-
     return render(
         request,
         'admission_form.html',

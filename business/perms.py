@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.http import Http404
 
 from base.models.person import Person
 from base.views.common import access_denied
@@ -33,10 +34,11 @@ def has_participant_access(view_func):
     def f_has_participant_access(request, admission_uuid=None):
         if admission_uuid:
             person_uuid = str(Person.objects.get(user=request.user).uuid)
-            admission = get_admission(admission_uuid)
-            registration = get_registration(admission_uuid)
-            if (admission.get('uuid') and _no_admission_access(admission, person_uuid)) or \
-                    (registration.get('uuid') and _no_registration_access(registration, person_uuid)):
+            try:
+                admission = get_admission(admission_uuid)
+            except Http404:
+                admission = get_registration(admission_uuid)
+            if admission.get('uuid') and _no_admission_access(admission, person_uuid):
                 return access_denied(request)
         return view_func(request, admission_uuid)
 
@@ -45,7 +47,3 @@ def has_participant_access(view_func):
 
 def _no_admission_access(admission, person_uuid):
     return admission['person_information']['person']['uuid'] != person_uuid
-
-
-def _no_registration_access(registration, person_uuid):
-    return registration['person_information']['person']['uuid'] != person_uuid

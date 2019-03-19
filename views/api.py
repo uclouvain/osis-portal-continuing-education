@@ -146,11 +146,21 @@ def prepare_admission_data(admission, forms):
     forms['admission'].cleaned_data['person_information'] = forms['person'].cleaned_data
 
 
-def prepare_registration_data(registration, forms):
+def prepare_registration_data(registration, address, forms):
     if registration:
         forms['registration'].cleaned_data['uuid'] = registration['uuid']
-    forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
-    forms['registration'].cleaned_data['billing_address'] = forms['billing'].cleaned_data
+
+    address['country'] = address['country']['iso_code']
+
+    if forms['registration'].cleaned_data['use_address_for_billing']:
+        forms['registration'].cleaned_data['billing_address'] = address
+    else:
+        forms['registration'].cleaned_data['billing_address'] = forms['billing'].cleaned_data
+
+    if forms['registration'].cleaned_data['use_address_for_post']:
+        forms['registration'].cleaned_data['residence_address'] = address
+    else:
+        forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
 
 
 def prepare_registration_for_submit(registration):
