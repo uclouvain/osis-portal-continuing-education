@@ -34,12 +34,16 @@ def has_participant_access(view_func):
     def f_has_participant_access(request, admission_uuid=None):
         if admission_uuid:
             person_uuid = str(Person.objects.get(user=request.user).uuid)
-            try:
-                admission = get_admission(admission_uuid)
-            except Http404:
-                admission = get_registration(admission_uuid)
+            admission = _get_admission_or_registration(admission_uuid)
             if admission.get('uuid') and admission['person_information']['person']['uuid'] != person_uuid:
                 return access_denied(request)
         return view_func(request, admission_uuid)
+
+    def _get_admission_or_registration(admission_uuid):
+        try:
+            admission = get_admission(admission_uuid)
+        except Http404:
+            admission = get_registration(admission_uuid)
+        return admission
 
     return f_has_participant_access
