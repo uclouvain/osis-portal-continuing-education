@@ -38,12 +38,8 @@ def has_participant_access(view_func):
                 admission = get_admission(admission_uuid)
             except Http404:
                 admission = get_registration(admission_uuid)
-            if admission.get('uuid') and _no_admission_access(admission, person_uuid):
+            if admission.get('uuid') and admission['person_information']['person']['uuid'] != person_uuid:
                 return access_denied(request)
         return view_func(request, admission_uuid)
 
     return f_has_participant_access
-
-
-def _no_admission_access(admission, person_uuid):
-    return admission['person_information']['person']['uuid'] != person_uuid
