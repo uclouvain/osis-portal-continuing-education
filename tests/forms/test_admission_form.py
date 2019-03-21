@@ -30,17 +30,18 @@ from base.tests.factories.person import PersonFactory
 from continuing_education.forms.admission import AdmissionForm
 from continuing_education.models.enums.admission_state_choices import ACCEPTED
 from continuing_education.tests.factories.admission import AdmissionDictFactory
+from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from reference.models import country
 
 
 class TestAdmissionForm(TestCase):
     def test_valid_form(self):
-        admission = AdmissionDictFactory(PersonFactory().uuid)
+        admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid))
         form = AdmissionForm(admission)
         self.assertTrue(form.is_valid(), form.errors)
 
     def test_invalid_student_state(self):
-        admission = AdmissionDictFactory(PersonFactory().uuid, state=ACCEPTED)
+        admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid), state=ACCEPTED)
         form = AdmissionForm(admission)
         self.assertFalse(form.is_valid(), form.errors)
 
