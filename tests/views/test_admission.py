@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import datetime
-import uuid
 from unittest import mock
 from unittest.mock import patch
 
@@ -32,22 +31,21 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
-from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
-from continuing_education.models.admission import Admission
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import SUBMITTED
 from continuing_education.tests.factories.admission import AdmissionDictFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
+from continuing_education.views import api
 from continuing_education.views.admission import admission_form
-from continuing_education.views.api import NOT_FOUND
-from continuing_education.views.common import get_submission_errors
+from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -59,7 +57,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.request = RequestFactory()
         self.person = PersonFactory(user=self.user)
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.formation = EducationGroupYearFactory(academic_year=self.next_acad_year)
+        self.formation = ContinuingEducationTrainingDictFactory()
         self.admission = AdmissionDictFactory(self.person.uuid)
 
         self.admission_submitted = AdmissionDictFactory(self.person.uuid, SUBMITTED)
@@ -143,7 +141,7 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
-        mails = _get_managers_mails(self.admission_submitted.formation)
+        mails = _get_managers_mails(self.admission_submitted['formation'])
         self.assertIn(
             gettext("If you want to edit again your admission, please contact the program manager : %(mail)s")
             % {'mail': mails},
@@ -152,7 +150,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(messages_list[0].level, messages.WARNING)
 
     def test_admission_detail_not_found(self):
-        self.mocked_called_api_function_get.return_value = {'detail': NOT_FOUND}
+        self.mocked_called_api_function_get.return_value = {'detail': api.NOT_FOUND}
         response = self.client.get(reverse('admission_detail', kwargs={
             'admission_uuid': 0,
         }))
@@ -201,7 +199,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_admission_detail_unauthorized(self):
-        admission = AdmissionDictFactory(uuid.uuid4())
+        admission = AdmissionDictFactory(PersonFactory().uuid)
         self.mocked_called_api_function_get.return_value = admission
         url = reverse('admission_detail', args=[admission['uuid']])
         response = self.client.get(url)
@@ -217,21 +215,13 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
 
-    def test_admission_new_save(self):
+    @patch('continuing_education.views.api.post_admission')
+    def test_admission_new_save(self, mock_post):
+        mock_post.return_value = (self.admission, HttpResponse.status_code)
         admission = self.admission
-        person = {
-            'first_name': self.person.first_name,
-            'last_name': self.person.last_name,
-            'gender': self.person.gender,
-            'birth_country': self.admission['person_information']['birth_country'],
-            'birth_location': self.admission['person_information']['birth_location'],
-            'birth_date': self.admission['person_information']['birth_date'],
-        }
-        admission.update(person)
         response = self.client.post(reverse('admission_new'), data=admission)
-        created_admission = Admission.objects.last()
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_detail', args=[created_admission.pk]))
+        self.assertRedirects(response, reverse('admission_detail', args=[admission['uuid']]))
 
     def test_admission_save_with_error(self):
         admission = AdmissionDictFactory(self.person.uuid)
@@ -241,14 +231,14 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertTemplateUsed(response, 'admission_form.html')
 
     def test_admission_edit_not_found(self):
-        self.mocked_called_api_function_get.return_value = {'detail': NOT_FOUND}
+        self.mocked_called_api_function_get.return_value = {'detail': api.NOT_FOUND}
         response = self.client.get(reverse('admission_edit', kwargs={
             'admission_uuid': 0,
         }))
         self.assertEqual(response.status_code, 404)
 
     def test_admission_edit_unauthorized(self):
-        admission = AdmissionDictFactory(uuid.uuid4())
+        admission = AdmissionDictFactory(PersonFactory().uuid)
         self.mocked_called_api_function_get.return_value = admission
         url = reverse('admission_detail', args=[admission['uuid']])
         response = self.client.get(url)
@@ -294,7 +284,8 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
 
-    def test_edit_post_admission_found(self):
+    @patch('continuing_education.views.api.update_admission')
+    def test_edit_post_admission_found(self, mock_update):
         person_information = self.admission['person_information']
         person = {
             'first_name': self.person.first_name,
@@ -308,7 +299,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'person_information': person_information,
             'motivation': 'abcd',
             'professional_impact': 'abcd',
-            'formation': self.formation.pk,
+            'formation': self.formation['uuid'],
             'awareness_ucl_website': True,
             'state': admission_state_choices.DRAFT
         }
@@ -317,17 +308,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         data.update(admission)
         response = self.client.post(url, data=data)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_detail', args=[self.admission.id]))
-        self.admission.refresh_from_db()
-
-        # verifying that fields are correctly updated
-        for key in admission:
-            field_value = self.admission.__getattribute__(key)
-            if isinstance(field_value, datetime.date):
-                field_value = field_value.strftime('%Y-%m-%d')
-            if isinstance(field_value, models.Model):
-                field_value = field_value.pk
-            self.assertEqual(field_value, admission[key], key)
+        self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
 
     @mock.patch('continuing_education.views.admission._get_files_list')
     def test_admission_detail_files_list(self, mock_get_files_list):
@@ -358,8 +339,8 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         current_acad_year = create_current_academic_year()
         self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
         self.admission_model = AdmissionDictFactory(PersonFactory().uuid)
-
-        self.admission = AdmissionDictFactory(uuid.uuid4(), SUBMITTED)
+        person = PersonFactory()
+        self.admission = AdmissionDictFactory(person.uuid, SUBMITTED)
 
     def test_admission_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission)

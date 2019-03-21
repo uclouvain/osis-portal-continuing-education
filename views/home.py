@@ -29,8 +29,7 @@ from django.urls import reverse
 
 from base.models import person as mdl_person
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.api import get_continuing_education_training_list, get_continuing_education_training
-from continuing_education.views.api import get_data_list_from_osis
+from continuing_education.views import api
 
 
 def formations_list(request):
@@ -41,7 +40,7 @@ def formations_list(request):
         active_page = int(request.GET.get('page'))
     except TypeError:
         active_page = 1
-    paginator = get_continuing_education_training_list(
+    paginator = api.get_continuing_education_training_list(
         limit=limit,
         offset=(active_page-1)*limit,
     )
@@ -64,12 +63,12 @@ def main_view(request, formation_id=None):
             admission_state_choices.REGISTRATION_SUBMITTED,
             admission_state_choices.VALIDATED
         ]
-        admissions = get_data_list_from_osis("admissions", "person", str(person.uuid))
-        registrations = get_data_list_from_osis("registrations", "person", str(person.uuid))
+        admissions = api.get_admission_list("person", str(person.uuid))
+        registrations = api.get_registration_list("person", str(person.uuid))
         return render(request, "continuing_education/home.html", locals())
     else:
         if formation_id:
-            is_active = get_continuing_education_training(formation_id)['active']
+            is_active = api.get_continuing_education_training(formation_id)['active']
             if not is_active:
                 return redirect(reverse('prospect_form', kwargs={'formation_uuid': formation_id}))
         return render(request, "authentication/login.html")

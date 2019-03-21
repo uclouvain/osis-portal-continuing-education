@@ -63,6 +63,10 @@ def get_admission_list(filter_field=None, filter_value=None, **kwargs):
     return get_data_list_from_osis('admissions', filter_field, filter_value, **kwargs)
 
 
+def get_registration_list(filter_field=None, filter_value=None, **kwargs):
+    return get_data_list_from_osis('registrations', filter_field, filter_value, **kwargs)
+
+
 def get_persons_list(filter_field=None, filter_value=None, **kwargs):
     return get_data_list_from_osis('persons', filter_field, filter_value, **kwargs)
 
@@ -164,8 +168,8 @@ def prepare_registration_data(registration, address, forms):
 
 
 def prepare_registration_for_submit(registration):
-    registration.pop('person_information')
-    registration.pop('formation')
+    # registration.pop('person_information')
+    # registration.pop('formation')
     registration.pop('address')
     registration['residence_address']['country'] = registration['residence_address']['country']['iso_code']
     registration['billing_address']['country'] = registration['billing_address']['country']['iso_code']

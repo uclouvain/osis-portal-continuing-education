@@ -42,8 +42,7 @@ from continuing_education.forms.person import PersonForm
 from continuing_education.forms.registration import RegistrationForm
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
-from continuing_education.views.api import get_registration, prepare_registration_data, update_registration, \
-    prepare_registration_for_submit, get_persons_list
+from continuing_education.views import api
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
@@ -54,7 +53,7 @@ from osis_common.document.pdf_build import render_pdf
 @login_required
 @perms.has_participant_access
 def registration_detail(request, registration_uuid):
-    admission = get_registration(registration_uuid)
+    admission = api.get_registration(registration_uuid)
     if admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED:
         add_remaining_tasks_message(request)
         add_contact_for_edit_message(request, formation=admission['formation'], is_registration=True)
@@ -81,13 +80,13 @@ def registration_detail(request, registration_uuid):
 @login_required
 @require_http_methods(["POST"])
 def registration_submit(request):
-    registration = get_registration(request.POST.get('registration_uuid'))
-    prepare_registration_for_submit(registration)
+    registration = api.get_registration(request.POST.get('registration_uuid'))
+    api.prepare_registration_for_submit(registration)
     if registration['state'] == admission_state_choices.ACCEPTED:
         registration_submission_errors, errors_fields = get_submission_errors(registration, is_registration=True)
         if request.POST.get("submit") and not registration_submission_errors:
             registration['state'] = admission_state_choices.REGISTRATION_SUBMITTED
-            update_registration(registration)
+            api.update_registration(registration)
             return redirect('registration_detail', registration['uuid'])
     raise PermissionDenied('To submit a registration, its state must be ACCEPTED.')
 
@@ -95,7 +94,7 @@ def registration_submit(request):
 @login_required
 @perms.has_participant_access
 def registration_edit(request, registration_uuid):
-    registration = get_registration(registration_uuid)
+    registration = api.get_registration(registration_uuid)
     if registration and registration['state'] != admission_state_choices.ACCEPTED:
         raise PermissionDenied
 
@@ -121,7 +120,7 @@ def registration_edit(request, registration_uuid):
             _show_submit_warning(registration_submission_errors, request)
 
     if all([form.is_valid(), billing_address_form.is_valid(), residence_address_form.is_valid()]):
-        prepare_registration_data(
+        api.prepare_registration_data(
             registration,
             address,
             forms={
@@ -130,7 +129,7 @@ def registration_edit(request, registration_uuid):
                 'billing': billing_address_form,
             },
         )
-        update_registration(form.cleaned_data)
+        api.update_registration(form.cleaned_data)
         return redirect(
             reverse('registration_detail', kwargs={'admission_uuid': registration_uuid})
         )
@@ -141,7 +140,7 @@ def registration_edit(request, registration_uuid):
 
 
 def _get_person_information(base_person):
-    person_information = get_persons_list("person", str(base_person.uuid))
+    person_information = api.get_persons_list("person", str(base_person.uuid))
     if len(person_information) > 0:
         person_information = person_information[0]
     else:
@@ -151,7 +150,7 @@ def _get_person_information(base_person):
 
 @login_required
 def generate_pdf_registration(request, admission_uuid):
-    admission = get_registration(admission_uuid)
+    admission = api.get_registration(admission_uuid)
     if admission['state'] != REGISTRATION_SUBMITTED:
         return redirect(
             reverse('registration_detail', kwargs={'admission_uuid': admission_uuid})
@@ -163,7 +162,7 @@ def generate_pdf_registration(request, admission_uuid):
     }
     pdf_filename = get_valid_filename("{}_{}".format(
         admission['person_information']['person'],
-        admission['formation']['acronym'])
+        admission['formation']['education_group']['acronym'])
     )
 
     return render_pdf(

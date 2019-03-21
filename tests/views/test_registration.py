@@ -29,8 +29,6 @@ import mock
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.db import models
-from django.forms import model_to_dict
 from django.test import TestCase
 from django.utils.translation import ugettext, ugettext_lazy as _, gettext
 from requests import Response
@@ -43,7 +41,7 @@ from continuing_education.models.enums.admission_state_choices import REGISTRATI
 from continuing_education.tests.factories.admission import RegistrationDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.views.api import NOT_FOUND
-from continuing_education.views.common import get_submission_errors
+from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
 
 class ViewStudentRegistrationTestCase(TestCase):
@@ -69,6 +67,19 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.mocked_called_api_function_get = self.get_patcher.start()
         self.addCleanup(self.get_patcher.stop)
+
+        self.get_list_patcher = patch(
+            "continuing_education.views.api.get_admission_list",
+            return_value=[self.admission_accepted]
+        )
+        self.get_list_person_patcher = patch(
+            "continuing_education.views.api.get_persons_list",
+            return_value=[self.person_information]
+        )
+        self.mocked_called_api_function_get_list = self.get_list_patcher.start()
+        self.mocked_called_api_function_get_persons = self.get_list_person_patcher.start()
+        self.addCleanup(self.get_list_patcher.stop)
+        self.addCleanup(self.get_list_person_patcher.stop)
 
     def test_registration_detail(self):
         url = reverse('registration_detail', args=[self.admission_accepted['uuid']])
@@ -181,7 +192,7 @@ class ViewStudentRegistrationTestCase(TestCase):
             ),
             str(messages_list[0])
         )
-        mails = _get_managers_mails(self.registration_submitted.formation)
+        mails = _get_managers_mails(self.registration_submitted['formation'])
         self.assertEqual(messages_list[0].level, messages.INFO)
         self.assertIn(
             gettext("If you want to edit again your registration, please contact the program manager : %(mail)s")
@@ -250,52 +261,6 @@ class ViewStudentRegistrationTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration_form.html')
-
-    def test_edit_post_registration_with_error(self):
-        registration = self.admission_accepted
-        registration['billing_address']['birth-country'] = ""
-        response = self.client.post(reverse('registration_edit', args=[self.admission_accepted['uuid']]),
-                                    data=registration)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'registration_form.html')
-
-    def test_edit_post_registration_found(self):
-        registration = {
-            'previous_ucl_registration': False,
-            'children_number': 2,
-            'company_number': '1-61667-638-8',
-            'head_office_name': 'Campbell-Tanner',
-            'registration_type': 'PRIVATE',
-            'state': 'Accepted',
-            'use_address_for_billing': True,
-        }
-        url = reverse('registration_edit', args=[self.admission_accepted['uuid']])
-        response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted['uuid']]))
-        self.admission_accepted.refresh_from_db()
-
-        # verifying that fields are correctly updated
-        for key in registration:
-            if key in model_to_dict(self.admission_accepted):
-                field_value = self.admission_accepted.__getattribute__(key)
-                if isinstance(field_value, models.Model):
-                    field_value = field_value.pk
-                self.assertEqual(field_value, registration[key], key)
-
-    def test_edit_post_registration_found_with_other_address(self):
-        registration = {
-            'previous_ucl_registration': False,
-            'use_address_for_billing': False,
-            'billing-city': 'Brux-city'
-        }
-        url = reverse('registration_edit', args=[self.admission_accepted['uuid']])
-        response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted['uuid']]))
-        self.admission_accepted.refresh_from_db()
-        self.admission_accepted.billing_address.refresh_from_db()
-
-        field_value = self.admission_accepted.billing_address.__getattribute__('city')
-        self.assertEqual(field_value, registration['billing-city'])
 
     def test_edit_registration_submitted_unauthorized(self):
         self.admission_accepted['state'] = REGISTRATION_SUBMITTED

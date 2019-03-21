@@ -24,12 +24,14 @@
 #
 ##############################################################################
 import datetime
+import uuid
 
 import factory.fuzzy
 
 
 def ContinuingEducationPersonDictFactory(person_uuid):
     person = {
+        'uuid': uuid.uuid4(),
         'person': {
             'uuid': str(person_uuid),
             'email': 'a@b.de',

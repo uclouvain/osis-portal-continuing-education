@@ -28,21 +28,25 @@ import uuid
 
 import factory
 
+from base.models.person import Person
 from continuing_education.models.enums.admission_state_choices import DRAFT, ACCEPTED
+from continuing_education.tests.factories.address import AddressDictFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 
 CONTINUING_EDUCATION_TYPE = 8
 
 
 def AdmissionDictFactory(person_uuid, state=DRAFT):
+    person = Person.objects.get(uuid=person_uuid)
     admission = {
         'uuid': str(uuid.uuid4()),
         'person_information': {
             'person': {
                 'uuid': str(person_uuid),
-                'email': 'a@b.de',
-                'first_name': 'Ben',
-                'last_name': 'Dau',
-                'gender': 'M'
+                'email': person.email,
+                'first_name': person.first_name,
+                'last_name': person.last_name,
+                'gender': person.gender
             },
             'birth_country': {
                 'name': factory.Sequence(lambda n: 'Country - %d' % n),
@@ -51,19 +55,9 @@ def AdmissionDictFactory(person_uuid, state=DRAFT):
             'birth_location': 'ABCCity',
             'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
         },
-        'address': {
-            'location': factory.Faker('street_name'),
-            'postal_code': 1348,
-            'country': {
-                'name': factory.Sequence(lambda n: 'Country - %d' % n),
-                'iso_code': 'XX'
-            },
-            'city': factory.Faker('city')
-        },
+        'address': AddressDictFactory(),
         'last_degree_level': 'ACV',
-        'formation': {
-            'acronym': 'ABUS1FP',
-        },
+        'formation': ContinuingEducationTrainingDictFactory(),
         'citizenship': {
                 'name': factory.Sequence(lambda n: 'Country - %d' % n),
                 'iso_code': 'XX'
@@ -88,9 +82,7 @@ def AdmissionDictFactory(person_uuid, state=DRAFT):
 def RegistrationDictFactory(person_uuid, state=ACCEPTED):
     registration = {
         'uuid': str(uuid.uuid4()),
-        'formation': {
-            'acronym': 'ABUS1FP',
-        },
+        'formation': ContinuingEducationTrainingDictFactory(),
         'person_information': {
             'person': {
                 'uuid': str(person_uuid),
@@ -106,15 +98,7 @@ def RegistrationDictFactory(person_uuid, state=ACCEPTED):
             'birth_location': 'ABCCity',
             'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
         },
-        'address': {
-            'location': factory.Faker('street_name'),
-            'postal_code': 1348,
-            'country': {
-                'name': 'BElgique',
-                'iso_code': 'BE'
-            },
-            'city': factory.Faker('city')
-        },
+        'address': AddressDictFactory(),
         'registration_type': 'PRIVATE',
         'use_address_for_billing': True,
         'billing_address': {

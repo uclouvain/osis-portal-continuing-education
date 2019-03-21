@@ -29,12 +29,14 @@ import factory
 
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.person import PersonFactory
 from continuing_education.models.continuing_education_training import ContinuingEducationTraining
 
 
 def ContinuingEducationTrainingDictFactory(active=True):
     ed = EducationGroupFactory()
     edy = EducationGroupYearFactory(education_group=ed)
+    manager = PersonFactory()
     cet = {
         'uuid': uuid.uuid4(),
         'active': active,
@@ -42,6 +44,14 @@ def ContinuingEducationTrainingDictFactory(active=True):
             'uuid': ed.uuid,
             'acronym': edy.acronym
         },
+        'managers': [
+            {
+                'email': manager.email,
+                'uuid': manager.uuid,
+                'first_name': manager.first_name,
+                'last_name': manager.last_name
+            }
+        ]
     }
     return cet
 

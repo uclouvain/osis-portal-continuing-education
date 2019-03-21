@@ -54,7 +54,9 @@ class ViewHomeTestCase(TestCase):
 
         self.addCleanup(self.patcher.stop)
 
-    def test_main_view(self):
+    @mock.patch('continuing_education.views.api.get_admission_list')
+    @mock.patch('continuing_education.views.api.get_registration_list')
+    def test_main_view(self, mock_get_admission, mock_get_registration):
         url = reverse('continuing_education_home')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

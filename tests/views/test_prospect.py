@@ -81,7 +81,9 @@ class ProspectTestCase(TestCase):
         return {}, status.HTTP_400_BAD_REQUEST
 
     @patch('continuing_education.views.api.post_data_to_osis', side_effect=mocked_success_post_request)
-    def test_post_valid_prospect(self, mocked_success_post):
+    @patch('continuing_education.views.api.get_admission_list')
+    @patch('continuing_education.views.api.get_registration_list')
+    def test_post_valid_prospect(self, mocked_success_post, mock_get_admission, mock_get_registration):
         response = self.client.post(reverse('prospect_form'), data=self.prospect)
         self.assertEqual(response.status_code, 302)
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
