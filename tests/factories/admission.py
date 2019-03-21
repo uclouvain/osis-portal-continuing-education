@@ -36,25 +36,10 @@ from continuing_education.tests.factories.continuing_education_training import C
 CONTINUING_EDUCATION_TYPE = 8
 
 
-def AdmissionDictFactory(person_uuid, state=DRAFT):
-    person = Person.objects.get(uuid=person_uuid)
+def AdmissionDictFactory(person_information, state=DRAFT):
     admission = {
         'uuid': str(uuid.uuid4()),
-        'person_information': {
-            'person': {
-                'uuid': str(person_uuid),
-                'email': person.email,
-                'first_name': person.first_name,
-                'last_name': person.last_name,
-                'gender': person.gender
-            },
-            'birth_country': {
-                'name': factory.Sequence(lambda n: 'Country - %d' % n),
-                'iso_code': 'XX'
-            },
-            'birth_location': 'ABCCity',
-            'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
-        },
+        'person_information': person_information,
         'address': AddressDictFactory(),
         'last_degree_level': 'ACV',
         'formation': ContinuingEducationTrainingDictFactory(),
@@ -63,7 +48,7 @@ def AdmissionDictFactory(person_uuid, state=DRAFT):
                 'iso_code': 'XX'
             },
         'phone_mobile': 1234567890,
-        'email': 'a@b.de',
+        'email': person_information['person']['email'],
         'high_school_diploma': True,
         'last_degree_field': 'BBB',
         'last_degree_institution': 'CCC',
@@ -80,16 +65,17 @@ def AdmissionDictFactory(person_uuid, state=DRAFT):
 
 
 def RegistrationDictFactory(person_uuid, state=ACCEPTED):
+    person = Person.objects.get(uuid=person_uuid)
     registration = {
         'uuid': str(uuid.uuid4()),
         'formation': ContinuingEducationTrainingDictFactory(),
         'person_information': {
             'person': {
                 'uuid': str(person_uuid),
-                'email': 'a@b.de',
-                'first_name': 'Ben',
-                'last_name': 'Dau',
-                'gender': 'M'
+                'email': person.email,
+                'first_name': person.first_name,
+                'last_name': person.last_name,
+                'gender': person.gender
             },
             'birth_country': {
                 'name': 'BElgique',

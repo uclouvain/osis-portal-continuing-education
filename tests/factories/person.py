@@ -28,16 +28,19 @@ import uuid
 
 import factory.fuzzy
 
+from base.models.person import Person
+
 
 def ContinuingEducationPersonDictFactory(person_uuid):
+    person = Person.objects.get(uuid=person_uuid)
     person = {
-        'uuid': uuid.uuid4(),
+        'uuid': str(uuid.uuid4()),
         'person': {
             'uuid': str(person_uuid),
-            'email': 'a@b.de',
-            'first_name': 'Ben',
-            'last_name': 'Dau',
-            'gender': 'M'
+            'email': person.email,
+            'first_name': person.first_name,
+            'last_name': person.last_name,
+            'gender': person.gender
         },
         'birth_country': {
             'name': 'BElgique',

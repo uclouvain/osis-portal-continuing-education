@@ -58,9 +58,9 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.person = PersonFactory(user=self.user)
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
         self.formation = ContinuingEducationTrainingDictFactory()
-        self.admission = AdmissionDictFactory(self.person.uuid)
+        self.admission = AdmissionDictFactory(self.person_information)
 
-        self.admission_submitted = AdmissionDictFactory(self.person.uuid, SUBMITTED)
+        self.admission_submitted = AdmissionDictFactory(self.person_information, SUBMITTED)
 
         self.patcher = patch(
             "continuing_education.views.admission._get_files_list",
@@ -199,7 +199,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_admission_detail_unauthorized(self):
-        admission = AdmissionDictFactory(PersonFactory().uuid)
+        admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid))
         self.mocked_called_api_function_get.return_value = admission
         url = reverse('admission_detail', args=[admission['uuid']])
         response = self.client.get(url)
@@ -218,10 +218,9 @@ class ViewStudentAdmissionTestCase(TestCase):
     @patch('continuing_education.views.api.post_admission')
     def test_admission_new_save(self, mock_post):
         mock_post.return_value = (self.admission, HttpResponse.status_code)
-        admission = self.admission
-        response = self.client.post(reverse('admission_new'), data=admission)
+        response = self.client.post(reverse('admission_new'), data=self.admission)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_detail', args=[admission['uuid']]))
+        self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
 
     def test_admission_save_with_error(self):
         admission = AdmissionDictFactory(self.person.uuid)
@@ -238,7 +237,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_admission_edit_unauthorized(self):
-        admission = AdmissionDictFactory(PersonFactory().uuid)
+        admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid))
         self.mocked_called_api_function_get.return_value = admission
         url = reverse('admission_detail', args=[admission['uuid']])
         response = self.client.get(url)
@@ -338,9 +337,10 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUp(self):
         current_acad_year = create_current_academic_year()
         self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-        self.admission_model = AdmissionDictFactory(PersonFactory().uuid)
+        person_iufc = ContinuingEducationPersonDictFactory(PersonFactory().uuid)
+        self.admission_model = AdmissionDictFactory(person_iufc)
         person = PersonFactory()
-        self.admission = AdmissionDictFactory(person.uuid, SUBMITTED)
+        self.admission = AdmissionDictFactory(person_iufc, SUBMITTED)
 
     def test_admission_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission)

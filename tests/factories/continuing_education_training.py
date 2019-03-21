@@ -38,7 +38,7 @@ def ContinuingEducationTrainingDictFactory(active=True):
     edy = EducationGroupYearFactory(education_group=ed)
     manager = PersonFactory()
     cet = {
-        'uuid': uuid.uuid4(),
+        'uuid': str(uuid.uuid4()),
         'active': active,
         'education_group': {
             'uuid': ed.uuid,

@@ -54,7 +54,7 @@ class AdmissionFileTestCase(TestCase):
         self.request = RequestFactory()
         self.person = PersonFactory(user=self.user)
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.admission = AdmissionDictFactory(self.person.uuid)
+        self.admission = AdmissionDictFactory(self.person_information)
         self.admission_file = SimpleUploadedFile(
             name='upload_test.pdf',
             content=str.encode("test_content"),

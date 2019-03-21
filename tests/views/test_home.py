@@ -36,6 +36,7 @@ from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
+from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 
 
 class ViewHomeTestCase(TestCase):
@@ -74,6 +75,7 @@ class FormationsListTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.person = PersonFactory(user=self.user)
+        self.person_iufc = ContinuingEducationPersonDictFactory(self.person.uuid)
         self.an_academic_year = AcademicYearFactory(current=True)
 
     @mock.patch('continuing_education.views.api.get_data_list_from_osis')
@@ -100,12 +102,7 @@ class FormationsListTestCase(TestCase):
     def test_bypass_formations_list_when_logged_in(self, mock_get_admissions):
         self.client.force_login(self.user)
         url = reverse('formations_list')
-        mock_get_admissions.return_value = {
-            'count': 1,
-            'results': [
-                AdmissionDictFactory(self.person.uuid)
-            ]
-        }
+        mock_get_admissions.return_value = [AdmissionDictFactory(self.person_iufc)]
         response = self.client.get(url)
         self.assertTrue(self.user.is_authenticated)
         self.assertRedirects(response, "/continuing_education/home/")

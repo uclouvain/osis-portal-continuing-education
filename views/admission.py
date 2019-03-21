@@ -131,7 +131,6 @@ def admission_form(request, admission_uuid=None, **kwargs):
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
     adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
     id_form = PersonForm(request.POST or None, instance=base_person)
-
     current_address = admission['address'] if admission else None
     old_admission = api.get_admission_list("person", str(base_person.uuid))
     if len(old_admission) > 0:
@@ -170,6 +169,8 @@ def admission_form(request, admission_uuid=None, **kwargs):
             reverse('admission_detail', kwargs={'admission_uuid': admission['uuid'] if admission else ''}),
         )
     else:
+        print(id_form.errors)
+        print(person_form.errors)
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
         display_errors(request, errors)
 
