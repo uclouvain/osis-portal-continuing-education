@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-19 09:12+0100\n"
+"POT-Creation-Date: 2019-03-22 12:40+0100\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -524,7 +524,7 @@ msgstr "Actions"
 msgid "Activation failed"
 msgstr "Activation échouée"
 
-#: models/continuing_education_training.py:55
+#: models/continuing_education_training.py:54
 msgid "Active"
 msgstr "Active"
 
@@ -783,7 +783,7 @@ msgstr "Editer"
 msgid "Education"
 msgstr "Education"
 
-#: models/continuing_education_training.py:67
+#: models/continuing_education_training.py:66
 msgid "EducationGroup must have at least one EducationGroupYear"
 msgstr ""
 "Une organisation de formation doit avoir au moins une occurence annualisée."
@@ -1447,9 +1447,13 @@ msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
-#: models/continuing_education_training.py:60
+#: models/continuing_education_training.py:59
 msgid "Training aid"
 msgstr "Aide à la formation"
+
+#: models/continuing_education_training.py:100
+msgid "Training aid available"
+msgstr "Aide à la formation disponible"
 
 #: templates/fragment/files_panel.html:79
 msgid "Upload"

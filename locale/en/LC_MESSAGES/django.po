@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-19 09:12+0100\n"
+"POT-Creation-Date: 2019-03-22 12:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -320,7 +320,7 @@ msgstr ""
 msgid "Activation failed"
 msgstr ""
 
-#: models/continuing_education_training.py:55
+#: models/continuing_education_training.py:54
 msgid "Active"
 msgstr ""
 
@@ -575,7 +575,7 @@ msgstr ""
 msgid "Education"
 msgstr ""
 
-#: models/continuing_education_training.py:67
+#: models/continuing_education_training.py:66
 msgid "EducationGroup must have at least one EducationGroupYear"
 msgstr ""
 
@@ -1217,8 +1217,12 @@ msgstr ""
 msgid "This field is required."
 msgstr ""
 
-#: models/continuing_education_training.py:60
+#: models/continuing_education_training.py:59
 msgid "Training aid"
+msgstr ""
+
+#: models/continuing_education_training.py:100
+msgid "Training aid available"
 msgstr ""
 
 #: templates/fragment/files_panel.html:79
