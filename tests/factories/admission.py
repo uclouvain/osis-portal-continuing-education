@@ -23,13 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
+import random
 import uuid
 
 import factory
+import factory.fuzzy
 
-from base.models.person import Person
+from continuing_education.models.enums import enums
 from continuing_education.models.enums.admission_state_choices import DRAFT, ACCEPTED
+from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.address import AddressDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 
@@ -41,90 +43,59 @@ def AdmissionDictFactory(person_information, state=DRAFT):
         'uuid': str(uuid.uuid4()),
         'person_information': person_information,
         'address': AddressDictFactory(),
-        'last_degree_level': 'ACV',
+        'last_degree_level': "level",
         'formation': ContinuingEducationTrainingDictFactory(),
         'citizenship': {
                 'name': factory.Sequence(lambda n: 'Country - %d' % n),
-                'iso_code': 'XX'
-            },
-        'phone_mobile': 1234567890,
+                'iso_code': factory.Sequence(lambda n: str(n)[-2:])
+        },
+        'phone_mobile': factory.Faker('phone_number'),
         'email': person_information['person']['email'],
-        'high_school_diploma': True,
-        'last_degree_field': 'BBB',
-        'last_degree_institution': 'CCC',
-        'last_degree_graduation_year': 2016,
-        'professional_status': 'EMPLOYEE',
-        'current_occupation': 'FFF',
-        'current_employer': 'GGG',
-        'activity_sector': 'PRIVATE',
-        'motivation': 'III',
-        'professional_impact': 'KKK',
+        'high_school_diploma': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'last_degree_field': 'field',
+        'last_degree_institution': 'institution',
+        'last_degree_graduation_year': factory.fuzzy.FuzzyInteger(1991, 2018).fuzz(),
+        'professional_status': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.STATUS_CHOICES)).fuzz(),
+        'current_occupation': factory.Faker('text', max_nb_chars=50),
+        'current_employer': factory.Faker('company'),
+        'activity_sector': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.SECTOR_CHOICES)).fuzz(),
+        'motivation': 'motivation',
+        'professional_impact': 'professional impact',
         'state': state
     }
     return admission
 
 
-def RegistrationDictFactory(person_uuid, state=ACCEPTED):
-    person = Person.objects.get(uuid=person_uuid)
+def RegistrationDictFactory(person_information, state=ACCEPTED):
     registration = {
         'uuid': str(uuid.uuid4()),
         'formation': ContinuingEducationTrainingDictFactory(),
-        'person_information': {
-            'person': {
-                'uuid': str(person_uuid),
-                'email': person.email,
-                'first_name': person.first_name,
-                'last_name': person.last_name,
-                'gender': person.gender
-            },
-            'birth_country': {
-                'name': 'BElgique',
-                'iso_code': 'BE'
-            },
-            'birth_location': 'ABCCity',
-            'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
-        },
+        'person_information': person_information,
         'address': AddressDictFactory(),
-        'registration_type': 'PRIVATE',
-        'use_address_for_billing': True,
-        'billing_address': {
-            'location': factory.Faker('street_name'),
-            'postal_code': 1348,
-            'country': {
-                'name': 'BElgique',
-                'iso_code': 'BE'
-            },
-            'city': factory.Faker('city')
-        },
-        'head_office_name': 'TEST',
-        'company_number': 123,
-        'vat_number': 456,
-        'national_registry_number': 789,
-        'id_card_number': 123456,
-        'passport_number': 456789,
-        'marital_status': 'SINGLE',
-        'spouse_name': 'Cara',
-        'children_number': 2,
-        'previous_ucl_registration': False,
-        'previous_noma': '',
-        'use_address_for_post': False,
-        'residence_address': {
-            'location': factory.Faker('street_name'),
-            'postal_code': 1348,
-            'country': {
-                'name': 'BElgique',
-                'iso_code': 'BE'
-            },
-            'city': factory.Faker('city')
-        },
-        'residence_phone': 145632,
-        'ucl_registration_complete': False,
-        'noma': 45117,
-        'payment_complete': False,
-        'formation_spreading': False,
-        'prior_experience_validation': False,
-        'assessment_presented': False,
-        'assessment_succeeded': False,
+        'registration_type': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES)).fuzz(),
+        'use_address_for_billing': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'billing_address': AddressDictFactory(),
+        'head_office_name': factory.Faker('company'),
+        'company_number': factory.Faker('isbn10'),
+        'vat_number': factory.Faker('ssn'),
+        'national_registry_number': factory.Faker('ssn'),
+        'id_card_number': factory.Faker('ssn'),
+        'passport_number': factory.Faker('isbn13'),
+        'marital_status': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.MARITAL_STATUS_CHOICES)).fuzz(),
+        'spouse_name': factory.Faker('name'),
+        'children_number': random.randint(0, 10),
+        'previous_ucl_registration': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'previous_noma': factory.Faker('isbn10'),
+        'use_address_for_post': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'residence_address': AddressDictFactory(),
+        'residence_phone': factory.Faker('phone_number'),
+        'ucl_registration_complete': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'noma': factory.Faker('isbn10'),
+        'payment_complete': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'formation_spreading': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'prior_experience_validation': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'assessment_presented': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'assessment_succeeded': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
         'sessions': 'Test',
         'state': state
     }

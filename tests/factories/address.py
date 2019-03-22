@@ -33,7 +33,7 @@ def AddressDictFactory():
         'postal_code': 1348,
         'country': {
             'name': factory.Sequence(lambda n: 'Country - %d' % n),
-            'iso_code': 'BE'
+            'iso_code': factory.Sequence(lambda n: str(n)[-2:])
         },
         'city': factory.Faker('city')
     }

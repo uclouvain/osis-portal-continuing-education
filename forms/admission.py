@@ -37,7 +37,7 @@ class AdmissionForm(Form):
         required=False,
     )
     phone_mobile = forms.CharField(
-        max_length=30,
+        max_length=50,
         required=False,
         label=_("Phone mobile")
     )

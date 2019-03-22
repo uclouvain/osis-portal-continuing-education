@@ -50,9 +50,9 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.client.force_login(self.user)
         self.person = PersonFactory(user=self.user)
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.admission_accepted = RegistrationDictFactory(self.person.uuid, state=ACCEPTED)
-        self.admission_rejected = RegistrationDictFactory(self.person.uuid, state=REJECTED)
-        self.registration_submitted = RegistrationDictFactory(self.person.uuid, state=REGISTRATION_SUBMITTED)
+        self.admission_accepted = RegistrationDictFactory(self.person_information, state=ACCEPTED)
+        self.admission_rejected = RegistrationDictFactory(self.person_information, state=REJECTED)
+        self.registration_submitted = RegistrationDictFactory(self.person_information, state=REGISTRATION_SUBMITTED)
 
         self.patcher = patch(
             "continuing_education.views.registration._get_files_list",

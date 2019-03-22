@@ -90,7 +90,7 @@ class RegistrationForm(forms.Form):
     )
 
     residence_phone = forms.CharField(
-        max_length=30,
+        max_length=50,
         required=False,
         label=_("Residence phone")
     )
