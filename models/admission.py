@@ -322,10 +322,6 @@ class Admission(SerializableModel):
         verbose_name=_("Sessions")
     )
 
-    @property
-    def formation_display(self):
-        return str(self.formation)
-
     def is_draft(self):
         return self.state == admission_state_choices.DRAFT
 
