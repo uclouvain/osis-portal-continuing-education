@@ -324,11 +324,7 @@ class Admission(SerializableModel):
 
     @property
     def formation_display(self):
-        return "{}{} - {}".format(
-            "{} - ".format(self.formation.partial_acronym) if self.formation.partial_acronym else "",
-            self.formation.acronym,
-            self.formation.academic_year,
-            )
+        return str(self.formation)
 
     def is_draft(self):
         return self.state == admission_state_choices.DRAFT
