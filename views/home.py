@@ -63,8 +63,9 @@ def main_view(request, formation_id=None):
             admission_state_choices.REGISTRATION_SUBMITTED,
             admission_state_choices.VALIDATED
         ]
-        admissions = api.get_admission_list("person", str(person.uuid))
-        registrations = api.get_registration_list("person", str(person.uuid))
+        person_information = api.get_person_information("person", str(person.uuid))
+        admissions = api.get_admission_list(person_information['uuid'])
+        registrations = api.get_registration_list(person_information['uuid'])
         return render(request, "continuing_education/home.html", locals())
     else:
         if formation_id:

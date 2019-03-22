@@ -55,9 +55,10 @@ class ViewHomeTestCase(TestCase):
 
         self.addCleanup(self.patcher.stop)
 
+    @mock.patch('continuing_education.views.api.get_data_list_from_osis')
     @mock.patch('continuing_education.views.api.get_admission_list')
     @mock.patch('continuing_education.views.api.get_registration_list')
-    def test_main_view(self, mock_get_admission, mock_get_registration):
+    def test_main_view(self, mock_list, mock_get_admission, mock_get_registration):
         url = reverse('continuing_education_home')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -98,8 +99,10 @@ class FormationsListTestCase(TestCase):
         self.assertEqual(response.context['formations'], formations['results'])
         self.assertTemplateUsed(response, 'continuing_education/formations.html')
 
+    @mock.patch('continuing_education.views.api.get_admission_list')
+    @mock.patch('continuing_education.views.api.get_registration_list')
     @mock.patch('continuing_education.views.api.get_data_list_from_osis')
-    def test_bypass_formations_list_when_logged_in(self, mock_get_admissions):
+    def test_bypass_formations_list_when_logged_in(self, mock_get_admissions, mock_get_registrations, mock_get_list):
         self.client.force_login(self.user)
         url = reverse('formations_list')
         mock_get_admissions.return_value = [AdmissionDictFactory(self.person_iufc)]
