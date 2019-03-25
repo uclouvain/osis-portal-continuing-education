@@ -147,7 +147,7 @@ def __post_complete_account_registration(request):
         address = address_form.save()
         person = root_person_form.save(commit=False)
         person.user = request.user
-        person.email = request.user
+        person.email = request.user.username
         person.save()
         continuing_education_person = ce_person_form.save(commit=False)
         continuing_education_person.person = person
