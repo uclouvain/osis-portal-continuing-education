@@ -49,7 +49,7 @@ from continuing_education.views.file import _get_files_list, FILES_URL
 @login_required
 @perms.has_participant_access
 def admission_detail(request, admission_uuid):
-    admission = api.get_admission(admission_uuid)
+    admission = api.get_admission(request, admission_uuid)
     if admission and admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
     if admission and admission['state'] == admission_state_choices.DRAFT:
@@ -92,50 +92,51 @@ def _show_save_before_submit(request):
 @login_required
 @require_http_methods(["POST"])
 def admission_submit(request):
-    admission = api.get_admission(request.POST.get('admission_uuid'))
+    admission = api.get_admission(request, request.POST.get('admission_uuid'))
     if admission['state'] == admission_state_choices.DRAFT:
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         if request.POST.get("submit") and not admission_submission_errors:
-            _update_admission_state(admission)
+            _update_admission_state(request, admission)
             return redirect('admission_detail', admission['uuid'])
     raise PermissionDenied('To submit an admission, its state must be DRAFT.')
 
 
-def _update_admission_state(admission):
+def _update_admission_state(request, admission):
     admission['state'] = admission_state_choices.SUBMITTED
     submitted_admission = {
         'state': admission_state_choices.SUBMITTED,
         'uuid': admission['uuid']
     }
-    api.update_admission(submitted_admission)
+    api.update_admission(request, submitted_admission)
 
 
 @login_required
 @perms.has_participant_access
 def admission_form(request, admission_uuid=None, **kwargs):
-    admission = api.get_admission(admission_uuid) if admission_uuid else None
+    admission = api.get_admission(request, admission_uuid) if admission_uuid else None
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
 
     base_person = mdl_person.find_by_user(user=request.user)
-    person_information = api.get_persons_list("person", str(base_person.uuid))
+    person_information = api.get_persons_list(request, "person", str(base_person.uuid))
     if len(person_information) > 0:
         person_information = person_information[0]
+        old_admission = api.get_admission_list(request, person_information['uuid'])
     else:
         person_information = None
+        old_admission = None
 
     formation = None
     if request.session.get('formation_id'):
-        formation = api.get_continuing_education_training(request.session.get('formation_id'))
+        formation = api.get_continuing_education_training(request, request.session.get('formation_id'))
 
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
     adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
     id_form = PersonForm(request.POST or None, instance=base_person)
     current_address = admission['address'] if admission else None
-    old_admission = api.get_admission_list("person", str(base_person.uuid))
     if len(old_admission) > 0:
         old_admission = old_admission[0]
-        old_admission = api.get_admission(old_admission['uuid'])
+        old_admission = api.get_admission(request, old_admission['uuid'])
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, instance=address)
     errors_fields = []
@@ -159,10 +160,10 @@ def admission_form(request, admission_uuid=None, **kwargs):
             }
         )
         if admission:
-            api.update_admission(adm_form.cleaned_data)
+            api.update_admission(request, adm_form.cleaned_data)
         else:
-            admission, status = api.post_admission(adm_form.cleaned_data)
-
+            admission, status = api.post_admission(request, adm_form.cleaned_data)
+        print(admission)
         if request.session.get('formation_id'):
             del request.session['formation_id']
         return redirect(

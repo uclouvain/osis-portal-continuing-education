@@ -24,7 +24,7 @@ def prospect_form(request, formation_uuid=None):
             'formation': formation_uuid,
             'phone_number': request.POST.get('phone_number')
         }
-        data, response_status_code = post_prospect(prospect)
+        data, response_status_code = post_prospect(request, prospect)
         if response_status_code == status.HTTP_201_CREATED:
             display_success_messages(request, _("Your form was correctly send."))
             return redirect(reverse('continuing_education_home'))

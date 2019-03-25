@@ -48,7 +48,7 @@ FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/%(admission
 @login_required
 def upload_file(request, admission_uuid):
     admission_file = request.FILES['myfile'] if 'myfile' in request.FILES else None
-    admission = get_admission(admission_uuid)
+    admission = get_admission(request, admission_uuid)
     person = admission['person_information']['person']
     data = {
         'uploaded_by': person['uuid'],
