@@ -37,11 +37,9 @@ API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "%(object_name)s/%(object
 NOT_FOUND = 'Pas trouvé.'
 
 
-def transform_response_to_data(response, results_only=True):
+def transform_response_to_data(response):
     stream = io.BytesIO(response.content)
     data = JSONParser().parse(stream)
-    if 'results' in data and results_only:
-        data = data['results']
     return data
 
 
@@ -73,13 +71,11 @@ def get_registration_list(request, person_uuid):
     return transform_response_to_data(response)
 
 
-def get_continuing_education_training_list(limit=-1, offset=-1, search=""):
-    results_only = True
+def get_continuing_education_training_list(limit=None, offset=None, search=""):
     params = None
     url = API_URL % {'object_name': "training", 'object_uuid': ''}
-    if limit >= 0 and offset >= 0:
-        results_only = False
-        url = url + "?limit=" + str(limit) + "&offset=" + str(offset)
+    if limit and offset:
+        params = {'limit': str(limit), 'offset': str(offset)}
     if search:
         params = {'search': search}
 
@@ -88,7 +84,7 @@ def get_continuing_education_training_list(limit=-1, offset=-1, search=""):
         headers=REQUEST_HEADER,
         params=params
     )
-    return transform_response_to_data(response, results_only)
+    return transform_response_to_data(response)
 
 
 def get_data_from_osis(request, object_name, uuid):
@@ -102,22 +98,22 @@ def get_data_from_osis(request, object_name, uuid):
 
 
 def get_continuing_education_person(request):
-    return get_data_from_osis(request, "persons", "details")
+    return get_data_from_osis(request, "persons", "details")['results']
 
 
 def get_continuing_education_training(request, uuid):
-    return get_data_from_osis(request, "training", uuid)
+    return get_data_from_osis(request, "training", uuid)['results']
 
 
 def get_admission(request, uuid):
-    data = get_data_from_osis(request, "admissions", uuid)
+    data = get_data_from_osis(request, "admissions", uuid)['results']
     if data.get('detail', '') == NOT_FOUND:
         raise Http404
     return data
 
 
 def get_registration(request, uuid):
-    data = get_data_from_osis(request, "registrations", uuid)
+    data = get_data_from_osis(request, "registrations", uuid)['results']
     if data.get('detail', '') == NOT_FOUND:
         raise Http404
     return data
@@ -213,9 +209,6 @@ def get_token_from_osis(username, force_user_creation=False):
 
 
 def get_personal_token(request):
-    if 'personal_token' in request.session:
-        token = request.session.get('personal_token')
-    else:
-        token = get_token_from_osis(request.user.username, force_user_creation=True)
-        request.session['personal_token'] = token
-    return token
+    if not request.session.get('personal_token'):
+        request.session['personal_token'] = get_token_from_osis(request.user.username, force_user_creation=True)
+    return request.session['personal_token']
