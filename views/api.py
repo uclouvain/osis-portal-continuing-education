@@ -98,22 +98,22 @@ def get_data_from_osis(request, object_name, uuid):
 
 
 def get_continuing_education_person(request):
-    return get_data_from_osis(request, "persons", "details")['results']
+    return get_data_from_osis(request, "persons", "details")
 
 
 def get_continuing_education_training(request, uuid):
-    return get_data_from_osis(request, "training", uuid)['results']
+    return get_data_from_osis(request, "training", uuid)
 
 
 def get_admission(request, uuid):
-    data = get_data_from_osis(request, "admissions", uuid)['results']
+    data = get_data_from_osis(request, "admissions", uuid)
     if data.get('detail', '') == NOT_FOUND:
         raise Http404
     return data
 
 
 def get_registration(request, uuid):
-    data = get_data_from_osis(request, "registrations", uuid)['results']
+    data = get_data_from_osis(request, "registrations", uuid)
     if data.get('detail', '') == NOT_FOUND:
         raise Http404
     return data
