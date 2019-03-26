@@ -41,7 +41,6 @@ def formations_list(request):
     except TypeError:
         active_page = 1
     paginator = api.get_continuing_education_training_list(
-        request,
         limit=limit,
         offset=(active_page-1)*limit,
     )

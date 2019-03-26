@@ -45,24 +45,14 @@ def transform_response_to_data(response, results_only=True):
     return data
 
 
-def get_data_list_from_osis(request, object_name, filter_field=None, filter_value=None, **kwargs):
+def get_data_list_from_osis(request, object_name):
     token = get_personal_token(request)
     url = API_URL % {'object_name': object_name, 'object_uuid': ''}
-    results_only = 'limit' not in kwargs or 'offset' not in kwargs
-    if filter_field and filter_value:
-        url = url + "?" + filter_field + "=" + filter_value
-    if not results_only:
-        url = url + "?limit="+str(kwargs['limit'])+"&offset="+str(kwargs['offset'])
-
     response = requests.get(
         url=url,
         headers={'Authorization': 'Token ' + token}
     )
-    return transform_response_to_data(response, results_only)
-
-
-def get_persons_list(request, filter_field=None, filter_value=None, **kwargs):
-    return get_data_list_from_osis(request, 'persons', filter_field, filter_value, **kwargs)
+    return transform_response_to_data(response)
 
 
 def get_admission_list(request, person_uuid):
@@ -83,26 +73,29 @@ def get_registration_list(request, person_uuid):
     return transform_response_to_data(response)
 
 
-def get_continuing_education_training_list(request, filter_field=None, filter_value=None, **kwargs):
+def get_continuing_education_training_list(limit=-1, offset=-1, search=""):
+    results_only = True
+    params = None
     url = API_URL % {'object_name': "training", 'object_uuid': ''}
-    results_only = 'limit' not in kwargs or 'offset' not in kwargs
-    if filter_field and filter_value:
-        url = url + "?" + filter_field + "=" + filter_value
-    if not results_only:
-        url = url + "?limit=" + str(kwargs['limit']) + "&offset=" + str(kwargs['offset'])
+    if limit >= 0 and offset >= 0:
+        results_only = False
+        url = url + "?limit=" + str(limit) + "&offset=" + str(offset)
+    if search:
+        params = {'search': search}
 
     response = requests.get(
         url=url,
-        headers=REQUEST_HEADER
+        headers=REQUEST_HEADER,
+        params=params
     )
     return transform_response_to_data(response, results_only)
 
 
 def get_data_from_osis(request, object_name, uuid):
-    token = get_personal_token(request)
     response = requests.get(
         url=API_URL % {'object_name': object_name, 'object_uuid': str(uuid)},
-        headers={'Authorization': 'Token ' + token}
+        headers={'Authorization': 'Token ' + get_personal_token(request)} if request.user.is_authenticated
+        else REQUEST_HEADER
     )
 
     return transform_response_to_data(response)
@@ -118,24 +111,24 @@ def get_continuing_education_training(request, uuid):
 
 def get_admission(request, uuid):
     data = get_data_from_osis(request, "admissions", uuid)
-    if 'detail' in data and data['detail'] == NOT_FOUND:
+    if data.get('detail', '') == NOT_FOUND:
         raise Http404
     return data
 
 
 def get_registration(request, uuid):
     data = get_data_from_osis(request, "registrations", uuid)
-    if 'detail' in data and data['detail'] == NOT_FOUND:
+    if data.get('detail', '') == NOT_FOUND:
         raise Http404
     return data
 
 
-def post_data_to_osis(request, object_name, object):
+def post_data_to_osis(request, object_name, object_to_post):
     token = get_personal_token(request)
     response = requests.post(
         url=API_URL % {'object_name': object_name, 'object_uuid': ''},
         headers={'Authorization': 'Token ' + token},
-        json=object
+        json=object_to_post
     )
     if response.status_code != status.HTTP_201_CREATED:
         data = {}
@@ -143,16 +136,6 @@ def post_data_to_osis(request, object_name, object):
         data = transform_response_to_data(response)
 
     return data, response.status_code
-
-
-def update_data_to_osis(request, object_name, object):
-    token = get_personal_token(request)
-    response = requests.patch(
-        url=API_URL % {'object_name': object_name, 'object_uuid': object['uuid']},
-        headers={'Authorization': 'Token ' + token},
-        json=object,
-    )
-    return response
 
 
 def post_prospect(request, object_to_post):
@@ -163,12 +146,22 @@ def post_admission(request, object_to_post):
     return post_data_to_osis(request, "admissions", object_to_post)
 
 
-def update_admission(request, object_to_post):
-    return update_data_to_osis(request, "admissions", object_to_post)
+def update_data_to_osis(request, object_name, object_to_update):
+    token = get_personal_token(request)
+    response = requests.patch(
+        url=API_URL % {'object_name': object_name, 'object_uuid': object_to_update['uuid']},
+        headers={'Authorization': 'Token ' + token},
+        json=object,
+    )
+    return response
 
 
-def update_registration(request, object_to_post):
-    return update_data_to_osis(request, "registrations", object_to_post)
+def update_admission(request, object_to_update):
+    return update_data_to_osis(request, "admissions", object_to_update)
+
+
+def update_registration(request, object_to_update):
+    return update_data_to_osis(request, "registrations", object_to_update)
 
 
 def prepare_admission_data(admission, forms):
@@ -199,8 +192,6 @@ def prepare_registration_data(registration, address, forms):
 
 
 def prepare_registration_for_submit(registration):
-    # registration.pop('person_information')
-    # registration.pop('formation')
     registration.pop('address')
     registration['residence_address']['country'] = registration['residence_address']['country']['iso_code']
     registration['billing_address']['country'] = registration['billing_address']['country']['iso_code']
@@ -215,7 +206,6 @@ def get_token_from_osis(username, force_user_creation=False):
             'force_user_creation': force_user_creation
         }
     )
-
     if response.status_code == status.HTTP_200_OK:
         return json.loads(response.content)['token']
     else:
