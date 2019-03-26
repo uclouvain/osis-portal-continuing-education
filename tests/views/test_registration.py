@@ -73,8 +73,8 @@ class ViewStudentRegistrationTestCase(TestCase):
             return_value=[self.admission_accepted]
         )
         self.get_list_person_patcher = patch(
-            "continuing_education.views.api.get_persons_list",
-            return_value=[self.person_information]
+            "continuing_education.views.api.get_continuing_education_person",
+            return_value=self.person_information
         )
         self.mocked_called_api_function_get_list = self.get_list_patcher.start()
         self.mocked_called_api_function_get_persons = self.get_list_person_patcher.start()

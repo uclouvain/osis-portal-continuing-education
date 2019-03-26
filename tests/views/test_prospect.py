@@ -28,6 +28,7 @@ from unittest.mock import patch
 
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext, gettext_lazy as _
@@ -53,13 +54,6 @@ class ProspectTestCase(TestCase):
             'formation': uuid.uuid4()
         }
 
-        self.patcher = patch(
-            "continuing_education.views.api.post_prospect",
-            return_value=({}, status.HTTP_201_CREATED)
-        )
-        self.mocked_called_api_function = self.patcher.start()
-        self.addCleanup(self.patcher.stop)
-
     def test_post_prospect_with_missing_information(self):
         prospect = self.prospect
         prospect['name'] = ''
@@ -74,17 +68,13 @@ class ProspectTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'prospect_form.html')
 
-    def mocked_success_post_request(*args, **kwargs):
-        return {}, status.HTTP_201_CREATED
-
     def mocked_failed_post_request(*args, **kwargs):
         return {}, status.HTTP_400_BAD_REQUEST
 
-    @patch('continuing_education.views.api.post_data_to_osis', side_effect=mocked_success_post_request)
-    @patch('continuing_education.views.api.get_data_list_from_osis')
-    @patch('continuing_education.views.api.get_admission_list')
-    @patch('continuing_education.views.api.get_registration_list')
-    def test_post_valid_prospect(self, mocked_success_post, mock_get_list, mock_get_a, mock_get_r):
+    @patch('continuing_education.views.api.transform_response_to_data')
+    @patch('requests.get')
+    @patch('requests.post', return_value=HttpResponse(status=status.HTTP_201_CREATED))
+    def test_post_valid_prospect(self, mock_post, mock_get, mock_transform):
         response = self.client.post(reverse('prospect_form'), data=self.prospect)
         self.assertEqual(response.status_code, 302)
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]

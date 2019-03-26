@@ -37,7 +37,6 @@ from reference.models import country
 class TestAdmissionForm(TestCase):
     def test_valid_form(self):
         admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid))
-        print(admission)
         form = AdmissionForm(admission)
         self.assertTrue(form.is_valid(), form.errors)
 

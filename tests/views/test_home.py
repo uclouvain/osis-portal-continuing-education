@@ -26,6 +26,7 @@
 from random import choice
 from string import ascii_lowercase
 from unittest import mock
+from unittest.mock import patch
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -34,7 +35,6 @@ from mock import patch
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
-from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 
@@ -48,25 +48,25 @@ class ViewHomeTestCase(TestCase):
             active=False
         )
         self.patcher = patch(
-            "continuing_education.views.api.get_data_from_osis",
+            "continuing_education.views.api.get_continuing_education_training",
             return_value=self.cet
         )
         self.mocked_called_api_function = self.patcher.start()
 
         self.addCleanup(self.patcher.stop)
 
-    @mock.patch('continuing_education.views.api.get_data_list_from_osis')
-    @mock.patch('continuing_education.views.api.get_admission_list')
-    @mock.patch('continuing_education.views.api.get_registration_list')
-    def test_main_view(self, mock_list, mock_get_admission, mock_get_registration):
+    @mock.patch('requests.get')
+    @mock.patch('continuing_education.views.api.get_personal_token')
+    @mock.patch('continuing_education.views.api.transform_response_to_data')
+    def test_main_view(self, mock_transform, mock_token, mock_get):
         url = reverse('continuing_education_home')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'continuing_education/home.html')
 
-    def test_redirect_to_prospect_form_if_formation_not_activated_in_url(self):
+    @mock.patch('continuing_education.views.api.get_personal_token')
+    def test_redirect_to_prospect_form_if_formation_not_activated_in_url(self, mock_token):
         self.client.logout()
-
         url = reverse('continuing_education_home', kwargs={'formation_id': self.cet['uuid']})
         response = self.client.get(url)
         self.assertRedirects(response, reverse('prospect_form', kwargs={'formation_uuid': self.cet['uuid']}))
@@ -79,7 +79,7 @@ class FormationsListTestCase(TestCase):
         self.person_iufc = ContinuingEducationPersonDictFactory(self.person.uuid)
         self.an_academic_year = AcademicYearFactory(current=True)
 
-    @mock.patch('continuing_education.views.api.get_data_list_from_osis')
+    @mock.patch('continuing_education.views.api.get_continuing_education_training_list')
     def test_formations_list(self, mock_get_training_list):
         mock_get_training_list.return_value = {
             'count': 11,
@@ -99,13 +99,12 @@ class FormationsListTestCase(TestCase):
         self.assertEqual(response.context['formations'], formations['results'])
         self.assertTemplateUsed(response, 'continuing_education/formations.html')
 
-    @mock.patch('continuing_education.views.api.get_admission_list')
-    @mock.patch('continuing_education.views.api.get_registration_list')
-    @mock.patch('continuing_education.views.api.get_data_list_from_osis')
-    def test_bypass_formations_list_when_logged_in(self, mock_get_admissions, mock_get_registrations, mock_get_list):
+    @mock.patch('requests.get')
+    @mock.patch('continuing_education.views.api.get_personal_token')
+    @mock.patch('continuing_education.views.api.transform_response_to_data')
+    def test_bypass_formations_list_when_logged_in(self, mock_get, mock_token, mock_transform):
         self.client.force_login(self.user)
         url = reverse('formations_list')
-        mock_get_admissions.return_value = [AdmissionDictFactory(self.person_iufc)]
         response = self.client.get(url)
         self.assertTrue(self.user.is_authenticated)
         self.assertRedirects(response, "/continuing_education/home/")
