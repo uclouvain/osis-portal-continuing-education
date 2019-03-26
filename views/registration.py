@@ -107,7 +107,7 @@ def registration_edit(request, registration_uuid):
     )
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
-    person_information = _get_person_information(request, base_person)
+    person_information = api.get_continuing_education_person(request)
     person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
     address = registration['address']
 
@@ -137,15 +137,6 @@ def registration_edit(request, registration_uuid):
         errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))
         display_errors(request, errors)
     return render(request, 'registration_form.html', locals())
-
-
-def _get_person_information(request, base_person):
-    person_information = api.get_persons_list(request, "person", str(base_person.uuid))
-    if len(person_information) > 0:
-        person_information = person_information[0]
-    else:
-        person_information = None
-    return person_information
 
 
 @login_required

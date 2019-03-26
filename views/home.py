@@ -30,7 +30,6 @@ from django.urls import reverse
 from base.models import person as mdl_person
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views import api
-from continuing_education.views.api import get_personal_token
 
 
 def formations_list(request):
@@ -59,14 +58,14 @@ def main_view(request, formation_id=None):
     if formation_id:
         request.session['formation_id'] = formation_id
     if request.user.is_authenticated:
-        get_personal_token(request)
+        api.get_personal_token(request)
         person = mdl_person.find_by_user(request.user)
         registration_states = [
             admission_state_choices.ACCEPTED,
             admission_state_choices.REGISTRATION_SUBMITTED,
             admission_state_choices.VALIDATED
         ]
-        person_information = api.get_person_information(request, "person", str(person.uuid))
+        person_information = api.get_continuing_education_person(request)
         admissions = api.get_admission_list(request, person_information['uuid'])
         registrations = api.get_registration_list(request, person_information['uuid'])
         return render(request, "continuing_education/home.html", locals())

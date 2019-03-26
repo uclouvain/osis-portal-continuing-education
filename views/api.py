@@ -61,7 +61,11 @@ def get_data_list_from_osis(request, object_name, filter_field=None, filter_valu
     return transform_response_to_data(response, results_only)
 
 
-def get_admission_list(request, person_uuid, **kwargs):
+def get_persons_list(request, filter_field=None, filter_value=None, **kwargs):
+    return get_data_list_from_osis(request, 'persons', filter_field, filter_value, **kwargs)
+
+
+def get_admission_list(request, person_uuid):
     token = get_personal_token(request)
     response = requests.get(
         url=API_URL % {'object_name': "persons", 'object_uuid': person_uuid} + "/admissions/",
@@ -70,7 +74,7 @@ def get_admission_list(request, person_uuid, **kwargs):
     return transform_response_to_data(response)
 
 
-def get_registration_list(request, person_uuid, **kwargs):
+def get_registration_list(request, person_uuid):
     token = get_personal_token(request)
     response = requests.get(
         url=API_URL % {'object_name': "persons", 'object_uuid': person_uuid} + "/registrations/",
@@ -79,16 +83,19 @@ def get_registration_list(request, person_uuid, **kwargs):
     return transform_response_to_data(response)
 
 
-def get_persons_list(request, filter_field=None, filter_value=None, **kwargs):
-    return get_data_list_from_osis(request, 'persons', filter_field, filter_value, **kwargs)
-
-
-def get_person_information(request, filter_field=None, filter_value=None, **kwargs):
-    return get_data_list_from_osis(request, 'persons', filter_field, filter_value, **kwargs)[0]
-
-
 def get_continuing_education_training_list(request, filter_field=None, filter_value=None, **kwargs):
-    return get_data_list_from_osis(request, 'training', filter_field, filter_value, **kwargs)
+    url = API_URL % {'object_name': "training", 'object_uuid': ''}
+    results_only = 'limit' not in kwargs or 'offset' not in kwargs
+    if filter_field and filter_value:
+        url = url + "?" + filter_field + "=" + filter_value
+    if not results_only:
+        url = url + "?limit=" + str(kwargs['limit']) + "&offset=" + str(kwargs['offset'])
+
+    response = requests.get(
+        url=url,
+        headers=REQUEST_HEADER
+    )
+    return transform_response_to_data(response, results_only)
 
 
 def get_data_from_osis(request, object_name, uuid):
@@ -97,7 +104,12 @@ def get_data_from_osis(request, object_name, uuid):
         url=API_URL % {'object_name': object_name, 'object_uuid': str(uuid)},
         headers={'Authorization': 'Token ' + token}
     )
+
     return transform_response_to_data(response)
+
+
+def get_continuing_education_person(request):
+    return get_data_from_osis(request, "persons", "details")
 
 
 def get_continuing_education_training(request, uuid):

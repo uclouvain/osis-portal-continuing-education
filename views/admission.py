@@ -110,6 +110,13 @@ def _update_admission_state(request, admission):
     api.update_admission(request, submitted_admission)
 
 
+def _has_instance_with_values(instance):
+    for k, v in instance.items():
+        if v is None:
+            return False
+    return True
+
+
 @login_required
 @perms.has_participant_access
 def admission_form(request, admission_uuid=None, **kwargs):
@@ -118,26 +125,28 @@ def admission_form(request, admission_uuid=None, **kwargs):
         raise PermissionDenied
 
     base_person = mdl_person.find_by_user(user=request.user)
-    person_information = api.get_persons_list(request, "person", str(base_person.uuid))
-    if len(person_information) > 0:
-        person_information = person_information[0]
-        old_admission = api.get_admission_list(request, person_information['uuid'])
-    else:
-        person_information = None
-        old_admission = None
+    person_information = api.get_continuing_education_person(request)
 
     formation = None
     if request.session.get('formation_id'):
         formation = api.get_continuing_education_training(request, request.session.get('formation_id'))
 
-    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
+    person_form = ContinuingEducationPersonForm(
+        request.POST or None,
+        instance=person_information if _has_instance_with_values(person_information) else None
+    )
     adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
     id_form = PersonForm(request.POST or None, instance=base_person)
-    current_address = admission['address'] if admission else None
-    if len(old_admission) > 0:
+
+    # Get Last Admission
+    old_admission = api.get_admission_list(request, person_information['uuid'])
+    if old_admission:
         old_admission = old_admission[0]
         old_admission = api.get_admission(request, old_admission['uuid'])
+
+    current_address = admission['address'] if admission else None
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
+
     address_form = AddressForm(request.POST or None, instance=address)
     errors_fields = []
     if not admission and not request.POST:
@@ -163,7 +172,7 @@ def admission_form(request, admission_uuid=None, **kwargs):
             api.update_admission(request, adm_form.cleaned_data)
         else:
             admission, status = api.post_admission(request, adm_form.cleaned_data)
-        print(admission)
+
         if request.session.get('formation_id'):
             del request.session['formation_id']
         return redirect(
