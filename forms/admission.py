@@ -160,7 +160,6 @@ class AdmissionForm(Form):
     )
 
     # State
-
     state_reason = forms.CharField(
         widget=forms.Textarea,
         required=False,

@@ -69,7 +69,7 @@ class ContinuingEducationPasswordResetForm(forms.Form):
         email = self.cleaned_data["email"]
         try:
             user = User.objects.get(username=email)
-        except (ObjectDoesNotExist, MultipleObjectsReturned) :
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
             error_message = _('This email does not exist in our database: %(mail)s').format(mail=email)
         else:
             scheme = 'https' if request.is_secure() else 'http'
@@ -95,6 +95,3 @@ class ContinuingEducationPasswordResetForm(forms.Form):
                                                                 [], receivers, template_base_data, None)
         return message_service.send_messages(message_content,
                                              settings.IUFC_CONFIG.get('PASSWORD_RESET_MESSAGES_OUTSIDE_PRODUCTION'))
-
-
-
