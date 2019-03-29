@@ -123,9 +123,7 @@ def admission_form(request, admission_uuid=None):
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
 
-    formation = None
-    if request.session.get('formation_id'):
-        formation = api.get_continuing_education_training(request, request.session.get('formation_id'))
+    formation = _get_formation(request)
 
     address_form, adm_form, id_form, person_form = _fill_forms_with_existing_data(admission, formation, request)
 
@@ -170,6 +168,13 @@ def admission_form(request, admission_uuid=None):
             'errors_fields': errors_fields
         }
     )
+
+
+def _get_formation(request):
+    formation = None
+    if request.session.get('formation_id'):
+        formation = api.get_continuing_education_training(request, request.session.get('formation_id'))
+    return formation
 
 
 def _is_admission_submittable_and_show_errors(admission, errors_fields, request):
