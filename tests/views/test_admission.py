@@ -169,7 +169,6 @@ class ViewStudentAdmissionTestCase(TestCase):
             }
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['admission']['state'], admission_state_choices.SUBMITTED)
         self.assertTemplateUsed(response, 'admission_detail.html')
 
     @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
