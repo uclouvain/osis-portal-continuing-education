@@ -102,7 +102,6 @@ def admission_submit(request):
 
 
 def _update_admission_state(request, admission):
-    admission['state'] = admission_state_choices.SUBMITTED
     submitted_admission = {
         'state': admission_state_choices.SUBMITTED,
         'uuid': admission['uuid']
@@ -141,8 +140,7 @@ def admission_form(request, admission_uuid=None, **kwargs):
     # Get Last Admission
     old_admission = api.get_admission_list(request, person_information['uuid'])
     if old_admission:
-        old_admission = old_admission[0]
-        old_admission = api.get_admission(request, old_admission['uuid'])
+        old_admission = api.get_admission(request, old_admission[0]['uuid'])
 
     current_address = admission['address'] if admission else None
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
