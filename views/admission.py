@@ -119,9 +119,7 @@ def _has_instance_with_values(instance):
 @login_required
 @perms.has_participant_access
 def admission_form(request, admission_uuid=None):
-    admission = api.get_admission(request, admission_uuid) if admission_uuid else None
-    if admission and admission['state'] != admission_state_choices.DRAFT:
-        raise PermissionDenied
+    admission = _get_admission_or_403(admission_uuid, request)
 
     formation = _get_formation(request)
 
@@ -168,6 +166,13 @@ def admission_form(request, admission_uuid=None):
             'errors_fields': errors_fields
         }
     )
+
+
+def _get_admission_or_403(admission_uuid, request):
+    admission = api.get_admission(request, admission_uuid) if admission_uuid else None
+    if admission and admission['state'] != admission_state_choices.DRAFT:
+        raise PermissionDenied
+    return admission
 
 
 def _get_formation(request):
