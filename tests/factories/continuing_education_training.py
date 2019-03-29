@@ -25,12 +25,9 @@
 ##############################################################################
 import uuid
 
-import factory
-
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
-from continuing_education.models.continuing_education_training import ContinuingEducationTraining
 
 
 def ContinuingEducationTrainingDictFactory(active=True):
@@ -54,11 +51,3 @@ def ContinuingEducationTrainingDictFactory(active=True):
         ]
     }
     return cet
-
-
-class ContinuingEducationTrainingFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = ContinuingEducationTraining
-
-    active = True
-    education_group = factory.SubFactory(EducationGroupFactory)

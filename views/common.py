@@ -28,7 +28,7 @@ from collections import OrderedDict
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import login as django_login
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import translation
 from django.utils.safestring import mark_safe
@@ -42,7 +42,6 @@ from continuing_education.forms.address import StrictAddressForm
 from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
-from continuing_education.models.admission import Admission
 
 
 def display_errors(request, errors):
@@ -148,14 +147,6 @@ def _update_errors(forms, errors, errors_field):
         for field in form.errors:
             errors.update({form[field].label: form.errors[field]})
             errors_field.append(field)
-
-
-def _find_user_admission_by_id(admission_id, user):
-    return get_object_or_404(
-        Admission,
-        pk=admission_id,
-        person_information__person__user=user
-    )
 
 
 def _build_warning_from_errors_dict(errors):
