@@ -133,11 +133,7 @@ def admission_form(request, admission_uuid=None):
     if not admission and not request.POST:
         _show_save_before_submit(request)
 
-    if admission and not request.POST:
-        admission_submission_errors, errors_fields = get_submission_errors(admission)
-        admission_is_submittable = not admission_submission_errors
-        if not admission_is_submittable:
-            _show_submit_warning(admission_submission_errors, request)
+    errors_fields = _is_admission_submittable_and_show_errors(admission, errors_fields, request)
 
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
         api.prepare_admission_data(
@@ -174,6 +170,15 @@ def admission_form(request, admission_uuid=None):
             'errors_fields': errors_fields
         }
     )
+
+
+def _is_admission_submittable_and_show_errors(admission, errors_fields, request):
+    if admission and not request.POST:
+        admission_submission_errors, errors_fields = get_submission_errors(admission)
+        admission_is_submittable = not admission_submission_errors
+        if not admission_is_submittable:
+            _show_submit_warning(admission_submission_errors, request)
+    return errors_fields
 
 
 def _fill_forms_with_existing_data(admission, formation, request):
