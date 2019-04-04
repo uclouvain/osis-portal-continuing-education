@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-22 12:40+0100\n"
+"POT-Creation-Date: 2019-04-04 16:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -449,7 +449,7 @@ msgstr ""
 msgid "Birth location"
 msgstr ""
 
-#: templates/fragment/files_panel.html:82
+#: templates/fragment/files_panel.html:91
 msgid "Browse"
 msgstr ""
 
@@ -871,7 +871,7 @@ msgstr ""
 msgid "No document available"
 msgstr ""
 
-#: templates/fragment/files_panel.html:73
+#: templates/fragment/files_panel.html:78
 msgid "No file chosen"
 msgstr ""
 
@@ -1129,6 +1129,11 @@ msgstr ""
 msgid "State"
 msgstr ""
 
+#: templates/fragment/files_panel.html:61
+#: templates/fragment/files_panel.html:89
+msgid "State of file prevent this action"
+msgstr ""
+
 #: models/admission.py:176
 msgid "State reason"
 msgstr ""
@@ -1225,7 +1230,7 @@ msgstr ""
 msgid "Training aid available"
 msgstr ""
 
-#: templates/fragment/files_panel.html:79
+#: templates/fragment/files_panel.html:84
 msgid "Upload"
 msgstr ""
 

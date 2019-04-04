@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-22 12:40+0100\n"
+"POT-Creation-Date: 2019-04-04 16:16+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -657,7 +657,7 @@ msgstr "Date de naissance"
 msgid "Birth location"
 msgstr "Lieu de naissance"
 
-#: templates/fragment/files_panel.html:82
+#: templates/fragment/files_panel.html:91
 msgid "Browse"
 msgstr "Parcourir"
 
@@ -899,10 +899,8 @@ msgid "High school graduation year"
 msgstr "Année d'obtention (secondaire)"
 
 #: templates/registration_pdf.html:150
-#, fuzzy
-#| msgid "Legal address"
 msgid "Home address"
-msgstr "Domicile légal"
+msgstr "Adresse du domicile"
 
 #: templates/registration_pdf.html:151 templates/registration_pdf.html:163
 msgid "House name"
@@ -1046,10 +1044,8 @@ msgid "Married"
 msgstr "Marié"
 
 #: templates/registration_pdf.html:146
-#, fuzzy
-#| msgid "No file chosen"
 msgid "Mobile phone"
-msgstr "Aucun fichier choisi"
+msgstr "Téléphone mobile"
 
 #: models/admission.py:122 templates/admission_detail.html:154
 #: templates/admission_detail.html:157
@@ -1091,7 +1087,7 @@ msgstr "Vous n'avez pas soumis de formulaire d'admission"
 msgid "No document available"
 msgstr "Pas de document disponible"
 
-#: templates/fragment/files_panel.html:73
+#: templates/fragment/files_panel.html:78
 msgid "No file chosen"
 msgstr "Aucun fichier choisi"
 
@@ -1213,10 +1209,9 @@ msgid "Private"
 msgstr "Privé"
 
 #: templates/registration_pdf.html:148
-#, fuzzy
 #| msgid "Private"
 msgid "Private e-mail"
-msgstr "Privé"
+msgstr "E-mail privé"
 
 #: models/enums/enums.py:10
 msgid "Professional"
@@ -1285,10 +1280,8 @@ msgid "Registration type"
 msgstr "Type d'inscription"
 
 #: templates/registration_pdf.html:363
-#, fuzzy
-#| msgid "Registration"
 msgid "Reglementations"
-msgstr "Inscription"
+msgstr "Réglementations"
 
 #: models/enums/admission_state_choices.py:14
 msgid "Rejected"
@@ -1328,10 +1321,8 @@ msgstr ""
 "programme"
 
 #: templates/registration_pdf.html:422
-#, fuzzy
-#| msgid "Signup"
 msgid "Signature"
-msgstr "Créer un compte"
+msgstr "Signature"
 
 #: templates/registration_pdf.html:420
 msgid "Signed in"
@@ -1358,6 +1349,11 @@ msgstr "Nom du conjoint"
 #: templates/continuing_education/home.html:101
 msgid "State"
 msgstr "Statut"
+
+#: templates/fragment/files_panel.html:61
+#: templates/fragment/files_panel.html:89
+msgid "State of file prevent this action"
+msgstr ""
 
 #: models/admission.py:176
 msgid "State reason"
@@ -1455,7 +1451,7 @@ msgstr "Aide à la formation"
 msgid "Training aid available"
 msgstr "Aide à la formation disponible"
 
-#: templates/fragment/files_panel.html:79
+#: templates/fragment/files_panel.html:84
 msgid "Upload"
 msgstr "Envoyer"
 
