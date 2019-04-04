@@ -90,7 +90,6 @@ class StrictAdmissionForm(AdmissionForm):
         required_fields = [
             'citizenship',
             'phone_mobile',
-            'email',
             'high_school_diploma',
             'last_degree_level',
             'last_degree_field',
