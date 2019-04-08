@@ -159,6 +159,12 @@ class AdmissionForm(Form):
         label=_("Awareness other")
     )
 
+    residence_phone = forms.CharField(
+        max_length=30,
+        required=False,
+        label=_("Residence phone")
+    )
+
     # State
     state_reason = forms.CharField(
         widget=forms.Textarea,
