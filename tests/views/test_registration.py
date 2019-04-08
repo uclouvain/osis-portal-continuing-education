@@ -70,7 +70,7 @@ class ViewStudentRegistrationTestCase(TestCase):
 
         self.get_list_patcher = patch(
             "continuing_education.views.api.get_admission_list",
-            return_value=[self.admission_accepted]
+            return_value={'results': [self.admission_accepted]}
         )
         self.get_list_person_patcher = patch(
             "continuing_education.views.api.get_continuing_education_person",

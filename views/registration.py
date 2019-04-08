@@ -99,16 +99,16 @@ def registration_edit(request, registration_uuid):
         raise PermissionDenied
 
     form = RegistrationForm(request.POST or None, initial=registration)
-    billing_address_form = AddressForm(request.POST or None, instance=registration['billing_address'], prefix="billing")
+    billing_address_form = AddressForm(request.POST or None, initial=registration['billing_address'], prefix="billing")
     residence_address_form = AddressForm(
         request.POST or None,
-        instance=registration['residence_address'],
+        initial=registration['residence_address'],
         prefix="residence"
     )
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
     person_information = api.get_continuing_education_person(request)
-    person_form = ContinuingEducationPersonForm(request.POST or None, instance=person_information)
+    person_form = ContinuingEducationPersonForm(request.POST or None, initial=person_information)
     address = registration['address']
 
     errors = []
