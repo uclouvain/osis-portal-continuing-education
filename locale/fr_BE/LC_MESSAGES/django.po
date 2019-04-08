@@ -1353,7 +1353,7 @@ msgstr "Statut"
 #: templates/fragment/files_panel.html:61
 #: templates/fragment/files_panel.html:89
 msgid "State of file prevent this action"
-msgstr ""
+msgstr "L'état du dossier empêche cette action"
 
 #: models/admission.py:176
 msgid "State reason"
