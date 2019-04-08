@@ -167,26 +167,24 @@ class AdmissionForm(Form):
     )
 
     def __init__(self, *args, **kwargs):
-        self.instance = kwargs.pop('instance', None)
         formation = kwargs.pop('formation', None)
         super(AdmissionForm, self).__init__(*args, **kwargs)
         if formation:
             self.initial['formation'] = (formation['uuid'], formation['education_group']['acronym'])
             self.fields['formation'].choices = [self.initial['formation']]
-        if self.instance:
+        if self.initial:
             self._set_initial_fields()
 
     def _set_initial_fields(self):
         fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', 'acronym', 'uuid')]
         for field, attribute, slug in fields_to_set:
-            if self.instance[field]:
-                self.instance[field] = (
-                    self.instance[field][slug],
-                    self.instance[field]['education_group'][attribute]
-                    if field == 'formation' else self.instance[field][attribute]
+            if self.initial[field]:
+                self.initial[field] = (
+                    self.initial[field][slug],
+                    self.initial[field]['education_group'][attribute]
+                    if field == 'formation' else self.initial[field][attribute]
                 )
-                self.fields[field].choices = [self.instance[field]]
-        self.initial = self.instance
+                self.fields[field].choices = [self.initial[field]]
 
 
 class StrictAdmissionForm(AdmissionForm):
