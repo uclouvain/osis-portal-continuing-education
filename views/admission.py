@@ -196,7 +196,7 @@ def _fill_forms_with_existing_data(admission, formation, request):
     person_information = api.get_continuing_education_person(request)
     person_form = ContinuingEducationPersonForm(
         request.POST or None,
-        instance=person_information if _has_instance_with_values(person_information) else None
+        initial=person_information if _has_instance_with_values(person_information) else None
     )
     adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
     id_form = PersonForm(request.POST or None, instance=base_person)

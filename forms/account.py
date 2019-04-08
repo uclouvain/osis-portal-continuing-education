@@ -34,21 +34,19 @@ class ContinuingEducationPersonForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        self.instance = kwargs.pop('instance', None)
         super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
-        if self.instance:
-            self.instance['birth_country'] = (
-                self.instance['birth_country']['iso_code'],
-                self.instance['birth_country']['name']
+        if self.initial:
+            self.initial['birth_country'] = (
+                self.initial['birth_country']['iso_code'],
+                self.initial['birth_country']['name']
             )
             self._disable_existing_person_fields()
-            self.initial = self.instance
 
     def _disable_existing_person_fields(self):
         fields_to_disable = ["birth_country", "birth_date"]
         for field in self.fields.keys():
             if field == 'birth_country':
-                self.fields[field].choices = [self.instance[field]]
+                self.fields[field].choices = [self.initial[field]]
             self.fields[field].widget.attrs['readonly'] = True
 
             if field in fields_to_disable:
