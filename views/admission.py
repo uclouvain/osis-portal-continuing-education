@@ -200,9 +200,14 @@ def _fill_forms_with_existing_data(admission, formation, request):
     )
     adm_form = AdmissionForm(request.POST or None, instance=admission, formation=formation)
     id_form = PersonForm(request.POST or None, instance=base_person)
-    old_admission = api.get_admission_list(request, person_information['uuid'])
+    admissions = api.get_admission_list(request, person_information['uuid'])['results']
+    old_admission = admissions[0] if admissions \
+        else api.get_registration_list(request, person_information['uuid'])['results']
     if old_admission:
-        old_admission = api.get_admission(request, old_admission[0]['uuid'])
+        if admissions:
+            old_admission = api.get_admission(request, old_admission[0]['uuid'])
+        else:
+            old_admission = api.get_registration(request, old_admission[0]['uuid'])
     current_address = admission['address'] if admission else None
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, instance=address)

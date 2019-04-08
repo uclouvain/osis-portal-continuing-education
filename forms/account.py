@@ -52,7 +52,7 @@ class ContinuingEducationPersonForm(forms.Form):
             self.fields[field].widget.attrs['readonly'] = True
 
             if field in fields_to_disable:
-                self.fields[field].widget.attrs['disabled'] = 'disabled'
+                self.fields[field].widget.attrs['disabled'] = True
 
 
 class ContinuingEducationPasswordResetForm(forms.Form):

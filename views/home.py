@@ -60,8 +60,9 @@ def main_view(request, formation_id=None):
         person = mdl_person.find_by_user(request.user)
 
         person_information = api.get_continuing_education_person(request)
-        admissions = api.get_admission_list(request, person_information['uuid'])
-        registrations = api.get_registration_list(request, person_information['uuid'])
+        admissions = api.get_admission_list(request, person_information['uuid'])['results']
+        registrations = api.get_registration_list(request, person_information['uuid'])['results']
+
         return render(request, "continuing_education/home.html", locals())
     else:
         if formation_id:
