@@ -34,7 +34,6 @@ from rest_framework.parsers import JSONParser
 
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
 API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "%(object_name)s/%(object_uuid)s"
-NOT_FOUND = 'Pas trouvé.'
 
 
 def transform_response_to_data(response):
@@ -93,7 +92,8 @@ def get_data_from_osis(request, object_name, uuid):
         headers={'Authorization': 'Token ' + get_personal_token(request)} if request.user.is_authenticated
         else REQUEST_HEADER
     )
-
+    if response.status_code == status.HTTP_404_NOT_FOUND:
+        raise Http404
     return transform_response_to_data(response)
 
 
@@ -106,17 +106,11 @@ def get_continuing_education_training(request, uuid):
 
 
 def get_admission(request, uuid):
-    data = get_data_from_osis(request, "admissions", uuid)
-    if data.get('detail', '') == NOT_FOUND:
-        raise Http404
-    return data
+    return get_data_from_osis(request, "admissions", uuid)
 
 
 def get_registration(request, uuid):
-    data = get_data_from_osis(request, "registrations", uuid)
-    if data.get('detail', '') == NOT_FOUND:
-        raise Http404
-    return data
+    return get_data_from_osis(request, "registrations", uuid)
 
 
 def post_data_to_osis(request, object_name, object_to_post):

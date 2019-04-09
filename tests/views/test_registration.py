@@ -40,7 +40,6 @@ from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED, ACCEPTED, REJECTED
 from continuing_education.tests.factories.admission import RegistrationDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
-from continuing_education.views.api import NOT_FOUND
 from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
 
@@ -201,13 +200,6 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.assertEqual(messages_list[1].level, messages.WARNING)
 
-    def test_registration_detail_not_found(self):
-        self.mocked_called_api_function_get.return_value = {'detail': NOT_FOUND}
-        response = self.client.get(reverse('registration_detail', kwargs={
-            'admission_uuid': 0,
-        }))
-        self.assertEqual(response.status_code, 404)
-
     @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
     def test_registration_submit(self, mock_update):
         url = reverse('registration_submit')
@@ -248,13 +240,6 @@ class ViewStudentRegistrationTestCase(TestCase):
             }
         )
         self.assertEqual(response.status_code, 401)
-
-    def test_registration_edit_not_found(self):
-        self.mocked_called_api_function_get.return_value = {'detail': NOT_FOUND}
-        response = self.client.get(reverse('registration_edit', kwargs={
-            'admission_uuid': 0,
-        }))
-        self.assertEqual(response.status_code, 404)
 
     def test_edit_get_registration_found(self):
         url = reverse('registration_edit', args=[self.admission_accepted['uuid']])

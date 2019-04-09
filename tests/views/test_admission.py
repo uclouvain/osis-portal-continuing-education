@@ -43,7 +43,6 @@ from continuing_education.models.enums.admission_state_choices import SUBMITTED
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
-from continuing_education.views import api
 from continuing_education.views.admission import admission_form
 from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
@@ -148,13 +147,6 @@ class ViewStudentAdmissionTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.WARNING)
-
-    def test_admission_detail_not_found(self):
-        self.mocked_called_api_function_get.return_value = {'detail': api.NOT_FOUND}
-        response = self.client.get(reverse('admission_detail', kwargs={
-            'admission_uuid': 0,
-        }))
-        self.assertEqual(response.status_code, 404)
 
     @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
     def test_admission_submit(self, mock_update):
@@ -261,13 +253,6 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
-
-    def test_admission_edit_not_found(self):
-        self.mocked_called_api_function_get.return_value = {'detail': api.NOT_FOUND}
-        response = self.client.get(reverse('admission_edit', kwargs={
-            'admission_uuid': 0,
-        }))
-        self.assertEqual(response.status_code, 404)
 
     def test_admission_edit_unauthorized(self):
         admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid))
