@@ -1085,7 +1085,7 @@ msgstr "Numéro de registre national belge"
 
 #: templates/continuing_education/home.html:44
 msgid "New admission"
-msgstr "Nouvelle admission"
+msgstr "Nouvelle demande d'admission"
 
 #: templates/fragment/wizard_navbar.html:30
 msgid "Next"
