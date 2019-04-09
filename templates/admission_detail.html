@@ -185,13 +185,25 @@
                         <li>{% trans 'Awareness Facebook' %}</li>
                         {% endif %}
                         {% if admission.awareness_linkedin %}
-                        <li>{% trans 'Awareness LinkedIn' %}</li>
+                        <li>{% trans 'Awareness LinkedIn' %}tddddd</li>
                         {% endif %}
                         {% if admission.awareness_customized_mail %}
                         <li>{% trans 'Awareness customized mail' %}</li>
                         {% endif %}
                         {% if admission.awareness_emailing %}
                         <li>{% trans 'Awareness emailing' %}</li>
+                        {% endif %}
+                        {% if admission.awareness_word_of_mouth %}
+                            <li>{% trans 'Awareness word of mouth' %}</li>
+                        {% endif %}
+                        {% if admission.awareness_friends %}
+                            <li>{% trans 'Awareness friends' %}</li>
+                        {% endif %}
+                        {% if admission.awareness_former_students %}
+                            <li>{% trans 'Awareness former students' %}</li>
+                        {% endif %}
+                        {% if admission.awareness_moocs %}
+                            <li>{% trans 'Awareness Moocs' %}</li>
                         {% endif %}
                         {% if admission.awareness_other %}
                         <li>{% trans 'Other' %}: {{ admission.awareness_other }}</li>
