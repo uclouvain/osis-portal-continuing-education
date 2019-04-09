@@ -43,9 +43,15 @@
                 {% bootstrap_field form.password1 %}
                 {% bootstrap_field form.password2 %}
                 <input type="hidden" name="username" id="id_username" value="{{ form.username.value }}"/>
+                <input type="checkbox" id="chbx_rgpd" required/>
+                {% trans 'By checking the checkbox, I accept that my data are used by IUFC.' %}
+                <br>
+                <br>
+                {% trans 'In accordance with regulation on the protection of individuals with regard to the processing of personal data, we undertake to protect your personal data.'  %}
+                {% trans 'We ensures that these data are used for IUFC only, the data collected will not be communicated to a third party.' %}
             </div>
             <div class="panel panel-body">
-                <button type="submit" class="btn btn-primary" title="{%trans 'Submit' %}" id="bt_submit_registration">
+                <button type="submit" class="btn btn-primary" title="{%trans 'Submit' %}" id="bt_submit_registration" disabled>
                     <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' %}
                 </button>
                 <a class="btn btn-default" href="{% url 'continuing_education_home' %}" id="bt_cancel_registration">
@@ -68,5 +74,15 @@
                fill_username();
             });
         });
+
+        $("#chbx_rgpd").click(function(){
+            if ($('#chbx_rgpd').is(':checked')){
+                $( "#bt_submit_registration" ).prop("disabled", false);
+            }else{
+                $( "#bt_submit_registration" ).prop("disabled", true);
+            }
+        });
+
+
     </script>
 {% endblock %}

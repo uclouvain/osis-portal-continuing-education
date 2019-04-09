@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-04 16:16+0200\n"
+"POT-Creation-Date: 2019-04-09 11:32+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -657,11 +657,15 @@ msgstr "Date de naissance"
 msgid "Birth location"
 msgstr "Lieu de naissance"
 
-#: templates/fragment/files_panel.html:91
+#: templates/fragment/files_panel.html:82
 msgid "Browse"
 msgstr "Parcourir"
 
-#: templates/django_registration/registration_form.html:52
+#: templates/django_registration/registration_form.html:47
+msgid "By checking the checkbox, I accept that my data are used by IUFC."
+msgstr "En cochant cette case, j'accepte que les données fournies dans ce formulaire soient exploitées par l'IUFC."
+
+#: templates/django_registration/registration_form.html:58
 #: templates/fragment/submit_confirmation_modal.html:50
 #: templates/prospect_form.html:41 templates/prospect_form.html:72
 msgid "Cancel"
@@ -899,6 +903,8 @@ msgid "High school graduation year"
 msgstr "Année d'obtention (secondaire)"
 
 #: templates/registration_pdf.html:150
+#, fuzzy
+#| msgid "Legal address"
 msgid "Home address"
 msgstr "Adresse du domicile"
 
@@ -945,6 +951,14 @@ msgid ""
 msgstr ""
 "Si vous souhaitez encore éditer votre dossier d'inscription, veuillez "
 "prendre contact avec l'un des gestionnaires de la formation : %(mail)s"
+
+#: templates/django_registration/registration_form.html:50
+msgid ""
+"In accordance with regulation on the protection of individuals with regard "
+"to the processing of personal data, we undertake to protect your personal "
+"data."
+msgstr ""
+"Conformément au règlement général sur la protection des données, nous nous engageons à protéger vos données personnelles."
 
 #: templates/registration_pdf.html:189
 msgid ""
@@ -1044,6 +1058,8 @@ msgid "Married"
 msgstr "Marié"
 
 #: templates/registration_pdf.html:146
+#, fuzzy
+#| msgid "No file chosen"
 msgid "Mobile phone"
 msgstr "Téléphone mobile"
 
@@ -1087,7 +1103,7 @@ msgstr "Vous n'avez pas soumis de formulaire d'admission"
 msgid "No document available"
 msgstr "Pas de document disponible"
 
-#: templates/fragment/files_panel.html:78
+#: templates/fragment/files_panel.html:73
 msgid "No file chosen"
 msgstr "Aucun fichier choisi"
 
@@ -1209,6 +1225,7 @@ msgid "Private"
 msgstr "Privé"
 
 #: templates/registration_pdf.html:148
+#, fuzzy
 #| msgid "Private"
 msgid "Private e-mail"
 msgstr "E-mail privé"
@@ -1280,6 +1297,8 @@ msgid "Registration type"
 msgstr "Type d'inscription"
 
 #: templates/registration_pdf.html:363
+#, fuzzy
+#| msgid "Registration"
 msgid "Reglementations"
 msgstr "Réglementations"
 
@@ -1321,6 +1340,8 @@ msgstr ""
 "programme"
 
 #: templates/registration_pdf.html:422
+#, fuzzy
+#| msgid "Signup"
 msgid "Signature"
 msgstr "Signature"
 
@@ -1451,7 +1472,7 @@ msgstr "Aide à la formation"
 msgid "Training aid available"
 msgstr "Aide à la formation disponible"
 
-#: templates/fragment/files_panel.html:84
+#: templates/fragment/files_panel.html:79
 msgid "Upload"
 msgstr "Envoyer"
 
@@ -1494,6 +1515,14 @@ msgstr "En attente"
 #: templates/admission_detail.html:67
 msgid "Waiting state reason"
 msgstr "Raison de la mise en attente"
+
+#: templates/django_registration/registration_form.html:51
+msgid ""
+"We ensures that these data are used for IUFC only, the data collected will "
+"not be communicated to a third party."
+msgstr ""
+"Nous vous assurons que ces données seront utilisées exclusivement par la plateforme d'admission/inscription et "
+"qu'elles ne seront en aucun cas communiquées à des tiers."
 
 #: templates/registration_pdf.html:169
 msgid "Which address would you like your post to be sent to? *"
