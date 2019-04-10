@@ -55,7 +55,6 @@ class ApiMethodsTestCase(TestCase):
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
         self.formation = ContinuingEducationTrainingDictFactory()
         self.admission = AdmissionDictFactory(self.person_information)
-
         self.admission_submitted = AdmissionDictFactory(self.person_information, SUBMITTED)
 
     @mock.patch('requests.post', return_value=HttpResponse(content=b'{"token": "token"}', status=status.HTTP_200_OK))

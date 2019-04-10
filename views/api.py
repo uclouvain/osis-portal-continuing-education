@@ -96,7 +96,7 @@ def get_data_from_osis(request, object_name, uuid):
     if response.status_code == status.HTTP_404_NOT_FOUND:
         raise Http404
     elif response.status_code == status.HTTP_403_FORBIDDEN:
-        raise PermissionDenied(response.json()['detail'])
+        raise PermissionDenied(response.json()['detail'] if response.content else '')
     return transform_response_to_data(response)
 
 
@@ -147,7 +147,7 @@ def update_data_to_osis(request, object_name, object_to_update):
         json=object_to_update,
     )
     if response.status_code == status.HTTP_403_FORBIDDEN:
-        raise PermissionDenied(response.content)
+        raise PermissionDenied(response.json()['detail'] if response.content else '')
     return response
 
 
