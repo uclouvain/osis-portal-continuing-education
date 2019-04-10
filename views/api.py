@@ -30,6 +30,7 @@ import requests
 from django.conf import settings
 from django.http import Http404
 from rest_framework import status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
 
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
@@ -94,6 +95,8 @@ def get_data_from_osis(request, object_name, uuid):
     )
     if response.status_code == status.HTTP_404_NOT_FOUND:
         raise Http404
+    elif response.status_code == status.HTTP_403_FORBIDDEN:
+        raise PermissionDenied
     return transform_response_to_data(response)
 
 

@@ -34,7 +34,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
-from continuing_education.business import perms
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
@@ -47,7 +46,6 @@ from continuing_education.views.file import _get_files_list, FILES_URL
 
 
 @login_required
-@perms.has_participant_access
 def admission_detail(request, admission_uuid):
     admission = api.get_admission(request, admission_uuid)
     if admission and admission['state'] == admission_state_choices.SUBMITTED:
@@ -117,7 +115,6 @@ def _has_instance_with_values(instance):
 
 
 @login_required
-@perms.has_participant_access
 def admission_form(request, admission_uuid=None):
     admission = _get_admission_or_403(admission_uuid, request)
 

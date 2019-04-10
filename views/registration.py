@@ -35,7 +35,6 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
-from continuing_education.business import perms
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.person import PersonForm
@@ -51,9 +50,8 @@ from osis_common.document.pdf_build import render_pdf
 
 
 @login_required
-@perms.has_participant_access
-def registration_detail(request, registration_uuid):
-    admission = api.get_registration(request, registration_uuid)
+def registration_detail(request, admission_uuid):
+    admission = api.get_registration(request, admission_uuid)
     if admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED:
         add_remaining_tasks_message(request)
         add_contact_for_edit_message(request, formation=admission['formation'], is_registration=True)
@@ -71,9 +69,9 @@ def registration_detail(request, registration_uuid):
     list_files = _get_files_list(
         request,
         admission,
-        FILES_URL % {'admission_uuid': str(registration_uuid)}
+        FILES_URL % {'admission_uuid': str(admission_uuid)}
     )
-
+    is_accepted = admission['state'] == admission_state_choices.ACCEPTED
     return render(request, "registration_detail.html", locals())
 
 
@@ -92,9 +90,8 @@ def registration_submit(request):
 
 
 @login_required
-@perms.has_participant_access
-def registration_edit(request, registration_uuid):
-    registration = api.get_registration(request, registration_uuid)
+def registration_edit(request, admission_uuid):
+    registration = api.get_registration(request, admission_uuid)
     if registration and registration['state'] != admission_state_choices.ACCEPTED:
         raise PermissionDenied
 
@@ -131,7 +128,7 @@ def registration_edit(request, registration_uuid):
         )
         api.update_registration(request, form.cleaned_data)
         return redirect(
-            reverse('registration_detail', kwargs={'admission_uuid': registration_uuid})
+            reverse('registration_detail', kwargs={'admission_uuid': admission_uuid})
         )
     else:
         errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))

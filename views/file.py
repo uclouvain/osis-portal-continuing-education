@@ -31,14 +31,14 @@ import requests
 from dateutil import parser
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import redirect
 from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 
-from continuing_education.views.api import REQUEST_HEADER, get_admission
+from continuing_education.views.api import REQUEST_HEADER, get_admission, get_registration
 from continuing_education.views.common import display_error_messages, display_success_messages
 
 MAX_ADMISSION_FILE_NAME_LENGTH = 100
@@ -48,12 +48,14 @@ FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/%(admission
 @login_required
 def upload_file(request, admission_uuid):
     admission_file = request.FILES['myfile'] if 'myfile' in request.FILES else None
-    admission = get_admission(request, admission_uuid)
+    try:
+        admission = get_admission(request, admission_uuid)
+    except Http404:
+        admission = get_registration(request, admission_uuid)
     person = admission['person_information']['person']
     data = {
         'uploaded_by': person['uuid'],
     }
-
     request_to_upload = requests.post(
         FILES_URL % {'admission_uuid': str(admission_uuid)},
         headers=REQUEST_HEADER,
