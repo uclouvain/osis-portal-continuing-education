@@ -38,7 +38,8 @@ from django.utils.translation import ugettext_lazy as _, ugettext
 from requests import Response
 from rest_framework import status
 
-from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.academic_year import create_current_academic_year
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
@@ -198,3 +199,21 @@ class AdmissionFileTestCase(TestCase):
         url = reverse('download_file', args=[uuid.uuid4(), self.admission['uuid']])
         response = self.client.get(url)
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_remove_file_denied(self):
+        self.admission.state = admission_state_choices.SUBMITTED
+        self.admission.save()
+        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
+        url = reverse('remove_file', args=[uuid.uuid4(), self.admission.uuid])
+        response = self.client.delete(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
+        self.assertEqual(response.status_code,  HttpResponse('Unauthorized', status=401).status_code)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def test_upload_file_denied(self):
+        self.admission.state = admission_state_choices.SUBMITTED
+        self.admission.save()
+        url = reverse('upload_file', args=[self.admission.uuid])
+        redirect_url = reverse('admission_detail', kwargs={'admission_id': self.admission.id})
+        response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
+        self.assertEqual(response.status_code,  HttpResponse('Unauthorized', status=401).status_code)
+        self.assertTemplateUsed(response, 'access_denied.html')

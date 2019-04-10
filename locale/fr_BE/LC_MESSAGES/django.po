@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-22 12:40+0100\n"
+"POT-Creation-Date: 2019-04-09 11:32+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -661,7 +661,11 @@ msgstr "Lieu de naissance"
 msgid "Browse"
 msgstr "Parcourir"
 
-#: templates/django_registration/registration_form.html:52
+#: templates/django_registration/registration_form.html:47
+msgid "By checking the checkbox, I accept that my data are used by IUFC."
+msgstr "En cochant cette case, j'accepte que les données fournies dans ce formulaire soient exploitées par l'IUFC."
+
+#: templates/django_registration/registration_form.html:58
 #: templates/fragment/submit_confirmation_modal.html:50
 #: templates/prospect_form.html:41 templates/prospect_form.html:72
 msgid "Cancel"
@@ -899,10 +903,8 @@ msgid "High school graduation year"
 msgstr "Année d'obtention (secondaire)"
 
 #: templates/registration_pdf.html:150
-#, fuzzy
-#| msgid "Legal address"
 msgid "Home address"
-msgstr "Domicile légal"
+msgstr "Adresse du domicile"
 
 #: templates/registration_pdf.html:151 templates/registration_pdf.html:163
 msgid "House name"
@@ -947,6 +949,14 @@ msgid ""
 msgstr ""
 "Si vous souhaitez encore éditer votre dossier d'inscription, veuillez "
 "prendre contact avec l'un des gestionnaires de la formation : %(mail)s"
+
+#: templates/django_registration/registration_form.html:50
+msgid ""
+"In accordance with regulation on the protection of individuals with regard "
+"to the processing of personal data, we undertake to protect your personal "
+"data."
+msgstr ""
+"Conformément au règlement général sur la protection des données, nous nous engageons à protéger vos données personnelles."
 
 #: templates/registration_pdf.html:189
 msgid ""
@@ -1046,10 +1056,8 @@ msgid "Married"
 msgstr "Marié"
 
 #: templates/registration_pdf.html:146
-#, fuzzy
-#| msgid "No file chosen"
 msgid "Mobile phone"
-msgstr "Aucun fichier choisi"
+msgstr "Téléphone mobile"
 
 #: models/admission.py:122 templates/admission_detail.html:154
 #: templates/admission_detail.html:157
@@ -1073,7 +1081,7 @@ msgstr "Numéro de registre national belge"
 
 #: templates/continuing_education/home.html:44
 msgid "New admission"
-msgstr "Nouvelle admission"
+msgstr "Nouvelle demande d'admission"
 
 #: templates/fragment/wizard_navbar.html:30
 msgid "Next"
@@ -1213,10 +1221,8 @@ msgid "Private"
 msgstr "Privé"
 
 #: templates/registration_pdf.html:148
-#, fuzzy
-#| msgid "Private"
 msgid "Private e-mail"
-msgstr "Privé"
+msgstr "E-mail privé"
 
 #: models/enums/enums.py:10
 msgid "Professional"
@@ -1285,10 +1291,8 @@ msgid "Registration type"
 msgstr "Type d'inscription"
 
 #: templates/registration_pdf.html:363
-#, fuzzy
-#| msgid "Registration"
 msgid "Reglementations"
-msgstr "Inscription"
+msgstr "Réglementations"
 
 #: models/enums/admission_state_choices.py:14
 msgid "Rejected"
@@ -1328,10 +1332,8 @@ msgstr ""
 "programme"
 
 #: templates/registration_pdf.html:422
-#, fuzzy
-#| msgid "Signup"
 msgid "Signature"
-msgstr "Créer un compte"
+msgstr "Signature"
 
 #: templates/registration_pdf.html:420
 msgid "Signed in"
@@ -1358,6 +1360,11 @@ msgstr "Nom du conjoint"
 #: templates/continuing_education/home.html:101
 msgid "State"
 msgstr "Statut"
+
+#: templates/fragment/files_panel.html:61
+#: templates/fragment/files_panel.html:89
+msgid "State of file prevent this action"
+msgstr "L'état du dossier empêche cette action"
 
 #: models/admission.py:176
 msgid "State reason"
@@ -1498,6 +1505,14 @@ msgstr "En attente"
 #: templates/admission_detail.html:67
 msgid "Waiting state reason"
 msgstr "Raison de la mise en attente"
+
+#: templates/django_registration/registration_form.html:51
+msgid ""
+"We ensures that these data are used for IUFC only, the data collected will "
+"not be communicated to a third party."
+msgstr ""
+"Nous vous assurons que ces données seront utilisées exclusivement par la plateforme d'admission/inscription et "
+"qu'elles ne seront en aucun cas communiquées à des tiers."
 
 #: templates/registration_pdf.html:169
 msgid "Which address would you like your post to be sent to? *"

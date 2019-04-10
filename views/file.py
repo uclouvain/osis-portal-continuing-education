@@ -31,7 +31,9 @@ import requests
 from dateutil import parser
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext_lazy as _
@@ -45,7 +47,18 @@ MAX_ADMISSION_FILE_NAME_LENGTH = 100
 FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/%(admission_uuid)s/files/"
 
 
+def allowed_by_state(function):
+    def decorator(request, admission_uuid, file_uuid=None):
+        admission = Admission.objects.get(uuid=admission_uuid)
+        if admission.is_accepted() or admission.is_draft():
+            return function(request, file_uuid, admission_uuid) if file_uuid else function(request, admission_uuid)
+        else:
+            raise PermissionDenied
+    return decorator
+
+
 @login_required
+@allowed_by_state
 def upload_file(request, admission_uuid):
     admission_file = request.FILES['myfile'] if 'myfile' in request.FILES else None
     try:
@@ -91,6 +104,7 @@ def download_file(request, file_uuid, admission_uuid):
 
 
 @login_required
+@allowed_by_state
 def remove_file(request, file_uuid, admission_uuid):
     request_to_delete = requests.delete(
         FILES_URL % {'admission_uuid': str(admission_uuid)} + str(file_uuid),

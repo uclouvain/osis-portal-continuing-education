@@ -145,3 +145,9 @@ label.required:after{
 .select2-container {
     width: 100% !important;
 }
+.disable-wrapper, #custom-file[disabled], .custom-file-input[disabled]{
+    cursor: not-allowed;
+}
+a[disabled]{
+    pointer-events: none;
+}

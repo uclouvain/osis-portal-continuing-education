@@ -96,7 +96,7 @@ def get_data_from_osis(request, object_name, uuid):
     if response.status_code == status.HTTP_404_NOT_FOUND:
         raise Http404
     elif response.status_code == status.HTTP_403_FORBIDDEN:
-        raise PermissionDenied
+        raise PermissionDenied(response.json()['detail'])
     return transform_response_to_data(response)
 
 
