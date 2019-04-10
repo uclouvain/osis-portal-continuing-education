@@ -66,10 +66,10 @@ def AdmissionDictFactory(person_information, state=DRAFT):
     return admission
 
 
-def RegistrationDictFactory(person_information, state=ACCEPTED):
+def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
     registration = {
         'uuid': str(uuid.uuid4()),
-        'formation': ContinuingEducationTrainingDictFactory(),
+        'formation': formation if formation else ContinuingEducationTrainingDictFactory(),
         'person_information': person_information,
         'address': AddressDictFactory(),
         'registration_type': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES)).fuzz(),

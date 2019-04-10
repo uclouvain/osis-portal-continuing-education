@@ -144,8 +144,10 @@ def update_data_to_osis(request, object_name, object_to_update):
     response = requests.patch(
         url=API_URL % {'object_name': object_name, 'object_uuid': object_to_update['uuid']},
         headers={'Authorization': 'Token ' + token},
-        json=object,
+        json=object_to_update,
     )
+    if response.status_code == status.HTTP_403_FORBIDDEN:
+        raise PermissionDenied(response.content)
     return response
 
 
@@ -186,6 +188,8 @@ def prepare_registration_data(registration, address, forms):
 
 def prepare_registration_for_submit(registration):
     registration.pop('address')
+    registration.pop('person_information')
+    registration.pop('formation')
     registration['residence_address']['country'] = registration['residence_address']['country']['iso_code']
     registration['billing_address']['country'] = registration['billing_address']['country']['iso_code']
 

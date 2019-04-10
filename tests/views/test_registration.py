@@ -192,8 +192,9 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.assertEqual(messages_list[1].level, messages.WARNING)
 
+    @mock.patch('continuing_education.views.api.prepare_registration_for_submit')
     @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
-    def test_registration_submit(self, mock_update):
+    def test_registration_submit(self, mock_update, mock_prepare):
         url = reverse('registration_submit')
         response = self.client.post(
             url,
@@ -218,7 +219,7 @@ class ViewStudentRegistrationTestCase(TestCase):
                 "admission_uuid": self.registration_submitted['uuid']
             }
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
 
     def test_registration_submit_not_complete(self):
         self.admission_accepted['national_registry_number'] = ''
@@ -231,7 +232,7 @@ class ViewStudentRegistrationTestCase(TestCase):
                 "admission_uuid": self.admission_accepted['uuid']
             }
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
 
     def test_edit_get_registration_found(self):
         url = reverse('registration_edit', args=[self.admission_accepted['uuid']])

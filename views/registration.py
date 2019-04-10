@@ -80,13 +80,11 @@ def registration_detail(request, admission_uuid):
 def registration_submit(request):
     registration = api.get_registration(request, request.POST.get('registration_uuid'))
     api.prepare_registration_for_submit(registration)
-    if registration['state'] == admission_state_choices.ACCEPTED:
-        registration_submission_errors, errors_fields = get_submission_errors(registration, is_registration=True)
-        if request.POST.get("submit") and not registration_submission_errors:
-            registration['state'] = admission_state_choices.REGISTRATION_SUBMITTED
-            api.update_registration(request, registration)
-            return redirect('registration_detail', registration['uuid'])
-    raise PermissionDenied('To submit a registration, its state must be ACCEPTED.')
+    registration_submission_errors, errors_fields = get_submission_errors(registration, is_registration=True)
+    if request.POST.get("submit") and not registration_submission_errors:
+        registration['state'] = admission_state_choices.REGISTRATION_SUBMITTED
+        api.update_registration(request, registration)
+    return redirect('registration_detail', registration['uuid'])
 
 
 @login_required
