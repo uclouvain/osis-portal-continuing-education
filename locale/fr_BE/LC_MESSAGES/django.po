@@ -903,8 +903,6 @@ msgid "High school graduation year"
 msgstr "Année d'obtention (secondaire)"
 
 #: templates/registration_pdf.html:150
-#, fuzzy
-#| msgid "Legal address"
 msgid "Home address"
 msgstr "Adresse du domicile"
 
@@ -1058,8 +1056,6 @@ msgid "Married"
 msgstr "Marié"
 
 #: templates/registration_pdf.html:146
-#, fuzzy
-#| msgid "No file chosen"
 msgid "Mobile phone"
 msgstr "Téléphone mobile"
 
@@ -1225,8 +1221,6 @@ msgid "Private"
 msgstr "Privé"
 
 #: templates/registration_pdf.html:148
-#, fuzzy
-#| msgid "Private"
 msgid "Private e-mail"
 msgstr "E-mail privé"
 
@@ -1297,8 +1291,6 @@ msgid "Registration type"
 msgstr "Type d'inscription"
 
 #: templates/registration_pdf.html:363
-#, fuzzy
-#| msgid "Registration"
 msgid "Reglementations"
 msgstr "Réglementations"
 
@@ -1340,8 +1332,6 @@ msgstr ""
 "programme"
 
 #: templates/registration_pdf.html:422
-#, fuzzy
-#| msgid "Signup"
 msgid "Signature"
 msgstr "Signature"
 
