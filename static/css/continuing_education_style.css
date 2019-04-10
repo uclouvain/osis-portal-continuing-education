@@ -141,3 +141,9 @@ label.required:after{
 .badge-warning {
   background-color: #8a6d3b;
 }
+.disable-wrapper, #custom-file[disabled], .custom-file-input[disabled]{
+    cursor: not-allowed;
+}
+a[disabled]{
+    pointer-events: none;
+}
