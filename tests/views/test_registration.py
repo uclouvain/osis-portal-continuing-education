@@ -109,14 +109,6 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
 
-    def test_registration_detail_access_denied(self):
-        a_person = PersonFactory()
-        self.client.force_login(a_person.user)
-        url = reverse('registration_detail', args=[self.admission_accepted['uuid']])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 401)
-        self.assertTemplateUsed(response, "access_denied.html")
-
     def test_registration_detail_not_submittable(self):
         self.admission_accepted['national_registry_number'] = ''
 
