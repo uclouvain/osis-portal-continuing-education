@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-09 11:32+0200\n"
+"POT-Creation-Date: 2019-04-11 08:10+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -496,7 +496,7 @@ msgstr ""
 "    Administration de l'enseignement et de la formation<br/>\n"
 "    Service des inscriptions<br/>\n"
 
-#: tests/views/test_file.py:183 views/file.py:115
+#: tests/views/test_file.py:182 views/file.py:128
 msgid "A problem occured during delete"
 msgstr "Un problème est survenu durant la suppression"
 
@@ -528,11 +528,11 @@ msgstr "Activation échouée"
 msgid "Active"
 msgstr "Active"
 
-#: models/admission.py:112 templates/admission_detail.html:147
+#: models/admission.py:113 templates/admission_detail.html:147
 msgid "Activity sector"
 msgstr "Secteur d'activité"
 
-#: models/admission.py:53
+#: models/admission.py:54
 msgid "Additional email"
 msgstr "Adresse email additionnelle"
 
@@ -564,19 +564,19 @@ msgstr ""
 "Un email vous a été envoyé contenant les instructions de changement de mot "
 "de passe."
 
-#: views/file.py:138
+#: views/file.py:151
 msgid "An unexpected error occurred"
 msgstr "Une erreur innatendue s'est produite."
 
-#: models/admission.py:311
+#: models/admission.py:326
 msgid "Archived"
 msgstr "Archivé"
 
-#: models/admission.py:299
+#: models/admission.py:314
 msgid "Assessment presented"
 msgstr "A présenté l'épreuve d'évaluation"
 
-#: models/admission.py:303
+#: models/admission.py:318
 msgid "Assessment succeeded"
 msgstr "A réussi l'épreuve d'évaluation"
 
@@ -597,44 +597,12 @@ msgstr ""
 msgid "Awareness"
 msgstr "Comment avez-vous connu l'existence de ce programme ?"
 
-#: models/admission.py:144 templates/admission_detail.html:185
-msgid "Awareness Facebook"
-msgstr "Sur Facebook"
-
-#: models/admission.py:148 templates/admission_detail.html:188
-msgid "Awareness LinkedIn"
-msgstr "Sur LinkedIn"
-
-#: models/admission.py:132 templates/admission_detail.html:176
-msgid "Awareness UCL website"
-msgstr "Par le site web de l'UCL"
-
-#: models/admission.py:152 templates/admission_detail.html:191
-msgid "Awareness customized mail"
-msgstr "Par courrier personnalisé"
-
-#: models/admission.py:156 templates/admission_detail.html:194
-msgid "Awareness emailing"
-msgstr "Par un emailing"
-
-#: models/admission.py:136 templates/admission_detail.html:179
-msgid "Awareness formation website"
-msgstr "Par le site web de la formation continue"
-
-#: models/admission.py:161
-msgid "Awareness other"
-msgstr "Autre"
-
-#: models/admission.py:140 templates/admission_detail.html:182
-msgid "Awareness press"
-msgstr "Dans la presse"
-
 #: templates/registration_detail.html:107 templates/registration_form.html:52
 #: templates/registration_form.html:114
 msgid "Billing"
 msgstr "Facturation"
 
-#: models/admission.py:195
+#: models/admission.py:210
 msgid "Billing address"
 msgstr "Adresse de facturation"
 
@@ -657,13 +625,59 @@ msgstr "Date de naissance"
 msgid "Birth location"
 msgstr "Lieu de naissance"
 
-#: templates/fragment/files_panel.html:82
+#: templates/fragment/files_panel.html:91
 msgid "Browse"
 msgstr "Parcourir"
 
+#: models/admission.py:145 templates/admission_detail.html:185
+msgid "By Facebook"
+msgstr "Sur Facebook"
+
+#: models/admission.py:149 templates/admission_detail.html:188
+msgid "By LinkedIn"
+msgstr "Sur LinkedIn"
+
+#: models/admission.py:178 templates/admission_detail.html:206
+msgid "By Moocs"
+msgstr "Par les Moocs"
+
+#: models/admission.py:133 templates/admission_detail.html:176
+msgid "By UCL website"
+msgstr "Par le site web de l'UCL"
+
 #: templates/django_registration/registration_form.html:47
 msgid "By checking the checkbox, I accept that my data are used by IUFC."
-msgstr "En cochant cette case, j'accepte que les données fournies dans ce formulaire soient exploitées par l'IUFC."
+msgstr ""
+"En cochant cette case, j'accepte que les données fournies dans ce formulaire "
+"soient exploitées par l'IUFC."
+
+#: models/admission.py:153 templates/admission_detail.html:191
+msgid "By customized mail"
+msgstr "Par courrier personnalisé"
+
+#: models/admission.py:157 templates/admission_detail.html:194
+msgid "By emailing"
+msgstr "Par un emailing"
+
+#: models/admission.py:137 templates/admission_detail.html:179
+msgid "By formation website"
+msgstr "Par le site web de la formation continue"
+
+#: models/admission.py:174 templates/admission_detail.html:203
+msgid "By former students"
+msgstr "Par des anciens étudiants"
+
+#: models/admission.py:170 templates/admission_detail.html:200
+msgid "By friends"
+msgstr "Par des amis"
+
+#: models/admission.py:141 templates/admission_detail.html:182
+msgid "By press"
+msgstr "Dans la presse"
+
+#: models/admission.py:166 templates/admission_detail.html:197
+msgid "By word of mouth"
+msgstr "Par le bouche à oreille"
 
 #: templates/django_registration/registration_form.html:58
 #: templates/fragment/submit_confirmation_modal.html:50
@@ -679,7 +693,7 @@ msgstr "Catégorie"
 msgid "Change my password"
 msgstr "Changer mon mot de passe"
 
-#: models/admission.py:244 templates/registration_detail.html:98
+#: models/admission.py:259 templates/registration_detail.html:98
 #: templates/registration_pdf.html:136
 msgid "Children number"
 msgstr "Nombre d'enfants"
@@ -699,7 +713,7 @@ msgstr "Nationalité"
 msgid "City"
 msgstr "Ville"
 
-#: models/admission.py:206 templates/registration_detail.html:120
+#: models/admission.py:221 templates/registration_detail.html:120
 msgid "Company number"
 msgstr "Numéro unique d'entreprise"
 
@@ -738,11 +752,11 @@ msgstr "Pays"
 msgid "Creating a user account"
 msgstr "Création d'un compte utilisateur"
 
-#: models/admission.py:106 templates/admission_detail.html:146
+#: models/admission.py:107 templates/admission_detail.html:146
 msgid "Current employer"
 msgstr "Employeur actuel"
 
-#: models/admission.py:101 templates/admission_detail.html:143
+#: models/admission.py:102 templates/admission_detail.html:143
 msgid "Current occupation"
 msgstr "Fonction actuelle"
 
@@ -758,7 +772,7 @@ msgstr "Politique de protection des données"
 msgid "Date"
 msgstr ""
 
-#: models/admission.py:315
+#: models/admission.py:330
 msgid "Diploma produced"
 msgstr "Diplôme produit"
 
@@ -840,7 +854,7 @@ msgstr "Faculté"
 msgid "Female"
 msgstr "Femme"
 
-#: tests/views/test_file.py:163 views/file.py:113
+#: tests/views/test_file.py:163 views/file.py:126
 msgid "File correctly deleted"
 msgstr "Le fichier a bien été supprimé"
 
@@ -863,7 +877,7 @@ msgstr "Mot de passe oublié ?"
 msgid "Formation"
 msgstr "Formation"
 
-#: models/admission.py:291
+#: models/admission.py:306
 msgid "Formation spreading"
 msgstr "Etalement de la formation"
 
@@ -885,7 +899,7 @@ msgstr "Genre"
 msgid "Generate PDF"
 msgstr "Générer le PDF"
 
-#: models/admission.py:201 templates/registration_detail.html:119
+#: models/admission.py:216 templates/registration_detail.html:119
 msgid "Head office name"
 msgstr "Nom du siège social"
 
@@ -893,12 +907,12 @@ msgstr "Nom du siège social"
 msgid "Health"
 msgstr "Santé"
 
-#: forms/admission.py:25 models/admission.py:59
+#: forms/admission.py:25 models/admission.py:60
 #: templates/admission_detail.html:122
 msgid "High school diploma"
 msgstr "Diplôme d'études secondaires"
 
-#: models/admission.py:64 templates/admission_detail.html:123
+#: models/admission.py:65 templates/admission_detail.html:123
 msgid "High school graduation year"
 msgstr "Année d'obtention (secondaire)"
 
@@ -914,7 +928,7 @@ msgstr "Lieu-dit (éventuellement)"
 msgid "I, the undersigned"
 msgstr "Je soussignée"
 
-#: models/admission.py:223 templates/registration_detail.html:92
+#: models/admission.py:238 templates/registration_detail.html:92
 #: templates/registration_pdf.html:126
 msgid "ID card number"
 msgstr "Numéro de carte d'identité"
@@ -956,7 +970,8 @@ msgid ""
 "to the processing of personal data, we undertake to protect your personal "
 "data."
 msgstr ""
-"Conformément au règlement général sur la protection des données, nous nous engageons à protéger vos données personnelles."
+"Conformément au règlement général sur la protection des données, nous nous "
+"engageons à protéger vos données personnelles."
 
 #: templates/registration_pdf.html:189
 msgid ""
@@ -989,19 +1004,19 @@ msgstr ""
 msgid "Job seeker"
 msgstr "Chercheur d'emploi"
 
-#: models/admission.py:74 templates/admission_detail.html:127
+#: models/admission.py:75 templates/admission_detail.html:127
 msgid "Last degree field"
 msgstr "Domaine d'étude"
 
-#: models/admission.py:84 templates/admission_detail.html:130
+#: models/admission.py:85 templates/admission_detail.html:130
 msgid "Last degree graduation year"
 msgstr "Année d'obtention"
 
-#: models/admission.py:79 templates/admission_detail.html:129
+#: models/admission.py:80 templates/admission_detail.html:129
 msgid "Last degree institution"
 msgstr "Institution"
 
-#: models/admission.py:69 templates/admission_detail.html:126
+#: models/admission.py:70 templates/admission_detail.html:126
 #: tests/views/test_admission.py:126 tests/views/test_admission.py:266
 #: tests/views/test_admission.py:386 tests/views/test_admission.py:398
 msgid "Last degree level"
@@ -1046,7 +1061,7 @@ msgstr "Déconnecté"
 msgid "Male"
 msgstr "Homme"
 
-#: models/admission.py:234 templates/registration_detail.html:96
+#: models/admission.py:249 templates/registration_detail.html:96
 #: templates/registration_pdf.html:132
 msgid "Marital status"
 msgstr "Etat civil"
@@ -1059,12 +1074,12 @@ msgstr "Marié"
 msgid "Mobile phone"
 msgstr "Téléphone mobile"
 
-#: models/admission.py:122 templates/admission_detail.html:154
+#: models/admission.py:123 templates/admission_detail.html:154
 #: templates/admission_detail.html:157
 msgid "Motivation"
 msgstr "Motivation"
 
-#: models/admission.py:283
+#: models/admission.py:298
 msgid "NOMA"
 msgstr "NOMA"
 
@@ -1073,7 +1088,7 @@ msgstr "NOMA"
 msgid "Name"
 msgstr "Nom"
 
-#: models/admission.py:218 templates/registration_detail.html:91
+#: models/admission.py:233 templates/registration_detail.html:91
 #: templates/registration_pdf.html:124 tests/views/test_registration.py:162
 #: tests/views/test_registration.py:363 tests/views/test_registration.py:375
 msgid "National registry number"
@@ -1099,7 +1114,7 @@ msgstr "Vous n'avez pas soumis de formulaire d'admission"
 msgid "No document available"
 msgstr "Pas de document disponible"
 
-#: templates/fragment/files_panel.html:73
+#: templates/fragment/files_panel.html:78
 msgid "No file chosen"
 msgstr "Aucun fichier choisi"
 
@@ -1121,16 +1136,16 @@ msgctxt "on SIC pdf for date signature"
 msgid "On"
 msgstr "Le"
 
-#: models/enums/enums.py:32 models/enums/enums.py:40
-#: templates/admission_detail.html:197 templates/admission_form.html:157
+#: models/admission.py:162 models/enums/enums.py:32 models/enums/enums.py:40
+#: templates/admission_detail.html:209 templates/admission_form.html:161
 msgid "Other"
 msgstr "Autre"
 
-#: models/admission.py:88 templates/admission_detail.html:133
+#: models/admission.py:89 templates/admission_detail.html:133
 msgid "Other educational background"
 msgstr "Autres formations"
 
-#: models/admission.py:228 templates/registration_detail.html:93
+#: models/admission.py:243 templates/registration_detail.html:93
 #: templates/registration_pdf.html:128
 msgid "Passport number"
 msgstr "Numéro de passeport"
@@ -1147,11 +1162,11 @@ msgstr "Réinitialiser le mot de passe"
 msgid "Password reset unsuccessful"
 msgstr "Réinitialisation du mot de passe échouée"
 
-#: models/admission.py:116 templates/admission_detail.html:150
+#: models/admission.py:117 templates/admission_detail.html:150
 msgid "Past professional activities"
 msgstr "Expériences professionnelles passées"
 
-#: models/admission.py:287
+#: models/admission.py:302
 msgid "Payment complete"
 msgstr "En ordre de paiement"
 
@@ -1198,12 +1213,12 @@ msgstr "Code postal"
 msgid "Previous"
 msgstr "Précédent"
 
-#: models/admission.py:253 templates/registration_detail.html:102
+#: models/admission.py:268 templates/registration_detail.html:102
 #: templates/registration_pdf.html:140
 msgid "Previous NOMA"
 msgstr "Précédent NOMA"
 
-#: models/admission.py:248 templates/registration_detail.html:101
+#: models/admission.py:263 templates/registration_detail.html:101
 #: templates/registration_form.html:103 templates/registration_pdf.html:138
 msgid "Previous UCL registration"
 msgstr "Avez-vous déjà été inscrit(e) à l'UCL ?"
@@ -1212,7 +1227,7 @@ msgstr "Avez-vous déjà été inscrit(e) à l'UCL ?"
 msgid "Print the completed registration form"
 msgstr "Imprimer le formulaire d'inscription complété"
 
-#: models/admission.py:295
+#: models/admission.py:310
 msgid "Prior experience validation"
 msgstr "Valorisation des Acquis d'Experience"
 
@@ -1232,11 +1247,11 @@ msgstr "Professionel"
 msgid "Professional background"
 msgstr "Parcours professionnel"
 
-#: models/admission.py:126 templates/admission_detail.html:158
+#: models/admission.py:127 templates/admission_detail.html:158
 msgid "Professional impact"
 msgstr "Impact professionnel de la formation"
 
-#: models/admission.py:96 templates/admission_detail.html:140
+#: models/admission.py:97 templates/admission_detail.html:140
 msgid "Professional status"
 msgstr "Statut professionel"
 
@@ -1270,7 +1285,7 @@ msgstr "Motif d'état de refus"
 msgid "Registration"
 msgstr "Inscription"
 
-#: models/admission.py:278
+#: models/admission.py:293
 msgid "Registration complete"
 msgstr "En ordre d'inscription"
 
@@ -1278,7 +1293,7 @@ msgstr "En ordre d'inscription"
 msgid "Registration completed"
 msgstr "Inscription à la plateforme complétée"
 
-#: models/admission.py:307
+#: models/admission.py:322
 msgid "Registration file received"
 msgstr "Fichier d'inscription reçu"
 
@@ -1286,7 +1301,7 @@ msgstr "Fichier d'inscription reçu"
 msgid "Registration submitted"
 msgstr "Inscription soumise"
 
-#: models/admission.py:184 templates/registration_detail.html:110
+#: models/admission.py:199 templates/registration_detail.html:110
 msgid "Registration type"
 msgstr "Type d'inscription"
 
@@ -1298,11 +1313,11 @@ msgstr "Réglementations"
 msgid "Rejected"
 msgstr "Refusé"
 
-#: models/admission.py:266
+#: models/admission.py:281
 msgid "Residence address"
 msgstr "Adresse"
 
-#: models/admission.py:272 templates/registration_detail.html:134
+#: models/admission.py:287 templates/registration_detail.html:134
 #: templates/registration_pdf.html:160 templates/registration_pdf.html:168
 msgid "Residence phone"
 msgstr "Téléphone fixe"
@@ -1321,7 +1336,7 @@ msgstr "Indépendant"
 msgid "Separated"
 msgstr "Séparé"
 
-#: models/admission.py:322
+#: models/admission.py:337
 msgid "Sessions"
 msgstr "Sessions"
 
@@ -1351,12 +1366,12 @@ msgstr "Célibataire"
 msgid "Size"
 msgstr "Taille"
 
-#: models/admission.py:239 templates/registration_detail.html:97
+#: models/admission.py:254 templates/registration_detail.html:97
 #: templates/registration_pdf.html:134
 msgid "Spouse name"
 msgstr "Nom du conjoint"
 
-#: models/admission.py:171 templates/continuing_education/home.html:60
+#: models/admission.py:186 templates/continuing_education/home.html:60
 #: templates/continuing_education/home.html:101
 msgid "State"
 msgstr "Statut"
@@ -1366,7 +1381,7 @@ msgstr "Statut"
 msgid "State of file prevent this action"
 msgstr "L'état du dossier empêche cette action"
 
-#: models/admission.py:176
+#: models/admission.py:191
 msgid "State reason"
 msgstr "Raison du changement d'état"
 
@@ -1377,10 +1392,10 @@ msgstr "Raison du changement d'état"
 msgid "Student"
 msgstr "Etudiant"
 
-#: templates/django_registration/complete_account_registration.html:65
-#: templates/django_registration/complete_account_registration.html:66
-#: templates/django_registration/registration_form.html:48
-#: templates/django_registration/registration_form.html:49
+#: templates/django_registration/complete_account_registration.html:69
+#: templates/django_registration/complete_account_registration.html:70
+#: templates/django_registration/registration_form.html:54
+#: templates/django_registration/registration_form.html:55
 #: templates/fragment/submit_confirmation_modal.html:51
 #: templates/registration/continuing_education_password_reset_form.html:40
 msgid "Submit"
@@ -1431,7 +1446,7 @@ msgstr "L'activation a échoué."
 msgid "The activation key you provided is invalid."
 msgstr "La clé d'activation que vous avez fournie n'est pas valide."
 
-#: tests/views/test_file.py:108 views/file.py:69
+#: tests/views/test_file.py:108 views/file.py:81
 msgid "The document is uploaded correctly"
 msgstr "Le document a bien été uploadé"
 
@@ -1462,7 +1477,7 @@ msgstr "Aide à la formation"
 msgid "Training aid available"
 msgstr "Aide à la formation disponible"
 
-#: templates/fragment/files_panel.html:79
+#: templates/fragment/files_panel.html:84
 msgid "Upload"
 msgstr "Envoyer"
 
@@ -1470,11 +1485,11 @@ msgstr "Envoyer"
 msgid "Uploaded by"
 msgstr "Envoyé par"
 
-#: models/admission.py:188
+#: models/admission.py:203
 msgid "Use address for billing"
 msgstr "Utiliser l'adresse enregistrée pour la facturation"
 
-#: models/admission.py:259
+#: models/admission.py:274
 msgid "Use address for post"
 msgstr "Utiliser l'adresse enregistrée pour le courrier"
 
@@ -1490,7 +1505,7 @@ msgstr "Information du compte utilisateur"
 msgid "Username and password not matching"
 msgstr "Nom d'utilisateur et mot de passe ne correspondent pas"
 
-#: models/admission.py:211 templates/registration_detail.html:121
+#: models/admission.py:226 templates/registration_detail.html:121
 msgid "VAT number"
 msgstr "Numéro de TVA"
 
@@ -1511,8 +1526,9 @@ msgid ""
 "We ensures that these data are used for IUFC only, the data collected will "
 "not be communicated to a third party."
 msgstr ""
-"Nous vous assurons que ces données seront utilisées exclusivement par la plateforme d'admission/inscription et "
-"qu'elles ne seront en aucun cas communiquées à des tiers."
+"Nous vous assurons que ces données seront utilisées exclusivement par la "
+"plateforme d'admission/inscription et qu'elles ne seront en aucun cas "
+"communiquées à des tiers."
 
 #: templates/registration_pdf.html:169
 msgid "Which address would you like your post to be sent to? *"
@@ -1611,3 +1627,4 @@ msgstr ""
 #: templates/continuing_education_layout.html:89
 msgid "data"
 msgstr ""
+
