@@ -57,4 +57,3 @@ class PersonForm(ModelForm):
 class StrictPersonForm(PersonForm):
     def __init__(self, data, **kwargs):
         super().__init__(data, **kwargs)
-        self.fields['email'].required = True

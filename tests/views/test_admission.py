@@ -377,7 +377,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_not_submittable_missing_data_in_all_objects(self):
-        self.admission.person_information.person.email = ''
         self.admission.person_information.person.save()
         self.admission.person_information.birth_country = None
         self.admission.person_information.save()
@@ -390,7 +389,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.assertDictEqual(
             errors,
             {
-                _("Email"): [_("This field is required.")],
                 _("Birth country"): [_("This field is required.")],
                 _("Postal code"): [_("This field is required.")],
                 _("Last degree level"): [_("This field is required.")]
