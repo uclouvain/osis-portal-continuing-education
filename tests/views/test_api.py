@@ -57,8 +57,11 @@ class ApiMethodsTestCase(TestCase):
         self.admission = AdmissionDictFactory(self.person_information)
         self.admission_submitted = AdmissionDictFactory(self.person_information, SUBMITTED)
 
-    @mock.patch('requests.post', return_value=HttpResponse(content=b'{"token": "token"}', status=status.HTTP_200_OK))
+    @mock.patch('requests.post')
     def test_get_token_from_osis(self, mock_post):
+        response = HttpResponse(status=status.HTTP_200_OK)
+        response.json = lambda: {'token': 'token'}
+        mock_post.return_value = response
         token = get_token_from_osis(self.user.username)
         self.assertEqual(token, "token")
 
@@ -67,8 +70,11 @@ class ApiMethodsTestCase(TestCase):
         token = get_token_from_osis(self.user.username)
         self.assertEqual(token, "")
 
-    @mock.patch('requests.post', return_value=HttpResponse(content=b'{"token": "token"}', status=status.HTTP_200_OK))
+    @mock.patch('requests.post')
     def test_get_personal_token_not_in_session(self, mock_post):
+        response = HttpResponse(status=status.HTTP_200_OK)
+        response.json = lambda: {'token': 'token'}
+        mock_post.return_value = response
         token = get_personal_token(self.request)
         self.assertEqual(token, "token")
         self.assertEqual(self.request.session['personal_token'], "token")

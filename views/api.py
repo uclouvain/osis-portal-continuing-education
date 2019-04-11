@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import io
-import json
 
 import requests
 from django.conf import settings
@@ -204,7 +203,7 @@ def get_token_from_osis(username, force_user_creation=False):
         }
     )
     if response.status_code == status.HTTP_200_OK:
-        return json.loads(response.content)['token']
+        return response.json()['token']
     else:
         return ""
 
