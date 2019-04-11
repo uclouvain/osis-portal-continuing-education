@@ -78,7 +78,7 @@ class ApiMethodsTestCase(TestCase):
         token = get_personal_token(self.request)
         self.assertEqual(token, "token")
         self.assertEqual(self.request.session['personal_token'], "token")
-        mock_post.assert_called()
+        self.assertTrue(mock_post.called)
 
     @mock.patch('requests.post')
     def test_get_personal_token_in_session(self, mock_post):
