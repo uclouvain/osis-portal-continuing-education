@@ -51,7 +51,7 @@
             </div>
             <div class="panel-heading">{% trans 'Admission' %}</div>
             <div class="panel panel-body">
-                {% bootstrap_form admission_form exclude='address, person_information, state, awareness_ucl_website, awareness_formation_website, awareness_press, awareness_facebook,awareness_linkedin, awareness_customized_mail, awareness_emailing' %}
+                {% bootstrap_form admission_form exclude='address, person_information, state, awareness_ucl_website, awareness_formation_website, awareness_press, awareness_facebook,awareness_linkedin, awareness_customized_mail, awareness_emailing, awareness_word_of_mouth, awareness_friends, awareness_former_students, awareness_moocs' %}
                 <label class="control-label">{% trans 'Awareness' %}</label>
                 {% bootstrap_field admission_form.awareness_ucl_website %}
                 {% bootstrap_field admission_form.awareness_formation_website %}
@@ -60,6 +60,10 @@
                 {% bootstrap_field admission_form.awareness_linkedin %}
                 {% bootstrap_field admission_form.awareness_customized_mail %}
                 {% bootstrap_field admission_form.awareness_emailing %}
+                {% bootstrap_field admission_form.awareness_word_of_mouth %}
+                {% bootstrap_field admission_form.awareness_friends %}
+                {% bootstrap_field admission_form.awareness_former_students %}
+                {% bootstrap_field admission_form.awareness_moocs %}
             </div>
             <div class="panel panel-body text-center">
                 <button type="submit" class="btn btn-primary" title="{% trans 'Submit' %}" id="bt_submit_account_information">
