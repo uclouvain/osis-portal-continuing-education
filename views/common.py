@@ -235,4 +235,5 @@ def add_contact_for_edit_message(request, formation=None, is_registration=False)
 def _get_managers_mails(formation):
     managers_mail = formation.managers.all().order_by('last_name').values_list('email', flat=True) \
         if formation else []
+    managers_mail = [mail for mail in managers_mail if mail]
     return _(" or ").join(managers_mail)

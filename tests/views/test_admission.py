@@ -46,6 +46,7 @@ from continuing_education.models.enums import admission_state_choices
 from continuing_education.tests.factories.admission import AdmissionFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
+from continuing_education.tests.factories.person_training import PersonTrainingFactory
 from continuing_education.views.admission import admission_form
 from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
@@ -128,6 +129,15 @@ class ViewStudentAdmissionTestCase(TestCase):
         )
 
     def test_admission_submitted_detail(self):
+        PersonTrainingFactory(
+            person=PersonFactory(),
+            training=self.admission_submitted.formation
+        )
+        PersonTrainingFactory(
+            person=PersonFactory(email=None),
+            training=self.admission_submitted.formation
+        )
+
         url = reverse('admission_detail', args=[self.admission_submitted.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
