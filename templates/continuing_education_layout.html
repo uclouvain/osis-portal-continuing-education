@@ -86,7 +86,7 @@
                                 {% if perms.base.is_administrator %}
                                     <li><a href="{% url 'data' %}" role="button" id="bt_data">
                                         <i class="fa fa-database" aria-hidden="true"></i>
-                                        {% trans 'data' %}</a></li>
+                                        {% trans 'Data' %}</a></li>
                                 {% endif %}
                                 {% if 'dashboard' in installed_apps %}
                                     {% include 'dashboard_admin_menu.html' %}

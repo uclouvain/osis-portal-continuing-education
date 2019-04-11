@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-09 13:39+0200\n"
+"POT-Creation-Date: 2019-04-11 08:10+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -496,7 +496,7 @@ msgstr ""
 "    Administration de l'enseignement et de la formation<br/>\n"
 "    Service des inscriptions<br/>\n"
 
-#: tests/views/test_file.py:183 views/file.py:115
+#: tests/views/test_file.py:182 views/file.py:128
 msgid "A problem occured during delete"
 msgstr "Un problème est survenu durant la suppression"
 
@@ -564,7 +564,7 @@ msgstr ""
 "Un email vous a été envoyé contenant les instructions de changement de mot "
 "de passe."
 
-#: views/file.py:138
+#: views/file.py:151
 msgid "An unexpected error occurred"
 msgstr "Une erreur innatendue s'est produite."
 
@@ -597,54 +597,6 @@ msgstr ""
 msgid "Awareness"
 msgstr "Comment avez-vous connu l'existence de ce programme ?"
 
-#: models/admission.py:145 templates/admission_detail.html:185
-msgid "Awareness Facebook"
-msgstr "Sur Facebook"
-
-#: models/admission.py:149 templates/admission_detail.html:188
-msgid "Awareness LinkedIn"
-msgstr "Sur LinkedIn"
-
-#: models/admission.py:178 templates/admission_detail.html:206
-msgid "Awareness Moocs"
-msgstr "Par les Moocs"
-
-#: models/admission.py:133 templates/admission_detail.html:176
-msgid "Awareness UCL website"
-msgstr "Par le site web de l'UCL"
-
-#: models/admission.py:153 templates/admission_detail.html:191
-msgid "Awareness customized mail"
-msgstr "Par courrier personnalisé"
-
-#: models/admission.py:157 templates/admission_detail.html:194
-msgid "Awareness emailing"
-msgstr "Par un emailing"
-
-#: models/admission.py:137 templates/admission_detail.html:179
-msgid "Awareness formation website"
-msgstr "Par le site web de la formation continue"
-
-#: models/admission.py:174 templates/admission_detail.html:203
-msgid "Awareness former students"
-msgstr "Par des anciens étudiants"
-
-#: models/admission.py:170 templates/admission_detail.html:200
-msgid "Awareness friends"
-msgstr "Par des amis"
-
-#: models/admission.py:162
-msgid "Awareness other"
-msgstr "Autre"
-
-#: models/admission.py:141 templates/admission_detail.html:182
-msgid "Awareness press"
-msgstr "Dans la presse"
-
-#: models/admission.py:166 templates/admission_detail.html:197
-msgid "Awareness word of mouth"
-msgstr "Par le bouche à oreille"
-
 #: templates/registration_detail.html:107 templates/registration_form.html:52
 #: templates/registration_form.html:114
 msgid "Billing"
@@ -673,15 +625,59 @@ msgstr "Date de naissance"
 msgid "Birth location"
 msgstr "Lieu de naissance"
 
-#: templates/fragment/files_panel.html:82
+#: templates/fragment/files_panel.html:91
 msgid "Browse"
 msgstr "Parcourir"
+
+#: models/admission.py:145 templates/admission_detail.html:185
+msgid "By Facebook"
+msgstr "Sur Facebook"
+
+#: models/admission.py:149 templates/admission_detail.html:188
+msgid "By LinkedIn"
+msgstr "Sur LinkedIn"
+
+#: models/admission.py:178 templates/admission_detail.html:206
+msgid "By Moocs"
+msgstr "Par les Moocs"
+
+#: models/admission.py:133 templates/admission_detail.html:176
+msgid "By UCL website"
+msgstr "Par le site web de l'UCL"
 
 #: templates/django_registration/registration_form.html:47
 msgid "By checking the checkbox, I accept that my data are used by IUFC."
 msgstr ""
 "En cochant cette case, j'accepte que les données fournies dans ce formulaire "
 "soient exploitées par l'IUFC."
+
+#: models/admission.py:153 templates/admission_detail.html:191
+msgid "By customized mail"
+msgstr "Par courrier personnalisé"
+
+#: models/admission.py:157 templates/admission_detail.html:194
+msgid "By emailing"
+msgstr "Par un emailing"
+
+#: models/admission.py:137 templates/admission_detail.html:179
+msgid "By formation website"
+msgstr "Par le site web de la formation continue"
+
+#: models/admission.py:174 templates/admission_detail.html:203
+msgid "By former students"
+msgstr "Par des anciens étudiants"
+
+#: models/admission.py:170 templates/admission_detail.html:200
+msgid "By friends"
+msgstr "Par des amis"
+
+#: models/admission.py:141 templates/admission_detail.html:182
+msgid "By press"
+msgstr "Dans la presse"
+
+#: models/admission.py:166 templates/admission_detail.html:197
+msgid "By word of mouth"
+msgstr "Par le bouche à oreille"
 
 #: templates/django_registration/registration_form.html:58
 #: templates/fragment/submit_confirmation_modal.html:50
@@ -858,7 +854,7 @@ msgstr "Faculté"
 msgid "Female"
 msgstr "Femme"
 
-#: tests/views/test_file.py:163 views/file.py:113
+#: tests/views/test_file.py:163 views/file.py:126
 msgid "File correctly deleted"
 msgstr "Le fichier a bien été supprimé"
 
@@ -921,10 +917,8 @@ msgid "High school graduation year"
 msgstr "Année d'obtention (secondaire)"
 
 #: templates/registration_pdf.html:150
-#, fuzzy
-#| msgid "Legal address"
 msgid "Home address"
-msgstr "Domicile légal"
+msgstr "Adresse du domicile"
 
 #: templates/registration_pdf.html:151 templates/registration_pdf.html:163
 msgid "House name"
@@ -1077,10 +1071,8 @@ msgid "Married"
 msgstr "Marié"
 
 #: templates/registration_pdf.html:146
-#, fuzzy
-#| msgid "No file chosen"
 msgid "Mobile phone"
-msgstr "Aucun fichier choisi"
+msgstr "Téléphone mobile"
 
 #: models/admission.py:123 templates/admission_detail.html:154
 #: templates/admission_detail.html:157
@@ -1104,7 +1096,7 @@ msgstr "Numéro de registre national belge"
 
 #: templates/continuing_education/home.html:44
 msgid "New admission"
-msgstr "Nouvelle admission"
+msgstr "Nouvelle demande d'admission"
 
 #: templates/fragment/wizard_navbar.html:30
 msgid "Next"
@@ -1122,7 +1114,7 @@ msgstr "Vous n'avez pas soumis de formulaire d'admission"
 msgid "No document available"
 msgstr "Pas de document disponible"
 
-#: templates/fragment/files_panel.html:73
+#: templates/fragment/files_panel.html:78
 msgid "No file chosen"
 msgstr "Aucun fichier choisi"
 
@@ -1144,7 +1136,7 @@ msgctxt "on SIC pdf for date signature"
 msgid "On"
 msgstr "Le"
 
-#: models/enums/enums.py:32 models/enums/enums.py:40
+#: models/admission.py:162 models/enums/enums.py:32 models/enums/enums.py:40
 #: templates/admission_detail.html:209 templates/admission_form.html:161
 msgid "Other"
 msgstr "Autre"
@@ -1244,10 +1236,8 @@ msgid "Private"
 msgstr "Privé"
 
 #: templates/registration_pdf.html:148
-#, fuzzy
-#| msgid "Private"
 msgid "Private e-mail"
-msgstr "Privé"
+msgstr "E-mail privé"
 
 #: models/enums/enums.py:10
 msgid "Professional"
@@ -1316,10 +1306,8 @@ msgid "Registration type"
 msgstr "Type d'inscription"
 
 #: templates/registration_pdf.html:363
-#, fuzzy
-#| msgid "Registration"
 msgid "Reglementations"
-msgstr "Inscription"
+msgstr "Réglementations"
 
 #: models/enums/admission_state_choices.py:14
 msgid "Rejected"
@@ -1359,10 +1347,8 @@ msgstr ""
 "programme"
 
 #: templates/registration_pdf.html:422
-#, fuzzy
-#| msgid "Signup"
 msgid "Signature"
-msgstr "Créer un compte"
+msgstr "Signature"
 
 #: templates/registration_pdf.html:420
 msgid "Signed in"
@@ -1390,6 +1376,11 @@ msgstr "Nom du conjoint"
 msgid "State"
 msgstr "Statut"
 
+#: templates/fragment/files_panel.html:61
+#: templates/fragment/files_panel.html:89
+msgid "State of file prevent this action"
+msgstr "L'état du dossier empêche cette action"
+
 #: models/admission.py:191
 msgid "State reason"
 msgstr "Raison du changement d'état"
@@ -1401,8 +1392,8 @@ msgstr "Raison du changement d'état"
 msgid "Student"
 msgstr "Etudiant"
 
-#: templates/django_registration/complete_account_registration.html:65
-#: templates/django_registration/complete_account_registration.html:66
+#: templates/django_registration/complete_account_registration.html:69
+#: templates/django_registration/complete_account_registration.html:70
 #: templates/django_registration/registration_form.html:54
 #: templates/django_registration/registration_form.html:55
 #: templates/fragment/submit_confirmation_modal.html:51
@@ -1455,7 +1446,7 @@ msgstr "L'activation a échoué."
 msgid "The activation key you provided is invalid."
 msgstr "La clé d'activation que vous avez fournie n'est pas valide."
 
-#: tests/views/test_file.py:108 views/file.py:69
+#: tests/views/test_file.py:108 views/file.py:81
 msgid "The document is uploaded correctly"
 msgstr "Le document a bien été uploadé"
 
@@ -1486,7 +1477,7 @@ msgstr "Aide à la formation"
 msgid "Training aid available"
 msgstr "Aide à la formation disponible"
 
-#: templates/fragment/files_panel.html:79
+#: templates/fragment/files_panel.html:84
 msgid "Upload"
 msgstr "Envoyer"
 
@@ -1636,3 +1627,4 @@ msgstr ""
 #: templates/continuing_education_layout.html:89
 msgid "data"
 msgstr ""
+
