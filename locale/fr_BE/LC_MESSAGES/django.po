@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-11 08:10+0200\n"
+"POT-Creation-Date: 2019-04-11 09:19+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -763,6 +763,10 @@ msgstr "Fonction actuelle"
 #: templates/admission_form.html:55
 msgid "Curriculum"
 msgstr "Curriculum"
+
+#: templates/continuing_education_layout.html:89
+msgid "Data"
+msgstr ""
 
 #: templates/registration_pdf.html:379
 msgid "Data protection policy"
@@ -1548,8 +1552,8 @@ msgstr "Vous avez déjà un compte"
 
 #: tests/views/test_registration.py:102 tests/views/test_registration.py:144
 #: views/common.py:188
-msgid "You are still able to edit the form"
-msgstr "Vous pouvez encore le modifier"
+msgid "You are still able to edit the form, via the 'Edit' button"
+msgstr "Vous pouvez encore le modifier via le bouton 'Editer'"
 
 #: views/admission.py:93
 msgid ""
@@ -1623,8 +1627,3 @@ msgid ""
 msgstr ""
 "Votre compte utilsateur est désormais actif. Vous pouvez à présent vous "
 "identifier pour accéder à la plateforme."
-
-#: templates/continuing_education_layout.html:89
-msgid "data"
-msgstr ""
-

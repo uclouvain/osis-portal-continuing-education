@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-11 08:10+0200\n"
+"POT-Creation-Date: 2019-04-11 09:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -552,6 +552,10 @@ msgstr ""
 
 #: templates/admission_form.html:55
 msgid "Curriculum"
+msgstr ""
+
+#: templates/continuing_education_layout.html:89
+msgid "Data"
 msgstr ""
 
 #: templates/registration_pdf.html:379
@@ -1321,7 +1325,7 @@ msgstr ""
 
 #: tests/views/test_registration.py:102 tests/views/test_registration.py:144
 #: views/common.py:188
-msgid "You are still able to edit the form"
+msgid "You are still able to edit the form, via the 'Edit' button"
 msgstr ""
 
 #: views/admission.py:93
@@ -1381,8 +1385,4 @@ msgstr ""
 #: templates/django_registration/activation_complete.html:33
 msgid ""
 "Your user account is now active. You can now log in to access the platform."
-msgstr ""
-
-#: templates/continuing_education_layout.html:89
-msgid "data"
 msgstr ""
