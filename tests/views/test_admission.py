@@ -166,7 +166,7 @@ class ViewStudentAdmissionTestCase(TestCase):
                 "admission_id": self.admission_submitted['uuid']
             }
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
 
     def test_admission_submit_not_complete(self):
         self.admission['last_degree_level'] = ''
@@ -179,7 +179,7 @@ class ViewStudentAdmissionTestCase(TestCase):
                 "admission_uuid": self.admission['uuid']
             }
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
 
     def test_admission_new(self):
         url = reverse('admission_new')
