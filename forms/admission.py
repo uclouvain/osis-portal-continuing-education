@@ -153,6 +153,26 @@ class AdmissionForm(Form):
         required=False,
         label=_("Awareness emailing")
     )
+    awareness_word_of_mouth = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness word of mouth")
+    )
+    awareness_friends = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness friends")
+    )
+    awareness_former_students = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness former students")
+    )
+    awareness_moocs = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness moocs")
+    )
     awareness_other = forms.CharField(
         max_length=100,
         required=False,
