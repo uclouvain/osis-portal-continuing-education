@@ -70,14 +70,11 @@ def get_registration_list(request, person_uuid):
     return transform_response_to_data(response)
 
 
-def get_continuing_education_training_list(limit=None, offset=None, search=""):
-    params = None
+def get_continuing_education_training_list(**kwargs):
+    params = {}
     url = API_URL % {'object_name': "training", 'object_uuid': ''}
-    if limit and offset:
-        params = {'limit': str(limit), 'offset': str(offset)}
-    if search:
-        params = {'search': search}
-
+    for key, value in kwargs.items():
+        params.update({key: value})
     response = requests.get(
         url=url,
         headers=REQUEST_HEADER,

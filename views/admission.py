@@ -91,12 +91,10 @@ def _show_save_before_submit(request):
 @require_http_methods(["POST"])
 def admission_submit(request):
     admission = api.get_admission(request, request.POST.get('admission_uuid'))
-    if admission['state'] == admission_state_choices.DRAFT:
-        admission_submission_errors, errors_fields = get_submission_errors(admission)
-        if request.POST.get("submit") and not admission_submission_errors:
-            _update_admission_state(request, admission)
-            return redirect('admission_detail', admission['uuid'])
-    raise PermissionDenied('To submit an admission, its state must be DRAFT.')
+    admission_submission_errors, errors_fields = get_submission_errors(admission)
+    if request.POST.get("submit") and not admission_submission_errors:
+        _update_admission_state(request, admission)
+    return redirect('admission_detail', admission['uuid'])
 
 
 def _update_admission_state(request, admission):
