@@ -116,7 +116,7 @@ def post_data_to_osis(request, object_name, object_to_post):
     token = get_personal_token(request)
     response = requests.post(
         url=API_URL % {'object_name': object_name, 'object_uuid': ''},
-        headers={'Authorization': 'Token ' + token},
+        headers=REQUEST_HEADER if object_name == 'prospects' else {'Authorization': 'Token ' + token},
         json=object_to_post
     )
     if response.status_code != status.HTTP_201_CREATED:
@@ -206,6 +206,6 @@ def get_token_from_osis(username, force_user_creation=False):
 
 
 def get_personal_token(request):
-    if not request.session.get('personal_token'):
-        request.session['personal_token'] = get_token_from_osis(request.user.username, force_user_creation=True)
+    # if not request.session.get('personal_token'):
+    request.session['personal_token'] = get_token_from_osis(request.user.username, force_user_creation=True)
     return request.session['personal_token']

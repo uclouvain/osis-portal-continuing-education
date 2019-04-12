@@ -204,7 +204,7 @@ class AdmissionForm(Form):
     def _set_initial_fields(self):
         fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', 'acronym', 'uuid')]
         for field, attribute, slug in fields_to_set:
-            if self.initial[field]:
+            if field in self.initial:
                 self.initial[field] = (
                     self.initial[field][slug],
                     self.initial[field]['education_group'][attribute]
