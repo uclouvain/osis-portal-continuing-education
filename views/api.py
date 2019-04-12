@@ -155,11 +155,12 @@ def update_registration(request, object_to_update):
     return update_data_to_osis(request, "registrations", object_to_update)
 
 
-def prepare_admission_data(admission, forms):
+def prepare_admission_data(admission, username, forms):
     if admission:
         forms['admission'].cleaned_data['uuid'] = admission['uuid']
 
     forms['admission'].cleaned_data['address'] = forms['address'].cleaned_data
+    forms['id'].cleaned_data['email'] = username
     forms['person'].cleaned_data['person'] = forms['id'].cleaned_data
     forms['person'].cleaned_data['birth_date'] = forms['person'].cleaned_data['birth_date'].__str__()
     forms['admission'].cleaned_data['person_information'] = forms['person'].cleaned_data
@@ -206,6 +207,6 @@ def get_token_from_osis(username, force_user_creation=False):
 
 
 def get_personal_token(request):
-    # if not request.session.get('personal_token'):
-    request.session['personal_token'] = get_token_from_osis(request.user.username, force_user_creation=True)
+    if not request.session.get('personal_token'):
+        request.session['personal_token'] = get_token_from_osis(request.user.username, force_user_creation=True)
     return request.session['personal_token']

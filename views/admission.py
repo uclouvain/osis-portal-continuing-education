@@ -33,7 +33,7 @@ from django.shortcuts import render, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
-from base.models import person as mdl_person
+from base.models.person import Person
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
@@ -67,14 +67,15 @@ def admission_detail(request, admission_uuid):
         admission,
         FILES_URL % {'admission_uuid': str(admission_uuid)}
     )
-
+    is_draft = admission['state'] == admission_state_choices.DRAFT
     return render(
         request,
         "admission_detail.html",
         {
             'admission': admission,
             'admission_is_submittable': admission_is_submittable,
-            'list_files': list_files
+            'list_files': list_files,
+            'is_draft': is_draft,
         }
     )
 
@@ -129,6 +130,7 @@ def admission_form(request, admission_uuid=None):
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
         api.prepare_admission_data(
             admission,
+            request.user.username,
             forms={
                 'admission': adm_form,
                 'address': address_form,
@@ -187,8 +189,9 @@ def _is_admission_submittable_and_show_errors(admission, errors_fields, request)
 
 
 def _fill_forms_with_existing_data(admission, formation, request):
-    base_person = mdl_person.find_by_user(user=request.user)
     person_information = api.get_continuing_education_person(request)
+    Person.objects.filter(user=request.user).update(**person_information.get('person'))
+    base_person = Person.objects.get(user=request.user)
     person_form = ContinuingEducationPersonForm(
         request.POST or None,
         initial=person_information if _has_instance_with_values(person_information) else None
