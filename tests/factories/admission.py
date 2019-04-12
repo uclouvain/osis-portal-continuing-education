@@ -60,7 +60,7 @@ def AdmissionDictFactory(person_information, state=DRAFT):
         'current_employer': factory.Faker('company'),
         'activity_sector': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.SECTOR_CHOICES)).fuzz(),
         'motivation': 'motivation',
-        'professional_impact': 'professional impact',
+        'professional_personal_interests': 'professional impact',
         'state': state
     }
     return admission

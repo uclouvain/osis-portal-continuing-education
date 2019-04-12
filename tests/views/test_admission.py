@@ -293,7 +293,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         admission = {
             'person_information': person_information,
             'motivation': 'abcd',
-            'professional_impact': 'abcd',
+            'professional_personal_interests': 'abcd',
             'formation': self.formation['uuid'],
             'awareness_ucl_website': True,
             'state': admission_state_choices.DRAFT
@@ -355,7 +355,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.assertDictEqual(
             errors,
             {
-                _("Email"): [_("This field is required.")],
                 _("Birth country"): [_("This field is required.")],
                 _("Postal code"): [_("This field is required.")],
                 _("Last degree level"): [_("This field is required.")]

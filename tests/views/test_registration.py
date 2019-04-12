@@ -96,7 +96,7 @@ class ViewStudentRegistrationTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("You are still able to edit the form"),
+            ugettext("You are still able to edit the form, via the 'Edit' button"),
             str(messages_list[0])
         )
         self.assertIn(
@@ -129,7 +129,7 @@ class ViewStudentRegistrationTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("You are still able to edit the form"),
+            ugettext("You are still able to edit the form, via the 'Edit' button"),
             str(messages_list[0])
         )
         self.assertIn(

@@ -111,10 +111,10 @@ class AdmissionForm(Form):
         required=False,
         label=_("Motivation")
     )
-    professional_impact = forms.CharField(
+    professional_personal_interests = forms.CharField(
         widget=forms.Textarea,
         required=False,
-        label=_("Professional impact")
+        label=_("Professional personal interests")
     )
 
     # Awareness
@@ -230,7 +230,7 @@ class StrictAdmissionForm(AdmissionForm):
             'current_employer',
             'activity_sector',
             'motivation',
-            'professional_impact',
+            'professional_personal_interests',
             'formation',
         ]
 
