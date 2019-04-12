@@ -66,7 +66,7 @@ class AdmissionForm(ModelForm):
 
             # Motivation
             'motivation',
-            'professional_impact',
+            'professional_personal_interests',
 
             # Awareness
             'awareness_ucl_website',
@@ -104,7 +104,7 @@ class StrictAdmissionForm(AdmissionForm):
             'current_employer',
             'activity_sector',
             'motivation',
-            'professional_impact',
+            'professional_personal_interests',
             'formation',
         ]
 

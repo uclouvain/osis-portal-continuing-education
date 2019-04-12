@@ -102,7 +102,7 @@ class AdmissionFactory(factory.DjangoModelFactory):
 
     # Motivation
     motivation = "motivation"
-    professional_impact = "professional impact"
+    professional_personal_interests = "professional impact"
 
     # Awareness
     awareness_ucl_website = factory.fuzzy.FuzzyChoice([True, False])
