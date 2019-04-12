@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-11 09:19+0200\n"
+"POT-Creation-Date: 2019-04-12 08:34+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -467,7 +467,7 @@ msgstr ""
 "inscriptions</p>\n"
 "    "
 
-#: views/common.py:238
+#: views/common.py:239
 msgid " or "
 msgstr " ou "
 
@@ -608,8 +608,8 @@ msgstr "Adresse de facturation"
 
 #: forms/account.py:23 models/continuing_education_person.py:38
 #: templates/admission_detail.html:101 templates/registration_detail.html:88
-#: templates/registration_pdf.html:120 tests/views/test_admission.py:384
-#: tests/views/test_admission.py:410
+#: templates/registration_pdf.html:120 tests/views/test_admission.py:392
+#: tests/views/test_admission.py:418
 msgid "Birth country"
 msgstr "Pays de naissance"
 
@@ -813,7 +813,6 @@ msgstr ""
 #: forms/account.py:64 forms/person.py:35 forms/prospect.py:31
 #: templates/admission_detail.html:109 templates/authentication/login.html:50
 #: templates/authentication/login.html:52 templates/prospect_form.html:67
-#: tests/views/test_admission.py:383
 msgid "Email"
 msgstr ""
 
@@ -895,7 +894,7 @@ msgstr "Formations"
 
 #: forms/person.py:27 templates/admission_detail.html:95
 #: templates/registration_detail.html:82 templates/registration_pdf.html:130
-#: tests/views/test_admission.py:434
+#: tests/views/test_admission.py:442
 msgid "Gender"
 msgstr "Genre"
 
@@ -950,7 +949,7 @@ msgstr "IUFC - Formation Continue"
 msgid "Identification"
 msgstr "Identification"
 
-#: tests/views/test_admission.py:143 views/common.py:226
+#: tests/views/test_admission.py:153 views/common.py:226
 #, python-format
 msgid ""
 "If you want to edit again your admission, please contact the program "
@@ -1021,8 +1020,8 @@ msgid "Last degree institution"
 msgstr "Institution"
 
 #: models/admission.py:70 templates/admission_detail.html:126
-#: tests/views/test_admission.py:126 tests/views/test_admission.py:266
-#: tests/views/test_admission.py:386 tests/views/test_admission.py:398
+#: tests/views/test_admission.py:127 tests/views/test_admission.py:276
+#: tests/views/test_admission.py:394 tests/views/test_admission.py:406
 msgid "Last degree level"
 msgstr "Niveau du dernier diplôme"
 
@@ -1207,8 +1206,8 @@ msgstr "Courrier"
 #: templates/registration_detail.html:114
 #: templates/registration_detail.html:129 templates/registration_form.html:119
 #: templates/registration_form.html:146 templates/registration_pdf.html:154
-#: templates/registration_pdf.html:165 tests/views/test_admission.py:385
-#: tests/views/test_admission.py:422 tests/views/test_registration.py:361
+#: templates/registration_pdf.html:165 tests/views/test_admission.py:393
+#: tests/views/test_admission.py:430 tests/views/test_registration.py:361
 #: tests/views/test_registration.py:362 tests/views/test_registration.py:387
 msgid "Postal code"
 msgstr "Code postal"
@@ -1247,13 +1246,13 @@ msgstr "E-mail privé"
 msgid "Professional"
 msgstr "Professionel"
 
+#: models/admission.py:127 templates/admission_detail.html:158
+msgid "Professional and personal interests"
+msgstr "Intérêts professionnels et personnels"
+
 #: templates/admission_detail.html:137 templates/admission_form.html:123
 msgid "Professional background"
 msgstr "Parcours professionnel"
-
-#: models/admission.py:127 templates/admission_detail.html:158
-msgid "Professional impact"
-msgstr "Impact professionnel de la formation"
 
 #: models/admission.py:97 templates/admission_detail.html:140
 msgid "Professional status"
@@ -1463,13 +1462,12 @@ msgstr "Ce compte a expiré."
 msgid "This email does not exist in our database: %(mail)s"
 msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 
-#: tests/views/test_admission.py:383 tests/views/test_admission.py:384
-#: tests/views/test_admission.py:385 tests/views/test_admission.py:386
-#: tests/views/test_admission.py:398 tests/views/test_admission.py:410
-#: tests/views/test_admission.py:422 tests/views/test_admission.py:434
-#: tests/views/test_registration.py:361 tests/views/test_registration.py:362
-#: tests/views/test_registration.py:363 tests/views/test_registration.py:375
-#: tests/views/test_registration.py:387
+#: tests/views/test_admission.py:392 tests/views/test_admission.py:393
+#: tests/views/test_admission.py:394 tests/views/test_admission.py:406
+#: tests/views/test_admission.py:418 tests/views/test_admission.py:430
+#: tests/views/test_admission.py:442 tests/views/test_registration.py:361
+#: tests/views/test_registration.py:362 tests/views/test_registration.py:363
+#: tests/views/test_registration.py:375 tests/views/test_registration.py:387
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
@@ -1579,7 +1577,7 @@ msgstr ""
 "Votre dossier d'admission a été enregistré. Veuillez prendre en compte les "
 "informations suivantes :"
 
-#: tests/views/test_admission.py:122 tests/views/test_admission.py:262
+#: tests/views/test_admission.py:123 tests/views/test_admission.py:272
 #: tests/views/test_registration.py:158 views/common.py:164
 msgid ""
 "Your file is not submittable because you did not provide the following "
@@ -1627,3 +1625,6 @@ msgid ""
 msgstr ""
 "Votre compte utilsateur est désormais actif. Vous pouvez à présent vous "
 "identifier pour accéder à la plateforme."
+
+#~ msgid "Professional impact"
+#~ msgstr "Impact professionnel de la formation"
