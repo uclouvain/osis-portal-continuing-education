@@ -102,8 +102,10 @@ class ContinuingEducationRegistrationView(RegistrationView):
     def __get_activation_link(self, activation_key):
         scheme = 'https' if self.request.is_secure() else 'http'
         site = get_current_site(self.request)
-        url = reverse('django_registration_activate', kwargs={'formation_id': self.request.session.get('formation_id'),
-                                                              'activation_key': activation_key})
+        params = {'activation_key': activation_key}
+        if self.request.session.get('formation_id'):
+            params.update({'formation_id': self.request.session.get('formation_id')})
+        url = reverse('django_registration_activate', kwargs=params)
         return '{scheme}://{site}{url}'.format(scheme=scheme,
                                                site=site,
                                                url=url)
