@@ -67,7 +67,6 @@ def admission_detail(request, admission_uuid):
         admission,
         FILES_URL % {'admission_uuid': str(admission_uuid)}
     )
-    is_draft = admission['state'] == admission_state_choices.DRAFT
     return render(
         request,
         "admission_detail.html",
@@ -75,7 +74,11 @@ def admission_detail(request, admission_uuid):
             'admission': admission,
             'admission_is_submittable': admission_is_submittable,
             'list_files': list_files,
-            'is_draft': is_draft,
+            'states': {
+                'is_draft': admission['state'] == admission_state_choices.DRAFT,
+                'is_rejected': admission['state'] == admission_state_choices.REJECTED,
+                'is_waiting': admission['state'] == admission_state_choices.WAITING
+            }
         }
     )
 
