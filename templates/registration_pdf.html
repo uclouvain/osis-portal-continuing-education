@@ -95,7 +95,7 @@
         </td>
         <td width="25%"><table class="main_table">
         <tr>
-            <th>{% trans 'RESERVED FOR UCL USE' %}</th>
+            <th>{% trans 'RESERVED FOR UCLOUVAIN USE' %}</th>
         </tr>
         <tr>
             <td>{% trans 'Date' %}</td>
@@ -135,7 +135,7 @@
          {{ admission.spouse_name | default_if_none:"-" }} </div>
     <div><strong>{% trans "Children number" %}:</strong>
          {{ admission.children_number | default_if_none:"-" }} </div>
-    <div class="col-md-6"><strong>{% trans "Previous UCL registration" %}</strong>
+    <div class="col-md-6"><strong>{% trans "Previous UCLouvain registration" %}</strong>
          {{ admission.previous_ucl_registration | yesno }} </div>
     <div><strong>{% trans "Previous NOMA" %}:</strong>
          {{ admission.previous_noma | default_if_none:"-" }} </div>
@@ -179,20 +179,20 @@
                     (please mark your choice below), the additional document(s) requested<br/>
                 - the enclosed "University Regulation and Data Protection" document dated and signed<br/>
                 - a colour photo with a white background (of the correct size) glued to the attached
-                    "Ordering a UCL access card" document<br/>
+                    "Ordering a UCLouvain access card" document<br/>
                 - a photocopy of your identity car or passport<br/>
             {% endblocktrans %}
         </p>
     </div>
 
     <div>
-        <h4>[  ]{% trans 'Individual course(s) or language course at the language institute of UCL (ILV)' %}</h4>
+        <h4>[  ]{% trans 'Individual course(s) or language course at the language institute of UCLouvain (ILV)' %}</h4>
         <table class="main_table">
             <tr>
                 <td>
                     {% blocktrans %}
                         - official offer of a place ("autorisation d'inscription") in a individual course(s) or language<br/>
-                        <strong>Please return your duly completed and signed application to the UCL University's Enrolment Office</strong>
+                        <strong>Please return your duly completed and signed application to the UCLouvain University's Enrolment Office</strong>
                     {% endblocktrans %}
                 </td>
             </tr>
@@ -205,8 +205,8 @@
             <tr>
                 <td>
                     {% blocktrans %}
-                        - official offer of a place ("autorisation d'inscription") issued by the UCL University's Enrolment Office<br/>
-                        <strong>Please bring your duly completed and signed application to the UCL University's Enrolment Office</strong>
+                        - official offer of a place ("autorisation d'inscription") issued by the UCLouvain University's Enrolment Office<br/>
+                        <strong>Please bring your duly completed and signed application to the UCLouvain University's Enrolment Office</strong>
                     {% endblocktrans %}
                 </td>
             </tr>
@@ -220,7 +220,7 @@
                 <td>
                     {% blocktrans %}
                         - a photocopy of the internship agreement signed by all three parties<br/>
-                        <strong>Please bring your duly completed and signed application to the UCL University's Enrolment Office</strong>
+                        <strong>Please bring your duly completed and signed application to the UCLouvain University's Enrolment Office</strong>
                     {% endblocktrans %}
                 </td>
             </tr>
@@ -234,7 +234,7 @@
                 <td>
                     {% blocktrans %}
                         - confirmation of enrolment at your home university<br/>
-                        <strong>Please return your duly completed and signed application for processing to the UCL faculty in which you will be studying</strong>
+                        <strong>Please return your duly completed and signed application for processing to the UCLouvain faculty in which you will be studying</strong>
                     {% endblocktrans %}
                 </td>
             </tr>
@@ -308,14 +308,14 @@
             <tr>
                 <td>
                     {% blocktrans %}
-                        <h4>Reserved for the UCL faculty</h4><br/>
+                        <h4>Reserved for the UCLouvain faculty</h4><br/>
                         <small>(for enrolment on either an "Inter-university programme" or lifelong learning programme)</small><br/>
                         The faculty where the student will study is required to:<br/>
                         - specify the course title:<br/>
-                        - specify the UCL course code to be used:<br/>
+                        - specify the UCLouvain course code to be used:<br/>
                         <table>
                             <tr>
-                                <td>Date</td><td>Signature and stamp of the UCL faculty</td>
+                                <td>Date</td><td>Signature and stamp of the UCLouvain faculty</td>
                             </tr>
                         </table>
                         Name and telephone extension
@@ -434,14 +434,14 @@
 <table>
     <tr>
         <td width="75%">
-            {% blocktrans with aca_year=root.academic_year %}<strong>Ordering a UCL access card (smartcard)</strong><br/>
+            {% blocktrans with aca_year=root.academic_year %}<strong>Ordering a UCLouvain access card (smartcard)</strong><br/>
     Teaching and Training Department<br/>
     Office of the Registrar<br/>
 {% endblocktrans %}
         </td>
         <td width="25%"><table class="main_table">
         <tr>
-            <th>{% trans 'RESERVED FOR UCL USE' %}</th>
+            <th>{% trans 'RESERVED FOR UCLOUVAIN USE' %}</th>
         </tr>
         <tr>
             <td>{% trans 'Date' %}</td>
@@ -467,14 +467,14 @@
     </table>
     {% blocktrans %}
         <p>Dear Student,</p>
-        <p>The Université catholique de Louvain (UCL) provides its students with a smartcard to access a growing number
+        <p>The Université catholique de Louvain (UCLouvain) provides its students with a smartcard to access a growing number
             of functions (to access buildings, car parks, computer rooms, …
             For more information: https://uclouvain.be/fr/decouvrir/smartcard.html).</p>
 
         <p>Do you already have a smartcard?<br/>
-        [  ] NO,<br/>I don’t have a UCL access card yet; in this case I have enclosed a photograph in accordance with the
+        [  ] NO,<br/>I don’t have a UCLouvain access card yet; in this case I have enclosed a photograph in accordance with the
             instructions below.<br/>
-        [  ] YES, I already have a UCL access card (issued only by the Office of the Registrar or the UCL Human Resources
+        [  ] YES, I already have a UCLouvain access card (issued only by the Office of the Registrar or the UCLouvain Human Resources
             Department); in this case, I have checked the box and enclosed this form with my enrolment application
             WITHOUT a photograph.
         </p>
