@@ -122,7 +122,7 @@ class Admission(SerializableModel):
         blank=True,
         verbose_name=_("Motivation")
     )
-    professional_personal_interests  = models.TextField(
+    professional_personal_interests = models.TextField(
         blank=True,
         verbose_name=_("Professional and personal interests")
     )
