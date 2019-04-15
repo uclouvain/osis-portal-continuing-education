@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-15 09:08+0200\n"
+"POT-Creation-Date: 2019-04-15 10:08+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1283,6 +1283,10 @@ msgstr "Fonctionnaire"
 msgid "RESERVED FOR UCLOUVAIN USE"
 msgstr "CADRE RÉSERVÉ À L'UCLOUVAIN"
 
+#: models/admission.py:342
+msgid "Reduced rates"
+msgstr "Droits réduits"
+
 #: templates/admission_form.html:63
 msgid "References"
 msgstr "Références"
@@ -1382,6 +1386,10 @@ msgstr "Taille"
 #: templates/registration_pdf.html:134
 msgid "Spouse name"
 msgstr "Nom du conjoint"
+
+#: models/admission.py:347
+msgid "Spreading payments"
+msgstr "Etalement des paiements"
 
 #: models/admission.py:186 templates/continuing_education/home.html:60
 #: templates/continuing_education/home.html:101

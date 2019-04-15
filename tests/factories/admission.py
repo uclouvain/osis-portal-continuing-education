@@ -153,3 +153,5 @@ class AdmissionFactory(factory.DjangoModelFactory):
     assessment_succeeded = factory.fuzzy.FuzzyChoice([True, False])
     # ajouter dates sessions cours suivies
     sessions = "sessions"
+    reduced_rates = False
+    spreading_payments = False

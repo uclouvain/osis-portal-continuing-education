@@ -337,6 +337,16 @@ class Admission(SerializableModel):
         verbose_name=_("Sessions")
     )
 
+    reduced_rates = models.BooleanField(
+        default=False,
+        verbose_name=_("Reduced rates")
+    )
+
+    spreading_payments = models.BooleanField(
+        default=False,
+        verbose_name=_("Spreading payments")
+    )
+
     def is_draft(self):
         return self.state == admission_state_choices.DRAFT
 
