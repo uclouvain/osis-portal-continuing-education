@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-12 08:34+0200\n"
+"POT-Creation-Date: 2019-04-15 09:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgid ""
 "                        - a photocopy of the internship agreement signed by "
 "all three parties<br/>\n"
 "                        <strong>Please bring your duly completed and signed "
-"application to the UCL University's Enrolment Office</strong>\n"
+"application to the UCLouvain University's Enrolment Office</strong>\n"
 "                    "
 msgstr ""
 
@@ -33,8 +33,8 @@ msgid ""
 "                        - confirmation of enrolment at your home "
 "university<br/>\n"
 "                        <strong>Please return your duly completed and signed "
-"application for processing to the UCL faculty in which you will be studying</"
-"strong>\n"
+"application for processing to the UCLouvain faculty in which you will be "
+"studying</strong>\n"
 "                    "
 msgstr ""
 
@@ -44,7 +44,7 @@ msgid ""
 "                        - official offer of a place (\"autorisation "
 "d'inscription\") in a individual course(s) or language<br/>\n"
 "                        <strong>Please return your duly completed and signed "
-"application to the UCL University's Enrolment Office</strong>\n"
+"application to the UCLouvain University's Enrolment Office</strong>\n"
 "                    "
 msgstr ""
 
@@ -52,9 +52,9 @@ msgstr ""
 msgid ""
 "\n"
 "                        - official offer of a place (\"autorisation "
-"d'inscription\") issued by the UCL University's Enrolment Office<br/>\n"
+"d'inscription\") issued by the UCLouvain University's Enrolment Office<br/>\n"
 "                        <strong>Please bring your duly completed and signed "
-"application to the UCL University's Enrolment Office</strong>\n"
+"application to the UCLouvain University's Enrolment Office</strong>\n"
 "                    "
 msgstr ""
 
@@ -69,17 +69,18 @@ msgstr ""
 #: templates/registration_pdf.html:310
 msgid ""
 "\n"
-"                        <h4>Reserved for the UCL faculty</h4><br/>\n"
+"                        <h4>Reserved for the UCLouvain faculty</h4><br/>\n"
 "                        <small>(for enrolment on either an \"Inter-"
 "university programme\" or lifelong learning programme)</small><br/>\n"
 "                        The faculty where the student will study is required "
 "to:<br/>\n"
 "                        - specify the course title:<br/>\n"
-"                        - specify the UCL course code to be used:<br/>\n"
+"                        - specify the UCLouvain course code to be used:<br/"
+">\n"
 "                        <table>\n"
 "                            <tr>\n"
 "                                <td>Date</td><td>Signature and stamp of the "
-"UCL faculty</td>\n"
+"UCLouvain faculty</td>\n"
 "                            </tr>\n"
 "                        </table>\n"
 "                        Name and telephone extension\n"
@@ -205,7 +206,7 @@ msgid ""
 "document dated and signed<br/>\n"
 "                - a colour photo with a white background (of the correct "
 "size) glued to the attached\n"
-"                    \"Ordering a UCL access card\" document<br/>\n"
+"                    \"Ordering a UCLouvain access card\" document<br/>\n"
 "                - a photocopy of your identity car or passport<br/>\n"
 "            "
 msgstr ""
@@ -214,18 +215,18 @@ msgstr ""
 msgid ""
 "\n"
 "        <p>Dear Student,</p>\n"
-"        <p>The Université catholique de Louvain (UCL) provides its students "
-"with a smartcard to access a growing number\n"
+"        <p>The Université catholique de Louvain (UCLouvain) provides its "
+"students with a smartcard to access a growing number\n"
 "            of functions (to access buildings, car parks, computer rooms, …\n"
 "            For more information: https://uclouvain.be/fr/decouvrir/"
 "smartcard.html).</p>\n"
 "\n"
 "        <p>Do you already have a smartcard?<br/>\n"
-"        [  ] NO,<br/>I don’t have a UCL access card yet; in this case I have "
-"enclosed a photograph in accordance with the\n"
+"        [  ] NO,<br/>I don’t have a UCLouvain access card yet; in this case "
+"I have enclosed a photograph in accordance with the\n"
 "            instructions below.<br/>\n"
-"        [  ] YES, I already have a UCL access card (issued only by the "
-"Office of the Registrar or the UCL Human Resources\n"
+"        [  ] YES, I already have a UCLouvain access card (issued only by the "
+"Office of the Registrar or the UCLouvain Human Resources\n"
 "            Department); in this case, I have checked the box and enclosed "
 "this form with my enrolment application\n"
 "            WITHOUT a photograph.\n"
@@ -289,7 +290,7 @@ msgstr ""
 
 #: templates/registration_pdf.html:437
 msgid ""
-"<strong>Ordering a UCL access card (smartcard)</strong><br/>\n"
+"<strong>Ordering a UCLouvain access card (smartcard)</strong><br/>\n"
 "    Teaching and Training Department<br/>\n"
 "    Office of the Registrar<br/>\n"
 msgstr ""
@@ -434,7 +435,7 @@ msgid "By Moocs"
 msgstr ""
 
 #: models/admission.py:133 templates/admission_detail.html:176
-msgid "By UCL website"
+msgid "By UCLouvain website"
 msgstr ""
 
 #: templates/django_registration/registration_form.html:47
@@ -648,6 +649,10 @@ msgstr ""
 msgid "File correctly deleted"
 msgstr ""
 
+#: templates/fragment/submit_confirmation_modal.html:51
+msgid "Finalize"
+msgstr ""
+
 #: forms/person.py:16 forms/prospect.py:11 templates/admission_detail.html:93
 #: templates/prospect_form.html:59 templates/registration_detail.html:80
 #: templates/registration_pdf.html:114 templates/registration_pdf.html:353
@@ -759,8 +764,8 @@ msgstr ""
 
 #: templates/registration_pdf.html:189
 msgid ""
-"Individual course(s) or language course at the language institute of UCL "
-"(ILV)"
+"Individual course(s) or language course at the language institute of "
+"UCLouvain (ILV)"
 msgstr ""
 
 #: templates/django_registration/complete_account_registration.html:48
@@ -1001,7 +1006,7 @@ msgstr ""
 
 #: models/admission.py:263 templates/registration_detail.html:101
 #: templates/registration_form.html:103 templates/registration_pdf.html:138
-msgid "Previous UCL registration"
+msgid "Previous UCLouvain registration"
 msgstr ""
 
 #: tests/views/test_registration.py:184 views/common.py:204
@@ -1049,7 +1054,7 @@ msgid "Public servant"
 msgstr ""
 
 #: templates/registration_pdf.html:98 templates/registration_pdf.html:444
-msgid "RESERVED FOR UCL USE"
+msgid "RESERVED FOR UCLOUVAIN USE"
 msgstr ""
 
 #: templates/admission_form.html:63
@@ -1175,7 +1180,6 @@ msgstr ""
 #: templates/django_registration/complete_account_registration.html:70
 #: templates/django_registration/registration_form.html:54
 #: templates/django_registration/registration_form.html:55
-#: templates/fragment/submit_confirmation_modal.html:51
 #: templates/registration/continuing_education_password_reset_form.html:40
 msgid "Submit"
 msgstr ""
