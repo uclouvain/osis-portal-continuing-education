@@ -154,4 +154,4 @@ class AdmissionFactory(factory.DjangoModelFactory):
     # ajouter dates sessions cours suivies
     sessions = "sessions"
     reduced_rates = False
-    spreading_payment = False
+    spreading_payments = False
