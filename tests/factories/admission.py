@@ -97,6 +97,8 @@ def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
         'assessment_presented': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
         'assessment_succeeded': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
         'sessions': 'Test',
-        'state': state
+        'state': state,
+        'reduced_rates': False,
+        'spreading_payments': False
     }
     return registration
