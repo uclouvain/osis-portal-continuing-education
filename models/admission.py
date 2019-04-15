@@ -130,7 +130,7 @@ class Admission(SerializableModel):
     # Awareness
     awareness_ucl_website = models.BooleanField(
         default=False,
-        verbose_name=_("By UCL website")
+        verbose_name=_("By UCLouvain website")
     )
     awareness_formation_website = models.BooleanField(
         default=False,
@@ -260,7 +260,7 @@ class Admission(SerializableModel):
     )
     previous_ucl_registration = models.BooleanField(
         default=False,
-        verbose_name=_("Previous UCL registration")
+        verbose_name=_("Previous UCLouvain registration")
     )
     previous_noma = models.CharField(
         max_length=255,
