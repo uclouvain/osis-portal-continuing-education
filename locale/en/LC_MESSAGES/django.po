@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-15 09:08+0200\n"
+"POT-Creation-Date: 2019-04-15 10:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1057,6 +1057,10 @@ msgstr ""
 msgid "RESERVED FOR UCLOUVAIN USE"
 msgstr ""
 
+#: models/admission.py:342
+msgid "Reduced rates"
+msgstr ""
+
 #: templates/admission_form.html:63
 msgid "References"
 msgstr ""
@@ -1153,6 +1157,10 @@ msgstr ""
 #: models/admission.py:254 templates/registration_detail.html:97
 #: templates/registration_pdf.html:134
 msgid "Spouse name"
+msgstr ""
+
+#: models/admission.py:347
+msgid "Spreading payments"
 msgstr ""
 
 #: models/admission.py:186 templates/continuing_education/home.html:60
