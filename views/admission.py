@@ -177,7 +177,7 @@ def _get_admission_or_403(admission_uuid, request):
 
 def _get_formation(request):
     formation = None
-    if 'formation_id' in request.session:
+    if request.session.get('formation_id'):
         formation = api.get_continuing_education_training(request, request.session.get('formation_id'))
     return formation
 
