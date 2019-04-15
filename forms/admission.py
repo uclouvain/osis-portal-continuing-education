@@ -4,6 +4,7 @@ from django.forms import ChoiceField, Form
 from django.utils.translation import gettext_lazy as _
 
 from continuing_education.models.enums import enums, admission_state_choices
+from reference.models.country import Country
 
 
 class AdmissionForm(Form):
@@ -17,9 +18,10 @@ class AdmissionForm(Form):
         choices=admission_state_choices.STUDENT_STATE_CHOICES,
         required=False
     )
-    citizenship = autocomplete.Select2ListCreateChoiceField(
-        widget=autocomplete.ListSelect2(url='country-autocomplete'),
-        required=False,
+    citizenship = forms.ModelChoiceField(
+        queryset=Country.objects.all(),
+        widget=autocomplete.ModelSelect2(url='country-autocomplete'),
+        required=False
     )
     high_school_diploma = forms.TypedChoiceField(
         coerce=lambda x: x == 'True',

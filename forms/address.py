@@ -2,10 +2,13 @@ from dal import autocomplete
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from reference.models.country import Country
+
 
 class AddressForm(forms.Form):
-    country = autocomplete.Select2ListCreateChoiceField(
-        widget=autocomplete.ListSelect2(url='country-autocomplete'),
+    country = forms.ModelChoiceField(
+        queryset=Country.objects.all(),
+        widget=autocomplete.ModelSelect2(url='country-autocomplete'),
         required=False
     )
 

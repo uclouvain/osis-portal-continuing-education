@@ -13,13 +13,14 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
 from osis_common.messaging import message_config, send_message as message_service
+from reference.models.country import Country
 
 
 class ContinuingEducationPersonForm(forms.Form):
-    birth_country = autocomplete.Select2ListCreateChoiceField(
-        widget=autocomplete.ListSelect2(url='country-autocomplete'),
-        required=True,
-        label=_("Birth country")
+    birth_country = forms.ModelChoiceField(
+        queryset=Country.objects.all(),
+        widget=autocomplete.ModelSelect2(url='country-autocomplete'),
+        required=True
     )
 
     birth_date = forms.DateField(
