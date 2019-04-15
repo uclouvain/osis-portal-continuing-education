@@ -25,25 +25,21 @@
 ##############################################################################
 from unittest.mock import patch
 
+import mock
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.db import models
-from django.forms import model_to_dict
 from django.test import TestCase
 from django.utils.translation import ugettext, ugettext_lazy as _, gettext
 from requests import Response
 
 from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.education_group import EducationGroupFactory
-from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import SuperUserFactory
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
-from continuing_education.tests.factories.admission import AdmissionFactory
-from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingFactory
-from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
+from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED, ACCEPTED, REJECTED
+from continuing_education.tests.factories.admission import RegistrationDictFactory
+from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
 
@@ -52,29 +48,10 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
         self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonFactory(person=self.person)
-        academic_year = AcademicYearFactory(year=2018)
-        education_group = EducationGroupFactory()
-        EducationGroupYearFactory(
-            education_group=education_group,
-            academic_year=academic_year
-        )
-        self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
-        self.admission_accepted = AdmissionFactory(
-            state="Accepted",
-            person_information=self.person_information,
-            formation=self.formation
-        )
-        self.admission_rejected = AdmissionFactory(
-            state="Rejected",
-            person_information=self.person_information,
-            formation=self.formation
-        )
-        self.registration_submitted = AdmissionFactory(
-            state="Registration submitted",
-            person_information=self.person_information,
-            formation=self.formation
-        )
+        self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
+        self.admission_accepted = RegistrationDictFactory(self.person_information, state=ACCEPTED)
+        self.admission_rejected = RegistrationDictFactory(self.person_information, state=REJECTED)
+        self.registration_submitted = RegistrationDictFactory(self.person_information, state=REGISTRATION_SUBMITTED)
 
         self.patcher = patch(
             "continuing_education.views.registration._get_files_list",
@@ -83,8 +60,28 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.mocked_called_api_function = self.patcher.start()
         self.addCleanup(self.patcher.stop)
 
+        self.get_patcher = patch(
+            "continuing_education.views.api.get_data_from_osis",
+            return_value=self.admission_accepted
+        )
+        self.mocked_called_api_function_get = self.get_patcher.start()
+        self.addCleanup(self.get_patcher.stop)
+
+        self.get_list_patcher = patch(
+            "continuing_education.views.api.get_admission_list",
+            return_value={'results': [self.admission_accepted]}
+        )
+        self.get_list_person_patcher = patch(
+            "continuing_education.views.api.get_continuing_education_person",
+            return_value=self.person_information
+        )
+        self.mocked_called_api_function_get_list = self.get_list_patcher.start()
+        self.mocked_called_api_function_get_persons = self.get_list_person_patcher.start()
+        self.addCleanup(self.get_list_patcher.stop)
+        self.addCleanup(self.get_list_person_patcher.stop)
+
     def test_registration_detail(self):
-        url = reverse('registration_detail', args=[self.admission_accepted.id])
+        url = reverse('registration_detail', args=[self.admission_accepted['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration_detail.html')
@@ -112,19 +109,10 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
 
-    def test_registration_detail_access_denied(self):
-        a_person = PersonFactory()
-        self.client.force_login(a_person.user)
-        url = reverse('registration_detail', args=[self.admission_accepted.pk])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 401)
-        self.assertTemplateUsed(response, "access_denied.html")
-
     def test_registration_detail_not_submittable(self):
-        self.admission_accepted.national_registry_number = ''
-        self.admission_accepted.save()
+        self.admission_accepted['national_registry_number'] = ''
 
-        url = reverse('registration_detail', args=[self.admission_accepted.pk])
+        url = reverse('registration_detail', args=[self.admission_accepted['uuid']])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
@@ -165,7 +153,8 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(messages_list[1].level, messages.WARNING)
 
     def test_registration_submitted_detail(self):
-        url = reverse('registration_detail', args=[self.registration_submitted.pk])
+        self.mocked_called_api_function_get.return_value = self.registration_submitted
+        url = reverse('registration_detail', args=[self.registration_submitted['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration_detail.html')
@@ -194,7 +183,7 @@ class ViewStudentRegistrationTestCase(TestCase):
             ),
             str(messages_list[0])
         )
-        mails = _get_managers_mails(self.registration_submitted.formation)
+        mails = _get_managers_mails(self.registration_submitted['formation'])
         self.assertEqual(messages_list[0].level, messages.INFO)
         self.assertIn(
             gettext("If you want to edit again your registration, please contact the program manager : %(mail)s")
@@ -203,141 +192,79 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.assertEqual(messages_list[1].level, messages.WARNING)
 
-    def test_registration_detail_not_found(self):
-        response = self.client.get(reverse('registration_detail', kwargs={
-            'admission_id': 0,
-        }))
-        self.assertEqual(response.status_code, 404)
-
-    def test_registration_submit(self):
+    @mock.patch('continuing_education.views.api.prepare_registration_for_submit')
+    @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
+    def test_registration_submit(self, mock_update, mock_prepare):
         url = reverse('registration_submit')
         response = self.client.post(
             url,
             follow=True,
             data={
                 "submit": True,
-                "admission_id": self.admission_accepted.pk
+                "admission_uuid": self.admission_accepted['uuid']
             }
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['admission'].state, admission_state_choices.REGISTRATION_SUBMITTED)
+        self.assertEqual(response.context['admission']['state'], admission_state_choices.REGISTRATION_SUBMITTED)
         self.assertTemplateUsed(response, 'registration_detail.html')
 
-    def test_registration_submit_not_registration_submitted(self):
+    @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
+    def test_registration_submit_not_registration_submitted(self, mock_update):
+        self.mocked_called_api_function_get.return_value = self.registration_submitted
         url = reverse('registration_submit')
         response = self.client.post(
             url,
             data={
                 "submit": True,
-                "admission_id": self.registration_submitted.pk
+                "admission_uuid": self.registration_submitted['uuid']
             }
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
 
     def test_registration_submit_not_complete(self):
-        self.admission_accepted.national_registry_number = ''
-        self.admission_accepted.save()
+        self.admission_accepted['national_registry_number'] = ''
 
         url = reverse('registration_submit')
         response = self.client.post(
             url,
             data={
                 "submit": True,
-                "admission_id": self.admission_accepted.pk
+                "admission_uuid": self.admission_accepted['uuid']
             }
         )
-        self.assertEqual(response.status_code, 401)
-
-    def test_registration_edit_not_found(self):
-        response = self.client.get(reverse('registration_edit', kwargs={
-            'admission_id': 0,
-        }))
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
 
     def test_edit_get_registration_found(self):
-        url = reverse('registration_edit', args=[self.admission_accepted.id])
+        url = reverse('registration_edit', args=[self.admission_accepted['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration_form.html')
 
-    def test_edit_post_registration_with_error(self):
-        registration = model_to_dict(self.admission_accepted)
-        registration['billing_address'] = "no valid pk"
-        response = self.client.post(reverse('registration_edit', args=[self.admission_accepted.pk]),
-                                    data=registration)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'registration_form.html')
-
-    def test_edit_post_registration_found(self):
-        registration = {
-            'previous_ucl_registration': False,
-            'children_number': 2,
-            'company_number': '1-61667-638-8',
-            'head_office_name': 'Campbell-Tanner',
-            'registration_type': 'PRIVATE',
-            'state': 'Accepted',
-            'use_address_for_billing': True,
-        }
-        url = reverse('registration_edit', args=[self.admission_accepted.pk])
-        response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
-        self.admission_accepted.refresh_from_db()
-
-        # verifying that fields are correctly updated
-        for key in registration:
-            if key in model_to_dict(self.admission_accepted):
-                field_value = self.admission_accepted.__getattribute__(key)
-                if isinstance(field_value, models.Model):
-                    field_value = field_value.pk
-                self.assertEqual(field_value, registration[key], key)
-
-    def test_edit_post_registration_found_with_other_address(self):
-        registration = {
-            'previous_ucl_registration': False,
-            'use_address_for_billing': False,
-            'billing-city': 'Brux-city'
-        }
-        url = reverse('registration_edit', args=[self.admission_accepted.pk])
-        response = self.client.post(url, data=registration)
-        self.assertRedirects(response, reverse('registration_detail', args=[self.admission_accepted.id]))
-        self.admission_accepted.refresh_from_db()
-        self.admission_accepted.billing_address.refresh_from_db()
-
-        field_value = self.admission_accepted.billing_address.__getattribute__('city')
-        self.assertEqual(field_value, registration['billing-city'])
-
-    def test_edit_registration_submitted_error(self):
-        self.admission_accepted.state = REGISTRATION_SUBMITTED
-        self.admission_accepted.save()
-        url = reverse('registration_edit', args=[self.admission_accepted.id])
+    def test_edit_registration_submitted_unauthorized(self):
+        self.admission_accepted['state'] = REGISTRATION_SUBMITTED
+        url = reverse('registration_edit', args=[self.admission_accepted['uuid']])
         get_response = self.client.get(url)
-        self.assertEqual(get_response.status_code, 404)
-        self.assertTemplateUsed(get_response, 'page_not_found.html')
+        self.assertEqual(get_response.status_code, 401)
+        self.assertTemplateUsed(get_response, 'access_denied.html')
 
         post_response = self.client.post(url)
-        self.assertEqual(post_response.status_code, 404)
-        self.assertTemplateUsed(post_response, 'page_not_found.html')
+        self.assertEqual(post_response.status_code, 401)
+        self.assertTemplateUsed(post_response, 'access_denied.html')
 
     def test_pdf_content(self):
+        self.mocked_called_api_function_get.return_value = self.registration_submitted
         a_superuser = SuperUserFactory()
         self.client.force_login(a_superuser)
-        url = reverse("registration_pdf", args=[self.registration_submitted.id])
+        url = reverse('registration_pdf', args=[self.registration_submitted['uuid']])
         response = self.client.get(url)
         self.assertTemplateUsed(response, 'registration_pdf.html')
 
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
-        academic_year = AcademicYearFactory(year=2018)
-        education_group = EducationGroupFactory()
-        EducationGroupYearFactory(
-            education_group=education_group,
-            academic_year=academic_year
-        )
-        self.formation = ContinuingEducationTrainingFactory(education_group=education_group)
-        self.admission = AdmissionFactory(
-            formation=self.formation
-        )
+        ac = AcademicYearFactory()
+        AcademicYearFactory(year=ac.year+1)
+        self.admission = RegistrationDictFactory(PersonFactory().uuid)
 
     def test_registration_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
@@ -347,12 +274,9 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
         )
 
     def test_registration_is_not_submittable_missing_data_in_all_objects(self):
-        self.admission.residence_address.postal_code = ''
-        self.admission.residence_address.save()
-        self.admission.billing_address.postal_code = ''
-        self.admission.billing_address.save()
-        self.admission.national_registry_number = ''
-        self.admission.save()
+        self.admission['residence_address']['postal_code'] = ''
+        self.admission['billing_address']['postal_code'] = ''
+        self.admission['national_registry_number'] = ''
         errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
 
         self.assertDictEqual(
@@ -365,8 +289,7 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
         )
 
     def test_registration_is_not_submittable_missing_registration_data(self):
-        self.admission.national_registry_number = ''
-        self.admission.save()
+        self.admission['national_registry_number'] = ''
         errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
 
         self.assertDictEqual(
@@ -377,8 +300,7 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
         )
 
     def test_registration_is_not_submittable_missing_address_data(self):
-        self.admission.billing_address.postal_code = ''
-        self.admission.billing_address.save()
+        self.admission['billing_address']['postal_code'] = ''
         errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
 
         self.assertDictEqual(

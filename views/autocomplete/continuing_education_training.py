@@ -14,6 +14,6 @@ class ContinuingEducationTrainingAutocomplete(autocomplete.Select2ListView):
                 {'id': training['uuid'], 'text': training['education_group']['acronym']}
                 for training in get_continuing_education_training_list(
                     search=self.q,
-                )
+                )['results']
             ]
         }), content_type='application/json')

@@ -65,22 +65,22 @@ class UrlsTestCase(TestCase):
             dict(
                 url_path="/continuing_education/admission_edit/1",
                 pattern_name='admission_edit',
-                kwargs={'admission_id': 1}
+                kwargs={'admission_uuid': 1}
             ),
             dict(
                 url_path="/continuing_education/admission_detail/1",
                 pattern_name='admission_detail',
-                kwargs={'admission_id': 1}
+                kwargs={'admission_uuid': 1}
             ),
             dict(
                 url_path="/continuing_education/registration_edit/1",
                 pattern_name='registration_edit',
-                kwargs={'admission_id': 1}
+                kwargs={'admission_uuid': 1}
             ),
             dict(
                 url_path="/continuing_education/registration_detail/1",
                 pattern_name='registration_detail',
-                kwargs={'admission_id': 1}
+                kwargs={'admission_uuid': 1}
             ),
         ]
 

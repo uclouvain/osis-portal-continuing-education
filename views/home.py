@@ -23,16 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
-import os
 
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from base.models import person as mdl_person
-from continuing_education.models import continuing_education_person as mdl_continuing_education_person, admission
-from continuing_education.models.enums import admission_state_choices
-from continuing_education.views.api import get_continuing_education_training_list, get_continuing_education_training
+from continuing_education.views import api
 
 
 def formations_list(request):
@@ -43,7 +39,7 @@ def formations_list(request):
         active_page = int(request.GET.get('page'))
     except TypeError:
         active_page = 1
-    paginator = get_continuing_education_training_list(
+    paginator = api.get_continuing_education_training_list(
         limit=limit,
         offset=(active_page-1)*limit,
     )
@@ -60,35 +56,17 @@ def main_view(request, formation_id=None):
     if formation_id:
         request.session['formation_id'] = formation_id
     if request.user.is_authenticated:
+        api.get_personal_token(request)
         person = mdl_person.find_by_user(request.user)
-        continuing_education_person = mdl_continuing_education_person.find_by_person(person=person)
-        registration_states = [
-            admission_state_choices.ACCEPTED,
-            admission_state_choices.REGISTRATION_SUBMITTED,
-            admission_state_choices.VALIDATED
-        ]
-        admissions = admission.search(
-            person=continuing_education_person,
-        ).exclude(
-            state__in=registration_states
-        )
-        registrations = admission.search(
-            person=continuing_education_person,
-            state__in=registration_states,
-        )
+
+        person_information = api.get_continuing_education_person(request)
+        admissions = api.get_admission_list(request, person_information['uuid'])['results']
+        registrations = api.get_registration_list(request, person_information['uuid'])['results']
+
         return render(request, "continuing_education/home.html", locals())
     else:
         if formation_id:
-            is_active = get_continuing_education_training(formation_id)['active']
+            is_active = api.get_continuing_education_training(request, formation_id)['active']
             if not is_active:
                 return redirect(reverse('prospect_form', kwargs={'formation_uuid': formation_id}))
         return render(request, "authentication/login.html")
-
-
-def fetch_example_data():
-    # get formations from temporary file
-    module_dir = os.path.dirname(__file__)
-    file_path = os.path.join(module_dir, 'example_data.json')
-    with open(file_path) as f:
-        data = json.load(f)
-    return sorted(data, key=lambda k: k['acronym'])

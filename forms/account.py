@@ -1,27 +1,25 @@
 from datetime import datetime
 
+from dal import autocomplete
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.forms import ModelForm
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
-from continuing_education.models.continuing_education_person import ContinuingEducationPerson
 from osis_common.messaging import message_config, send_message as message_service
-from reference.models.country import Country
 
 
-class ContinuingEducationPersonForm(ModelForm):
-    birth_country = forms.ModelChoiceField(
-        queryset=Country.objects.all().order_by('name'),
-        label=_("Birth country"),
+class ContinuingEducationPersonForm(forms.Form):
+    birth_country = autocomplete.Select2ListCreateChoiceField(
+        widget=autocomplete.ListSelect2(url='country-autocomplete'),
         required=True,
+        label=_("Birth country")
     )
 
     birth_date = forms.DateField(
@@ -36,28 +34,23 @@ class ContinuingEducationPersonForm(ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-
         super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
-
-        if self.instance.pk:
+        if self.initial:
+            self.initial['birth_country'] = (
+                self.initial['birth_country']['iso_code'],
+                self.initial['birth_country']['name']
+            )
             self._disable_existing_person_fields()
 
     def _disable_existing_person_fields(self):
         fields_to_disable = ["birth_country", "birth_date"]
-
         for field in self.fields.keys():
-            self.fields[field].initial = getattr(self.instance, field)
+            if field == 'birth_country':
+                self.fields[field].choices = [self.initial[field]]
             self.fields[field].widget.attrs['readonly'] = True
+
             if field in fields_to_disable:
                 self.fields[field].widget.attrs['disabled'] = True
-
-    class Meta:
-        model = ContinuingEducationPerson
-        fields = [
-            'birth_date',
-            'birth_location',
-            'birth_country',
-        ]
 
 
 class ContinuingEducationPasswordResetForm(forms.Form):
@@ -74,7 +67,7 @@ class ContinuingEducationPasswordResetForm(forms.Form):
         email = self.cleaned_data["email"]
         try:
             user = User.objects.get(username=email)
-        except (ObjectDoesNotExist, MultipleObjectsReturned) :
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
             error_message = _('This email does not exist in our database: %(mail)s').format(mail=email)
         else:
             scheme = 'https' if request.is_secure() else 'http'
@@ -100,6 +93,3 @@ class ContinuingEducationPasswordResetForm(forms.Form):
                                                                 [], receivers, template_base_data, None)
         return message_service.send_messages(message_content,
                                              settings.IUFC_CONFIG.get('PASSWORD_RESET_MESSAGES_OUTSIDE_PRODUCTION'))
-
-
-

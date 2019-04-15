@@ -25,30 +25,29 @@
 ##############################################################################
 import uuid
 
-import factory
-
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
-from continuing_education.models.continuing_education_training import ContinuingEducationTraining
+from base.tests.factories.person import PersonFactory
 
 
 def ContinuingEducationTrainingDictFactory(active=True):
     ed = EducationGroupFactory()
     edy = EducationGroupYearFactory(education_group=ed)
+    manager = PersonFactory()
     cet = {
-        'uuid': uuid.uuid4(),
+        'uuid': str(uuid.uuid4()),
         'active': active,
         'education_group': {
             'uuid': ed.uuid,
             'acronym': edy.acronym
         },
+        'managers': [
+            {
+                'email': manager.email,
+                'uuid': manager.uuid,
+                'first_name': manager.first_name,
+                'last_name': manager.last_name
+            }
+        ]
     }
     return cet
-
-
-class ContinuingEducationTrainingFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = ContinuingEducationTraining
-
-    active = True
-    education_group = factory.SubFactory(EducationGroupFactory)

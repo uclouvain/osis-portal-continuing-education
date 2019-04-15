@@ -141,6 +141,10 @@ label.required:after{
 .badge-warning {
   background-color: #8a6d3b;
 }
+
+.select2-container {
+    width: 100% !important;
+}
 .disable-wrapper, #custom-file[disabled], .custom-file-input[disabled]{
     cursor: not-allowed;
 }

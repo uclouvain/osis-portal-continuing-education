@@ -1,21 +1,24 @@
+from dal import autocomplete
 from django import forms
-from django.forms import ModelForm, ChoiceField
-from django.utils.translation import ugettext_lazy as _
+from django.forms import ChoiceField, Form
+from django.utils.translation import gettext_lazy as _
 
-from continuing_education.models.admission import Admission
-from continuing_education.models.continuing_education_training import ContinuingEducationTraining
 from continuing_education.models.enums import enums, admission_state_choices
-from reference.models.country import Country
 
 
-class AdmissionForm(ModelForm):
-    formation = forms.ModelChoiceField(
-        queryset=ContinuingEducationTraining.objects.filter(active=True).select_related('education_group')
+class AdmissionForm(Form):
+
+    formation = autocomplete.Select2ListCreateChoiceField(
+        widget=autocomplete.ListSelect2(url='cetraining-autocomplete'),
+        required=True,
     )
-    state = ChoiceField(choices=admission_state_choices.STUDENT_STATE_CHOICES, required=False)
-    citizenship = forms.ModelChoiceField(
-        queryset=Country.objects.all().order_by('name'),
-        label=_("Citizenship"),
+
+    state = ChoiceField(
+        choices=admission_state_choices.STUDENT_STATE_CHOICES,
+        required=False
+    )
+    citizenship = autocomplete.Select2ListCreateChoiceField(
+        widget=autocomplete.ListSelect2(url='country-autocomplete'),
         required=False,
     )
     high_school_diploma = forms.TypedChoiceField(
@@ -25,66 +28,189 @@ class AdmissionForm(ModelForm):
         label=_("High school diploma")
     )
 
-    def __init__(self, data, **kwargs):
+    person_information = forms.CharField(
+        required=False,
+    )
+
+    # Contact
+    address = forms.CharField(
+        required=False,
+    )
+    phone_mobile = forms.CharField(
+        max_length=50,
+        required=False,
+        label=_("Phone mobile")
+    )
+    email = forms.EmailField(
+        max_length=255,
+        required=False,
+        label=_("Additional email")
+    )
+
+    # Education
+
+    high_school_graduation_year = forms.IntegerField(
+        required=False,
+        label=_("High school graduation year")
+    )
+    last_degree_level = forms.CharField(
+        max_length=50,
+        required=False,
+        label=_("Last degree level")
+    )
+    last_degree_field = forms.CharField(
+        max_length=50,
+        required=False,
+        label=_("Last degree field")
+    )
+    last_degree_institution = forms.CharField(
+        max_length=50,
+        required=False,
+        label=_("Last degree institution")
+    )
+    last_degree_graduation_year = forms.IntegerField(
+        required=False,
+        label=_("Last degree graduation year")
+    )
+    other_educational_background = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+        label=_("Other educational background")
+    )
+
+    # Professional Background
+    professional_status = forms.ChoiceField(
+        required=False,
+        choices=enums.STATUS_CHOICES,
+        label=_("Professional status")
+    )
+    current_occupation = forms.CharField(
+        max_length=50,
+        required=False,
+        label=_("Current occupation")
+    )
+    current_employer = forms.CharField(
+        max_length=50,
+        required=False,
+        label=_("Current employer")
+    )
+    activity_sector = forms.ChoiceField(
+        required=False,
+        choices=enums.SECTOR_CHOICES,
+        label=_("Activity sector")
+    )
+    past_professional_activities = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+        label=_("Past professional activities")
+    )
+
+    # Motivation
+    motivation = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+        label=_("Motivation")
+    )
+    professional_personal_interests = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+        label=_("Professional personal interests")
+    )
+
+    # Awareness
+    awareness_ucl_website = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness UCL website")
+    )
+    awareness_formation_website = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness formation website")
+    )
+    awareness_press = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness press")
+    )
+    awareness_facebook = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness Facebook")
+    )
+    awareness_linkedin = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness LinkedIn")
+    )
+    awareness_customized_mail = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness customized mail")
+    )
+    awareness_emailing = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness emailing")
+    )
+    awareness_word_of_mouth = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness word of mouth")
+    )
+    awareness_friends = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness friends")
+    )
+    awareness_former_students = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness former students")
+    )
+    awareness_moocs = forms.BooleanField(
+        initial=False,
+        required=False,
+        label=_("Awareness moocs")
+    )
+    awareness_other = forms.CharField(
+        max_length=100,
+        required=False,
+        label=_("Awareness other")
+    )
+
+    residence_phone = forms.CharField(
+        max_length=30,
+        required=False,
+        label=_("Residence phone")
+    )
+
+    # State
+    state_reason = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+        label=_("State reason")
+    )
+
+    def __init__(self, *args, **kwargs):
         formation = kwargs.pop('formation', None)
-        super().__init__(data, **kwargs)
+        super(AdmissionForm, self).__init__(*args, **kwargs)
         if formation:
-            self.initial['formation'] = formation
-        qs = self.fields['formation'].queryset
-        self.fields['formation'].queryset = qs.order_by(
-            'education_group__educationgroupyear__acronym'
-        ).distinct()
+            self.initial['formation'] = (formation['uuid'], formation['education_group']['acronym'])
+            self.fields['formation'].choices = [self.initial['formation']]
+        elif self.initial:
+            self._set_initial_fields()
 
-    class Meta:
-        model = Admission
-        fields = [
-            'formation',
-
-            # Contact
-            'person_information',
-            'citizenship',
-            'address',
-            'residence_phone',
-            'phone_mobile',
-            'email',
-
-            # Education
-            'high_school_diploma',
-            'high_school_graduation_year',
-            'last_degree_level',
-            'last_degree_field',
-            'last_degree_institution',
-            'last_degree_graduation_year',
-            'other_educational_background',
-
-            # Professional Background
-            'professional_status',
-            'current_occupation',
-            'current_employer',
-            'activity_sector',
-            'past_professional_activities',
-
-            # Motivation
-            'motivation',
-            'professional_personal_interests',
-
-            # Awareness
-            'awareness_ucl_website',
-            'awareness_formation_website',
-            'awareness_press',
-            'awareness_facebook',
-            'awareness_linkedin',
-            'awareness_customized_mail',
-            'awareness_emailing',
-            'awareness_word_of_mouth',
-            'awareness_friends',
-            'awareness_former_students',
-            'awareness_moocs',
-            'awareness_other',
-
-            # State
-            'state',
-        ]
+    def _set_initial_fields(self):
+        fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', 'acronym', 'uuid')]
+        for field, attribute, slug in fields_to_set:
+            if self.initial.get(field):
+                self.initial[field] = (
+                    self.initial[field][slug],
+                    self.initial[field]['education_group'][attribute]
+                    if field == 'formation' else self.initial[field][attribute]
+                )
+                self.fields[field].choices = [self.initial[field]]
 
 
 class StrictAdmissionForm(AdmissionForm):

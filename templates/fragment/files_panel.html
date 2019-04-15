@@ -56,7 +56,7 @@
                     {% if file.is_deletable %}
                     <span class="disable-wrapper">
                         <a class="button" role="button" href="{% url 'remove_file' file.uuid admission.uuid %}"
-                        {% if not admission.is_accepted and not admission.is_draft %}
+                        {% if not is_accepted and not is_draft %}
                          disabled
                          title="{% trans 'State of file prevent this action' %}"
                         {% endif %}>
@@ -84,13 +84,13 @@
                         {% trans 'Upload' %}
                     </button>
                     <div class="col-xs-12 col-md-6 custom-file file btn btn-primary pull-right"
-                        {% if not admission.is_accepted and not admission.is_draft %}
+                        {% if not is_accepted and not is_draft %}
                          disabled
                          title="{% trans 'State of file prevent this action' %}"
                         {% endif %}>
                         {% trans 'Browse' %}
                       <input type="file" class="custom-file-input" id="customFile" name="myfile"
-                        {% if not admission.is_accepted and not admission.is_draft %}disabled{% endif %}>
+                        {% if not is_accepted and not is_draft %}disabled{% endif %}>
                     </div>
                 </div>
             </div>

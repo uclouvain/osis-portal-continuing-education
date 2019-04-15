@@ -24,15 +24,12 @@
 #
 ##############################################################################
 
-import factory.fuzzy
-
 from base.tests.factories.person import PersonFactory
-from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 
 
-class PersonTrainingFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'continuing_education.PersonTraining'
-
-    person = factory.SubFactory(PersonFactory)
-    training = factory.SubFactory(ContinuingEducationTrainingFactory)
+def PersonTrainingDictFactory():
+    return {
+        'person': PersonFactory(),
+        'training': ContinuingEducationTrainingDictFactory()
+    }

@@ -28,8 +28,7 @@ from collections import OrderedDict
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import login as django_login
-from django.forms import model_to_dict
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import translation
 from django.utils.safestring import mark_safe
@@ -43,7 +42,6 @@ from continuing_education.forms.address import StrictAddressForm
 from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
-from continuing_education.models.admission import Admission
 
 
 def display_errors(request, errors):
@@ -53,7 +51,7 @@ def display_errors(request, errors):
 
 
 def login(request):
-    if("next" in request.GET):
+    if "next" in request.GET:
         formation_id = request.GET['next'].rsplit('/', 1)[-1]
     if request.method == 'POST':
         username = request.POST['username']
@@ -113,30 +111,30 @@ def get_submission_errors(admission, is_registration=False):
 
     if is_registration:
         address_form = StrictAddressForm(
-            data=model_to_dict(admission.billing_address)
+            data=admission['billing_address']
         )
         adm_form = StrictRegistrationForm(
-            data=model_to_dict(admission)
+            data=admission
         )
         _update_errors([address_form, adm_form], errors, errors_field)
 
-        if not admission.use_address_for_post:
+        if not admission['use_address_for_post']:
             residence_address_form = StrictAddressForm(
-                data=model_to_dict(admission.residence_address)
+                data=admission['residence_address']
             )
             _update_errors([residence_address_form], errors, errors_field)
     else:
         person_form = StrictPersonForm(
-            data=model_to_dict(admission.person_information.person)
+            data=admission['person_information']['person'] if 'person' in admission['person_information'] else None
         )
         person_information_form = ContinuingEducationPersonForm(
-            data=model_to_dict(admission.person_information)
+            data=admission['person_information']
         )
         address_form = StrictAddressForm(
-            data=model_to_dict(admission.address)
+            data=admission['address']
         )
         adm_form = StrictAdmissionForm(
-            data=model_to_dict(admission)
+            data=admission
         )
         forms = [person_form, person_information_form, address_form, adm_form]
         _update_errors(forms, errors, errors_field)
@@ -149,14 +147,6 @@ def _update_errors(forms, errors, errors_field):
         for field in form.errors:
             errors.update({form[field].label: form.errors[field]})
             errors_field.append(field)
-
-
-def _find_user_admission_by_id(admission_id, user):
-    return get_object_or_404(
-        Admission,
-        pk=admission_id,
-        person_information__person__user=user
-    )
 
 
 def _build_warning_from_errors_dict(errors):
@@ -233,7 +223,5 @@ def add_contact_for_edit_message(request, formation=None, is_registration=False)
 
 
 def _get_managers_mails(formation):
-    managers_mail = formation.managers.all().order_by('last_name').values_list('email', flat=True) \
-        if formation else []
-    managers_mail = [mail for mail in managers_mail if mail]
+    managers_mail = [d['email'] for d in formation['managers'] if d['email']] if formation['managers'] else []
     return _(" or ").join(managers_mail)

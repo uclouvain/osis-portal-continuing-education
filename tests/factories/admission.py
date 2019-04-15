@@ -23,135 +23,82 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 import random
+import uuid
 
 import factory
+import factory.fuzzy
 
-import reference
-from base.models import entity_version
-from base.models.academic_year import current_academic_years
-from base.models.enums import entity_type
-from base.models.offer_year import OfferYear
-from base.tests.factories.education_group_year import EducationGroupYearFactory
-from continuing_education.models.enums import enums, admission_state_choices
-from continuing_education.tests.factories.address import AddressFactory
-from continuing_education.tests.factories.person import ContinuingEducationPersonFactory
-from reference.tests.factories.country import CountryFactory
+from continuing_education.models.enums import enums
+from continuing_education.models.enums.admission_state_choices import DRAFT, ACCEPTED
+from continuing_education.models.enums.enums import get_enum_keys
+from continuing_education.tests.factories.address import AddressDictFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 
 CONTINUING_EDUCATION_TYPE = 8
 
 
-class AdmissionFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'continuing_education.admission'
+def AdmissionDictFactory(person_information, state=DRAFT):
+    admission = {
+        'uuid': str(uuid.uuid4()),
+        'person_information': person_information,
+        'address': AddressDictFactory(),
+        'last_degree_level': "level",
+        'formation': ContinuingEducationTrainingDictFactory(),
+        'citizenship': {
+                'name': factory.Sequence(lambda n: 'Country - %d' % n),
+                'iso_code': factory.Sequence(lambda n: str(n)[-2:])
+        },
+        'phone_mobile': factory.Faker('phone_number'),
+        'email': person_information['person']['email'],
+        'high_school_diploma': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'last_degree_field': 'field',
+        'last_degree_institution': 'institution',
+        'last_degree_graduation_year': factory.fuzzy.FuzzyInteger(1991, 2018).fuzz(),
+        'professional_status': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.STATUS_CHOICES)).fuzz(),
+        'current_occupation': factory.Faker('text', max_nb_chars=50),
+        'current_employer': factory.Faker('company'),
+        'activity_sector': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.SECTOR_CHOICES)).fuzz(),
+        'motivation': 'motivation',
+        'professional_personal_interests': 'professional impact',
+        'state': state
+    }
+    return admission
 
-    @staticmethod
-    def populate(country_id):
-        country = reference.models.country.find_by_id(country_id)
-        formation = OfferYear.objects.filter(
-            offer_type_id=CONTINUING_EDUCATION_TYPE,
-            academic_year_id=current_academic_years()
-        ).order_by('?').first()
-        faculty = entity_version.find_latest_version(
-            datetime.datetime.now()
-        ).filter(entity_type=entity_type.FACULTY).order_by('?').first()
 
-        AdmissionFactory.create(
-            birth_country=country,
-            country=country,
-            citizenship=country,
-            billing_country=country,
-            residence_country=country,
-            formation=formation,
-            faculty=faculty
-        )
-
-    person_information = factory.SubFactory(ContinuingEducationPersonFactory)
-
-    # Formation
-    formation = factory.SubFactory(EducationGroupYearFactory)
-
-    # Identification
-    citizenship = factory.SubFactory(CountryFactory)
-
-    # Contact
-    phone_mobile = factory.Faker('phone_number')
-    email = factory.Faker('email')
-
-    address = factory.SubFactory(AddressFactory)
-
-    # Education
-    high_school_diploma = factory.fuzzy.FuzzyChoice([True, False])
-    high_school_graduation_year = factory.fuzzy.FuzzyInteger(1991, 2018)
-    last_degree_level = "level"
-    last_degree_field = "field"
-    last_degree_institution = "institution"
-    last_degree_graduation_year = factory.fuzzy.FuzzyInteger(1991, 2018)
-    other_educational_background = "other background"
-
-    # Professional Background
-    professional_status = factory.fuzzy.FuzzyChoice(enums.get_enum_keys(enums.STATUS_CHOICES))
-
-    current_occupation = factory.Faker('text', max_nb_chars=50)
-    current_employer = factory.Faker('company')
-
-    activity_sector = factory.fuzzy.FuzzyChoice(enums.get_enum_keys(enums.SECTOR_CHOICES))
-
-    past_professional_activities = "past activities"
-
-    # Motivation
-    motivation = "motivation"
-    professional_personal_interests = "professional impact"
-
-    # Awareness
-    awareness_ucl_website = factory.fuzzy.FuzzyChoice([True, False])
-    awareness_formation_website = factory.fuzzy.FuzzyChoice([True, False])
-    awareness_press = factory.fuzzy.FuzzyChoice([True, False])
-    awareness_facebook = factory.fuzzy.FuzzyChoice([True, False])
-    awareness_linkedin = factory.fuzzy.FuzzyChoice([True, False])
-    awareness_customized_mail = factory.fuzzy.FuzzyChoice([True, False])
-    awareness_emailing = factory.fuzzy.FuzzyChoice([True, False])
-
-    # State
-    state = factory.fuzzy.FuzzyChoice(enums.get_enum_keys(admission_state_choices.STUDENT_STATE_CHOICES))
-
-    # Billing
-    registration_type = factory.fuzzy.FuzzyChoice(enums.get_enum_keys(enums.REGISTRATION_TITLE_CHOICES))
-
-    use_address_for_billing = factory.fuzzy.FuzzyChoice([True, False])
-    billing_address = factory.SubFactory(AddressFactory)
-
-    head_office_name = factory.Faker('company')
-    company_number = factory.Faker('isbn10')
-    vat_number = factory.Faker('ssn')
-
-    # Registration
-    national_registry_number = factory.Faker('ssn')
-    id_card_number = factory.Faker('ssn')
-    passport_number = factory.Faker('isbn13')
-
-    marital_status = factory.fuzzy.FuzzyChoice(enums.get_enum_keys(enums.MARITAL_STATUS_CHOICES))
-
-    spouse_name = factory.Faker('name')
-    children_number = random.randint(0,10)
-    previous_ucl_registration = factory.fuzzy.FuzzyChoice([True, False])
-    previous_noma = factory.Faker('isbn10')
-
-    # Post
-    use_address_for_post = factory.fuzzy.FuzzyChoice([True, False])
-    residence_address = factory.SubFactory(AddressFactory)
-    residence_phone = factory.Faker('phone_number')
-
-    # Student Sheet
-    ucl_registration_complete = factory.fuzzy.FuzzyChoice([True, False])
-    noma = factory.Faker('isbn10')
-    payment_complete = factory.fuzzy.FuzzyChoice([True, False])
-    formation_spreading = factory.fuzzy.FuzzyChoice([True, False])
-    prior_experience_validation = factory.fuzzy.FuzzyChoice([True, False])
-    assessment_presented = factory.fuzzy.FuzzyChoice([True, False])
-    assessment_succeeded = factory.fuzzy.FuzzyChoice([True, False])
-    # ajouter dates sessions cours suivies
-    sessions = "sessions"
-    reduced_rates = False
-    spreading_payments = False
+def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
+    registration = {
+        'uuid': str(uuid.uuid4()),
+        'formation': formation if formation else ContinuingEducationTrainingDictFactory(),
+        'person_information': person_information,
+        'address': AddressDictFactory(),
+        'registration_type': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES)).fuzz(),
+        'use_address_for_billing': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'billing_address': AddressDictFactory(),
+        'head_office_name': factory.Faker('company'),
+        'company_number': factory.Faker('isbn10'),
+        'vat_number': factory.Faker('ssn'),
+        'national_registry_number': factory.Faker('ssn'),
+        'id_card_number': factory.Faker('ssn'),
+        'passport_number': factory.Faker('isbn13'),
+        'marital_status': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.MARITAL_STATUS_CHOICES)).fuzz(),
+        'spouse_name': factory.Faker('name'),
+        'children_number': random.randint(0, 10),
+        'previous_ucl_registration': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'previous_noma': factory.Faker('isbn10'),
+        'use_address_for_post': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'residence_address': AddressDictFactory(),
+        'residence_phone': factory.Faker('phone_number'),
+        'ucl_registration_complete': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'noma': factory.Faker('isbn10'),
+        'payment_complete': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'formation_spreading': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'prior_experience_validation': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'assessment_presented': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'assessment_succeeded': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'sessions': 'Test',
+        'state': state,
+        'reduced_rates': False,
+        'spreading_payments': False
+    }
+    return registration

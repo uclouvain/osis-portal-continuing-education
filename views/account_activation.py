@@ -102,8 +102,10 @@ class ContinuingEducationRegistrationView(RegistrationView):
     def __get_activation_link(self, activation_key):
         scheme = 'https' if self.request.is_secure() else 'http'
         site = get_current_site(self.request)
-        url = reverse('django_registration_activate', kwargs={'formation_id': self.request.session.get('formation_id'),
-                                                              'activation_key': activation_key})
+        params = {'activation_key': activation_key}
+        if self.request.session.get('formation_id'):
+            params.update({'formation_id': self.request.session.get('formation_id')})
+        url = reverse('django_registration_activate', kwargs=params)
         return '{scheme}://{site}{url}'.format(scheme=scheme,
                                                site=site,
                                                url=url)
@@ -123,8 +125,10 @@ class ContinuingEducationRegistrationView(RegistrationView):
         }
         message_content = message_config.create_message_content(self.html_template_ref, self.txt_template_ref,
                                                                 [], receivers, template_base_data, None)
-        error_message = message_service.send_messages(message_content,
-                                                      settings.IUFC_CONFIG.get('ACTIVATION_MESSAGES_OUTSIDE_PRODUCTION'))
+        error_message = message_service.send_messages(
+            message_content,
+            settings.IUFC_CONFIG.get('ACTIVATION_MESSAGES_OUTSIDE_PRODUCTION')
+        )
 
 
 @login_required
@@ -142,11 +146,11 @@ def __post_complete_account_registration(request):
     admission_form = AdmissionForm(request.POST)
     forms = [root_person_form, ce_person_form, address_form, admission_form]
     errors = []
-
     if all([f.is_valid() for f in forms]):
         address = address_form.save()
         person = root_person_form.save(commit=False)
         person.user = request.user
+        person.email = request.user.username
         person.save()
         continuing_education_person = ce_person_form.save(commit=False)
         continuing_education_person.person = person
@@ -191,7 +195,7 @@ class ContinuingEducationActivationView(ActivationView):
         user = self.get_user(username)
         user.is_active = True
         user.save()
-        Person.objects.get_or_create(user=user, defaults={'language': 'fr-be'})
+        Person.objects.get_or_create(user=user, email=user.username, defaults={'language': 'fr-be'})
         self.request.session['formation_id'] = formation_id
         return user
 
