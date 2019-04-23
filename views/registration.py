@@ -72,6 +72,7 @@ def registration_detail(request, admission_uuid):
         FILES_URL % {'admission_uuid': str(admission_uuid)}
     )
     is_accepted = admission['state'] == admission_state_choices.ACCEPTED
+    is_registration_submitted = admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED
     return render(request, "registration_detail.html", locals())
 
 
@@ -147,7 +148,7 @@ def generate_pdf_registration(request, admission_uuid):
         'created': datetime.datetime.now(),
     }
     pdf_filename = get_valid_filename("{}_{}".format(
-        admission['person_information']['person'],
+        admission['person_information']['person']['last_name'],
         admission['formation']['education_group']['acronym'])
     )
 
