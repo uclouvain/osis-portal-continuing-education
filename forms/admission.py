@@ -20,6 +20,7 @@ class AdmissionForm(Form):
     citizenship = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='country-autocomplete'),
         required=False,
+        label=_("Citizenship")
     )
     high_school_diploma = forms.TypedChoiceField(
         coerce=lambda x: x == 'True',

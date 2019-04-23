@@ -6,7 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 class AddressForm(forms.Form):
     country = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='country-autocomplete'),
-        required=False
+        required=False,
+        label=_("Country")
     )
 
     location = forms.CharField(
