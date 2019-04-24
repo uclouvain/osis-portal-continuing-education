@@ -111,7 +111,6 @@
                     {% bootstrap_field form.registration_type %}
                     {% bootstrap_field form.use_address_for_billing %}
                     <div class="panel panel-default">
-                        <div class="panel-heading">{% trans 'Billing' %}</div>
                             <div class="panel panel-body">
                                 {% bootstrap_field billing_address_form.location form_group_class="form-group" label=_("Location") %}
                                 <div class="row">
@@ -138,7 +137,6 @@
                 <div id="contact" role="tabpanel" class="panel-body tab-pane">
                     {% bootstrap_field form.use_address_for_post %}
                     <div class="panel panel-default">
-                        <div class="panel-heading">{% trans 'Post' %}</div>
                             <div class="panel panel-body">
                                 {% bootstrap_field residence_address_form.location form_group_class="form-group" label=_("Location") %}
                                 <div class="row">
@@ -160,6 +158,7 @@
             </div>
         </form>
     </div>
+
     <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
     {{ residence_address_form.media }}
     {{ billing_address_form.media }}
@@ -202,19 +201,28 @@
             location: "{{address.location | escapejs}}",
             postal_code: "{{address.postal_code | escapejs}}",
             city: "{{address.city | escapejs}}",
-            country: "{{address.country | escapejs}}",
+            country: {
+                "iso_code": "{{address.country.iso_code | escapejs}}",
+                "name": "{{address.country.name | escapejs}}",
+            },
         };
         let billing_address = {
             location: "{{registration.billing_address.location | escapejs}}",
             postal_code: "{{registration.billing_address.postal_code | escapejs}}",
             city: "{{registration.billing_address.city | escapejs}}",
-            country: "{{registration.billing_address.country | escapejs}}",
+            country: {
+                "iso_code": "{{registration.billing_address.country.0 | escapejs}}",
+                "name": "{{registration.billing_address.country.1 | escapejs}}",
+            },
         };
         let residence_address = {
             location: "{{registration.residence_address.location | escapejs}}",
             postal_code: "{{registration.residence_address.postal_code | escapejs}}",
             city: "{{registration.residence_address.city | escapejs}}",
-            country: "{{registration.residence_address.country | escapejs}}",
+            country: {
+                "iso_code": "{{registration.residence_address.country.0 | escapejs}}",
+                "name": "{{registration.residence_address.country.1 | escapejs}}",
+            },
         };
 
         let billing_radio = $("[name='use_address_for_billing']:radio");
@@ -250,7 +258,9 @@
                 $("#id_"+e+"-"+field).val(address[field]);
                 $("#id_"+e+"-"+field).prop("readonly", true);
             });
-            $("#id_"+e+"-country").val(address['country']);
+            let selected_option = $("#id_"+e+"-country option")[0];
+            selected_option.value = address.country.iso_code;
+            selected_option.innerHTML = address.country.name;
             $("#id_"+e+"-country").prop("disabled", true);
         }
 
@@ -260,6 +270,9 @@
                 $("#id_"+e+"-"+field).prop("readonly", false);
             });
             $("#id_"+e+"-country").prop("disabled", false);
+            let selected_option = $("#id_"+e+"-country option")[0];
+            selected_option.value = address.country.iso_code;
+            selected_option.innerHTML = address.country.name;
         }
         //show missing fields in red
         let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
@@ -283,6 +296,5 @@
         $('.btnPrevious').click(function(){
             $('.nav-tabs > .active').prev('li').find('a').trigger('click');
         });
-
     </script>
 {% endblock %}
