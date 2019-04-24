@@ -115,69 +115,69 @@ class AdmissionForm(Form):
     professional_personal_interests = forms.CharField(
         widget=forms.Textarea,
         required=False,
-        label=_("Professional personal interests")
+        label=_("Professional and personal interests")
     )
 
     # Awareness
     awareness_ucl_website = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness UCL website")
+        label=_("By UCLouvain website")
     )
     awareness_formation_website = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness formation website")
+        label=_("By formation website")
     )
     awareness_press = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness press")
+        label=_("By press")
     )
     awareness_facebook = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness Facebook")
+        label=_("By Facebook")
     )
     awareness_linkedin = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness LinkedIn")
+        label=_("By LinkedIn")
     )
     awareness_customized_mail = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness customized mail")
+        label=_("By customized mail")
     )
     awareness_emailing = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness emailing")
+        label=_("By emailing")
     )
     awareness_word_of_mouth = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness word of mouth")
+        label=_("By word of mouth")
     )
     awareness_friends = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness friends")
+        label=_("By friends")
     )
     awareness_former_students = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness former students")
+        label=_("By former students")
     )
     awareness_moocs = forms.BooleanField(
         initial=False,
         required=False,
-        label=_("Awareness moocs")
+        label=_("By Moocs")
     )
     awareness_other = forms.CharField(
         max_length=100,
         required=False,
-        label=_("Awareness other")
+        label=_("Other")
     )
 
     residence_phone = forms.CharField(
