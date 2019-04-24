@@ -217,25 +217,28 @@
             country: "{{registration.residence_address.country | escapejs}}",
         };
 
-        $("#id_use_address_for_billing:checkbox").change(function(){
-            if(this.checked){
+        let billing_radio = $("[name='use_address_for_billing']:radio");
+        let post_radio = $("[name='use_address_for_post']:radio");
+
+        billing_radio.change(function(){
+            if(this.value === "True"){
                 copy_address("billing");
             } else {
                 empty_address("billing", billing_address);
             }
         });
         //check when page is loaded
-        $("#id_use_address_for_billing:checkbox").prop('checked')?copy_address("billing"):empty_address(("billing"), billing_address);
+        billing_radio.prop('checked')?copy_address("billing"):empty_address(("billing"), billing_address);
 
-        $("#id_use_address_for_post:checkbox").change(function(){
-            if(this.checked){
+        post_radio.change(function(){
+            if(this.value === "True"){
                 copy_address("residence");
             } else {
                 empty_address("residence", residence_address);
             }
         });
         //check when page is loaded
-        $("#id_use_address_for_post:checkbox").prop('checked')?copy_address("residence"):empty_address(("residence"), residence_address);
+        post_radio.prop('checked')?copy_address("residence"):empty_address(("residence"), residence_address);
 
         //re-enable disabled field on form submit
         $( "#form" ).submit(function( event ) {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-23 11:20+0200\n"
+"POT-Creation-Date: 2019-04-24 10:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -358,15 +358,15 @@ msgstr ""
 msgid "An unexpected error occurred"
 msgstr ""
 
-#: forms/registration.py:142
+#: forms/registration.py:150
 msgid "Archived"
 msgstr ""
 
-#: forms/registration.py:127
+#: forms/registration.py:135
 msgid "Assessment presented"
 msgstr ""
 
-#: forms/registration.py:132
+#: forms/registration.py:140
 msgid "Assessment succeeded"
 msgstr ""
 
@@ -390,7 +390,7 @@ msgstr ""
 msgid "Billing"
 msgstr ""
 
-#: forms/registration.py:26
+#: forms/registration.py:30
 msgid "Billing address"
 msgstr ""
 
@@ -476,7 +476,7 @@ msgstr ""
 msgid "Change my password"
 msgstr ""
 
-#: forms/registration.py:72 templates/registration_detail.html:98
+#: forms/registration.py:76 templates/registration_detail.html:98
 #: templates/registration_pdf.html:136
 msgid "Children number"
 msgstr ""
@@ -494,7 +494,7 @@ msgstr ""
 msgid "City"
 msgstr ""
 
-#: forms/registration.py:36 templates/registration_detail.html:120
+#: forms/registration.py:40 templates/registration_detail.html:120
 msgid "Company number"
 msgstr ""
 
@@ -557,7 +557,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: forms/registration.py:147
+#: forms/registration.py:155
 msgid "Diploma produced"
 msgstr ""
 
@@ -658,7 +658,7 @@ msgstr ""
 msgid "Formation"
 msgstr ""
 
-#: forms/registration.py:117
+#: forms/registration.py:125
 msgid "Formation spreading"
 msgstr ""
 
@@ -680,7 +680,7 @@ msgstr ""
 msgid "Generate PDF"
 msgstr ""
 
-#: forms/registration.py:31 templates/registration_detail.html:119
+#: forms/registration.py:35 templates/registration_detail.html:119
 msgid "Head office name"
 msgstr ""
 
@@ -704,11 +704,19 @@ msgstr ""
 msgid "House name"
 msgstr ""
 
+#: forms/registration.py:25
+msgid "I would like the billing address to be :"
+msgstr ""
+
+#: forms/registration.py:92
+msgid "I would like the post address to be :"
+msgstr ""
+
 #: templates/registration_pdf.html:348
 msgid "I, the undersigned"
 msgstr ""
 
-#: forms/registration.py:52 templates/registration_detail.html:92
+#: forms/registration.py:56 templates/registration_detail.html:92
 #: templates/registration_pdf.html:126
 msgid "ID card number"
 msgstr ""
@@ -834,7 +842,7 @@ msgstr ""
 msgid "Male"
 msgstr ""
 
-#: forms/registration.py:62 templates/registration_detail.html:96
+#: forms/registration.py:66 templates/registration_detail.html:96
 #: templates/registration_pdf.html:132
 msgid "Marital status"
 msgstr ""
@@ -852,7 +860,7 @@ msgstr ""
 msgid "Motivation"
 msgstr ""
 
-#: forms/registration.py:107
+#: forms/registration.py:115
 msgid "NOMA"
 msgstr ""
 
@@ -861,7 +869,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: forms/registration.py:47 templates/registration_detail.html:91
+#: forms/registration.py:51 templates/registration_detail.html:91
 #: templates/registration_pdf.html:124 tests/views/test_registration.py:150
 #: tests/views/test_registration.py:287 tests/views/test_registration.py:298
 msgid "National registry number"
@@ -918,7 +926,7 @@ msgstr ""
 msgid "Other educational background"
 msgstr ""
 
-#: forms/registration.py:57 templates/registration_detail.html:93
+#: forms/registration.py:61 templates/registration_detail.html:93
 #: templates/registration_pdf.html:128
 msgid "Passport number"
 msgstr ""
@@ -939,7 +947,7 @@ msgstr ""
 msgid "Past professional activities"
 msgstr ""
 
-#: forms/registration.py:112
+#: forms/registration.py:120
 msgid "Payment complete"
 msgstr ""
 
@@ -979,7 +987,7 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: forms/registration.py:78 templates/registration_detail.html:102
+#: forms/registration.py:82 templates/registration_detail.html:102
 #: templates/registration_pdf.html:140
 msgid "Previous NOMA"
 msgstr ""
@@ -993,7 +1001,7 @@ msgstr ""
 msgid "Print the completed registration form"
 msgstr ""
 
-#: forms/registration.py:122
+#: forms/registration.py:130
 msgid "Prior experience validation"
 msgstr ""
 
@@ -1051,7 +1059,7 @@ msgstr ""
 msgid "Registration"
 msgstr ""
 
-#: forms/registration.py:102
+#: forms/registration.py:110
 msgid "Registration complete"
 msgstr ""
 
@@ -1059,7 +1067,7 @@ msgstr ""
 msgid "Registration completed"
 msgstr ""
 
-#: forms/registration.py:137
+#: forms/registration.py:145
 msgid "Registration file received"
 msgstr ""
 
@@ -1079,11 +1087,11 @@ msgstr ""
 msgid "Rejected"
 msgstr ""
 
-#: forms/registration.py:89
+#: forms/registration.py:97
 msgid "Residence address"
 msgstr ""
 
-#: forms/admission.py:186 forms/registration.py:95
+#: forms/admission.py:186 forms/registration.py:103
 #: templates/registration_detail.html:134 templates/registration_pdf.html:160
 #: templates/registration_pdf.html:168
 msgid "Residence phone"
@@ -1127,7 +1135,7 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-#: forms/registration.py:67 templates/registration_detail.html:97
+#: forms/registration.py:71 templates/registration_detail.html:97
 #: templates/registration_pdf.html:134
 msgid "Spouse name"
 msgstr ""
@@ -1236,14 +1244,6 @@ msgstr ""
 msgid "Uploaded by"
 msgstr ""
 
-#: forms/registration.py:21
-msgid "Use address for billing"
-msgstr ""
-
-#: forms/registration.py:84
-msgid "Use address for post"
-msgstr ""
-
 #: templates/django_registration/activation_complete.html:31
 msgid "User account activated"
 msgstr ""
@@ -1256,7 +1256,7 @@ msgstr ""
 msgid "Username and password not matching"
 msgstr ""
 
-#: forms/registration.py:41 templates/registration_detail.html:121
+#: forms/registration.py:45 templates/registration_detail.html:121
 msgid "VAT number"
 msgstr ""
 
@@ -1356,4 +1356,12 @@ msgstr ""
 #: templates/django_registration/activation_complete.html:33
 msgid ""
 "Your user account is now active. You can now log in to access the platform."
+msgstr ""
+
+#: forms/registration.py:23 forms/registration.py:90
+msgid "an other address"
+msgstr ""
+
+#: forms/registration.py:22 forms/registration.py:89
+msgid "residence address mentioned earlier"
 msgstr ""

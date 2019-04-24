@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-23 11:20+0200\n"
+"POT-Creation-Date: 2019-04-24 10:57+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -568,15 +568,15 @@ msgstr ""
 msgid "An unexpected error occurred"
 msgstr "Une erreur innatendue s'est produite."
 
-#: forms/registration.py:142
+#: forms/registration.py:150
 msgid "Archived"
 msgstr "Archivé"
 
-#: forms/registration.py:127
+#: forms/registration.py:135
 msgid "Assessment presented"
 msgstr "A présenté l'épreuve d'évaluation"
 
-#: forms/registration.py:132
+#: forms/registration.py:140
 msgid "Assessment succeeded"
 msgstr "A réussi l'épreuve d'évaluation"
 
@@ -602,7 +602,7 @@ msgstr "Comment avez-vous connu l'existence de ce programme ?"
 msgid "Billing"
 msgstr "Facturation"
 
-#: forms/registration.py:26
+#: forms/registration.py:30
 msgid "Billing address"
 msgstr "Adresse de facturation"
 
@@ -690,7 +690,7 @@ msgstr "Catégorie"
 msgid "Change my password"
 msgstr "Changer mon mot de passe"
 
-#: forms/registration.py:72 templates/registration_detail.html:98
+#: forms/registration.py:76 templates/registration_detail.html:98
 #: templates/registration_pdf.html:136
 msgid "Children number"
 msgstr "Nombre d'enfants"
@@ -708,7 +708,7 @@ msgstr "Nationalité"
 msgid "City"
 msgstr "Ville"
 
-#: forms/registration.py:36 templates/registration_detail.html:120
+#: forms/registration.py:40 templates/registration_detail.html:120
 msgid "Company number"
 msgstr "Numéro unique d'entreprise"
 
@@ -771,7 +771,7 @@ msgstr "Politique de protection des données"
 msgid "Date"
 msgstr ""
 
-#: forms/registration.py:147
+#: forms/registration.py:155
 msgid "Diploma produced"
 msgstr "Diplôme produit"
 
@@ -874,7 +874,7 @@ msgstr "Mot de passe oublié ?"
 msgid "Formation"
 msgstr "Formation"
 
-#: forms/registration.py:117
+#: forms/registration.py:125
 msgid "Formation spreading"
 msgstr "Etalement de la formation"
 
@@ -896,7 +896,7 @@ msgstr "Genre"
 msgid "Generate PDF"
 msgstr "Générer le PDF"
 
-#: forms/registration.py:31 templates/registration_detail.html:119
+#: forms/registration.py:35 templates/registration_detail.html:119
 msgid "Head office name"
 msgstr "Nom du siège social"
 
@@ -920,11 +920,19 @@ msgstr "Adresse du domicile"
 msgid "House name"
 msgstr "Lieu-dit (éventuellement)"
 
+#: forms/registration.py:25
+msgid "I would like the billing address to be :"
+msgstr "Je souhaite que l'adresse de facturation soit :"
+
+#: forms/registration.py:92
+msgid "I would like the post address to be :"
+msgstr "Je souhaite recevoir mon courrier à :"
+
 #: templates/registration_pdf.html:348
 msgid "I, the undersigned"
 msgstr "Je soussignée"
 
-#: forms/registration.py:52 templates/registration_detail.html:92
+#: forms/registration.py:56 templates/registration_detail.html:92
 #: templates/registration_pdf.html:126
 msgid "ID card number"
 msgstr "Numéro de carte d'identité"
@@ -1057,7 +1065,7 @@ msgstr "Déconnecté"
 msgid "Male"
 msgstr "Homme"
 
-#: forms/registration.py:62 templates/registration_detail.html:96
+#: forms/registration.py:66 templates/registration_detail.html:96
 #: templates/registration_pdf.html:132
 msgid "Marital status"
 msgstr "Etat civil"
@@ -1075,7 +1083,7 @@ msgstr "Téléphone mobile"
 msgid "Motivation"
 msgstr "Motivation"
 
-#: forms/registration.py:107
+#: forms/registration.py:115
 msgid "NOMA"
 msgstr "NOMA"
 
@@ -1084,7 +1092,7 @@ msgstr "NOMA"
 msgid "Name"
 msgstr "Nom"
 
-#: forms/registration.py:47 templates/registration_detail.html:91
+#: forms/registration.py:51 templates/registration_detail.html:91
 #: templates/registration_pdf.html:124 tests/views/test_registration.py:150
 #: tests/views/test_registration.py:287 tests/views/test_registration.py:298
 msgid "National registry number"
@@ -1141,7 +1149,7 @@ msgstr "Autre"
 msgid "Other educational background"
 msgstr "Autres formations"
 
-#: forms/registration.py:57 templates/registration_detail.html:93
+#: forms/registration.py:61 templates/registration_detail.html:93
 #: templates/registration_pdf.html:128
 msgid "Passport number"
 msgstr "Numéro de passeport"
@@ -1162,7 +1170,7 @@ msgstr "Réinitialisation du mot de passe échouée"
 msgid "Past professional activities"
 msgstr "Expériences professionnelles passées"
 
-#: forms/registration.py:112
+#: forms/registration.py:120
 msgid "Payment complete"
 msgstr "En ordre de paiement"
 
@@ -1204,7 +1212,7 @@ msgstr "Code postal"
 msgid "Previous"
 msgstr "Précédent"
 
-#: forms/registration.py:78 templates/registration_detail.html:102
+#: forms/registration.py:82 templates/registration_detail.html:102
 #: templates/registration_pdf.html:140
 msgid "Previous NOMA"
 msgstr "Précédent NOMA"
@@ -1218,7 +1226,7 @@ msgstr "Avez-vous déjà été inscrit(e) à l'UCLouvain ?"
 msgid "Print the completed registration form"
 msgstr "Imprimer le formulaire d'inscription complété"
 
-#: forms/registration.py:122
+#: forms/registration.py:130
 msgid "Prior experience validation"
 msgstr "Valorisation des Acquis d'Experience"
 
@@ -1276,7 +1284,7 @@ msgstr "Motif d'état de refus"
 msgid "Registration"
 msgstr "Inscription"
 
-#: forms/registration.py:102
+#: forms/registration.py:110
 msgid "Registration complete"
 msgstr "En ordre d'inscription"
 
@@ -1284,7 +1292,7 @@ msgstr "En ordre d'inscription"
 msgid "Registration completed"
 msgstr "Inscription à la plateforme complétée"
 
-#: forms/registration.py:137
+#: forms/registration.py:145
 msgid "Registration file received"
 msgstr "Fichier d'inscription reçu"
 
@@ -1304,11 +1312,11 @@ msgstr "Réglementations"
 msgid "Rejected"
 msgstr "Refusé"
 
-#: forms/registration.py:89
+#: forms/registration.py:97
 msgid "Residence address"
 msgstr "Adresse"
 
-#: forms/admission.py:186 forms/registration.py:95
+#: forms/admission.py:186 forms/registration.py:103
 #: templates/registration_detail.html:134 templates/registration_pdf.html:160
 #: templates/registration_pdf.html:168
 msgid "Residence phone"
@@ -1354,7 +1362,7 @@ msgstr "Célibataire"
 msgid "Size"
 msgstr "Taille"
 
-#: forms/registration.py:67 templates/registration_detail.html:97
+#: forms/registration.py:71 templates/registration_detail.html:97
 #: templates/registration_pdf.html:134
 msgid "Spouse name"
 msgstr "Nom du conjoint"
@@ -1463,14 +1471,6 @@ msgstr "Envoyer"
 msgid "Uploaded by"
 msgstr "Envoyé par"
 
-#: forms/registration.py:21
-msgid "Use address for billing"
-msgstr "Utiliser l'adresse enregistrée pour la facturation"
-
-#: forms/registration.py:84
-msgid "Use address for post"
-msgstr "Utiliser l'adresse enregistrée pour le courrier"
-
 #: templates/django_registration/activation_complete.html:31
 msgid "User account activated"
 msgstr "Compte utilisateur activé"
@@ -1483,7 +1483,7 @@ msgstr "Information du compte utilisateur"
 msgid "Username and password not matching"
 msgstr "Nom d'utilisateur et mot de passe ne correspondent pas"
 
-#: forms/registration.py:41 templates/registration_detail.html:121
+#: forms/registration.py:45 templates/registration_detail.html:121
 msgid "VAT number"
 msgstr "Numéro de TVA"
 
@@ -1601,6 +1601,20 @@ msgid ""
 msgstr ""
 "Votre compte utilsateur est désormais actif. Vous pouvez à présent vous "
 "identifier pour accéder à la plateforme."
+
+#: forms/registration.py:23 forms/registration.py:90
+msgid "an other address"
+msgstr "une autre adresse"
+
+#: forms/registration.py:22 forms/registration.py:89
+msgid "residence address mentioned earlier"
+msgstr "l'adresse du domicile légal mentionnée précédemment"
+
+#~ msgid "Use address for billing"
+#~ msgstr "Utiliser l'adresse enregistrée pour la facturation"
+
+#~ msgid "Use address for post"
+#~ msgstr "Utiliser l'adresse enregistrée pour le courrier"
 
 #~ msgid "Active"
 #~ msgstr "Active"
