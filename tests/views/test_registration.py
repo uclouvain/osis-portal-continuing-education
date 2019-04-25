@@ -110,7 +110,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(messages_list[0].level, messages.INFO)
 
     def test_registration_detail_not_submittable(self):
-        self.admission_accepted['national_registry_number'] = ''
+        self.admission_accepted['marital_status'] = ''
 
         url = reverse('registration_detail', args=[self.admission_accepted['uuid']])
         response = self.client.get(url)
@@ -147,7 +147,7 @@ class ViewStudentRegistrationTestCase(TestCase):
             str(messages_list[1])
         )
         self.assertIn(
-            ugettext("National registry number"),
+            ugettext("Marital status"),
             str(messages_list[1])
         )
         self.assertEqual(messages_list[1].level, messages.WARNING)
@@ -222,7 +222,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_registration_submit_not_complete(self):
-        self.admission_accepted['national_registry_number'] = ''
+        self.admission_accepted['marital_status'] = ''
 
         url = reverse('registration_submit')
         response = self.client.post(
@@ -276,26 +276,24 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
     def test_registration_is_not_submittable_missing_data_in_all_objects(self):
         self.admission['residence_address']['postal_code'] = ''
         self.admission['billing_address']['postal_code'] = ''
-        self.admission['national_registry_number'] = ''
         errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
 
         self.assertDictEqual(
             errors,
             {
                 _("Postal code"): [_("This field is required.")],
-                _("Postal code"): [_("This field is required.")],
-                _("National registry number"): [_("This field is required.")]
+                _("Postal code"): [_("This field is required.")]
             }
         )
 
     def test_registration_is_not_submittable_missing_registration_data(self):
-        self.admission['national_registry_number'] = ''
+        self.admission['marital_status'] = ''
         errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
 
         self.assertDictEqual(
             errors,
             {
-                _("National registry number"): [_("This field is required.")]
+                _("Marital status"): [_("This field is required.")]
             }
         )
 
