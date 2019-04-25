@@ -162,8 +162,6 @@ class StrictRegistrationForm(RegistrationForm):
 
         required_fields = [
             'registration_type',
-            'national_registry_number',
-            'id_card_number',
             'marital_status',
             'previous_ucl_registration',
         ]
