@@ -16,9 +16,13 @@ class RegistrationForm(forms.Form):
         choices=enums.REGISTRATION_TITLE_CHOICES,
         label=_("Registration type")
     )
-    use_address_for_billing = forms.BooleanField(
-        initial=True,
-        label=_("Use address for billing"),
+    use_address_for_billing = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=[
+            (True, _("residence address mentioned earlier")),
+            (False, _("an other address"))
+        ],
+        label=_('I would like the billing address to be :'),
         required=False
     )
     billing_address = forms.CharField(
@@ -79,9 +83,13 @@ class RegistrationForm(forms.Form):
     )
 
     # Post
-    use_address_for_post = forms.BooleanField(
-        initial=True,
-        label=_("Use address for post"),
+    use_address_for_post = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=[
+            (True, _("residence address mentioned earlier")),
+            (False, _("an other address"))
+        ],
+        label=_('I would like the post address to be :'),
         required=False
     )
     residence_address = forms.CharField(
