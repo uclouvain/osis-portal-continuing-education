@@ -283,7 +283,7 @@
         //show missing fields in red
         let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
         errors_fields = JSON.parse(errors_fields);
-        $('#identification_information').hide();
+        
         for(field of errors_fields){
             $('#id_'+field).parent().addClass('has-warning');
 
