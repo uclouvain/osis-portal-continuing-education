@@ -77,7 +77,7 @@
                     <div class="row" id="identification_information"
                          style="display: none; visibility: hidden;">
                         <div class="col-md-12" style="color: rgb(138, 109, 59); font-weight: bold">
-                            {% trans 'At least one of the 3 following fields(national registry, id card number or passport number) must be filled-in!' %}
+                            {% trans 'At least one of the 3 following fields (national registry, id card number or passport number) must be filled-in!' %}
                         </div>
                     </div>
                     <div class="row">
@@ -283,7 +283,7 @@
         //show missing fields in red
         let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
         errors_fields = JSON.parse(errors_fields);
-        
+
         for(field of errors_fields){
             $('#id_'+field).parent().addClass('has-warning');
 
