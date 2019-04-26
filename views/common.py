@@ -43,6 +43,8 @@ from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
 
+ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION = 'national_registry_number'
+
 
 def display_errors(request, errors):
     for error in errors:
@@ -231,7 +233,7 @@ def _get_managers_mails(formation):
 def _build_error_data(errors):
     errors_data = []
     for k, v in errors.items():
-        if 'national_registry_number' in v:
+        if ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION in v:
             errors_data.append(
                 _('At least one of the 3 following fields must be filled-in : national registry, id card number '
                   'or passport number')

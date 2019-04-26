@@ -286,9 +286,8 @@
         $('#identification_information').hide();
         for(field of errors_fields){
             $('#id_'+field).parent().addClass('has-warning');
-            console.log(field);
+
             if(field == 'national_registry_number'){
-                console.log('kkk');
                 $('#id_id_card_number').parent().addClass('has-warning');
                 $('#id_passport_number').parent().addClass('has-warning');
                 $('#identification_information').css("visibility", "visible");
