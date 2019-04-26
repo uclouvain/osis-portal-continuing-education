@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-24 10:57+0200\n"
+"POT-Creation-Date: 2019-04-26 11:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -274,7 +274,7 @@ msgid ""
 "    "
 msgstr ""
 
-#: views/common.py:227
+#: views/common.py:230
 msgid " or "
 msgstr ""
 
@@ -307,7 +307,7 @@ msgstr ""
 msgid "Access to regulates professions"
 msgstr ""
 
-#: tests/views/test_registration.py:182 views/common.py:196
+#: tests/views/test_registration.py:182 views/common.py:199
 msgid ""
 "Accompanied by two passport photos and a copy of both sides of the identity "
 "card or residence permit."
@@ -374,6 +374,18 @@ msgstr ""
 msgid "Associative"
 msgstr ""
 
+#: views/common.py:238
+msgid ""
+"At least one of the 3 following fields must be filled-in : national "
+"registry, id card number or passport number"
+msgstr ""
+
+#: templates/registration_form.html:80
+msgid ""
+"At least one of the 3 following fields(national registry, id card number or "
+"passport number) must be filled-in!"
+msgstr ""
+
 #: templates/continuing_education/home.html:90
 msgid ""
 "At least one of your admission files is now processed as a registration file "
@@ -386,7 +398,6 @@ msgid "Awareness"
 msgstr ""
 
 #: templates/registration_detail.html:107 templates/registration_form.html:52
-#: templates/registration_form.html:114
 msgid "Billing"
 msgstr ""
 
@@ -488,8 +499,8 @@ msgstr ""
 
 #: forms/address.py:26 forms/prospect.py:26 templates/admission_detail.html:114
 #: templates/prospect_form.html:62 templates/registration_detail.html:115
-#: templates/registration_detail.html:130 templates/registration_form.html:122
-#: templates/registration_form.html:149 templates/registration_pdf.html:156
+#: templates/registration_detail.html:130 templates/registration_form.html:127
+#: templates/registration_form.html:153 templates/registration_pdf.html:156
 #: templates/registration_pdf.html:166
 msgid "City"
 msgstr ""
@@ -523,8 +534,8 @@ msgstr ""
 
 #: forms/address.py:10 templates/admission_detail.html:115
 #: templates/registration_detail.html:116
-#: templates/registration_detail.html:131 templates/registration_form.html:125
-#: templates/registration_form.html:152 templates/registration_pdf.html:158
+#: templates/registration_detail.html:131 templates/registration_form.html:130
+#: templates/registration_form.html:156 templates/registration_pdf.html:158
 #: templates/registration_pdf.html:167
 msgid "Country"
 msgstr ""
@@ -566,7 +577,7 @@ msgid "Divorced"
 msgstr ""
 
 #: tests/views/test_registration.py:107 tests/views/test_registration.py:140
-#: views/common.py:180
+#: views/common.py:183
 msgid "Do not forget to submit your file when it is complete"
 msgstr ""
 
@@ -734,14 +745,14 @@ msgstr ""
 msgid "Identification"
 msgstr ""
 
-#: tests/views/test_admission.py:137 views/common.py:216
+#: tests/views/test_admission.py:137 views/common.py:219
 #, python-format
 msgid ""
 "If you want to edit again your admission, please contact the program "
 "manager : %(mail)s"
 msgstr ""
 
-#: tests/views/test_registration.py:189 views/common.py:213
+#: tests/views/test_registration.py:189 views/common.py:216
 #, python-format
 msgid ""
 "If you want to edit again your registration, please contact the program "
@@ -822,8 +833,8 @@ msgstr ""
 
 #: forms/address.py:16 templates/admission_detail.html:112
 #: templates/registration_detail.html:113
-#: templates/registration_detail.html:128 templates/registration_form.html:116
-#: templates/registration_form.html:143 templates/registration_pdf.html:152
+#: templates/registration_detail.html:128 templates/registration_form.html:121
+#: templates/registration_form.html:147 templates/registration_pdf.html:152
 #: templates/registration_pdf.html:164
 msgid "Location"
 msgstr ""
@@ -843,7 +854,8 @@ msgid "Male"
 msgstr ""
 
 #: forms/registration.py:66 templates/registration_detail.html:96
-#: templates/registration_pdf.html:132
+#: templates/registration_pdf.html:132 tests/views/test_registration.py:150
+#: tests/views/test_registration.py:296
 msgid "Marital status"
 msgstr ""
 
@@ -870,8 +882,7 @@ msgid "Name"
 msgstr ""
 
 #: forms/registration.py:51 templates/registration_detail.html:91
-#: templates/registration_pdf.html:124 tests/views/test_registration.py:150
-#: tests/views/test_registration.py:287 tests/views/test_registration.py:298
+#: templates/registration_pdf.html:124
 msgid "National registry number"
 msgstr ""
 
@@ -969,17 +980,17 @@ msgstr ""
 msgid "Please state you"
 msgstr ""
 
-#: templates/registration_detail.html:125 templates/registration_form.html:141
+#: templates/registration_detail.html:125
 msgid "Post"
 msgstr ""
 
 #: forms/address.py:21 forms/prospect.py:21 templates/admission_detail.html:113
 #: templates/prospect_form.html:63 templates/registration_detail.html:114
-#: templates/registration_detail.html:129 templates/registration_form.html:119
-#: templates/registration_form.html:146 templates/registration_pdf.html:154
+#: templates/registration_detail.html:129 templates/registration_form.html:124
+#: templates/registration_form.html:150 templates/registration_pdf.html:154
 #: templates/registration_pdf.html:165 tests/views/test_admission.py:359
-#: tests/views/test_admission.py:392 tests/views/test_registration.py:285
-#: tests/views/test_registration.py:286 tests/views/test_registration.py:309
+#: tests/views/test_admission.py:392 tests/views/test_registration.py:284
+#: tests/views/test_registration.py:285 tests/views/test_registration.py:307
 msgid "Postal code"
 msgstr ""
 
@@ -992,12 +1003,12 @@ msgstr ""
 msgid "Previous NOMA"
 msgstr ""
 
-#: templates/registration_detail.html:101 templates/registration_form.html:103
+#: templates/registration_detail.html:101 templates/registration_form.html:109
 #: templates/registration_pdf.html:138
 msgid "Previous UCLouvain registration"
 msgstr ""
 
-#: tests/views/test_registration.py:173 views/common.py:194
+#: tests/views/test_registration.py:173 views/common.py:197
 msgid "Print the completed registration form"
 msgstr ""
 
@@ -1111,7 +1122,7 @@ msgstr ""
 msgid "Separated"
 msgstr ""
 
-#: tests/views/test_registration.py:177 views/common.py:195
+#: tests/views/test_registration.py:177 views/common.py:198
 msgid "Sign it and send it by post to the address of the program manager"
 msgstr ""
 
@@ -1230,9 +1241,9 @@ msgstr ""
 #: tests/views/test_admission.py:358 tests/views/test_admission.py:359
 #: tests/views/test_admission.py:360 tests/views/test_admission.py:371
 #: tests/views/test_admission.py:382 tests/views/test_admission.py:392
-#: tests/views/test_admission.py:403 tests/views/test_registration.py:285
-#: tests/views/test_registration.py:286 tests/views/test_registration.py:287
-#: tests/views/test_registration.py:298 tests/views/test_registration.py:309
+#: tests/views/test_admission.py:403 tests/views/test_registration.py:284
+#: tests/views/test_registration.py:285 tests/views/test_registration.py:296
+#: tests/views/test_registration.py:307
 msgid "This field is required."
 msgstr ""
 
@@ -1295,7 +1306,7 @@ msgid "You already have an account"
 msgstr ""
 
 #: tests/views/test_registration.py:99 tests/views/test_registration.py:132
-#: views/common.py:178
+#: views/common.py:181
 msgid "You are still able to edit the form, via the 'Edit' button"
 msgstr ""
 
@@ -1305,7 +1316,7 @@ msgid ""
 msgstr ""
 
 #: tests/views/test_registration.py:103 tests/views/test_registration.py:136
-#: views/common.py:179
+#: views/common.py:182
 msgid "You can upload documents via the 'Documents'"
 msgstr ""
 
@@ -1320,7 +1331,7 @@ msgid ""
 msgstr ""
 
 #: tests/views/test_admission.py:115 tests/views/test_admission.py:253
-#: tests/views/test_registration.py:146 views/common.py:154
+#: tests/views/test_registration.py:146 views/common.py:158
 msgid ""
 "Your file is not submittable because you did not provide the following "
 "data : "
@@ -1341,7 +1352,7 @@ msgid ""
 "information :"
 msgstr ""
 
-#: tests/views/test_registration.py:169 views/common.py:199
+#: tests/views/test_registration.py:169 views/common.py:202
 msgid ""
 "Your registration is submitted. Some tasks are remaining to complete the "
 "registration :"
