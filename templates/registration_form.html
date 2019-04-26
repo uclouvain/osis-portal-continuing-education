@@ -74,6 +74,12 @@
                         <div class="col-md-6">{% bootstrap_field person_form.birth_location %}</div>
                         <div class="col-md-6">{% bootstrap_field person_form.birth_country %}</div>
                     </div>
+                    <div class="row" id="identification_information"
+                         style="display: none; visibility: hidden;">
+                        <div class="col-md-12" style="color: rgb(138, 109, 59); font-weight: bold">
+                            {% trans 'At least one of the 3 following fields(national registry, id card number or passport number) must be filled-in!' %}
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             {% bootstrap_field form.national_registry_number %}
@@ -277,8 +283,18 @@
         //show missing fields in red
         let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
         errors_fields = JSON.parse(errors_fields);
-        for(field of errors_fields)
+        $('#identification_information').hide();
+        for(field of errors_fields){
             $('#id_'+field).parent().addClass('has-warning');
+            console.log(field);
+            if(field == 'national_registry_number'){
+                console.log('kkk');
+                $('#id_id_card_number').parent().addClass('has-warning');
+                $('#id_passport_number').parent().addClass('has-warning');
+                $('#identification_information').css("visibility", "visible");
+                $('#identification_information').css("display", "block");
+            }
+        }
 
 
         $('.tab-pane').each(function(){

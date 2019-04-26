@@ -168,3 +168,13 @@ class StrictRegistrationForm(RegistrationForm):
 
         for required_field in required_fields:
             self.fields[required_field].required = True
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if not cleaned_data.get('national_registry_number') and \
+                not cleaned_data.get('id_card_number') and \
+                not cleaned_data.get('passport_number'):
+            self.add_error('national_registry_number', 'national_registry_number')
+
+        return cleaned_data

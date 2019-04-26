@@ -110,12 +110,14 @@ def get_submission_errors(admission, is_registration=False):
     errors = OrderedDict()
 
     if is_registration:
+
         address_form = StrictAddressForm(
             data=admission['billing_address']
         )
         adm_form = StrictRegistrationForm(
             data=admission
         )
+
         _update_errors([address_form, adm_form], errors, errors_field)
 
         if not admission['use_address_for_post']:
@@ -153,12 +155,11 @@ def _build_warning_from_errors_dict(errors):
     warning_message = ugettext(
         "Your file is not submittable because you did not provide the following data : "
     )
-
     warning_message = \
         "<strong>" + \
         warning_message + \
         "</strong><br>" + \
-        " · ".join([ugettext(key) for key in errors.keys()])
+        " · ".join([ugettext(key) for key in _build_error_data(errors)])
 
     return mark_safe(warning_message)
 
@@ -225,3 +226,16 @@ def add_contact_for_edit_message(request, formation=None, is_registration=False)
 def _get_managers_mails(formation):
     managers_mail = [d['email'] for d in formation['managers'] if d['email']] if formation['managers'] else []
     return _(" or ").join(managers_mail)
+
+
+def _build_error_data(errors):
+    errors_data = []
+    for k, v in errors.items():
+        if 'national_registry_number' in v:
+            errors_data.append(
+                _('At least one of the 3 following fields must be filled-in : national registry, id card number '
+                  'or passport number')
+            )
+        else:
+            errors_data.append(k)
+    return errors_data
