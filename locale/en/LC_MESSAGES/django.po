@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-26 11:48+0200\n"
+"POT-Creation-Date: 2019-04-26 12:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -374,16 +374,16 @@ msgstr ""
 msgid "Associative"
 msgstr ""
 
+#: templates/registration_form.html:80
+msgid ""
+"At least one of the 3 following fields (national registry, id card number or "
+"passport number) must be filled-in!"
+msgstr ""
+
 #: views/common.py:238
 msgid ""
 "At least one of the 3 following fields must be filled-in : national "
 "registry, id card number or passport number"
-msgstr ""
-
-#: templates/registration_form.html:80
-msgid ""
-"At least one of the 3 following fields(national registry, id card number or "
-"passport number) must be filled-in!"
 msgstr ""
 
 #: templates/continuing_education/home.html:90

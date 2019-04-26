@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-26 11:48+0200\n"
+"POT-Creation-Date: 2019-04-26 12:06+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -584,21 +584,21 @@ msgstr "A réussi l'épreuve d'évaluation"
 msgid "Associative"
 msgstr "Associatif"
 
+#: templates/registration_form.html:80
+msgid ""
+"At least one of the 3 following fields (national registry, id card number or "
+"passport number) must be filled-in!"
+msgstr ""
+"Au moins un des 3 champs suivants (numéro de registre national, numéro de "
+"carte d'identité ou numéro de passeport) doit être rempli"
+
 #: views/common.py:238
 msgid ""
 "At least one of the 3 following fields must be filled-in : national "
 "registry, id card number or passport number"
 msgstr ""
-"Veuillez remplir au moins un des 3 champs suivants : numéro de registre national, numéro de carte d'identité ou "
-"numéro de passeport"
-
-#: templates/registration_form.html:80
-msgid ""
-"At least one of the 3 following fields(national registry, id card number or "
-"passport number) must be filled-in!"
-msgstr ""
-"Au moins un des 3 champs suivants(numéro de registre national, numéro de carte d'identité ou numéro de passeport) "
-"doit être rempli"
+"Veuillez remplir au moins un des 3 champs suivants : numéro de registre "
+"national, numéro de carte d'identité ou numéro de passeport"
 
 #: templates/continuing_education/home.html:90
 msgid ""
