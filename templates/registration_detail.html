@@ -101,7 +101,12 @@
                         <div class="col-md-6">{% bootstrap_label _("Previous UCLouvain registration") %} <br/> {{ admission.previous_ucl_registration | yesno}} </div>
                         <div class="col-md-3">{% bootstrap_label _("Previous NOMA") %} <br/> {{ admission.previous_noma | default_if_none:"-" }} </div>
                     </div>
+                    {% if is_accepted %}
+                    <div class="row form-group">
+                        <div class="col-md-12">{% bootstrap_label _("Conditionally accepted") %} <br/> {{ admission.condition_of_acceptance}} </div>
 
+                    </div>
+                    {% endif %}
                 </div>
 
                 <div class="panel-heading">{% trans 'Billing' %}</div>

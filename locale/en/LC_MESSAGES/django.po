@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-26 12:06+0200\n"
+"POT-Creation-Date: 2019-04-29 14:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -397,7 +397,7 @@ msgstr ""
 msgid "Awareness"
 msgstr ""
 
-#: templates/registration_detail.html:107 templates/registration_form.html:52
+#: templates/registration_detail.html:112 templates/registration_form.html:52
 msgid "Billing"
 msgstr ""
 
@@ -498,15 +498,19 @@ msgid "Citizenship"
 msgstr ""
 
 #: forms/address.py:26 forms/prospect.py:26 templates/admission_detail.html:114
-#: templates/prospect_form.html:62 templates/registration_detail.html:115
-#: templates/registration_detail.html:130 templates/registration_form.html:127
+#: templates/prospect_form.html:62 templates/registration_detail.html:120
+#: templates/registration_detail.html:135 templates/registration_form.html:127
 #: templates/registration_form.html:153 templates/registration_pdf.html:156
 #: templates/registration_pdf.html:166
 msgid "City"
 msgstr ""
 
-#: forms/registration.py:40 templates/registration_detail.html:120
+#: forms/registration.py:40 templates/registration_detail.html:125
 msgid "Company number"
+msgstr ""
+
+#: templates/registration_detail.html:106
+msgid "Conditionally accepted"
 msgstr ""
 
 #: templates/admission_detail.html:105 templates/registration_pdf.html:145
@@ -533,8 +537,8 @@ msgid "Continuing Education"
 msgstr ""
 
 #: forms/address.py:10 templates/admission_detail.html:115
-#: templates/registration_detail.html:116
-#: templates/registration_detail.html:131 templates/registration_form.html:130
+#: templates/registration_detail.html:121
+#: templates/registration_detail.html:136 templates/registration_form.html:130
 #: templates/registration_form.html:156 templates/registration_pdf.html:158
 #: templates/registration_pdf.html:167
 msgid "Country"
@@ -691,7 +695,7 @@ msgstr ""
 msgid "Generate PDF"
 msgstr ""
 
-#: forms/registration.py:35 templates/registration_detail.html:119
+#: forms/registration.py:35 templates/registration_detail.html:124
 msgid "Head office name"
 msgstr ""
 
@@ -832,8 +836,8 @@ msgid "Legal cohabitant"
 msgstr ""
 
 #: forms/address.py:16 templates/admission_detail.html:112
-#: templates/registration_detail.html:113
-#: templates/registration_detail.html:128 templates/registration_form.html:121
+#: templates/registration_detail.html:118
+#: templates/registration_detail.html:133 templates/registration_form.html:121
 #: templates/registration_form.html:147 templates/registration_pdf.html:152
 #: templates/registration_pdf.html:164
 msgid "Location"
@@ -980,13 +984,13 @@ msgstr ""
 msgid "Please state you"
 msgstr ""
 
-#: templates/registration_detail.html:125
+#: templates/registration_detail.html:130
 msgid "Post"
 msgstr ""
 
 #: forms/address.py:21 forms/prospect.py:21 templates/admission_detail.html:113
-#: templates/prospect_form.html:63 templates/registration_detail.html:114
-#: templates/registration_detail.html:129 templates/registration_form.html:124
+#: templates/prospect_form.html:63 templates/registration_detail.html:119
+#: templates/registration_detail.html:134 templates/registration_form.html:124
 #: templates/registration_form.html:150 templates/registration_pdf.html:154
 #: templates/registration_pdf.html:165 tests/views/test_admission.py:359
 #: tests/views/test_admission.py:392 tests/views/test_registration.py:284
@@ -1086,7 +1090,7 @@ msgstr ""
 msgid "Registration submitted"
 msgstr ""
 
-#: forms/registration.py:17 templates/registration_detail.html:110
+#: forms/registration.py:17 templates/registration_detail.html:115
 msgid "Registration type"
 msgstr ""
 
@@ -1103,7 +1107,7 @@ msgid "Residence address"
 msgstr ""
 
 #: forms/admission.py:186 forms/registration.py:103
-#: templates/registration_detail.html:134 templates/registration_pdf.html:160
+#: templates/registration_detail.html:139 templates/registration_pdf.html:160
 #: templates/registration_pdf.html:168
 msgid "Residence phone"
 msgstr ""
@@ -1267,7 +1271,7 @@ msgstr ""
 msgid "Username and password not matching"
 msgstr ""
 
-#: forms/registration.py:45 templates/registration_detail.html:121
+#: forms/registration.py:45 templates/registration_detail.html:126
 msgid "VAT number"
 msgstr ""
 
