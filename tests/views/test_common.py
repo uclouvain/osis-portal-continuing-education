@@ -27,7 +27,7 @@
 from collections import OrderedDict
 
 from django.test import TestCase
-
+from django.test.utils import override_settings
 from continuing_education.views.common import _build_error_data, ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION
 
 
@@ -51,8 +51,9 @@ class CommonViewTestCase(TestCase):
                               ['Anything else', OTHER_FIELD_LABEL]
         )
 
+    @override_settings(LANGUAGES=[('en', 'English'), ], LANGUAGE_CODE='en')
     def test_build_warning_from_errors_dict_special_at_least_one_of_three_field_needed(self):
-        errors_dict = OrderedDict([('Numéro de registre national belge', [ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION]),
+        errors_dict = OrderedDict([('National registry number', [ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION]),
                                    (OTHER_FIELD_LABEL, [OTHER_FORM_FIELD])]
                                   )
         self.assertCountEqual(
