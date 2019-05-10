@@ -116,11 +116,11 @@
     <div><strong>{% trans "Birth date" %}:</strong>
          {{ admission.person_information.birth_date | default:"-" }} </div>
     <div><strong>{% trans "Birth location" %}:</strong>
-         {{ admission.person_information.birth_location | default:"-" }} </div>
+         {{ admission.person_information.birth_location | upper | default:"-" }} </div>
     <div><strong>{% trans "Birth country" %}:</strong>
-         {{ admission.person_information.birth_country.name | default:"-" }} </div>
+         {{ admission.person_information.birth_country.name | upper | default:"-" }} </div>
     <div><strong>{% trans "Citizenship" %}:</strong>
-         {{ admission.citizenship.name | default:"-" }} </div>
+         {{ admission.citizenship.name | upper | default:"-" }} </div>
     <div><strong>{% trans "National registry number" %}:</strong>
          {{ admission.national_registry_number | default_if_none:"-" }} </div>
     <div><strong>{% trans "ID card number" %}:</strong>
@@ -154,9 +154,9 @@
     <div><strong>{% trans "Postal code" %}:</strong>
          {{ admission.residence_address.postal_code | default_if_none:"-" }} </div>
     <div><strong>{% trans "City" %}:</strong>
-         {{ admission.residence_address.city | default_if_none:"-" }} </div>
+         {{ admission.residence_address.city | upper | default_if_none:"-" }} </div>
     <div><strong>{% trans "Country" %}:</strong>
-         {{ admission.residence_address.country.name | default_if_none:"-" }} </div>
+         {{ admission.residence_address.country.name | upper| default_if_none:"-" }} </div>
     <div class="col-md-4"><strong>{% trans "Residence phone" %}:</strong>
          {{ admission.residence_phone | default_if_none:"-" }} </div>
     <h3>{% trans 'Term-time address (student accommodation)' %}</h3>
