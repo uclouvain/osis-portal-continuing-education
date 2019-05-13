@@ -28,12 +28,27 @@ import io
 import requests
 from django.conf import settings
 from django.http import Http404
+from openapi_client import Configuration
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
 
+from continuing_education_api.openapi_client.api.default_api import DefaultApi
+from continuing_education_api.openapi_client.api_client import ApiClient
+
+api_config = Configuration()
+api_config.api_key_prefix['Authorization'] = "Token"
+api_config.api_key['Authorization'] = settings.OSIS_PORTAL_TOKEN
+api_config.host = settings.URL_CONTINUING_EDUCATION_FILE_API
+
+api = DefaultApi(
+    api_client=ApiClient(
+        configuration=api_config
+    )
+)
+
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "%(object_name)s/%(object_uuid)s"
+API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "/%(object_name)s/%(object_uuid)s"
 
 
 def transform_response_to_data(response):
@@ -105,7 +120,11 @@ def get_continuing_education_training(request, uuid):
 
 
 def get_admission(request, uuid):
-    return get_data_from_osis(request, "admissions", uuid)
+    # token = get_personal_token(request)
+    # api.api_client.configuration.api_key['Authorization'] = token
+    # api.api_client.configuration.api_key_prefix['Authorization'] = 'Token'
+    return api.admissions_uuid_get(uuid)
+    # return get_data_from_osis(request, "admissions", uuid)
 
 
 def get_registration(request, uuid):
@@ -172,16 +191,15 @@ def prepare_registration_data(registration, address, forms):
 
     address['country'] = address['country']['iso_code']
 
-    if forms['registration'].cleaned_data['use_address_for_billing']:
+    if forms['registration'].cleaned_data['use_address_for_billing'] == "True":
         forms['registration'].cleaned_data['billing_address'] = address
     else:
         forms['registration'].cleaned_data['billing_address'] = forms['billing'].cleaned_data
 
-    if forms['registration'].cleaned_data['use_address_for_post']:
+    if forms['registration'].cleaned_data['use_address_for_post'] == "True":
         forms['registration'].cleaned_data['residence_address'] = address
     else:
         forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
-
 
 def prepare_registration_for_submit(registration):
     registration.pop('address')
