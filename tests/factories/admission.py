@@ -99,6 +99,10 @@ def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
         'sessions': 'Test',
         'state': state,
         'reduced_rates': False,
-        'spreading_payments': False
+        'spreading_payments': False,
+        'citizenship': {
+            'name': factory.Sequence(lambda n: 'Country - %d' % n),
+            'iso_code': factory.Sequence(lambda n: str(n)[-2:])
+        },
     }
     return registration
