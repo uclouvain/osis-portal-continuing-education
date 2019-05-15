@@ -187,6 +187,7 @@ def prepare_registration_for_submit(registration):
     registration.pop('address')
     registration.pop('person_information')
     registration.pop('formation')
+    registration.pop('citizenship')
     registration['residence_address']['country'] = registration['residence_address']['country']['iso_code']
     registration['billing_address']['country'] = registration['billing_address']['country']['iso_code']
 
