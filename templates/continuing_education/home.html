@@ -77,6 +77,8 @@
                                         <span class="label label-info show">{% trans admission.state %}</span>
                                     {% elif admission.state == "Draft" %}
                                         <span class="label label-default show">{% trans admission.state %}</span>
+                                    {% elif admission.state == "Cancelled" %}
+                                        <span class="label label-warning show">{% trans "Cancelled" %}</span>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -118,6 +120,8 @@
                                         <span class="label label-success show">{% trans registration.state %}</span>
                                     {% elif registration.state == "Accepted" %}
                                         <span class="label label-default show">{% trans "Not submitted" %}</span>
+                                    {% elif registration.state == "Cancelled" %}
+                                        <span class="label label-warning show">{% trans "Cancelled" %}</span>
                                     {% endif %}
                                 </td>
                             </tr>

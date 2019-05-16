@@ -78,6 +78,10 @@
     background-color: #5bc0de;
 }
 
+.admission-detail-state-cancelled{
+    background-color: rgb(240, 173, 78);
+}
+
 .btn-space {
     margin-right: 10px;
 }
