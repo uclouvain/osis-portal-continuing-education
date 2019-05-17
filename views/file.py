@@ -57,7 +57,6 @@ def upload_file(request, admission_uuid):
     data = {
         'uploaded_by': person['uuid'],
     }
-    print(vars(admission_file))
     request_to_upload = requests.post(
         FILES_URL % {'admission_uuid': str(admission_uuid)},
         headers=REQUEST_HEADER,

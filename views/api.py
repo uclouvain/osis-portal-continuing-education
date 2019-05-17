@@ -154,7 +154,6 @@ def update_admission(request, object_to_update):
 
 
 def update_registration(request, object_to_update):
-    print('update', object_to_update)
     return update_data_to_osis(request, "registrations", object_to_update)
 
 
