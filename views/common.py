@@ -32,7 +32,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import translation
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import gettext_lazy as _, gettext
 
 from base.models import person as person_mdl
 from base.views import layout
@@ -153,14 +153,14 @@ def _update_errors(forms, errors, errors_field):
 
 
 def _build_warning_from_errors_dict(errors):
-    warning_message = ugettext(
+    warning_message = gettext(
         "Your file is not submittable because you did not provide the following data : "
     )
     warning_message = \
         "<strong>" + \
         warning_message + \
         "</strong><br>" + \
-        " · ".join([ugettext(key) for key in _build_error_data(errors)])
+        " · ".join([gettext(key) for key in _build_error_data(errors)])
 
     return mark_safe(warning_message)
 
