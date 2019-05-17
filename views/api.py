@@ -172,7 +172,7 @@ def prepare_registration_data(registration, address, forms):
     if registration:
         forms['registration'].cleaned_data['uuid'] = registration['uuid']
 
-    address['country'] = Country.objects.get(name=address['country'] ).iso_code
+    address['country'] = Country.objects.get(name=address['country']).iso_code
 
     if forms['registration'].cleaned_data['use_address_for_billing'] == 'True':
         forms['registration'].cleaned_data['billing_address'] = address
