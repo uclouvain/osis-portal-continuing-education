@@ -4,6 +4,7 @@ from django.forms import ChoiceField, Form
 from django.utils.translation import gettext_lazy as _
 
 from continuing_education.models.enums import enums, admission_state_choices
+from reference.models.country import Country
 
 
 class AdmissionForm(Form):
@@ -204,14 +205,18 @@ class AdmissionForm(Form):
 
     def _set_initial_fields(self):
         fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', 'acronym', 'uuid')]
-        for field, attribute, slug in fields_to_set:
-            if self.initial.get(field):
-                self.initial[field] = (
-                    self.initial[field][slug],
-                    self.initial[field]['education_group'][attribute]
-                    if field == 'formation' else self.initial[field][attribute]
-                )
-                self.fields[field].choices = [self.initial[field]]
+        if self.initial.get('formation'):
+            self.initial['formation'] = (
+                self.initial['formation']['uuid'],
+                self.initial['formation']['acronym']
+            )
+            self.fields['formation'].choices = [self.initial['formation']]
+        if self.initial.get('citizenship'):
+            self.initial['citizenship'] = (
+                Country.objects.get(name=self.initial['citizenship']).iso_code,
+                self.initial['citizenship']
+            )
+            self.fields['citizenship'].choices = [self.initial['citizenship']]
 
 
 class StrictAdmissionForm(AdmissionForm):

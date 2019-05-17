@@ -2,6 +2,8 @@ from dal import autocomplete
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from reference.models.country import Country
+
 
 class AddressForm(forms.Form):
     country = autocomplete.Select2ListCreateChoiceField(
@@ -30,7 +32,10 @@ class AddressForm(forms.Form):
         super(AddressForm, self).__init__(*args, **kwargs)
         if self.initial:
             if self.initial['country']:
-                self.initial['country'] = (self.initial['country']['iso_code'], self.initial['country']['name'])
+                self.initial['country'] = (
+                    Country.objects.get(name=self.initial['country']).iso_code,
+                    self.initial['country']
+                )
                 self.fields['country'].choices = [self.initial['country']]
 
 

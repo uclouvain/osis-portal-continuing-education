@@ -32,6 +32,8 @@ from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
 
+from reference.models.country import Country
+
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
 API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "%(object_name)s/%(object_uuid)s"
 
@@ -152,6 +154,7 @@ def update_admission(request, object_to_update):
 
 
 def update_registration(request, object_to_update):
+    print('update', object_to_update)
     return update_data_to_osis(request, "registrations", object_to_update)
 
 
@@ -170,14 +173,13 @@ def prepare_registration_data(registration, address, forms):
     if registration:
         forms['registration'].cleaned_data['uuid'] = registration['uuid']
 
-    address['country'] = address['country']['iso_code']
+    address['country'] = Country.objects.get(name=address['country'] ).iso_code
 
-    if forms['registration'].cleaned_data['use_address_for_billing']:
+    if forms['registration'].cleaned_data['use_address_for_billing'] == 'True':
         forms['registration'].cleaned_data['billing_address'] = address
     else:
         forms['registration'].cleaned_data['billing_address'] = forms['billing'].cleaned_data
-
-    if forms['registration'].cleaned_data['use_address_for_post']:
+    if forms['registration'].cleaned_data['use_address_for_post'] == 'True':
         forms['registration'].cleaned_data['residence_address'] = address
     else:
         forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
@@ -185,11 +187,13 @@ def prepare_registration_data(registration, address, forms):
 
 def prepare_registration_for_submit(registration):
     registration.pop('address')
-    registration.pop('person_information')
-    registration.pop('formation')
     registration.pop('citizenship')
-    registration['residence_address']['country'] = registration['residence_address']['country']['iso_code']
-    registration['billing_address']['country'] = registration['billing_address']['country']['iso_code']
+    registration['residence_address']['country'] = Country.objects.get(
+        name=registration['residence_address']['country']
+    ).iso_code
+    registration['billing_address']['country'] = Country.objects.get(
+        name=registration['billing_address']['country']
+    ).iso_code
 
 
 def get_token_from_osis(username, force_user_creation=False):

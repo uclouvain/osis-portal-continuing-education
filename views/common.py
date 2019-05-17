@@ -112,7 +112,6 @@ def get_submission_errors(admission, is_registration=False):
     errors = OrderedDict()
 
     if is_registration:
-
         address_form = StrictAddressForm(
             data=admission['billing_address']
         )
@@ -129,10 +128,10 @@ def get_submission_errors(admission, is_registration=False):
             _update_errors([residence_address_form], errors, errors_field)
     else:
         person_form = StrictPersonForm(
-            data=admission['person_information']['person'] if 'person' in admission['person_information'] else None
+            data=admission
         )
         person_information_form = ContinuingEducationPersonForm(
-            data=admission['person_information']
+            data=admission
         )
         address_form = StrictAddressForm(
             data=admission['address']

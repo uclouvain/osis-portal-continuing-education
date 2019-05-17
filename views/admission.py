@@ -192,9 +192,12 @@ def _is_admission_submittable_and_show_errors(admission, errors_fields, request)
 
 
 def _fill_forms_with_existing_data(admission, formation, request):
-    person_information = api.get_continuing_education_person(request)
-    Person.objects.filter(user=request.user).update(**person_information.get('person'))
+    Person.objects.filter(user=request.user).update(**_get_datas_from_admission('person', admission))
     base_person = Person.objects.get(user=request.user)
+    person_information = _get_datas_from_admission('person_information', admission)
+    person_information.update(
+        api.get_continuing_education_person(request)
+    )
     person_form = ContinuingEducationPersonForm(
         request.POST or None,
         initial=person_information if _has_instance_with_values(person_information) else None
@@ -208,6 +211,17 @@ def _fill_forms_with_existing_data(admission, formation, request):
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, initial=address)
     return address_form, adm_form, id_form, person_form
+
+
+def _get_datas_from_admission(data_type, admission):
+    keys = []
+    if data_type == 'person':
+        keys = ['first_name', 'last_name', 'gender']
+    if data_type == 'person_information':
+        keys = ['birth_date', 'birth_location', 'birth_country']
+    return {
+        key: admission[key] for key in keys
+    }
 
 
 def _get_old_admission_if_exists(admissions, person_information, request):

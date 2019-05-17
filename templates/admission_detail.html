@@ -91,15 +91,15 @@
                         <div class="panel-heading">{% trans 'Identification' %}</div>
                         <div class="panel panel-body">
                             <div class="row form-group">
-                                <div class="col-md-3">{% bootstrap_label _("First name") %} <br/> {{ admission.person_information.person.first_name | default:"-" }} </div>
-                                <div class="col-md-3">{% bootstrap_label _("Last name") %} <br/> {{ admission.person_information.person.last_name | default:"-" }} </div>
-                                <div class="col-md-3">{% bootstrap_label _("Gender") %} <br/> {{ admission.person_information.person.gender | default:"-" }} </div>
-                                <div class="col-md-3">{% bootstrap_label _("Citizenship") %} <br/> {{ admission.citizenship.nationality | upper | default:"-" }} </div>
+                                <div class="col-md-3">{% bootstrap_label _("First name") %} <br/> {{ admission.first_name | default:"-" }} </div>
+                                <div class="col-md-3">{% bootstrap_label _("Last name") %} <br/> {{ admission.last_name | default:"-" }} </div>
+                                <div class="col-md-3">{% bootstrap_label _("Gender") %} <br/> {{ admission.gender | default:"-" }} </div>
+                                <div class="col-md-3">{% bootstrap_label _("Citizenship") %} <br/> {{ admission.citizenship | upper | default:"-" }} </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-md-3">{% bootstrap_label _("Birth date") %} <br/> {{ admission.person_information.birth_date | default:"-" }} </div>
-                                <div class="col-md-3">{% bootstrap_label _("Birth location") %} <br/> {{ admission.person_information.birth_location | upper | default:"-" }} </div>
-                                <div class="col-md-3">{% bootstrap_label _("Birth country") %} <br/> {{ admission.person_information.birth_country.name| upper | default:"-" }} </div>
+                                <div class="col-md-3">{% bootstrap_label _("Birth date") %} <br/> {{ admission.birth_date | default:"-" }} </div>
+                                <div class="col-md-3">{% bootstrap_label _("Birth location") %} <br/> {{ admission.birth_location | upper | default:"-" }} </div>
+                                <div class="col-md-3">{% bootstrap_label _("Birth country") %} <br/> {{ admission.birth_country| upper | default:"-" }} </div>
                             </div>
                         </div>
 
@@ -113,7 +113,7 @@
                                 <div class="col-md-3">{% bootstrap_label _("Location") %} <br/> {{ admission.address.location | default:"-" }} </div>
                                 <div class="col-md-3">{% bootstrap_label _("Postal code") %} <br/> {{ admission.address.postal_code | default:"-" }} </div>
                                 <div class="col-md-3">{% bootstrap_label _("City") %} <br/> {{ admission.address.city | upper | default:"-" }} </div>
-                                <div class="col-md-3">{% bootstrap_label _("Country") %} <br/> {{ admission.address.country.name | upper | default:"-" }} </div>
+                                <div class="col-md-3">{% bootstrap_label _("Country") %} <br/> {{ admission.address.country | upper | default:"-" }} </div>
                             </div>
                         </div>
 
@@ -163,7 +163,7 @@
                 <div class="panel-heading">{% trans 'Formation' %}</div>
                     <div class="panel panel-body">
                         <div class="form-group">
-                            {% bootstrap_label _("Formation") %} <br/> {{ admission.formation.education_group.acronym | default:"-" }}
+                            {% bootstrap_label _("Formation") %} <br/> {{ admission.formation.acronym | default:"-" }}
                         </div>
                 </div>
 
