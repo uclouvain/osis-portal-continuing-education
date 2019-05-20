@@ -57,7 +57,7 @@
         </span>
 
         <h2>{% trans 'Admission' %}</h2>
-        <h4>{{ admission.formation.education_group.acronym | default:"-" }}</h4>
+        <h4>{{ admission.formation.acronym | default:"-" }}</h4>
     </div>
 
     {% include 'template_messages.html' %}

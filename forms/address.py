@@ -30,13 +30,12 @@ class AddressForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(AddressForm, self).__init__(*args, **kwargs)
-        if self.initial:
-            if self.initial['country']:
-                self.initial['country'] = (
-                    Country.objects.get(name=self.initial['country']).iso_code,
-                    self.initial['country']
-                )
-                self.fields['country'].choices = [self.initial['country']]
+        if self.initial and 'country' in self.initial:
+            self.initial['country'] = (
+                Country.objects.get(name=self.initial['country']).iso_code,
+                self.initial['country']
+            )
+            self.fields['country'].choices = [self.initial['country']]
 
 
 class StrictAddressForm(AddressForm):
