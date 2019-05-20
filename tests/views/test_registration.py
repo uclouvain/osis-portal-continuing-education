@@ -264,7 +264,8 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
         ac = AcademicYearFactory()
         AcademicYearFactory(year=ac.year+1)
-        self.admission = RegistrationDictFactory(PersonFactory().uuid)
+        person_iufc = ContinuingEducationPersonDictFactory(PersonFactory().uuid)
+        self.admission = RegistrationDictFactory(person_iufc)
 
     def test_registration_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission, is_registration=True)

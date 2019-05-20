@@ -213,7 +213,7 @@ class AdmissionForm(Form):
             self.fields['formation'].choices = [self.initial['formation']]
         if self.initial.get('citizenship'):
             self.initial['citizenship'] = (
-                Country.objects.get(name=self.initial['citizenship']).iso_code,
+                Country.objects.get(name=self.initial['citizenship']),
                 self.initial['citizenship']
             )
             self.fields['citizenship'].choices = [self.initial['citizenship']]

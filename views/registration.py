@@ -152,8 +152,8 @@ def generate_pdf_registration(request, admission_uuid):
         'created': datetime.datetime.now(),
     }
     pdf_filename = get_valid_filename("{}_{}".format(
-        admission['person_information']['person']['last_name'],
-        admission['formation']['education_group']['acronym'])
+        admission['last_name'],
+        admission['formation']['acronym'])
     )
 
     return render_pdf(

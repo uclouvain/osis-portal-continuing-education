@@ -234,7 +234,7 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_admission_save_with_error(self):
         admission = AdmissionDictFactory(self.person_information)
-        admission['person_information'] = "no valid pk"
+        admission.pop('birth_country')
         response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
@@ -281,17 +281,15 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     @patch('continuing_education.views.api.update_admission')
     def test_edit_post_admission_found(self, mock_update):
-        person_information = self.admission['person_information']
         person = {
             'first_name': self.person.first_name,
             'last_name': self.person.last_name,
             'gender': self.person.gender,
-            'birth_country': person_information['birth_country'],
-            'birth_location': person_information['birth_location'],
-            'birth_date': person_information['birth_date'],
+            'birth_country': self.admission['birth_country'],
+            'birth_location': self.admission['birth_location'],
+            'birth_date': self.admission['birth_date'],
         }
         admission = {
-            'person_information': person_information,
             'motivation': 'abcd',
             'professional_personal_interests': 'abcd',
             'formation': self.formation['uuid'],
@@ -346,8 +344,8 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_not_submittable_missing_data_in_all_objects(self):
-        self.admission['person_information']['person']['email'] = ''
-        self.admission['person_information']['birth_country'] = ''
+        self.admission['email'] = ''
+        self.admission['birth_country'] = ''
         self.admission['address']['postal_code'] = ''
         self.admission['last_degree_level'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
@@ -373,7 +371,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_not_submittable_missing_person_information_data(self):
-        self.admission['person_information']['birth_country'] = ''
+        self.admission['birth_country'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(
@@ -394,7 +392,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         )
 
     def test_admission_is_not_submittable_missing_person_data(self):
-        self.admission['person_information']['person']['gender'] = None
+        self.admission['gender'] = None
         errors, errors_fields = get_submission_errors(self.admission)
 
         self.assertDictEqual(

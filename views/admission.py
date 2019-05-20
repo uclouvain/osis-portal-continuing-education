@@ -214,14 +214,16 @@ def _fill_forms_with_existing_data(admission, formation, request):
 
 
 def _get_datas_from_admission(data_type, admission):
-    keys = []
-    if data_type == 'person':
-        keys = ['first_name', 'last_name', 'gender']
-    if data_type == 'person_information':
-        keys = ['birth_date', 'birth_location', 'birth_country']
-    return {
-        key: admission[key] for key in keys
-    }
+    if admission:
+        keys = []
+        if data_type == 'person':
+            keys = ['first_name', 'last_name', 'gender']
+        if data_type == 'person_information':
+            keys = ['birth_date', 'birth_location', 'birth_country']
+        return {
+            key: admission[key] for key in keys
+        }
+    return {}
 
 
 def _get_old_admission_if_exists(admissions, person_information, request):

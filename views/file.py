@@ -53,9 +53,8 @@ def upload_file(request, admission_uuid):
         admission = get_admission(request, admission_uuid)
     except Http404:
         admission = get_registration(request, admission_uuid)
-    person = admission['person_information']['person']
     data = {
-        'uploaded_by': person['uuid'],
+        'uploaded_by': admission['person_uuid'],
     }
     request_to_upload = requests.post(
         FILES_URL % {'admission_uuid': str(admission_uuid)},

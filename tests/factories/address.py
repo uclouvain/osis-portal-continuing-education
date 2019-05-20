@@ -26,15 +26,14 @@
 
 import factory
 
+from reference.tests.factories.country import CountryFactory
+
 
 def AddressDictFactory():
     address = {
         'location': factory.Faker('street_name'),
         'postal_code': 1348,
-        'country': {
-            'name': factory.Sequence(lambda n: 'Country - %d' % n),
-            'iso_code': factory.Sequence(lambda n: str(n)[-2:])
-        },
+        'country': CountryFactory().name,
         'city': factory.Faker('city')
     }
     return address
