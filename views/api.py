@@ -32,6 +32,10 @@ from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
 
+from continuing_education.continuing_education_api.openapi_client.configuration import Configuration
+from continuing_education.continuing_education_api.openapi_client.api.default_api import DefaultApi
+from continuing_education.continuing_education_api.openapi_client.api_client import ApiClient
+
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
 API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "%(object_name)s/%(object_uuid)s"
 
