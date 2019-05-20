@@ -33,7 +33,7 @@ class AddressForm(forms.Form):
         if self.initial:
             if self.initial['country']:
                 self.initial['country'] = (
-                    Country.objects.get(name=self.initial['country']),
+                    Country.objects.get(name=self.initial['country']).iso_code,
                     self.initial['country']
                 )
                 self.fields['country'].choices = [self.initial['country']]
