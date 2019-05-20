@@ -36,7 +36,7 @@ class ContinuingEducationPersonForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
-        if self.initial:
+        if self.initial and 'birth_country' in self.initial:
             self.initial['birth_country'] = (
                 Country.objects.get(name=self.initial['birth_country']).iso_code,
                 self.initial['birth_country']

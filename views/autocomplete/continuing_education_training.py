@@ -11,7 +11,7 @@ class ContinuingEducationTrainingAutocomplete(autocomplete.Select2ListView):
     def get(self, request, *args, **kwargs):
         return http.HttpResponse(json.dumps({
             'results': [
-                {'id': training['uuid'], 'text': training['education_group']['acronym']}
+                {'id': training['uuid'], 'text': training['acronym']}
                 for training in get_continuing_education_training_list(
                     search=self.q,
                 )['results']
