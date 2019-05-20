@@ -37,7 +37,7 @@ class PersonForm(ModelForm):
     def _disable_existing_person_fields(self):
         for field in self.fields.keys():
             attr = getattr(self.instance, field)
-            if attr and attr != 'U':
+            if attr:
                 self.fields[field].initial = attr
                 self.fields[field].widget.attrs['readonly'] = True
                 if field is "gender":
