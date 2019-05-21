@@ -14,8 +14,6 @@ install:
   - cd /tmp
   - git clone https://github.com/uclouvain/osis-portal.git
   - cd osis-portal
-  - git checkout dev
-  - git pull origin dev
   - git submodule init
   - git submodule update
   - pip install -r requirements.txt
