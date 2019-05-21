@@ -4,7 +4,8 @@ env:
 
 language: python
 python: "3.5.5"
-cache: pip
+services:
+  - postgresql
 addons:
     postgresql: "9.6"
 
