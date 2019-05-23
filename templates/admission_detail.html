@@ -217,6 +217,7 @@
             <div role="tabpanel" class="tab-pane" id="documents">
                 <div class="panel-body">
                     {% include 'fragment/files_panel.html' %}
+                    {% include 'fragment/confirm_delete_document.html' %}
                 </div>
             </div>
         </div>
@@ -245,5 +246,18 @@
             $('#btn-upload').removeAttr("disabled")
         });
 
+        $("a[id^='btn_delete_doc_']").click(function(e){
+            e.preventDefault();
+            $('#delete_document_modal').modal('show');
+            $('#confirm_delete_document').attr('href',$(this).attr('href'));
+        });
+
+        $("#cancel_delete_document").click(function(e){
+            $('#delete_document_modal').modal('hide');
+        });
+
+        $("#confirm_delete_document").click(function(e){
+            $('#delete_document_modal').modal('hide');
+        });
     </script>
 {% endblock %}

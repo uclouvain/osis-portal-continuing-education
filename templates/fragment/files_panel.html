@@ -56,6 +56,7 @@
                     {% if file.is_deletable %}
                     <span class="disable-wrapper">
                         <a class="button" role="button" href="{% url 'remove_file' file.uuid admission.uuid %}"
+                           id="btn_delete_doc_{{ file.id }}"
                         {% if not states.is_accepted and not states.is_draft %}
                          disabled
                          title="{% trans 'State of file prevent this action' %}"
