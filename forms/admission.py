@@ -1,9 +1,15 @@
 from dal import autocomplete
 from django import forms
+from django.core.validators import RegexValidator
 from django.forms import ChoiceField, Form
 from django.utils.translation import gettext_lazy as _
 
 from continuing_education.models.enums import enums, admission_state_choices
+
+phone_regex = RegexValidator(
+    regex=r'^((?:\+|00)\d{1,3}|0)\d{8,15}$',
+    message=_("Phone number must be entered in the format: '+32474123456' or '0474123456' or '0032474123456'.")
+)
 
 
 class AdmissionForm(Form):
@@ -37,11 +43,14 @@ class AdmissionForm(Form):
     address = forms.CharField(
         required=False,
     )
+
     phone_mobile = forms.CharField(
-        max_length=50,
+        validators=[phone_regex],
         required=False,
-        label=_("Phone mobile")
+        label=_("Phone mobile"),
+        max_length=20
     )
+
     email = forms.EmailField(
         max_length=255,
         required=False,
