@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-23 15:53+0200\n"
+"POT-Creation-Date: 2019-05-23 16:05+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1209,6 +1209,7 @@ msgid "Payment complete"
 msgstr "En ordre de paiement"
 
 #: forms/admission.py:50 templates/admission_detail.html:109
+#: tests/views/test_admission.py:416
 msgid "Phone mobile"
 msgstr "GSM"
 
@@ -1216,13 +1217,13 @@ msgstr "GSM"
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: forms/admission.py:11
+#: forms/admission.py:11 tests/views/test_admission.py:417
 msgid ""
 "Phone number must be entered in the format: '+32474123456' or '0474123456' "
 "or '0032474123456'."
-msgstr  ""
-"Le numéro de téléphone doit être au format '+32474123456' ou '0474123456' "
-"ou '0032474123456'."
+msgstr ""
+"Le numéro de téléphone doit être au format '+32474123456' ou '0474123456' ou "
+"'0032474123456'."
 
 #: templates/django_registration/complete_account_registration.html:35
 msgid ""

@@ -403,3 +403,19 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
                 _("Gender"): [_("This field is required.")],
             }
         )
+
+    def test_admission_is_not_submittable_wrong_phone_format(self):
+        wrong_numbers = ['12345', '00+32474945669', '+32456']
+        for number in wrong_numbers:
+            self.admission['phone_mobile'] = number
+            errors, errors_fields = get_submission_errors(self.admission)
+
+            self.assertDictEqual(
+                errors,
+                {
+                    _("Phone mobile"): [
+                        _("Phone number must be entered in the format: '+32474123456' or '0474123456' "
+                          "or '0032474123456'.")
+                    ],
+                }
+            )

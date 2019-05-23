@@ -49,7 +49,7 @@ def AdmissionDictFactory(person_information, state=DRAFT):
                 'name': factory.Sequence(lambda n: 'Country - %d' % n),
                 'iso_code': factory.Sequence(lambda n: str(n)[-2:])
         },
-        'phone_mobile': factory.Faker('phone_number'),
+        'phone_mobile': '0474123456',
         'email': person_information['person']['email'],
         'high_school_diploma': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
         'last_degree_field': 'field',

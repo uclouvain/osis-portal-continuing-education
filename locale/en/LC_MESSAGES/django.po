@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-23 15:53+0200\n"
+"POT-Creation-Date: 2019-05-23 16:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -982,6 +982,7 @@ msgid "Payment complete"
 msgstr ""
 
 #: forms/admission.py:50 templates/admission_detail.html:109
+#: tests/views/test_admission.py:416
 msgid "Phone mobile"
 msgstr ""
 
@@ -989,7 +990,7 @@ msgstr ""
 msgid "Phone number"
 msgstr ""
 
-#: forms/admission.py:11
+#: forms/admission.py:11 tests/views/test_admission.py:417
 msgid ""
 "Phone number must be entered in the format: '+32474123456' or '0474123456' "
 "or '0032474123456'."
