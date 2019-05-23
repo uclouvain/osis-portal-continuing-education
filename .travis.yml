@@ -18,7 +18,7 @@ install:
   - git submodule update
   - pip install -r requirements.txt
   - rm -Rf continuing_education
-  - cp -avr $PROJECT_DIR continuing_education
+  - ln -s $PROJECT_DIR continuing_education
   
 before_script:
   - cp .env.example .env
