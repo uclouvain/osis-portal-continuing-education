@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-23 16:05+0200\n"
+"POT-Creation-Date: 2019-05-24 11:57+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -529,11 +529,11 @@ msgstr "Actions"
 msgid "Activation failed"
 msgstr "Activation échouée"
 
-#: forms/admission.py:110 templates/admission_detail.html:148
+#: forms/admission.py:114 templates/admission_detail.html:148
 msgid "Activity sector"
 msgstr "Secteur d'activité"
 
-#: forms/admission.py:57
+#: forms/admission.py:61
 msgid "Additional email"
 msgstr "Adresse email additionnelle"
 
@@ -596,7 +596,7 @@ msgstr ""
 "Au moins un des 3 champs suivants (numéro de registre national, numéro de "
 "carte d'identité ou numéro de passeport) doit être rempli"
 
-#: views/common.py:238
+#: views/common.py:239
 msgid ""
 "At least one of the 3 following fields must be filled-in : national "
 "registry, id card number or passport number"
@@ -645,19 +645,19 @@ msgstr "Lieu de naissance"
 msgid "Browse"
 msgstr "Parcourir"
 
-#: forms/admission.py:149 templates/admission_detail.html:186
+#: forms/admission.py:153 templates/admission_detail.html:186
 msgid "By Facebook"
 msgstr "Sur Facebook"
 
-#: forms/admission.py:154 templates/admission_detail.html:189
+#: forms/admission.py:158 templates/admission_detail.html:189
 msgid "By LinkedIn"
 msgstr "Sur LinkedIn"
 
-#: forms/admission.py:184 templates/admission_detail.html:207
+#: forms/admission.py:188 templates/admission_detail.html:207
 msgid "By Moocs"
 msgstr "Par les Moocs"
 
-#: forms/admission.py:134 templates/admission_detail.html:177
+#: forms/admission.py:138 templates/admission_detail.html:177
 msgid "By UCLouvain website"
 msgstr "Par le site web de l'UCLouvain"
 
@@ -667,31 +667,31 @@ msgstr ""
 "En cochant cette case, j'accepte que les données fournies dans ce formulaire "
 "soient exploitées par l'IUFC."
 
-#: forms/admission.py:159 templates/admission_detail.html:192
+#: forms/admission.py:163 templates/admission_detail.html:192
 msgid "By customized mail"
 msgstr "Par courrier personnalisé"
 
-#: forms/admission.py:164 templates/admission_detail.html:195
+#: forms/admission.py:168 templates/admission_detail.html:195
 msgid "By emailing"
 msgstr "Par un emailing"
 
-#: forms/admission.py:139 templates/admission_detail.html:180
+#: forms/admission.py:143 templates/admission_detail.html:180
 msgid "By formation website"
 msgstr "Par le site web de la formation continue"
 
-#: forms/admission.py:179 templates/admission_detail.html:204
+#: forms/admission.py:183 templates/admission_detail.html:204
 msgid "By former students"
 msgstr "Par des anciens étudiants"
 
-#: forms/admission.py:174 templates/admission_detail.html:201
+#: forms/admission.py:178 templates/admission_detail.html:201
 msgid "By friends"
 msgstr "Par des amis"
 
-#: forms/admission.py:144 templates/admission_detail.html:183
+#: forms/admission.py:148 templates/admission_detail.html:183
 msgid "By press"
 msgstr "Dans la presse"
 
-#: forms/admission.py:169 templates/admission_detail.html:198
+#: forms/admission.py:173 templates/admission_detail.html:198
 msgid "By word of mouth"
 msgstr "Par le bouche à oreille"
 
@@ -720,7 +720,7 @@ msgstr "Changer mon mot de passe"
 msgid "Children number"
 msgstr "Nombre d'enfants"
 
-#: forms/admission.py:29 templates/admission_detail.html:97
+#: forms/admission.py:35 templates/admission_detail.html:97
 #: templates/registration_detail.html:84 templates/registration_pdf.html:122
 msgid "Citizenship"
 msgstr "Nationalité"
@@ -781,11 +781,11 @@ msgstr "Pays"
 msgid "Creating a user account"
 msgstr "Création d'un compte utilisateur"
 
-#: forms/admission.py:105 templates/admission_detail.html:147
+#: forms/admission.py:109 templates/admission_detail.html:147
 msgid "Current employer"
 msgstr "Employeur actuel"
 
-#: forms/admission.py:100 templates/admission_detail.html:144
+#: forms/admission.py:104 templates/admission_detail.html:144
 msgid "Current occupation"
 msgstr "Fonction actuelle"
 
@@ -938,11 +938,11 @@ msgstr "Nom du siège social"
 msgid "Health"
 msgstr "Santé"
 
-#: forms/admission.py:35 templates/admission_detail.html:123
+#: forms/admission.py:41 templates/admission_detail.html:123
 msgid "High school diploma"
 msgstr "Diplôme d'études secondaires"
 
-#: forms/admission.py:64 templates/admission_detail.html:124
+#: forms/admission.py:68 templates/admission_detail.html:124
 msgid "High school graduation year"
 msgstr "Année d'obtention (secondaire)"
 
@@ -1042,19 +1042,19 @@ msgstr ""
 msgid "Job seeker"
 msgstr "Chercheur d'emploi"
 
-#: forms/admission.py:74 templates/admission_detail.html:128
+#: forms/admission.py:78 templates/admission_detail.html:128
 msgid "Last degree field"
 msgstr "Domaine d'étude"
 
-#: forms/admission.py:83 templates/admission_detail.html:131
+#: forms/admission.py:87 templates/admission_detail.html:131
 msgid "Last degree graduation year"
 msgstr "Année d'obtention"
 
-#: forms/admission.py:79 templates/admission_detail.html:130
+#: forms/admission.py:83 templates/admission_detail.html:130
 msgid "Last degree institution"
 msgstr "Institution"
 
-#: forms/admission.py:69 templates/admission_detail.html:127
+#: forms/admission.py:73 templates/admission_detail.html:127
 #: tests/views/test_admission.py:119 tests/views/test_admission.py:257
 #: tests/views/test_admission.py:360 tests/views/test_admission.py:371
 msgid "Last degree level"
@@ -1113,7 +1113,7 @@ msgstr "Marié"
 msgid "Mobile phone"
 msgstr "Téléphone mobile"
 
-#: forms/admission.py:122 templates/admission_detail.html:155
+#: forms/admission.py:126 templates/admission_detail.html:155
 #: templates/admission_detail.html:158
 msgid "Motivation"
 msgstr "Motivation"
@@ -1174,12 +1174,12 @@ msgctxt "on SIC pdf for date signature"
 msgid "On"
 msgstr "Le"
 
-#: forms/admission.py:189 models/enums/enums.py:32 models/enums/enums.py:40
+#: forms/admission.py:193 models/enums/enums.py:32 models/enums/enums.py:40
 #: templates/admission_detail.html:210 templates/admission_form.html:161
 msgid "Other"
 msgstr "Autre"
 
-#: forms/admission.py:88 templates/admission_detail.html:134
+#: forms/admission.py:92 templates/admission_detail.html:134
 msgid "Other educational background"
 msgstr "Autres formations"
 
@@ -1200,7 +1200,7 @@ msgstr "Réinitialiser le mot de passe"
 msgid "Password reset unsuccessful"
 msgstr "Réinitialisation du mot de passe échouée"
 
-#: forms/admission.py:115 templates/admission_detail.html:151
+#: forms/admission.py:119 templates/admission_detail.html:151
 msgid "Past professional activities"
 msgstr "Expériences professionnelles passées"
 
@@ -1208,8 +1208,9 @@ msgstr "Expériences professionnelles passées"
 msgid "Payment complete"
 msgstr "En ordre de paiement"
 
-#: forms/admission.py:50 templates/admission_detail.html:109
-#: tests/views/test_admission.py:416
+#: forms/admission.py:55 forms/admission.py:234
+#: templates/admission_detail.html:109 tests/views/test_admission.py:424
+#: views/common.py:242
 msgid "Phone mobile"
 msgstr "GSM"
 
@@ -1217,13 +1218,15 @@ msgstr "GSM"
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: forms/admission.py:11 tests/views/test_admission.py:417
+#: forms/admission.py:12 tests/views/test_admission.py:426
 msgid ""
-"Phone number must be entered in the format: '+32474123456' or '0474123456' "
-"or '0032474123456'."
+"Phone number must be entered (without spaces and up to 3 digits X and 15 "
+"digits x) in the format:<br>&emsp;&emsp;'+X xxx xxx xx' or<br>&emsp;"
+"&emsp;'0xx xx xx xx' or<br>&emsp;&emsp;'00XX xx xx xx'."
 msgstr ""
-"Le numéro de téléphone doit être au format '+32474123456' ou '0474123456' ou "
-"'0032474123456'."
+"Le numéro de téléphone doit être au format (sans espaces et jusqu'à 3 "
+"chiffres X et 15 chiffres x):<br>&emsp;&emsp;'+X xxx xxx xx' ou<br>&emsp;"
+"&emsp;'0xx xx xx xx' ou<br>&emsp;&emsp;'00XX xx xx xx'."
 
 #: templates/django_registration/complete_account_registration.html:35
 msgid ""
@@ -1285,7 +1288,7 @@ msgstr "E-mail privé"
 msgid "Professional"
 msgstr "Professionel"
 
-#: forms/admission.py:127 templates/admission_detail.html:159
+#: forms/admission.py:131 templates/admission_detail.html:159
 msgid "Professional and personal interests"
 msgstr "Intérêts professionnels et personnels"
 
@@ -1293,7 +1296,7 @@ msgstr "Intérêts professionnels et personnels"
 msgid "Professional background"
 msgstr "Parcours professionnel"
 
-#: forms/admission.py:95 templates/admission_detail.html:141
+#: forms/admission.py:99 templates/admission_detail.html:141
 msgid "Professional status"
 msgstr "Statut professionel"
 
@@ -1359,7 +1362,7 @@ msgstr "Refusé"
 msgid "Residence address"
 msgstr "Adresse"
 
-#: forms/admission.py:195 forms/registration.py:103
+#: forms/admission.py:199 forms/registration.py:103
 #: templates/registration_detail.html:140 templates/registration_pdf.html:160
 #: templates/registration_pdf.html:168
 msgid "Residence phone"
@@ -1420,7 +1423,7 @@ msgstr "Statut"
 msgid "State of file prevent this action"
 msgstr "L'état du dossier empêche cette action"
 
-#: forms/admission.py:202
+#: forms/admission.py:206
 msgid "State reason"
 msgstr "Raison du changement d'état"
 
@@ -1572,7 +1575,7 @@ msgstr "Vous avez déjà un compte"
 msgid "You are still able to edit the form, via the 'Edit' button"
 msgstr "Vous pouvez encore le modifier via le bouton 'Editer'"
 
-#: views/admission.py:90
+#: views/admission.py:91
 msgid ""
 "You can save an application form and access it later until it is submitted"
 msgstr ""
@@ -1652,3 +1655,17 @@ msgstr "une autre adresse"
 #: forms/registration.py:22 forms/registration.py:89
 msgid "residence address mentioned earlier"
 msgstr "l'adresse du domicile légal mentionnée précédemment"
+
+#~ msgid ""
+#~ "Phone number must be entered in the format: '+XXXXXXXXXXX' or "
+#~ "'0XXXXXXXXX' or '00XXXXXXXXXXX'."
+#~ msgstr ""
+#~ "Le numéro de téléphone doit être au format '+XXXXXXXXXXX' or '0XXXXXXXXX' "
+#~ "ou '00XXXXXXXXXXX'."
+
+#~ msgid ""
+#~ "Phone number must be entered in the format: '+32474123456' or "
+#~ "'0474123456' or '0032474123456'."
+#~ msgstr ""
+#~ "Le numéro de téléphone doit être au format '+32474123456' ou '0474123456' "
+#~ "ou '0032474123456'."

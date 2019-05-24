@@ -8,7 +8,13 @@ from continuing_education.models.enums import enums, admission_state_choices
 
 phone_regex = RegexValidator(
     regex=r'^((?:\+|00)\d{1,3}|0)\d{8,15}$',
-    message=_("Phone number must be entered in the format: '+32474123456' or '0474123456' or '0032474123456'.")
+    message=_(
+        "Phone number must be entered (without spaces and up to 3 digits X and 15 "
+        "digits x) in the format:<br>"
+        "&emsp;&emsp;'+X xxx xxx xx' or<br>"
+        "&emsp;&emsp;'0xx xx xx xx' or<br>"
+        "&emsp;&emsp;'00XX xx xx xx'."
+    )
 )
 
 
@@ -45,10 +51,8 @@ class AdmissionForm(Form):
     )
 
     phone_mobile = forms.CharField(
-        validators=[phone_regex],
         required=False,
         label=_("Phone mobile"),
-        max_length=20
     )
 
     email = forms.EmailField(
@@ -224,6 +228,12 @@ class AdmissionForm(Form):
 
 
 class StrictAdmissionForm(AdmissionForm):
+    phone_mobile = forms.CharField(
+        validators=[phone_regex],
+        required=False,
+        label=_("Phone mobile"),
+    )
+
     def __init__(self, data, **kwargs):
         super().__init__(data, **kwargs)
 

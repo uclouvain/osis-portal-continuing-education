@@ -238,6 +238,8 @@ def _build_error_data(errors):
                 _('At least one of the 3 following fields must be filled-in : national registry, id card number '
                   'or passport number')
             )
+        elif k == _('Phone mobile') and v.data[0].code != 'required':
+            errors_data.append(v.data[0].message)
         else:
             errors_data.append(k)
     return errors_data
