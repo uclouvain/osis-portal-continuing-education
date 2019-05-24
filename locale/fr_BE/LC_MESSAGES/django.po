@@ -991,7 +991,7 @@ msgid ""
 "manager : %(mail)s"
 msgstr ""
 "Si vous souhaitez encore éditer votre dossier d'admission, veuillez prendre "
-"contact avec l'un des gestionnaires de la formation : %(mail)s"
+"contact avec le·a gestionnaire de la formation : %(mail)s"
 
 #: tests/views/test_registration.py:189 views/common.py:216
 #, python-format
@@ -1000,7 +1000,7 @@ msgid ""
 "manager : %(mail)s"
 msgstr ""
 "Si vous souhaitez encore éditer votre dossier d'inscription, veuillez "
-"prendre contact avec l'un des gestionnaires de la formation : %(mail)s"
+"prendre contact avec le·a gestionnaire de la formation : %(mail)s"
 
 #: templates/django_registration/registration_form.html:50
 msgid ""
