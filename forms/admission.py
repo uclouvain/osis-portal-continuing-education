@@ -232,6 +232,7 @@ class StrictAdmissionForm(AdmissionForm):
         validators=[phone_regex],
         required=False,
         label=_("Phone mobile"),
+        widget=forms.TextInput(attrs={'placeholder': '0474123456 - 0032474123456 - +32474123456'})
     )
 
     def __init__(self, data, **kwargs):
