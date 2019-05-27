@@ -1655,17 +1655,3 @@ msgstr "une autre adresse"
 #: forms/registration.py:22 forms/registration.py:89
 msgid "residence address mentioned earlier"
 msgstr "l'adresse du domicile légal mentionnée précédemment"
-
-#~ msgid ""
-#~ "Phone number must be entered in the format: '+XXXXXXXXXXX' or "
-#~ "'0XXXXXXXXX' or '00XXXXXXXXXXX'."
-#~ msgstr ""
-#~ "Le numéro de téléphone doit être au format '+XXXXXXXXXXX' or '0XXXXXXXXX' "
-#~ "ou '00XXXXXXXXXXX'."
-
-#~ msgid ""
-#~ "Phone number must be entered in the format: '+32474123456' or "
-#~ "'0474123456' or '0032474123456'."
-#~ msgstr ""
-#~ "Le numéro de téléphone doit être au format '+32474123456' ou '0474123456' "
-#~ "ou '0032474123456'."
