@@ -351,7 +351,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.admission['address']['postal_code'] = ''
         self.admission['last_degree_level'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
-
         self.assertDictEqual(
             errors,
             {
@@ -364,7 +363,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_admission_data(self):
         self.admission['last_degree_level'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
-
         self.assertDictEqual(
             errors,
             {
@@ -375,7 +373,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_person_information_data(self):
         self.admission['person_information']['birth_country'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
-
         self.assertDictEqual(
             errors,
             {
@@ -396,10 +393,38 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_person_data(self):
         self.admission['person_information']['person']['gender'] = None
         errors, errors_fields = get_submission_errors(self.admission)
-
         self.assertDictEqual(
             errors,
             {
                 _("Gender"): [_("This field is required.")],
             }
         )
+
+    def test_admission_is_not_submittable_wrong_phone_format(self):
+        wrong_numbers = [
+            '1234567891',
+            '00+32474945669',
+            '0+32474123456',
+            '(32)1234567891',
+            '0474.12.34.56',
+            '0474 123456'
+        ]
+        short_numbers = ['00321234', '+32123456', '01234567']
+        long_numbers = ['003212345678912345678', '+3212345678912345678', '01234567891234567']
+        for number in wrong_numbers + short_numbers + long_numbers:
+            self.admission['phone_mobile'] = number
+            errors, errors_fields = get_submission_errors(self.admission)
+            self.assertDictEqual(
+                errors,
+                {
+                    _("Phone mobile"): [
+                        _(
+                            "Phone number must be entered (without spaces and up to 3 digits X and 15 "
+                            "digits x) in the format:<br>"
+                            "&emsp;&emsp;'+X xxx xxx xx' or<br>"
+                            "&emsp;&emsp;'0xx xx xx xx' or<br>"
+                            "&emsp;&emsp;'00XX xx xx xx'."
+                        )
+                    ],
+                }
+            )
