@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
+from continuing_education.forms.admission import phone_regex
 from continuing_education.models.enums import enums
 from continuing_education.models.enums.enums import YES_NO_CHOICES
 
@@ -157,6 +158,13 @@ class RegistrationForm(forms.Form):
 
 
 class StrictRegistrationForm(RegistrationForm):
+    residence_phone = forms.CharField(
+        validators=[phone_regex],
+        required=False,
+        label=_("Residence phone"),
+        widget=forms.TextInput(attrs={'placeholder': '082123456 - 003282123456 - +3282123456'})
+    )
+
     def __init__(self, data, **kwargs):
         super().__init__(data, **kwargs)
 

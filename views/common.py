@@ -240,6 +240,8 @@ def _build_error_data(errors):
             )
         elif k == _('Phone mobile') and v.data[0].code != 'required':
             errors_data.append("<br>" + str(v.data[0].message) + '<br>')
+        elif k == _('Residence phone') and v.data[0] != 'required':
+            errors_data.append("<br>" + str(v.data[0].message) + '<br>')
         else:
             errors_data.append(k)
     return errors_data

@@ -88,7 +88,7 @@ def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
         'previous_noma': factory.Faker('isbn10'),
         'use_address_for_post': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
         'residence_address': AddressDictFactory(),
-        'residence_phone': factory.Faker('phone_number'),
+        'residence_phone': '082123456',
         'ucl_registration_complete': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
         'noma': factory.Faker('isbn10'),
         'payment_complete': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
