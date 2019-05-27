@@ -232,15 +232,14 @@ def _get_managers_mails(formation):
 
 def _build_error_data(errors):
     errors_data = []
+    phone_fields = [_('Phone mobile'), _('Residence phone')]
     for k, v in errors.items():
         if ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION in v:
             errors_data.append(
                 _('At least one of the 3 following fields must be filled-in : national registry, id card number '
                   'or passport number')
             )
-        elif k == _('Phone mobile') and v.data[0].code != 'required':
-            errors_data.append("<br>" + str(v.data[0].message) + '<br>')
-        elif k == _('Residence phone') and v.data[0] != 'required':
+        elif k in phone_fields and v.data[0].code != 'required':
             errors_data.append("<br>" + str(v.data[0].message) + '<br>')
         else:
             errors_data.append(k)
