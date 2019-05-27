@@ -351,7 +351,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.admission['address']['postal_code'] = ''
         self.admission['last_degree_level'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
-
         self.assertDictEqual(
             errors,
             {
@@ -364,7 +363,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_admission_data(self):
         self.admission['last_degree_level'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
-
         self.assertDictEqual(
             errors,
             {
@@ -375,7 +373,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_person_information_data(self):
         self.admission['person_information']['birth_country'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
-
         self.assertDictEqual(
             errors,
             {
@@ -396,7 +393,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def test_admission_is_not_submittable_missing_person_data(self):
         self.admission['person_information']['person']['gender'] = None
         errors, errors_fields = get_submission_errors(self.admission)
-
         self.assertDictEqual(
             errors,
             {
