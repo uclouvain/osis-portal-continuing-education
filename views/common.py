@@ -233,6 +233,7 @@ def _get_managers_mails(formation):
 def _build_error_data(errors):
     errors_data = []
     phone_fields = [_('Phone mobile'), _('Residence phone')]
+    error_phone = ''
     for k, v in errors.items():
         if ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION in v:
             errors_data.append(
@@ -240,7 +241,9 @@ def _build_error_data(errors):
                   'or passport number')
             )
         elif k in phone_fields and v.data[0].code != 'required':
-            errors_data.append("<br>" + str(v.data[0].message) + '<br>')
+            error_phone = "<br>" + str(v.data[0].message) + '<br>'
         else:
             errors_data.append(k)
+    if error_phone:
+        errors_data.append(error_phone)
     return errors_data
