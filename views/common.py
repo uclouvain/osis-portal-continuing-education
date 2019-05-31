@@ -244,5 +244,6 @@ def _build_error_data(errors):
             error_phone = "<br>" + str(v.data[0].message) + '<br>'
         else:
             errors_data.append(k)
-    errors_data.append(error_phone)
+    if error_phone:
+        errors_data.append(error_phone)
     return errors_data
