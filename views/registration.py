@@ -53,7 +53,7 @@ from osis_common.document.pdf_build import render_pdf
 def registration_detail(request, admission_uuid):
     admission = api.get_registration(request, admission_uuid)
     if admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED:
-        add_remaining_tasks_message(request)
+        add_remaining_tasks_message(request, admission['formation'])
         add_contact_for_edit_message(request, formation=admission['formation'], is_registration=True)
     if admission['state'] == admission_state_choices.ACCEPTED:
         add_informations_message_on_submittable_file(

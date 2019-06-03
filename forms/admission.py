@@ -9,7 +9,7 @@ from continuing_education.models.enums import enums, admission_state_choices
 phone_regex = RegexValidator(
     regex=r'^((?:\+|00)\d{1,3}|0)\d{8,15}$',
     message=_(
-        "Phone number must be entered (without spaces and up to 3 digits X and 15 "
+        "Phone number must be entered (up to 3 digits X and 15 "
         "digits x) in the format:<br>"
         "&emsp;&emsp;'+X xxx xxx xx' or<br>"
         "&emsp;&emsp;'0xx xx xx xx' or<br>"
@@ -199,6 +199,9 @@ class AdmissionForm(Form):
         required=False,
         label=_("State reason")
     )
+
+    def clean_phone_mobile(self):
+        return self.cleaned_data['phone_mobile'].replace(' ', '')
 
     def __init__(self, *args, **kwargs):
         formation = kwargs.pop('formation', None)

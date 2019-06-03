@@ -32,7 +32,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import translation
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import gettext_lazy as _, gettext
 
 from base.models import person as person_mdl
 from base.views import layout
@@ -154,14 +154,14 @@ def _update_errors(forms, errors, errors_field):
 
 
 def _build_warning_from_errors_dict(errors):
-    warning_message = ugettext(
+    warning_message = gettext(
         "Your file is not submittable because you did not provide the following data : "
     )
     warning_message = \
         "<strong>" + \
         warning_message + \
         "</strong><br>" + \
-        " · ".join([ugettext(key) for key in _build_error_data(errors)])
+        " · ".join([gettext(key) for key in _build_error_data(errors)])
 
     return mark_safe(warning_message)
 
@@ -192,14 +192,17 @@ def add_informations_message_on_submittable_file(request, title):
         )
 
 
-def add_remaining_tasks_message(request):
+def add_remaining_tasks_message(request, formation):
     items = [
         _("Print the completed registration form"),
-        _("Sign it and send it by post to the address of the program manager"),
-        _("Accompanied by two passport photos and a copy of both sides of the identity card or residence permit."),
+        _("Add two colour passport photos on a white background, one of which must be pasted on the document entitled "
+          "'Ordering a UCLouvain access card'."),
+        _("(if you are a European citizen, add a photocopy of your identity card or passport)"),
+        _("Sign it and send it by post to your manager's address : %(address)s") %
+        {'address': format_formation_address(formation['postal_address'])},
     ]
 
-    title = _("Your registration is submitted. Some tasks are remaining to complete the registration :")
+    title = _("Your data has been successfully saved. Some tasks are remaining to complete the registration :")
     message = "<strong>{}</strong><br>".format(title) + \
               "".join(["- {}<br>".format(item) for item in items])
 
@@ -208,6 +211,13 @@ def add_remaining_tasks_message(request):
         level=messages.INFO,
         message=mark_safe(message)
     )
+
+
+def format_formation_address(address):
+    if address:
+        return address['location'] + ' · ' + address['postal_code'] + ' ' + address['city'] + \
+               (' (' + address['country']['name'] + ')') if address['country'] else ''
+    return ''
 
 
 def add_contact_for_edit_message(request, formation=None, is_registration=False):

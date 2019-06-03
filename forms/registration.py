@@ -156,6 +156,9 @@ class RegistrationForm(forms.Form):
         label=_("Diploma produced")
     )
 
+    def clean_residence_phone(self):
+        return self.cleaned_data['residence_phone'].replace(' ', '')
+
 
 class StrictRegistrationForm(RegistrationForm):
     residence_phone = forms.CharField(
@@ -179,7 +182,6 @@ class StrictRegistrationForm(RegistrationForm):
 
     def clean(self):
         cleaned_data = super().clean()
-
         if not cleaned_data.get('national_registry_number') and \
                 not cleaned_data.get('id_card_number') and \
                 not cleaned_data.get('passport_number'):
