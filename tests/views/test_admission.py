@@ -419,7 +419,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
                 {
                     _("Phone mobile"): [
                         _(
-                            "Phone number must be entered (without spaces and up to 3 digits X and 15 "
+                            "Phone number must be entered (up to 3 digits X and 15 "
                             "digits x) in the format:<br>"
                             "&emsp;&emsp;'+X xxx xxx xx' or<br>"
                             "&emsp;&emsp;'0xx xx xx xx' or<br>"
