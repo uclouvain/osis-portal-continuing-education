@@ -28,14 +28,12 @@ import factory
 
 
 def AddressDictFactory():
-    address = {
-        'location': factory.Faker('street_name'),
-        'postal_code': 1348,
+    return {
+        'location': 'street_name and number',
+        'postal_code': '1348',
         'country': {
-            'name': factory.Sequence(lambda n: 'Country - %d' % n),
+            'name': 'COUNTRY',
             'iso_code': factory.Sequence(lambda n: str(n)[-2:])
         },
-        'city': factory.Faker('city')
+        'city': 'CITY'
     }
-    return address
-

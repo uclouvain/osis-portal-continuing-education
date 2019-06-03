@@ -28,6 +28,7 @@ import uuid
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
+from continuing_education.tests.factories.address import AddressDictFactory
 
 
 def ContinuingEducationTrainingDictFactory(active=True):
@@ -48,6 +49,7 @@ def ContinuingEducationTrainingDictFactory(active=True):
                 'first_name': manager.first_name,
                 'last_name': manager.last_name
             }
-        ]
+        ],
+        'postal_address': AddressDictFactory()
     }
     return cet

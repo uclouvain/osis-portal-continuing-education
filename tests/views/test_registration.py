@@ -30,7 +30,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from django.utils.translation import ugettext, ugettext_lazy as _, gettext
+from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
 
 from base.tests.factories.academic_year import AcademicYearFactory
@@ -40,7 +40,7 @@ from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED, ACCEPTED, REJECTED
 from continuing_education.tests.factories.admission import RegistrationDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
-from continuing_education.views.common import get_submission_errors, _get_managers_mails
+from continuing_education.views.common import get_submission_errors, _get_managers_mails, format_formation_address
 
 
 class ViewStudentRegistrationTestCase(TestCase):
@@ -92,19 +92,19 @@ class ViewStudentRegistrationTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
         self.assertIn(
-            ugettext("Your registration file has been saved. Please consider the following information :"),
+            gettext("Your registration file has been saved. Please consider the following information :"),
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("You are still able to edit the form, via the 'Edit' button"),
+            gettext("You are still able to edit the form, via the 'Edit' button"),
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("You can upload documents via the 'Documents'"),
+            gettext("You can upload documents via the 'Documents'"),
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("Do not forget to submit your file when it is complete"),
+            gettext("Do not forget to submit your file when it is complete"),
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
@@ -125,29 +125,29 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(len(messages_list), 2)
 
         self.assertIn(
-            ugettext("Your registration file has been saved. Please consider the following information :"),
+            gettext("Your registration file has been saved. Please consider the following information :"),
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("You are still able to edit the form, via the 'Edit' button"),
+            gettext("You are still able to edit the form, via the 'Edit' button"),
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("You can upload documents via the 'Documents'"),
+            gettext("You can upload documents via the 'Documents'"),
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("Do not forget to submit your file when it is complete"),
+            gettext("Do not forget to submit your file when it is complete"),
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
 
         self.assertIn(
-            ugettext("Your file is not submittable because you did not provide the following data : "),
+            gettext("Your file is not submittable because you did not provide the following data : "),
             str(messages_list[1])
         )
         self.assertIn(
-            ugettext("Marital status"),
+            gettext("Marital status"),
             str(messages_list[1])
         )
         self.assertEqual(messages_list[1].level, messages.WARNING)
@@ -166,20 +166,30 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(len(messages_list), 2)
 
         self.assertIn(
-            ugettext("Your registration is submitted. Some tasks are remaining to complete the registration :"),
+            gettext("Your data has been successfully saved. Some tasks are remaining to complete "
+                     "the registration :"),
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("Print the completed registration form"),
+            gettext("Print the completed registration form"),
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext("Sign it and send it by post to the address of the program manager"),
+            gettext("Sign it and send it by post to your manager's address : %(address)s") % {
+                'address': format_formation_address(self.registration_submitted['formation']['postal_address'])
+            },
             str(messages_list[0])
         )
         self.assertIn(
-            ugettext(
-                "Accompanied by two passport photos and a copy of both sides of the identity card or residence permit."
+            gettext(
+                "Add two colour passport photos on a white background, one of which must be "
+                "pasted on the document entitled 'Ordering a UCLouvain access card'."
+            ),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            gettext(
+                "(if you are a European citizen, add a photocopy of your identity card or passport)"
             ),
             str(messages_list[0])
         )
