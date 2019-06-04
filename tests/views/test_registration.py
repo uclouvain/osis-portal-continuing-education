@@ -188,13 +188,13 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.assertIn(
             gettext(
-                "(if you are a European citizen, add a photocopy of your identity card or passport)"
+                "if you are a European citizen, add a photocopy of your identity card or passport"
             ),
             str(messages_list[0])
         )
         self.assertIn(
             gettext(
-                "(if you are a non-EU citizen, add a photocopy of your residence permit)"
+                "if you are a non-EU citizen, add a photocopy of your residence permit"
             ),
             str(messages_list[0])
         )

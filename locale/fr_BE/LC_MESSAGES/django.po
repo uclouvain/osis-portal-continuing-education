@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-04 14:04+0200\n"
+"POT-Creation-Date: 2019-06-04 14:14+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -475,20 +475,6 @@ msgstr ""
 #: views/common.py:241
 msgid " or "
 msgstr " ou "
-
-#: tests/views/test_registration.py:191 views/common.py:200
-msgid ""
-"(if you are a European citizen, add a photocopy of your identity card or "
-"passport)"
-msgstr ""
-"(si vous êtes citoyen européen, ajouter une photocopie de votre carte "
-"d’identité ou de votre passeport)"
-
-#: tests/views/test_registration.py:197 views/common.py:201
-msgid "(if you are a non-EU citizen, add a photocopy of your residence permit)"
-msgstr ""
-"(si vous êtes de nationalité hors UE, ajouter une photocopie de votre titre "
-"de séjour)"
 
 #: templates/registration_pdf.html:90
 #, python-format
@@ -1669,6 +1655,20 @@ msgstr ""
 #: forms/registration.py:24 forms/registration.py:91
 msgid "an other address"
 msgstr "une autre adresse"
+
+#: tests/views/test_registration.py:191 views/common.py:200
+msgid ""
+"if you are a European citizen, add a photocopy of your identity card or "
+"passport"
+msgstr ""
+"si vous êtes citoyen européen, ajouter une photocopie de votre carte "
+"d’identité ou de votre passeport"
+
+#: tests/views/test_registration.py:197 views/common.py:201
+msgid "if you are a non-EU citizen, add a photocopy of your residence permit"
+msgstr ""
+"si vous êtes de nationalité hors UE, ajouter une photocopie de votre titre "
+"de séjour"
 
 #: forms/registration.py:23 forms/registration.py:90
 msgid "residence address mentioned earlier"

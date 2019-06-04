@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-04 14:04+0200\n"
+"POT-Creation-Date: 2019-06-04 14:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -276,16 +276,6 @@ msgstr ""
 
 #: views/common.py:241
 msgid " or "
-msgstr ""
-
-#: tests/views/test_registration.py:191 views/common.py:200
-msgid ""
-"(if you are a European citizen, add a photocopy of your identity card or "
-"passport)"
-msgstr ""
-
-#: tests/views/test_registration.py:197 views/common.py:201
-msgid "(if you are a non-EU citizen, add a photocopy of your residence permit)"
 msgstr ""
 
 #: templates/registration_pdf.html:90
@@ -1412,6 +1402,16 @@ msgstr ""
 
 #: forms/registration.py:24 forms/registration.py:91
 msgid "an other address"
+msgstr ""
+
+#: tests/views/test_registration.py:191 views/common.py:200
+msgid ""
+"if you are a European citizen, add a photocopy of your identity card or "
+"passport"
+msgstr ""
+
+#: tests/views/test_registration.py:197 views/common.py:201
+msgid "if you are a non-EU citizen, add a photocopy of your residence permit"
 msgstr ""
 
 #: forms/registration.py:23 forms/registration.py:90
