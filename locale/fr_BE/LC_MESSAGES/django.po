@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-04 14:14+0200\n"
+"POT-Creation-Date: 2019-06-04 16:27+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -521,7 +521,7 @@ msgstr "Actions"
 msgid "Activation failed"
 msgstr "Activation échouée"
 
-#: forms/admission.py:114 templates/admission_detail.html:148
+#: forms/admission.py:108 templates/admission_detail.html:148
 msgid "Activity sector"
 msgstr "Secteur d'activité"
 
@@ -534,7 +534,7 @@ msgstr ""
 "être collée sur le document intitulé « commande d’une carte d’accès "
 "UCLouvain »"
 
-#: forms/admission.py:61
+#: forms/admission.py:55
 msgid "Additional email"
 msgstr "Adresse email additionnelle"
 
@@ -646,19 +646,19 @@ msgstr "Lieu de naissance"
 msgid "Browse"
 msgstr "Parcourir"
 
-#: forms/admission.py:153 templates/admission_detail.html:186
+#: forms/admission.py:147 templates/admission_detail.html:186
 msgid "By Facebook"
 msgstr "Sur Facebook"
 
-#: forms/admission.py:158 templates/admission_detail.html:189
+#: forms/admission.py:152 templates/admission_detail.html:189
 msgid "By LinkedIn"
 msgstr "Sur LinkedIn"
 
-#: forms/admission.py:188 templates/admission_detail.html:207
+#: forms/admission.py:182 templates/admission_detail.html:207
 msgid "By Moocs"
 msgstr "Par les Moocs"
 
-#: forms/admission.py:138 templates/admission_detail.html:177
+#: forms/admission.py:132 templates/admission_detail.html:177
 msgid "By UCLouvain website"
 msgstr "Par le site web de l'UCLouvain"
 
@@ -668,31 +668,31 @@ msgstr ""
 "En cochant cette case, j'accepte que les données fournies dans ce formulaire "
 "soient exploitées par l'IUFC."
 
-#: forms/admission.py:163 templates/admission_detail.html:192
+#: forms/admission.py:157 templates/admission_detail.html:192
 msgid "By customized mail"
 msgstr "Par courrier personnalisé"
 
-#: forms/admission.py:168 templates/admission_detail.html:195
+#: forms/admission.py:162 templates/admission_detail.html:195
 msgid "By emailing"
 msgstr "Par un emailing"
 
-#: forms/admission.py:143 templates/admission_detail.html:180
+#: forms/admission.py:137 templates/admission_detail.html:180
 msgid "By formation website"
 msgstr "Par le site web de la formation continue"
 
-#: forms/admission.py:183 templates/admission_detail.html:204
+#: forms/admission.py:177 templates/admission_detail.html:204
 msgid "By former students"
 msgstr "Par des anciens étudiants"
 
-#: forms/admission.py:178 templates/admission_detail.html:201
+#: forms/admission.py:172 templates/admission_detail.html:201
 msgid "By friends"
 msgstr "Par des amis"
 
-#: forms/admission.py:148 templates/admission_detail.html:183
+#: forms/admission.py:142 templates/admission_detail.html:183
 msgid "By press"
 msgstr "Dans la presse"
 
-#: forms/admission.py:173 templates/admission_detail.html:198
+#: forms/admission.py:167 templates/admission_detail.html:198
 msgid "By word of mouth"
 msgstr "Par le bouche à oreille"
 
@@ -721,7 +721,7 @@ msgstr "Changer mon mot de passe"
 msgid "Children number"
 msgstr "Nombre d'enfants"
 
-#: forms/admission.py:35 templates/admission_detail.html:97
+#: forms/admission.py:29 templates/admission_detail.html:97
 #: templates/registration_detail.html:84 templates/registration_pdf.html:122
 msgid "Citizenship"
 msgstr "Nationalité"
@@ -782,11 +782,11 @@ msgstr "Pays"
 msgid "Creating a user account"
 msgstr "Création d'un compte utilisateur"
 
-#: forms/admission.py:109 templates/admission_detail.html:147
+#: forms/admission.py:103 templates/admission_detail.html:147
 msgid "Current employer"
 msgstr "Employeur actuel"
 
-#: forms/admission.py:104 templates/admission_detail.html:144
+#: forms/admission.py:98 templates/admission_detail.html:144
 msgid "Current occupation"
 msgstr "Fonction actuelle"
 
@@ -939,11 +939,11 @@ msgstr "Nom du siège social"
 msgid "Health"
 msgstr "Santé"
 
-#: forms/admission.py:41 templates/admission_detail.html:123
+#: forms/admission.py:35 templates/admission_detail.html:123
 msgid "High school diploma"
 msgstr "Diplôme d'études secondaires"
 
-#: forms/admission.py:68 templates/admission_detail.html:124
+#: forms/admission.py:62 templates/admission_detail.html:124
 msgid "High school graduation year"
 msgstr "Année d'obtention (secondaire)"
 
@@ -1043,19 +1043,19 @@ msgstr ""
 msgid "Job seeker"
 msgstr "Chercheur d'emploi"
 
-#: forms/admission.py:78 templates/admission_detail.html:128
+#: forms/admission.py:72 templates/admission_detail.html:128
 msgid "Last degree field"
 msgstr "Domaine d'étude"
 
-#: forms/admission.py:87 templates/admission_detail.html:131
+#: forms/admission.py:81 templates/admission_detail.html:131
 msgid "Last degree graduation year"
 msgstr "Année d'obtention"
 
-#: forms/admission.py:83 templates/admission_detail.html:130
+#: forms/admission.py:77 templates/admission_detail.html:130
 msgid "Last degree institution"
 msgstr "Institution"
 
-#: forms/admission.py:73 templates/admission_detail.html:127
+#: forms/admission.py:67 templates/admission_detail.html:127
 #: tests/views/test_admission.py:119 tests/views/test_admission.py:257
 #: tests/views/test_admission.py:359 tests/views/test_admission.py:369
 msgid "Last degree level"
@@ -1114,7 +1114,7 @@ msgstr "Marié"
 msgid "Mobile phone"
 msgstr "Téléphone mobile"
 
-#: forms/admission.py:126 templates/admission_detail.html:155
+#: forms/admission.py:120 templates/admission_detail.html:155
 #: templates/admission_detail.html:158
 msgid "Motivation"
 msgstr "Motivation"
@@ -1175,12 +1175,12 @@ msgctxt "on SIC pdf for date signature"
 msgid "On"
 msgstr "Le"
 
-#: forms/admission.py:193 models/enums/enums.py:32 models/enums/enums.py:40
+#: forms/admission.py:187 models/enums/enums.py:32 models/enums/enums.py:40
 #: templates/admission_detail.html:210 templates/admission_form.html:160
 msgid "Other"
 msgstr "Autre"
 
-#: forms/admission.py:92 templates/admission_detail.html:134
+#: forms/admission.py:86 templates/admission_detail.html:134
 msgid "Other educational background"
 msgstr "Autres formations"
 
@@ -1201,7 +1201,7 @@ msgstr "Réinitialiser le mot de passe"
 msgid "Password reset unsuccessful"
 msgstr "Réinitialisation du mot de passe échouée"
 
-#: forms/admission.py:119 templates/admission_detail.html:151
+#: forms/admission.py:113 templates/admission_detail.html:151
 msgid "Past professional activities"
 msgstr "Expériences professionnelles passées"
 
@@ -1209,8 +1209,8 @@ msgstr "Expériences professionnelles passées"
 msgid "Payment complete"
 msgstr "En ordre de paiement"
 
-#: forms/admission.py:55 forms/admission.py:231
-#: templates/admission_detail.html:109 tests/views/test_admission.py:420
+#: forms/admission.py:49 forms/admission.py:225
+#: templates/admission_detail.html:109 tests/views/test_admission.py:421
 #: views/common.py:246
 msgid "Phone mobile"
 msgstr "GSM"
@@ -1219,16 +1219,14 @@ msgstr "GSM"
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: forms/admission.py:12 tests/views/test_admission.py:422
-#: tests/views/test_registration.py:345
+#: forms/admission.py:11 tests/views/test_admission.py:422
+#: tests/views/test_registration.py:343
 msgid ""
-"Phone number must be entered (up to 3 digits X and 15 digits x) in the "
-"format:<br>&emsp;&emsp;'+X xxx xxx xx' or<br>&emsp;&emsp;'0xx xx xx xx' "
-"or<br>&emsp;&emsp;'00XX xx xx xx'."
+"Phone number must start with 0 or 00 or '+' followed by at least 7 digits "
+"and up to 15 digits."
 msgstr ""
-"Le numéro de téléphone doit être au format (jusqu'à 3 chiffres X et 15 "
-"chiffres x):<br>&emsp;&emsp;'+X xxx xxx xx' ou<br>&emsp;&emsp;'0xx xx xx xx' "
-"ou<br>&emsp;&emsp;'00XX xx xx xx'."
+"Le numéro de téléphone doit commencer par 0 ou 00 ou '+' suivi de minimum 7 "
+"chiffres et jusqu'à 15 chiffres."
 
 #: templates/django_registration/complete_account_registration.html:35
 msgid ""
@@ -1290,7 +1288,7 @@ msgstr "E-mail privé"
 msgid "Professional"
 msgstr "Professionel"
 
-#: forms/admission.py:131 templates/admission_detail.html:159
+#: forms/admission.py:125 templates/admission_detail.html:159
 msgid "Professional and personal interests"
 msgstr "Intérêts professionnels et personnels"
 
@@ -1298,7 +1296,7 @@ msgstr "Intérêts professionnels et personnels"
 msgid "Professional background"
 msgstr "Parcours professionnel"
 
-#: forms/admission.py:99 templates/admission_detail.html:141
+#: forms/admission.py:93 templates/admission_detail.html:141
 msgid "Professional status"
 msgstr "Statut professionel"
 
@@ -1427,7 +1425,7 @@ msgstr "Statut"
 msgid "State of file prevent this action"
 msgstr "L'état du dossier empêche cette action"
 
-#: forms/admission.py:200
+#: forms/admission.py:194
 msgid "State reason"
 msgstr "Raison du changement d'état"
 
