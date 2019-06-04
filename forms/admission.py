@@ -7,14 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from continuing_education.models.enums import enums, admission_state_choices
 
 phone_regex = RegexValidator(
-    regex=r'^((?:\+|00)\d{1,3}|0)\d{8,15}$',
-    message=_(
-        "Phone number must be entered (up to 3 digits X and 15 "
-        "digits x) in the format:<br>"
-        "&emsp;&emsp;'+X xxx xxx xx' or<br>"
-        "&emsp;&emsp;'0xx xx xx xx' or<br>"
-        "&emsp;&emsp;'00XX xx xx xx'."
-    )
+    regex=r'^(?P<prefix_intro>\+|0{1,2})\d{7,15}$',
+    message=_("Phone number : only '+' and up to 15 digits accepted.")
 )
 
 

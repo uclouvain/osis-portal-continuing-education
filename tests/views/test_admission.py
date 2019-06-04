@@ -409,22 +409,15 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
             '0474.12.34.56',
             '0474 123456'
         ]
-        short_numbers = ['00321234', '+32123456', '01234567']
-        long_numbers = ['003212345678912345678', '+3212345678912345678', '01234567891234567']
+        short_numbers = ['0032123', '+321234', '0123456']
+        long_numbers = ['003212345678912456', '+3212345678912345', '01234567891234567']
         for number in wrong_numbers + short_numbers + long_numbers:
+            print(number)
             self.admission['phone_mobile'] = number
             errors, errors_fields = get_submission_errors(self.admission)
             self.assertDictEqual(
                 errors,
                 {
-                    _("Phone mobile"): [
-                        _(
-                            "Phone number must be entered (up to 3 digits X and 15 "
-                            "digits x) in the format:<br>"
-                            "&emsp;&emsp;'+X xxx xxx xx' or<br>"
-                            "&emsp;&emsp;'0xx xx xx xx' or<br>"
-                            "&emsp;&emsp;'00XX xx xx xx'."
-                        )
-                    ],
+                    _("Phone mobile"): [_("Phone number : only '+' and up to 15 digits accepted.")],
                 }
             )
