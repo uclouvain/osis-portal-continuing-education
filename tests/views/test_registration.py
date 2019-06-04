@@ -340,6 +340,6 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
             self.assertDictEqual(
                 errors,
                 {
-                    _("Residence phone"): [_("Phone number : only '+' and up to 15 digits accepted.")],
+                    _("Residence phone"): [_("Phone number : only '+' (optional) and up to 15 digits accepted.")],
                 }
             )

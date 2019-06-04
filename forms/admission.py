@@ -8,7 +8,7 @@ from continuing_education.models.enums import enums, admission_state_choices
 
 phone_regex = RegexValidator(
     regex=r'^(?P<prefix_intro>\+|0{1,2})\d{7,15}$',
-    message=_("Phone number : only '+' and up to 15 digits accepted.")
+    message=_("Phone number : only '+' (optional) and up to 15 digits accepted.")
 )
 
 

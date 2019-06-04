@@ -418,6 +418,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
             self.assertDictEqual(
                 errors,
                 {
-                    _("Phone mobile"): [_("Phone number : only '+' and up to 15 digits accepted.")],
+                    _("Phone mobile"): [_("Phone number : only '+' (optional) and up to 15 digits accepted.")],
                 }
             )

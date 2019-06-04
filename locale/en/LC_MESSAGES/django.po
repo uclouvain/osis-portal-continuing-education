@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-04 15:55+0200\n"
+"POT-Creation-Date: 2019-06-04 16:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -982,7 +982,7 @@ msgid "Payment complete"
 msgstr ""
 
 #: forms/admission.py:49 forms/admission.py:225
-#: templates/admission_detail.html:109 tests/views/test_admission.py:420
+#: templates/admission_detail.html:109 tests/views/test_admission.py:421
 #: views/common.py:246
 msgid "Phone mobile"
 msgstr ""
@@ -991,9 +991,9 @@ msgstr ""
 msgid "Phone number"
 msgstr ""
 
-#: forms/admission.py:11 tests/views/test_admission.py:420
+#: forms/admission.py:11 tests/views/test_admission.py:421
 #: tests/views/test_registration.py:343
-msgid "Phone number : only '+' and up to 15 digits accepted."
+msgid "Phone number : only '+' (optional) and up to 15 digits accepted."
 msgstr ""
 
 #: templates/django_registration/complete_account_registration.html:35
