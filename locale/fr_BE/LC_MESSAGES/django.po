@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-03 09:30+0200\n"
+"POT-Creation-Date: 2019-06-04 14:04+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -472,7 +472,7 @@ msgstr ""
 "inscriptions</p>\n"
 "    "
 
-#: views/common.py:240
+#: views/common.py:241
 msgid " or "
 msgstr " ou "
 
@@ -483,6 +483,12 @@ msgid ""
 msgstr ""
 "(si vous êtes citoyen européen, ajouter une photocopie de votre carte "
 "d’identité ou de votre passeport)"
+
+#: tests/views/test_registration.py:197 views/common.py:201
+msgid "(if you are a non-EU citizen, add a photocopy of your residence permit)"
+msgstr ""
+"(si vous êtes de nationalité hors UE, ajouter une photocopie de votre titre "
+"de séjour)"
 
 #: templates/registration_pdf.html:90
 #, python-format
@@ -605,7 +611,7 @@ msgstr ""
 "Au moins un des 3 champs suivants (numéro de registre national, numéro de "
 "carte d'identité ou numéro de passeport) doit être rempli"
 
-#: views/common.py:250
+#: views/common.py:251
 msgid ""
 "At least one of the 3 following fields must be filled-in : national "
 "registry, id card number or passport number"
@@ -993,7 +999,7 @@ msgstr "IUFC - Formation Continue"
 msgid "Identification"
 msgstr "Identification"
 
-#: tests/views/test_admission.py:137 views/common.py:229
+#: tests/views/test_admission.py:137 views/common.py:230
 #, python-format
 msgid ""
 "If you want to edit again your admission, please contact the program "
@@ -1002,7 +1008,7 @@ msgstr ""
 "Si vous souhaitez encore éditer votre dossier d'admission, veuillez prendre "
 "contact avec le·a gestionnaire de la formation : %(mail)s"
 
-#: tests/views/test_registration.py:198 views/common.py:226
+#: tests/views/test_registration.py:204 views/common.py:227
 #, python-format
 msgid ""
 "If you want to edit again your registration, please contact the program "
@@ -1110,7 +1116,7 @@ msgstr "Homme"
 
 #: forms/registration.py:67 templates/registration_detail.html:97
 #: templates/registration_pdf.html:132 tests/views/test_registration.py:150
-#: tests/views/test_registration.py:305
+#: tests/views/test_registration.py:311
 msgid "Marital status"
 msgstr "Etat civil"
 
@@ -1219,7 +1225,7 @@ msgstr "En ordre de paiement"
 
 #: forms/admission.py:55 forms/admission.py:231
 #: templates/admission_detail.html:109 tests/views/test_admission.py:420
-#: views/common.py:245
+#: views/common.py:246
 msgid "Phone mobile"
 msgstr "GSM"
 
@@ -1228,6 +1234,7 @@ msgid "Phone number"
 msgstr "Numéro de téléphone"
 
 #: forms/admission.py:12 tests/views/test_admission.py:422
+#: tests/views/test_registration.py:345
 msgid ""
 "Phone number must be entered (up to 3 digits X and 15 digits x) in the "
 "format:<br>&emsp;&emsp;'+X xxx xxx xx' or<br>&emsp;&emsp;'0xx xx xx xx' "
@@ -1258,8 +1265,8 @@ msgstr "Courrier"
 #: templates/registration_detail.html:135 templates/registration_form.html:124
 #: templates/registration_form.html:150 templates/registration_pdf.html:154
 #: templates/registration_pdf.html:165 tests/views/test_admission.py:358
-#: tests/views/test_admission.py:389 tests/views/test_registration.py:293
-#: tests/views/test_registration.py:294 tests/views/test_registration.py:316
+#: tests/views/test_admission.py:389 tests/views/test_registration.py:299
+#: tests/views/test_registration.py:300 tests/views/test_registration.py:322
 msgid "Postal code"
 msgstr "Code postal"
 
@@ -1373,7 +1380,8 @@ msgstr "Adresse"
 
 #: forms/registration.py:104 forms/registration.py:167
 #: templates/registration_detail.html:140 templates/registration_pdf.html:160
-#: templates/registration_pdf.html:168 views/common.py:245
+#: templates/registration_pdf.html:168 tests/views/test_registration.py:343
+#: views/common.py:246
 msgid "Residence phone"
 msgstr "Téléphone fixe"
 
@@ -1391,7 +1399,7 @@ msgstr "Indépendant"
 msgid "Separated"
 msgstr "Séparé"
 
-#: tests/views/test_registration.py:177 views/common.py:201
+#: tests/views/test_registration.py:177 views/common.py:202
 #, python-format
 msgid "Sign it and send it by post to your manager's address : %(address)s"
 msgstr ""
@@ -1513,9 +1521,9 @@ msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 #: tests/views/test_admission.py:357 tests/views/test_admission.py:358
 #: tests/views/test_admission.py:359 tests/views/test_admission.py:369
 #: tests/views/test_admission.py:379 tests/views/test_admission.py:389
-#: tests/views/test_admission.py:399 tests/views/test_registration.py:293
-#: tests/views/test_registration.py:294 tests/views/test_registration.py:305
-#: tests/views/test_registration.py:316
+#: tests/views/test_admission.py:399 tests/views/test_registration.py:299
+#: tests/views/test_registration.py:300 tests/views/test_registration.py:311
+#: tests/views/test_registration.py:322
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
@@ -1609,7 +1617,7 @@ msgstr ""
 "Votre dossier d'admission a été enregistré. Veuillez prendre en compte les "
 "informations suivantes :"
 
-#: tests/views/test_registration.py:169 views/common.py:205
+#: tests/views/test_registration.py:169 views/common.py:206
 msgid ""
 "Your data has been successfully saved. Some tasks are remaining to complete "
 "the registration :"

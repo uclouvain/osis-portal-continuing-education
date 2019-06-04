@@ -198,6 +198,7 @@ def add_remaining_tasks_message(request, formation):
         _("Add two colour passport photos on a white background, one of which must be pasted on the document entitled "
           "'Ordering a UCLouvain access card'."),
         _("(if you are a European citizen, add a photocopy of your identity card or passport)"),
+        _("(if you are a non-EU citizen, add a photocopy of your residence permit)"),
         _("Sign it and send it by post to your manager's address : %(address)s") %
         {'address': format_formation_address(formation['postal_address'])},
     ]

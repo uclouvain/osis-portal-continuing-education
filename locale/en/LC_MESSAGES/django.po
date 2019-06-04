@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-03 09:30+0200\n"
+"POT-Creation-Date: 2019-06-04 14:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -274,7 +274,7 @@ msgid ""
 "    "
 msgstr ""
 
-#: views/common.py:240
+#: views/common.py:241
 msgid " or "
 msgstr ""
 
@@ -282,6 +282,10 @@ msgstr ""
 msgid ""
 "(if you are a European citizen, add a photocopy of your identity card or "
 "passport)"
+msgstr ""
+
+#: tests/views/test_registration.py:197 views/common.py:201
+msgid "(if you are a non-EU citizen, add a photocopy of your residence permit)"
 msgstr ""
 
 #: templates/registration_pdf.html:90
@@ -390,7 +394,7 @@ msgid ""
 "passport number) must be filled-in!"
 msgstr ""
 
-#: views/common.py:250
+#: views/common.py:251
 msgid ""
 "At least one of the 3 following fields must be filled-in : national "
 "registry, id card number or passport number"
@@ -770,14 +774,14 @@ msgstr ""
 msgid "Identification"
 msgstr ""
 
-#: tests/views/test_admission.py:137 views/common.py:229
+#: tests/views/test_admission.py:137 views/common.py:230
 #, python-format
 msgid ""
 "If you want to edit again your admission, please contact the program "
 "manager : %(mail)s"
 msgstr ""
 
-#: tests/views/test_registration.py:198 views/common.py:226
+#: tests/views/test_registration.py:204 views/common.py:227
 #, python-format
 msgid ""
 "If you want to edit again your registration, please contact the program "
@@ -880,7 +884,7 @@ msgstr ""
 
 #: forms/registration.py:67 templates/registration_detail.html:97
 #: templates/registration_pdf.html:132 tests/views/test_registration.py:150
-#: tests/views/test_registration.py:305
+#: tests/views/test_registration.py:311
 msgid "Marital status"
 msgstr ""
 
@@ -989,7 +993,7 @@ msgstr ""
 
 #: forms/admission.py:55 forms/admission.py:231
 #: templates/admission_detail.html:109 tests/views/test_admission.py:420
-#: views/common.py:245
+#: views/common.py:246
 msgid "Phone mobile"
 msgstr ""
 
@@ -998,6 +1002,7 @@ msgid "Phone number"
 msgstr ""
 
 #: forms/admission.py:12 tests/views/test_admission.py:422
+#: tests/views/test_registration.py:345
 msgid ""
 "Phone number must be entered (up to 3 digits X and 15 digits x) in the "
 "format:<br>&emsp;&emsp;'+X xxx xxx xx' or<br>&emsp;&emsp;'0xx xx xx xx' "
@@ -1023,8 +1028,8 @@ msgstr ""
 #: templates/registration_detail.html:135 templates/registration_form.html:124
 #: templates/registration_form.html:150 templates/registration_pdf.html:154
 #: templates/registration_pdf.html:165 tests/views/test_admission.py:358
-#: tests/views/test_admission.py:389 tests/views/test_registration.py:293
-#: tests/views/test_registration.py:294 tests/views/test_registration.py:316
+#: tests/views/test_admission.py:389 tests/views/test_registration.py:299
+#: tests/views/test_registration.py:300 tests/views/test_registration.py:322
 msgid "Postal code"
 msgstr ""
 
@@ -1138,7 +1143,8 @@ msgstr ""
 
 #: forms/registration.py:104 forms/registration.py:167
 #: templates/registration_detail.html:140 templates/registration_pdf.html:160
-#: templates/registration_pdf.html:168 views/common.py:245
+#: templates/registration_pdf.html:168 tests/views/test_registration.py:343
+#: views/common.py:246
 msgid "Residence phone"
 msgstr ""
 
@@ -1156,7 +1162,7 @@ msgstr ""
 msgid "Separated"
 msgstr ""
 
-#: tests/views/test_registration.py:177 views/common.py:201
+#: tests/views/test_registration.py:177 views/common.py:202
 #, python-format
 msgid "Sign it and send it by post to your manager's address : %(address)s"
 msgstr ""
@@ -1276,9 +1282,9 @@ msgstr ""
 #: tests/views/test_admission.py:357 tests/views/test_admission.py:358
 #: tests/views/test_admission.py:359 tests/views/test_admission.py:369
 #: tests/views/test_admission.py:379 tests/views/test_admission.py:389
-#: tests/views/test_admission.py:399 tests/views/test_registration.py:293
-#: tests/views/test_registration.py:294 tests/views/test_registration.py:305
-#: tests/views/test_registration.py:316
+#: tests/views/test_admission.py:399 tests/views/test_registration.py:299
+#: tests/views/test_registration.py:300 tests/views/test_registration.py:311
+#: tests/views/test_registration.py:322
 msgid "This field is required."
 msgstr ""
 
@@ -1365,7 +1371,7 @@ msgid ""
 "information :"
 msgstr ""
 
-#: tests/views/test_registration.py:169 views/common.py:205
+#: tests/views/test_registration.py:169 views/common.py:206
 msgid ""
 "Your data has been successfully saved. Some tasks are remaining to complete "
 "the registration :"

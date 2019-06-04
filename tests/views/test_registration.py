@@ -192,6 +192,12 @@ class ViewStudentRegistrationTestCase(TestCase):
             ),
             str(messages_list[0])
         )
+        self.assertIn(
+            gettext(
+                "(if you are a non-EU citizen, add a photocopy of your residence permit)"
+            ),
+            str(messages_list[0])
+        )
         mails = _get_managers_mails(self.registration_submitted['formation'])
         self.assertEqual(messages_list[0].level, messages.INFO)
         self.assertIn(
