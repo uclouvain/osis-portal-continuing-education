@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-04 16:13+0200\n"
+"POT-Creation-Date: 2019-06-04 16:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -991,9 +991,11 @@ msgstr ""
 msgid "Phone number"
 msgstr ""
 
-#: forms/admission.py:11 tests/views/test_admission.py:421
+#: forms/admission.py:11 tests/views/test_admission.py:422
 #: tests/views/test_registration.py:343
-msgid "Phone number : only '+' (optional) and up to 15 digits accepted."
+msgid ""
+"Phone number must start with 0 or 00 or '+' followed by at least 7 digits "
+"and up to 15 digits."
 msgstr ""
 
 #: templates/django_registration/complete_account_registration.html:35

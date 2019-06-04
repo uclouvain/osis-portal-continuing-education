@@ -412,12 +412,14 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         short_numbers = ['0032123', '+321234', '0123456']
         long_numbers = ['003212345678912456', '+3212345678912345', '01234567891234567']
         for number in wrong_numbers + short_numbers + long_numbers:
-            print(number)
             self.admission['phone_mobile'] = number
             errors, errors_fields = get_submission_errors(self.admission)
             self.assertDictEqual(
                 errors,
                 {
-                    _("Phone mobile"): [_("Phone number : only '+' (optional) and up to 15 digits accepted.")],
+                    _("Phone mobile"): [
+                        _("Phone number must start with 0 or 00 or '+' followed by at least "
+                          "7 digits and up to 15 digits.")
+                    ],
                 }
             )
