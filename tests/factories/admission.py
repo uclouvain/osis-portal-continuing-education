@@ -36,24 +36,22 @@ from continuing_education.tests.factories.address import AddressDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from reference.tests.factories.country import CountryFactory
 
+factory.Faker._DEFAULT_LOCALE = 'nl_BE'
 CONTINUING_EDUCATION_TYPE = 8
 
 
 def AdmissionDictFactory(person_information, state=DRAFT):
     admission = {
         'uuid': str(uuid.uuid4()),
-        'first_name': person_information['person']['first_name'],
-        'last_name': person_information['person']['last_name'],
-        'gender': person_information['person']['gender'],
-        'person_uuid': person_information['person']['person_uuid'],
-        'birth_country': person_information['birth_country'],
-        'birth_location': person_information['birth_location'],
-        'birth_date': person_information['birth_date'],
+        'person_information': person_information,
         'address': AddressDictFactory(),
         'last_degree_level': "level",
         'formation': ContinuingEducationTrainingDictFactory(),
-        'citizenship': CountryFactory().name,
-        'phone_mobile': factory.Faker('phone_number'),
+        'citizenship': {
+                'name': factory.Sequence(lambda n: 'Country - %d' % n),
+                'iso_code': factory.Sequence(lambda n: str(n)[-2:])
+        },
+        'phone_mobile': _get_fake_phone_number(),
         'email': person_information['person']['email'],
         'high_school_diploma': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
         'last_degree_field': 'field',
@@ -70,17 +68,18 @@ def AdmissionDictFactory(person_information, state=DRAFT):
     return admission
 
 
+def _get_fake_phone_number():
+    fake = factory.Faker('phone_number').generate(extra_kwargs={})
+    for c in [" ", "(", ")", "-"]:
+        fake = fake.replace(c, "")
+    return fake
+
+
 def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
     registration = {
         'uuid': str(uuid.uuid4()),
         'formation': formation if formation else ContinuingEducationTrainingDictFactory(),
-        'first_name': person_information['person']['first_name'],
-        'last_name': person_information['person']['last_name'],
-        'gender': person_information['person']['gender'],
-        'person_uuid': person_information['person']['person_uuid'],
-        'birth_country': person_information['birth_country'],
-        'birth_location': person_information['birth_location'],
-        'birth_date': person_information['birth_date'],
+        'person_information': person_information,
         'address': AddressDictFactory(),
         'registration_type': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES)).fuzz(),
         'use_address_for_billing': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
@@ -98,7 +97,7 @@ def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
         'previous_noma': factory.Faker('isbn10'),
         'use_address_for_post': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
         'residence_address': AddressDictFactory(),
-        'residence_phone': factory.Faker('phone_number'),
+        'residence_phone': _get_fake_phone_number(),
         'ucl_registration_complete': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
         'noma': factory.Faker('isbn10'),
         'payment_complete': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),

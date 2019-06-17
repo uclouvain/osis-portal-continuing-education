@@ -37,4 +37,3 @@ def AddressDictFactory():
         'city': factory.Faker('city')
     }
     return address
-

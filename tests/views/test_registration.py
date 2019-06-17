@@ -40,7 +40,7 @@ from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED, ACCEPTED, REJECTED
 from continuing_education.tests.factories.admission import RegistrationDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
-from continuing_education.views.common import get_submission_errors, _get_managers_mails
+from continuing_education.views.common import get_submission_errors, _get_managers_mails, format_formation_address
 
 
 class ViewStudentRegistrationTestCase(TestCase):
@@ -166,7 +166,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(len(messages_list), 2)
 
         self.assertIn(
-            gettext("Your registration is submitted. Some tasks are remaining to complete the registration :"),
+            gettext("Your data has been successfully saved. Some tasks are remaining to complete the registration :"),
             str(messages_list[0])
         )
         self.assertIn(
@@ -174,12 +174,27 @@ class ViewStudentRegistrationTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertIn(
-            gettext("Sign it and send it by post to the address of the program manager"),
+            gettext("Sign it and send it by post to your manager's address : %(address)s") % {
+                'address': format_formation_address(self.registration_submitted['formation']['postal_address'])
+            },
             str(messages_list[0])
         )
         self.assertIn(
             gettext(
-                "Accompanied by two passport photos and a copy of both sides of the identity card or residence permit."
+                "Add two colour passport photos on a white background, one of which must be "
+                "pasted on the document entitled 'Ordering a UCLouvain access card'."
+            ),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            gettext(
+                "if you are a European citizen, add a photocopy of your identity card or passport"
+            ),
+            str(messages_list[0])
+        )
+        self.assertIn(
+            gettext(
+                "if you are a non-EU citizen, add a photocopy of your residence permit"
             ),
             str(messages_list[0])
         )
@@ -308,3 +323,26 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
                 _("Postal code"): [_("This field is required.")],
             }
         )
+
+    def test_registration_is_not_submittable_wrong_phone_format(self):
+        wrong_numbers = [
+            '1234567891',
+            '00+32474945669',
+            '0+32474123456',
+            '(32)1234567891',
+            '0474.12.34.56',
+            '0474 123456'
+        ]
+        short_numbers = ['0032123', '+321234', '0123456']
+        long_numbers = ['003212345678912456', '+3212345678912345', '01234567891234567']
+        for number in wrong_numbers + short_numbers + long_numbers:
+            self.admission['residence_phone'] = number
+            errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
+            self.assertDictEqual(
+                errors,
+                {
+                    _("Residence phone"): [_("Phone number must start with 0 or 00 or '+' followed by at least "
+                                             "7 digits and up to 15 digits.")
+                                           ],
+                }
+            )

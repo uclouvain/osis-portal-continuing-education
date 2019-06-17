@@ -1,10 +1,16 @@
 from dal import autocomplete
 from django import forms
+from django.core.validators import RegexValidator
 from django.forms import ChoiceField, Form
 from django.utils.translation import gettext_lazy as _
 
 from continuing_education.models.enums import enums, admission_state_choices
 from reference.models.country import Country
+
+phone_regex = RegexValidator(
+    regex=r'^(?P<prefix_intro>\+|0{1,2})\d{7,15}$',
+    message=_("Phone number must start with 0 or 00 or '+' followed by at least 7 digits and up to 15 digits.")
+)
 
 
 class AdmissionForm(Form):
@@ -38,11 +44,12 @@ class AdmissionForm(Form):
     address = forms.CharField(
         required=False,
     )
+
     phone_mobile = forms.CharField(
-        max_length=50,
         required=False,
-        label=_("Phone mobile")
+        label=_("Phone mobile"),
     )
+
     email = forms.EmailField(
         max_length=255,
         required=False,
@@ -181,18 +188,15 @@ class AdmissionForm(Form):
         label=_("Other")
     )
 
-    residence_phone = forms.CharField(
-        max_length=30,
-        required=False,
-        label=_("Residence phone")
-    )
-
     # State
     state_reason = forms.CharField(
         widget=forms.Textarea,
         required=False,
         label=_("State reason")
     )
+
+    def clean_phone_mobile(self):
+        return self.cleaned_data['phone_mobile'].replace(' ', '')
 
     def __init__(self, *args, **kwargs):
         formation = kwargs.pop('formation', None)
@@ -219,6 +223,13 @@ class AdmissionForm(Form):
 
 
 class StrictAdmissionForm(AdmissionForm):
+    phone_mobile = forms.CharField(
+        validators=[phone_regex],
+        required=False,
+        label=_("Phone mobile"),
+        widget=forms.TextInput(attrs={'placeholder': '0474123456 - 0032474123456 - +32474123456'})
+    )
+
     def __init__(self, data, **kwargs):
         super().__init__(data, **kwargs)
 
