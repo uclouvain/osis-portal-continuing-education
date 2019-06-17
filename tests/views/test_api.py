@@ -92,14 +92,14 @@ class ApiMethodsTestCase(TestCase):
     @mock.patch('requests.get', return_value=HttpResponse(status=status.HTTP_404_NOT_FOUND))
     def test_get_admission_not_found(self, mock_get, mock_token):
         with self.assertRaises(Http404):
-            get_admission(self.request, uuid.uuid4())
+            get_admission(uuid.uuid4())
         self.assertTrue(mock_get.called)
 
     @mock.patch('continuing_education.views.api.get_personal_token')
     @mock.patch('requests.get', return_value=HttpResponse(status=status.HTTP_403_FORBIDDEN))
     def test_get_admission_denied(self, mock_get, mock_token):
         with self.assertRaises(PermissionDenied):
-            get_admission(self.request, uuid.uuid4())
+            get_admission(uuid.uuid4())
         self.assertTrue(mock_get.called)
 
     @mock.patch('continuing_education.views.api.get_personal_token')
@@ -120,26 +120,26 @@ class ApiMethodsTestCase(TestCase):
     @mock.patch('requests.get', return_value=HttpResponse(status=status.HTTP_404_NOT_FOUND))
     def test_get_continuing_education_training_not_found(self, mock_get, mock_token):
         with self.assertRaises(Http404):
-            get_continuing_education_training(self.request, uuid.uuid4())
+            get_continuing_education_training(self.request)
         self.assertTrue(mock_get.called)
 
     @mock.patch('continuing_education.views.api.get_personal_token')
     @mock.patch('requests.get', return_value=HttpResponse(status=status.HTTP_403_FORBIDDEN))
     def test_get_continuing_education_training_denied(self, mock_get, mock_token):
         with self.assertRaises(PermissionDenied):
-            get_continuing_education_training(self.request, uuid.uuid4())
+            get_continuing_education_training(self.request)
         self.assertTrue(mock_get.called)
 
     @mock.patch('continuing_education.views.api.get_personal_token')
     @mock.patch('requests.get', return_value=HttpResponse(status=status.HTTP_404_NOT_FOUND))
     def test_get_continuing_education_person_not_found(self, mock_get, mock_token):
         with self.assertRaises(Http404):
-            get_continuing_education_person(self.request)
+            get_continuing_education_person()
         self.assertTrue(mock_get.called)
 
     @mock.patch('continuing_education.views.api.get_personal_token')
     @mock.patch('requests.get', return_value=HttpResponse(status=status.HTTP_403_FORBIDDEN))
     def test_get_continuing_education_person_denied(self, mock_get, mock_token):
         with self.assertRaises(PermissionDenied):
-            get_continuing_education_person(self.request)
+            get_continuing_education_person()
         self.assertTrue(mock_get.called)

@@ -70,11 +70,8 @@ def get_data_list_from_osis(request, object_name):
 
 def get_admission_list(request, person_uuid):
     token = get_personal_token(request)
-    response = requests.get(
-        url=API_URL % {'object_name': "persons", 'object_uuid': person_uuid} + "/admissions/",
-        headers={'Authorization': 'Token ' + token}
-    )
-    return transform_response_to_data(response)
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.persons_uuid_admissions_get(person_uuid)
 
 
 def get_registration_list(request, person_uuid):
@@ -106,16 +103,16 @@ def get_data_from_osis(request, object_name, uuid):
     return transform_response_to_data(response)
 
 
-def get_continuing_education_person(request):
-    return get_data_from_osis(request, "persons", "details")
+def get_continuing_education_person():
+    return api.persons_details_get()
 
 
-def get_continuing_education_training(request, uuid):
-    return get_data_from_osis(request, "training", uuid)
+def get_continuing_education_training(uuid):
+    return api.trainings_uuid_get(uuid)
 
 
-def get_admission(request, uuid):
-    return get_data_from_osis(request, "admissions", uuid)
+def get_admission(uuid):
+    return api.admissions_uuid_get(uuid)
 
 
 def get_registration(request, uuid):

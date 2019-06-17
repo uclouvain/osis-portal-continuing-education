@@ -12,7 +12,7 @@ from continuing_education.views.common import display_success_messages
 def prospect_form(request, formation_uuid=None):
     cet = None
     if formation_uuid:
-        cet = api.get_continuing_education_training(request, formation_uuid)
+        cet = api.get_continuing_education_training(request)
     form = ProspectForm(request.POST or None, ce_training=cet)
 
     if form.is_valid():

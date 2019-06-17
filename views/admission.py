@@ -47,7 +47,7 @@ from continuing_education.views.file import _get_files_list, FILES_URL
 
 @login_required
 def admission_detail(request, admission_uuid):
-    admission = api.get_admission(request, admission_uuid)
+    admission = api.get_admission(admission_uuid)
     if admission and admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
     if admission and admission['state'] == admission_state_choices.DRAFT:
@@ -94,7 +94,7 @@ def _show_save_before_submit(request):
 @login_required
 @require_http_methods(["POST"])
 def admission_submit(request):
-    admission = api.get_admission(request, request.POST.get('admission_uuid'))
+    admission = api.get_admission(request.POST.get('admission_uuid'))
     admission_submission_errors, errors_fields = get_submission_errors(admission)
     if request.POST.get("submit") and not admission_submission_errors:
         _update_admission_state(request, admission)
@@ -169,7 +169,7 @@ def admission_form(request, admission_uuid=None):
 
 
 def _get_admission_or_403(admission_uuid, request):
-    admission = api.get_admission(request, admission_uuid) if admission_uuid else None
+    admission = api.get_admission(admission_uuid) if admission_uuid else None
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
     return admission
@@ -178,7 +178,7 @@ def _get_admission_or_403(admission_uuid, request):
 def _get_formation(request):
     formation = None
     if request.session.get('formation_id'):
-        formation = api.get_continuing_education_training(request, request.session.get('formation_id'))
+        formation = api.get_continuing_education_training(request)
     return formation
 
 
@@ -198,7 +198,7 @@ def _fill_forms_with_existing_data(admission, formation, request):
     id_form = PersonForm(request.POST or None, instance=base_person)
     person_information = _get_datas_from_admission('person_information', admission)
     person_information.update(
-        api.get_continuing_education_person(request)
+        api.get_continuing_education_person()
     )
     admissions = api.get_admission_list(request, person_information['uuid'])['results']
     old_admission = _get_old_admission_if_exists(admissions, person_information, request)
@@ -230,7 +230,7 @@ def _get_old_admission_if_exists(admissions, person_information, request):
         else api.get_registration_list(request, person_information['uuid'])['results']
     if old_admission:
         if admissions:
-            old_admission = api.get_admission(request, old_admission['uuid'])
+            old_admission = api.get_admission(old_admission['uuid'])
         else:
             old_admission = api.get_registration(request, old_admission[0]['uuid'])
     return old_admission

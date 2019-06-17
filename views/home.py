@@ -59,14 +59,14 @@ def main_view(request, formation_id=None):
         api.get_personal_token(request)
         person = mdl_person.find_by_user(request.user)
 
-        person_information = api.get_continuing_education_person(request)
+        person_information = api.get_continuing_education_person()
         admissions = api.get_admission_list(request, person_information['uuid'])['results']
         registrations = api.get_registration_list(request, person_information['uuid'])['results']
 
         return render(request, "continuing_education/home.html", locals())
     else:
         if formation_id:
-            is_active = api.get_continuing_education_training(request, formation_id)['active']
+            is_active = api.get_continuing_education_training(formation_id).active
             if not is_active:
                 return redirect(reverse('prospect_form', kwargs={'formation_uuid': formation_id}))
         return render(request, "authentication/login.html")
