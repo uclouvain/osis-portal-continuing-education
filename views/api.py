@@ -32,12 +32,22 @@ from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
 
-from continuing_education.continuing_education_api.openapi_client.configuration import Configuration
-from continuing_education.continuing_education_api.openapi_client.api.default_api import DefaultApi
-from continuing_education.continuing_education_api.openapi_client.api_client import ApiClient
+from openapi_client import Configuration, ApiClient
+from openapi_client.api.default_api import DefaultApi
 
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "%(object_name)s/%(object_uuid)s"
+API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "/%(object_name)s/%(object_uuid)s"
+
+api_config = Configuration()
+api_config.api_key_prefix['Authorization'] = "Token"
+api_config.api_key['Authorization'] = settings.OSIS_PORTAL_TOKEN
+api_config.host = settings.URL_CONTINUING_EDUCATION_FILE_API
+
+api = DefaultApi(
+    api_client=ApiClient(
+        configuration=api_config
+    )
+)
 
 
 def transform_response_to_data(response):
@@ -76,15 +86,9 @@ def get_registration_list(request, person_uuid):
 
 def get_continuing_education_training_list(**kwargs):
     params = {}
-    url = API_URL % {'object_name': "training", 'object_uuid': ''}
     for key, value in kwargs.items():
         params.update({key: value})
-    response = requests.get(
-        url=url,
-        headers=REQUEST_HEADER,
-        params=params
-    )
-    return transform_response_to_data(response)
+    return api.trainings_get(**params).to_dict()
 
 
 def get_data_from_osis(request, object_name, uuid):
