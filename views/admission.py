@@ -30,7 +30,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models.person import Person
@@ -192,22 +192,37 @@ def _is_admission_submittable_and_show_errors(admission, errors_fields, request)
 
 
 def _fill_forms_with_existing_data(admission, formation, request):
-    person_information = api.get_continuing_education_person(request)
-    Person.objects.filter(user=request.user).update(**person_information.get('person'))
+    Person.objects.filter(user=request.user).update(**_get_datas_from_admission('person', admission))
     base_person = Person.objects.get(user=request.user)
+    adm_form = AdmissionForm(request.POST or None, initial=admission, formation=formation)
+    id_form = PersonForm(request.POST or None, instance=base_person)
+    person_information = _get_datas_from_admission('person_information', admission)
+    person_information.update(
+        api.get_continuing_education_person(request)
+    )
+    admissions = api.get_admission_list(request, person_information['uuid'])['results']
+    old_admission = _get_old_admission_if_exists(admissions, person_information, request)
     person_form = ContinuingEducationPersonForm(
         request.POST or None,
         initial=person_information if _has_instance_with_values(person_information) else None
     )
-    adm_form = AdmissionForm(request.POST or None, initial=admission, formation=formation)
-    id_form = PersonForm(request.POST or None, instance=base_person)
-
-    admissions = api.get_admission_list(request, person_information['uuid'])['results']
-    old_admission = _get_old_admission_if_exists(admissions, person_information, request)
     current_address = admission['address'] if admission else None
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, initial=address)
     return address_form, adm_form, id_form, person_form
+
+
+def _get_datas_from_admission(data_type, admission):
+    if admission:
+        keys = []
+        if data_type == 'person':
+            keys = ['first_name', 'last_name', 'gender']
+        if data_type == 'person_information':
+            keys = ['birth_date', 'birth_location', 'birth_country']
+        return {
+            key: admission[key] for key in keys
+        }
+    return {}
 
 
 def _get_old_admission_if_exists(admissions, person_information, request):

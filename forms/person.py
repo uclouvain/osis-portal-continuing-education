@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from base.models.person import Person
 
@@ -37,7 +37,7 @@ class PersonForm(ModelForm):
     def _disable_existing_person_fields(self):
         for field in self.fields.keys():
             attr = getattr(self.instance, field)
-            if attr and attr != 'U':
+            if attr:
                 self.fields[field].initial = attr
                 self.fields[field].widget.attrs['readonly'] = True
                 if field is "gender":

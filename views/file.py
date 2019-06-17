@@ -35,7 +35,7 @@ from django.http import Http404
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.text import get_valid_filename
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 
@@ -53,9 +53,8 @@ def upload_file(request, admission_uuid):
         admission = get_admission(request, admission_uuid)
     except Http404:
         admission = get_registration(request, admission_uuid)
-    person = admission['person_information']['person']
     data = {
-        'uploaded_by': person['uuid'],
+        'uploaded_by': admission['person_uuid'],
     }
     request_to_upload = requests.post(
         FILES_URL % {'admission_uuid': str(admission_uuid)},
@@ -131,4 +130,4 @@ def _get_files_list(request, admission, url_continuing_education_file_api):
 def _is_file_uploaded_by_admission_person(admission, file):
     uploaded_by = file.get('uploaded_by', None)
     uploader_uuid = uploaded_by.get('uuid', None) if uploaded_by else None
-    return uploader_uuid == str(admission['person_information']['person']['uuid'])
+    return uploader_uuid == str(admission['person_uuid'])

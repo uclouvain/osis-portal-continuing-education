@@ -32,7 +32,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import translation
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import gettext_lazy as _, gettext
 
 from base.models import person as person_mdl
 from base.views import layout
@@ -112,7 +112,6 @@ def get_submission_errors(admission, is_registration=False):
     errors = OrderedDict()
 
     if is_registration:
-
         address_form = StrictAddressForm(
             data=admission['billing_address']
         )
@@ -129,10 +128,10 @@ def get_submission_errors(admission, is_registration=False):
             _update_errors([residence_address_form], errors, errors_field)
     else:
         person_form = StrictPersonForm(
-            data=admission['person_information']['person'] if 'person' in admission['person_information'] else None
+            data=admission
         )
         person_information_form = ContinuingEducationPersonForm(
-            data=admission['person_information']
+            data=admission
         )
         address_form = StrictAddressForm(
             data=admission['address']
@@ -154,14 +153,14 @@ def _update_errors(forms, errors, errors_field):
 
 
 def _build_warning_from_errors_dict(errors):
-    warning_message = ugettext(
+    warning_message = gettext(
         "Your file is not submittable because you did not provide the following data : "
     )
     warning_message = \
         "<strong>" + \
         warning_message + \
         "</strong><br>" + \
-        " · ".join([ugettext(key) for key in _build_error_data(errors)])
+        " · ".join([gettext(key) for key in _build_error_data(errors)])
 
     return mark_safe(warning_message)
 
