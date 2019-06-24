@@ -177,8 +177,9 @@ def _get_admission_or_403(admission_uuid, request):
 
 def _get_formation(request):
     formation = None
-    if request.session.get('formation_id'):
-        formation = api.get_continuing_education_training(request)
+    formation_id = request.session.get('formation_id')
+    if formation_id:
+        formation = api.get_continuing_education_training(formation_id)
     return formation
 
 
@@ -198,7 +199,7 @@ def _fill_forms_with_existing_data(admission, formation, request):
     id_form = PersonForm(request.POST or None, instance=base_person)
     person_information = _get_datas_from_admission('person_information', admission)
     person_information.update(
-        api.get_continuing_education_person()
+        api.get_continuing_education_person(request)
     )
     admissions = api.get_admission_list(request, person_information['uuid'])['results']
     old_admission = _get_old_admission_if_exists(admissions, person_information, request)
@@ -213,6 +214,7 @@ def _fill_forms_with_existing_data(admission, formation, request):
 
 
 def _get_datas_from_admission(data_type, admission):
+    print(admission)
     if admission:
         keys = []
         if data_type == 'person':

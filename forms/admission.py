@@ -202,7 +202,7 @@ class AdmissionForm(Form):
         formation = kwargs.pop('formation', None)
         super(AdmissionForm, self).__init__(*args, **kwargs)
         if formation:
-            self.initial['formation'] = (formation['uuid'], formation['education_group']['acronym'])
+            self.initial['formation'] = (formation['uuid'], formation['acronym'])
             self.fields['formation'].choices = [self.initial['formation']]
         elif self.initial:
             self._set_initial_fields()

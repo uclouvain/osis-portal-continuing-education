@@ -23,18 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import io
 
 import requests
 from django.conf import settings
-from django.http import Http404
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.parsers import JSONParser
 
 from openapi_client import Configuration, ApiClient
 from openapi_client.api.default_api import DefaultApi
-
 from reference.models.country import Country
 
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
@@ -52,22 +48,6 @@ api = DefaultApi(
 )
 
 
-def transform_response_to_data(response):
-    stream = io.BytesIO(response.content)
-    data = JSONParser().parse(stream)
-    return data
-
-
-def get_data_list_from_osis(request, object_name):
-    token = get_personal_token(request)
-    url = API_URL % {'object_name': object_name, 'object_uuid': ''}
-    response = requests.get(
-        url=url,
-        headers={'Authorization': 'Token ' + token}
-    )
-    return transform_response_to_data(response)
-
-
 def get_admission_list(request, person_uuid):
     token = get_personal_token(request)
     api.api_client.configuration.api_key['Authorization'] = token
@@ -76,35 +56,21 @@ def get_admission_list(request, person_uuid):
 
 def get_registration_list(request, person_uuid):
     token = get_personal_token(request)
-    response = requests.get(
-        url=API_URL % {'object_name': "persons", 'object_uuid': person_uuid} + "/registrations/",
-        headers={'Authorization': 'Token ' + token}
-    )
-    return transform_response_to_data(response)
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.persons_uuid_registrations_get(person_uuid)
 
 
 def get_continuing_education_training_list(**kwargs):
     params = {}
     for key, value in kwargs.items():
         params.update({key: value})
-    return api.trainings_get(**params).to_dict()
+    return api.trainings_get(**params)
 
 
-def get_data_from_osis(request, object_name, uuid):
-    response = requests.get(
-        url=API_URL % {'object_name': object_name, 'object_uuid': str(uuid)},
-        headers={'Authorization': 'Token ' + get_personal_token(request)} if request.user.is_authenticated
-        else REQUEST_HEADER
-    )
-    if response.status_code == status.HTTP_404_NOT_FOUND:
-        raise Http404
-    elif response.status_code == status.HTTP_403_FORBIDDEN:
-        raise PermissionDenied(response.json()['detail'] if response.content else '')
-    return transform_response_to_data(response)
-
-
-def get_continuing_education_person():
-    return api.persons_details_get()
+def get_continuing_education_person(request):
+    token = get_personal_token(request)
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.persons_details_get().to_dict()
 
 
 def get_continuing_education_training(uuid):
@@ -115,51 +81,32 @@ def get_admission(uuid):
     return api.admissions_uuid_get(uuid)
 
 
-def get_registration(request, uuid):
-    return get_data_from_osis(request, "registrations", uuid)
-
-
-def post_data_to_osis(request, object_name, object_to_post):
-    token = get_personal_token(request)
-    response = requests.post(
-        url=API_URL % {'object_name': object_name, 'object_uuid': ''},
-        headers=REQUEST_HEADER if object_name == 'prospects' else {'Authorization': 'Token ' + token},
-        json=object_to_post
-    )
-    if response.status_code != status.HTTP_201_CREATED:
-        data = {}
-    else:
-        data = transform_response_to_data(response)
-
-    return data, response.status_code
+def get_registration(uuid):
+    return api.registrations_uuid_get(uuid)
 
 
 def post_prospect(request, object_to_post):
-    return post_data_to_osis(request, "prospects", object_to_post)
+    token = get_personal_token(request)
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.prospects_post(object_to_post)
 
 
 def post_admission(request, object_to_post):
-    return post_data_to_osis(request, "admissions", object_to_post)
-
-
-def update_data_to_osis(request, object_name, object_to_update):
     token = get_personal_token(request)
-    response = requests.patch(
-        url=API_URL % {'object_name': object_name, 'object_uuid': object_to_update['uuid']},
-        headers={'Authorization': 'Token ' + token},
-        json=object_to_update,
-    )
-    if response.status_code == status.HTTP_403_FORBIDDEN:
-        raise PermissionDenied(response.json()['detail'] if response.content else '')
-    return response
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.admissions_post(object_to_post)
 
 
 def update_admission(request, object_to_update):
-    return update_data_to_osis(request, "admissions", object_to_update)
+    token = get_personal_token(request)
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.admissions_uuid_put(object_to_update['uuid'], object_to_update)
 
 
 def update_registration(request, object_to_update):
-    return update_data_to_osis(request, "registrations", object_to_update)
+    token = get_personal_token(request)
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.registrations_uuid_put(object_to_update['uuid'], object_to_update)
 
 
 def prepare_admission_data(admission, username, forms):
