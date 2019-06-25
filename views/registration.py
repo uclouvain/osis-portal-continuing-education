@@ -106,7 +106,7 @@ def registration_edit(request, admission_uuid):
     id_form = PersonForm(request.POST or None, instance=base_person)
     person_information = _get_datas_from_admission('person_information', registration)
     person_information.update(
-        api.get_continuing_education_person()
+        api.get_continuing_education_person(request)
     )
     person_form = ContinuingEducationPersonForm(request.POST or None, initial=person_information)
     address = registration['address']

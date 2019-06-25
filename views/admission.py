@@ -214,7 +214,6 @@ def _fill_forms_with_existing_data(admission, formation, request):
 
 
 def _get_datas_from_admission(data_type, admission):
-    print(admission)
     if admission:
         keys = []
         if data_type == 'person':
@@ -242,5 +241,5 @@ def _update_or_create_admission(adm_form, admission, request):
     if admission:
         api.update_admission(request, adm_form.cleaned_data)
     else:
-        admission, status = api.post_admission(request, adm_form.cleaned_data)
+        admission = api.post_admission(request, adm_form.cleaned_data)
     return admission

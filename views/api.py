@@ -27,7 +27,6 @@
 import requests
 from django.conf import settings
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
 
 from openapi_client import Configuration, ApiClient
 from openapi_client.api.default_api import DefaultApi
