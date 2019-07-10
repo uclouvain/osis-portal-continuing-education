@@ -214,9 +214,10 @@ def add_remaining_tasks_message(request, formation):
 
 
 def format_formation_address(address):
+    print(address)
     if address:
         return address['location'] + ' · ' + address['postal_code'] + ' ' + address['city'] + \
-               (' (' + address['country']['name'] + ')' if address['country'] else '')
+               (' (' + address['country'] + ')' if address['country'] else '')
     return ''
 
 

@@ -52,7 +52,7 @@ from osis_common.document.pdf_build import render_pdf
 
 @login_required
 def registration_detail(request, admission_uuid):
-    admission = api.get_registration(admission_uuid)
+    admission = api.get_registration(request, admission_uuid)
     if admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED:
         add_remaining_tasks_message(request, admission['formation'])
         add_contact_for_edit_message(request, formation=admission['formation'], is_registration=True)
@@ -91,7 +91,7 @@ def registration_submit(request):
 
 @login_required
 def registration_edit(request, admission_uuid):
-    registration = api.get_registration(admission_uuid)
+    registration = api.get_registration(request, admission_uuid)
     if registration and registration['state'] != admission_state_choices.ACCEPTED:
         raise PermissionDenied
 

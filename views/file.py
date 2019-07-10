@@ -43,14 +43,14 @@ from continuing_education.views.api import REQUEST_HEADER, get_admission, get_re
 from continuing_education.views.common import display_error_messages, display_success_messages
 
 MAX_ADMISSION_FILE_NAME_LENGTH = 100
-FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/%(admission_uuid)s/files/"
+FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "/admissions/%(admission_uuid)s/files/"
 
 
 @login_required
 def upload_file(request, admission_uuid):
     admission_file = request.FILES['myfile'] if 'myfile' in request.FILES else None
     try:
-        admission = get_admission(admission_uuid)
+        admission = get_admission(request, admission_uuid)
     except Http404:
         admission = get_registration(request, admission_uuid)
     data = {

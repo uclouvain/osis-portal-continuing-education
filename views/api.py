@@ -76,11 +76,15 @@ def get_continuing_education_training(uuid):
     return api.trainings_uuid_get(uuid)
 
 
-def get_admission(uuid):
+def get_admission(request, uuid):
+    token = get_personal_token(request)
+    api.api_client.configuration.api_key['Authorization'] = token
     return api.admissions_uuid_get(uuid)
 
 
-def get_registration(uuid):
+def get_registration(request, uuid):
+    token = get_personal_token(request)
+    api.api_client.configuration.api_key['Authorization'] = token
     return api.registrations_uuid_get(uuid)
 
 
@@ -99,13 +103,13 @@ def post_admission(request, object_to_post):
 def update_admission(request, object_to_update):
     token = get_personal_token(request)
     api.api_client.configuration.api_key['Authorization'] = token
-    return api.admissions_uuid_put(object_to_update['uuid'], object_to_update)
+    return api.admissions_uuid_patch(object_to_update['uuid'], object_to_update)
 
 
 def update_registration(request, object_to_update):
     token = get_personal_token(request)
     api.api_client.configuration.api_key['Authorization'] = token
-    return api.registrations_uuid_put(object_to_update['uuid'], object_to_update)
+    return api.registrations_uuid_patch(object_to_update['uuid'], object_to_update)
 
 
 def prepare_admission_data(admission, username, forms):
@@ -162,6 +166,7 @@ def get_token_from_osis(username, force_user_creation=False):
 
 
 def get_personal_token(request):
+    print(request.session.get('personal_token'))
     if not request.session.get('personal_token'):
         request.session['personal_token'] = get_token_from_osis(request.user.username, force_user_creation=True)
     return request.session['personal_token']
