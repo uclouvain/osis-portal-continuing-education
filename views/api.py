@@ -112,6 +112,30 @@ def update_registration(request, object_to_update):
     return api.registrations_uuid_patch(object_to_update['uuid'], object_to_update)
 
 
+def get_files_list(request, admission_uuid):
+    token = get_personal_token(request)
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.admissions_uuid_files_get(admission_uuid)
+
+
+def get_file(request, admission_uuid, file_uuid):
+    token = get_personal_token(request)
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.admissions_uuid_files_file_uuid_get(admission_uuid, file_uuid)
+
+
+def delete_file(request, admission_uuid, file_uuid):
+    token = get_personal_token(request)
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.admissions_uuid_files_file_uuid_delete(admission_uuid, file_uuid)
+
+
+def upload_file(request, admission_uuid, **kwargs):
+    token = get_personal_token(request)
+    api.api_client.configuration.api_key['Authorization'] = token
+    return api.admissions_uuid_files_post(admission_uuid, **kwargs)
+
+
 def prepare_admission_data(admission, username, forms):
     if admission:
         forms['admission'].cleaned_data['uuid'] = admission['uuid']
@@ -166,7 +190,6 @@ def get_token_from_osis(username, force_user_creation=False):
 
 
 def get_personal_token(request):
-    print(request.session.get('personal_token'))
     if not request.session.get('personal_token'):
         request.session['personal_token'] = get_token_from_osis(request.user.username, force_user_creation=True)
     return request.session['personal_token']

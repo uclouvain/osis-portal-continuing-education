@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-04 16:27+0200\n"
+"POT-Creation-Date: 2019-07-19 11:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -274,7 +274,7 @@ msgid ""
 "    "
 msgstr ""
 
-#: views/common.py:241
+#: views/common.py:240
 msgid " or "
 msgstr ""
 
@@ -295,7 +295,7 @@ msgid ""
 "    Office of the Registrar<br/>\n"
 msgstr ""
 
-#: tests/views/test_file.py:178 views/file.py:104
+#: tests/views/test_file.py:178 views/file.py:97
 msgid "A problem occured during delete"
 msgstr ""
 
@@ -315,17 +315,17 @@ msgstr ""
 msgid "Activation failed"
 msgstr ""
 
-#: forms/admission.py:108 templates/admission_detail.html:148
+#: forms/admission.py:109 templates/admission_detail.html:148
 msgid "Activity sector"
 msgstr ""
 
-#: tests/views/test_registration.py:184 views/common.py:198
+#: tests/views/test_registration.py:184 views/common.py:197
 msgid ""
 "Add two colour passport photos on a white background, one of which must be "
 "pasted on the document entitled 'Ordering a UCLouvain access card'."
 msgstr ""
 
-#: forms/admission.py:55
+#: forms/admission.py:56
 msgid "Additional email"
 msgstr ""
 
@@ -354,8 +354,12 @@ msgid ""
 "should receive this email shortly."
 msgstr ""
 
-#: views/file.py:127
+#: views/file.py:114
 msgid "An unexpected error occurred"
+msgstr ""
+
+#: views/file.py:87
+msgid "An unexpected error occurred during download"
 msgstr ""
 
 #: forms/registration.py:151
@@ -384,7 +388,7 @@ msgid ""
 "passport number) must be filled-in!"
 msgstr ""
 
-#: views/common.py:251
+#: views/common.py:250
 msgid ""
 "At least one of the 3 following fields must be filled-in : national "
 "registry, id card number or passport number"
@@ -409,18 +413,18 @@ msgstr ""
 msgid "Billing address"
 msgstr ""
 
-#: forms/account.py:22 templates/admission_detail.html:102
+#: forms/account.py:23 templates/admission_detail.html:102
 #: templates/registration_detail.html:89 templates/registration_pdf.html:120
-#: tests/views/test_admission.py:357 tests/views/test_admission.py:379
+#: tests/views/test_admission.py:355 tests/views/test_admission.py:377
 msgid "Birth country"
 msgstr ""
 
-#: forms/account.py:27 templates/admission_detail.html:100
+#: forms/account.py:28 templates/admission_detail.html:100
 #: templates/registration_detail.html:87 templates/registration_pdf.html:116
 msgid "Birth date"
 msgstr ""
 
-#: forms/account.py:33 templates/admission_detail.html:101
+#: forms/account.py:34 templates/admission_detail.html:101
 #: templates/registration_detail.html:88 templates/registration_pdf.html:118
 msgid "Birth location"
 msgstr ""
@@ -429,19 +433,19 @@ msgstr ""
 msgid "Browse"
 msgstr ""
 
-#: forms/admission.py:147 templates/admission_detail.html:186
+#: forms/admission.py:148 templates/admission_detail.html:186
 msgid "By Facebook"
 msgstr ""
 
-#: forms/admission.py:152 templates/admission_detail.html:189
+#: forms/admission.py:153 templates/admission_detail.html:189
 msgid "By LinkedIn"
 msgstr ""
 
-#: forms/admission.py:182 templates/admission_detail.html:207
+#: forms/admission.py:183 templates/admission_detail.html:207
 msgid "By Moocs"
 msgstr ""
 
-#: forms/admission.py:132 templates/admission_detail.html:177
+#: forms/admission.py:133 templates/admission_detail.html:177
 msgid "By UCLouvain website"
 msgstr ""
 
@@ -449,31 +453,31 @@ msgstr ""
 msgid "By checking the checkbox, I accept that my data are used by IUFC."
 msgstr ""
 
-#: forms/admission.py:157 templates/admission_detail.html:192
+#: forms/admission.py:158 templates/admission_detail.html:192
 msgid "By customized mail"
 msgstr ""
 
-#: forms/admission.py:162 templates/admission_detail.html:195
+#: forms/admission.py:163 templates/admission_detail.html:195
 msgid "By emailing"
 msgstr ""
 
-#: forms/admission.py:137 templates/admission_detail.html:180
+#: forms/admission.py:138 templates/admission_detail.html:180
 msgid "By formation website"
 msgstr ""
 
-#: forms/admission.py:177 templates/admission_detail.html:204
+#: forms/admission.py:178 templates/admission_detail.html:204
 msgid "By former students"
 msgstr ""
 
-#: forms/admission.py:172 templates/admission_detail.html:201
+#: forms/admission.py:173 templates/admission_detail.html:201
 msgid "By friends"
 msgstr ""
 
-#: forms/admission.py:142 templates/admission_detail.html:183
+#: forms/admission.py:143 templates/admission_detail.html:183
 msgid "By press"
 msgstr ""
 
-#: forms/admission.py:167 templates/admission_detail.html:198
+#: forms/admission.py:168 templates/admission_detail.html:198
 msgid "By word of mouth"
 msgstr ""
 
@@ -502,12 +506,12 @@ msgstr ""
 msgid "Children number"
 msgstr ""
 
-#: forms/admission.py:29 templates/admission_detail.html:97
+#: forms/admission.py:30 templates/admission_detail.html:97
 #: templates/registration_detail.html:84 templates/registration_pdf.html:122
 msgid "Citizenship"
 msgstr ""
 
-#: forms/address.py:26 forms/prospect.py:26 templates/admission_detail.html:115
+#: forms/address.py:29 forms/prospect.py:26 templates/admission_detail.html:115
 #: templates/prospect_form.html:62 templates/registration_detail.html:121
 #: templates/registration_detail.html:136 templates/registration_form.html:127
 #: templates/registration_form.html:153 templates/registration_pdf.html:156
@@ -551,7 +555,7 @@ msgstr ""
 msgid "Continuing Education"
 msgstr ""
 
-#: forms/address.py:10 templates/admission_detail.html:116
+#: forms/address.py:13 templates/admission_detail.html:116
 #: templates/registration_detail.html:122
 #: templates/registration_detail.html:137 templates/registration_form.html:130
 #: templates/registration_form.html:156 templates/registration_pdf.html:158
@@ -563,11 +567,11 @@ msgstr ""
 msgid "Creating a user account"
 msgstr ""
 
-#: forms/admission.py:103 templates/admission_detail.html:147
+#: forms/admission.py:104 templates/admission_detail.html:147
 msgid "Current employer"
 msgstr ""
 
-#: forms/admission.py:98 templates/admission_detail.html:144
+#: forms/admission.py:99 templates/admission_detail.html:144
 msgid "Current occupation"
 msgstr ""
 
@@ -596,7 +600,7 @@ msgid "Divorced"
 msgstr ""
 
 #: tests/views/test_registration.py:107 tests/views/test_registration.py:140
-#: views/common.py:183
+#: views/common.py:182
 msgid "Do not forget to submit your file when it is complete"
 msgstr ""
 
@@ -616,7 +620,7 @@ msgstr ""
 msgid "Education"
 msgstr ""
 
-#: forms/account.py:57 forms/person.py:35 forms/prospect.py:31
+#: forms/account.py:58 forms/person.py:35 forms/prospect.py:31
 #: templates/admission_detail.html:110 templates/authentication/login.html:50
 #: templates/authentication/login.html:52 templates/prospect_form.html:67
 msgid "Email"
@@ -661,7 +665,7 @@ msgstr ""
 msgid "Female"
 msgstr ""
 
-#: tests/views/test_file.py:159 views/file.py:102
+#: tests/views/test_file.py:159 views/file.py:95
 msgid "File correctly deleted"
 msgstr ""
 
@@ -702,7 +706,7 @@ msgstr ""
 
 #: forms/person.py:27 templates/admission_detail.html:96
 #: templates/registration_detail.html:83 templates/registration_pdf.html:130
-#: tests/views/test_admission.py:399
+#: tests/views/test_admission.py:397
 msgid "Gender"
 msgstr ""
 
@@ -718,11 +722,11 @@ msgstr ""
 msgid "Health"
 msgstr ""
 
-#: forms/admission.py:35 templates/admission_detail.html:123
+#: forms/admission.py:36 templates/admission_detail.html:123
 msgid "High school diploma"
 msgstr ""
 
-#: forms/admission.py:62 templates/admission_detail.html:124
+#: forms/admission.py:63 templates/admission_detail.html:124
 msgid "High school graduation year"
 msgstr ""
 
@@ -764,14 +768,14 @@ msgstr ""
 msgid "Identification"
 msgstr ""
 
-#: tests/views/test_admission.py:137 views/common.py:230
+#: tests/views/test_admission.py:137 views/common.py:229
 #, python-format
 msgid ""
 "If you want to edit again your admission, please contact the program "
 "manager : %(mail)s"
 msgstr ""
 
-#: tests/views/test_registration.py:204 views/common.py:227
+#: tests/views/test_registration.py:204 views/common.py:226
 #, python-format
 msgid ""
 "If you want to edit again your registration, please contact the program "
@@ -815,21 +819,21 @@ msgstr ""
 msgid "Job seeker"
 msgstr ""
 
-#: forms/admission.py:72 templates/admission_detail.html:128
+#: forms/admission.py:73 templates/admission_detail.html:128
 msgid "Last degree field"
 msgstr ""
 
-#: forms/admission.py:81 templates/admission_detail.html:131
+#: forms/admission.py:82 templates/admission_detail.html:131
 msgid "Last degree graduation year"
 msgstr ""
 
-#: forms/admission.py:77 templates/admission_detail.html:130
+#: forms/admission.py:78 templates/admission_detail.html:130
 msgid "Last degree institution"
 msgstr ""
 
-#: forms/admission.py:67 templates/admission_detail.html:127
+#: forms/admission.py:68 templates/admission_detail.html:127
 #: tests/views/test_admission.py:119 tests/views/test_admission.py:257
-#: tests/views/test_admission.py:359 tests/views/test_admission.py:369
+#: tests/views/test_admission.py:357 tests/views/test_admission.py:367
 msgid "Last degree level"
 msgstr ""
 
@@ -850,7 +854,7 @@ msgstr ""
 msgid "Legal cohabitant"
 msgstr ""
 
-#: forms/address.py:16 templates/admission_detail.html:113
+#: forms/address.py:19 templates/admission_detail.html:113
 #: templates/registration_detail.html:119
 #: templates/registration_detail.html:134 templates/registration_form.html:121
 #: templates/registration_form.html:147 templates/registration_pdf.html:152
@@ -874,7 +878,7 @@ msgstr ""
 
 #: forms/registration.py:67 templates/registration_detail.html:97
 #: templates/registration_pdf.html:132 tests/views/test_registration.py:150
-#: tests/views/test_registration.py:311
+#: tests/views/test_registration.py:312
 msgid "Marital status"
 msgstr ""
 
@@ -886,7 +890,7 @@ msgstr ""
 msgid "Mobile phone"
 msgstr ""
 
-#: forms/admission.py:120 templates/admission_detail.html:155
+#: forms/admission.py:121 templates/admission_detail.html:155
 #: templates/admission_detail.html:158
 msgid "Motivation"
 msgstr ""
@@ -947,12 +951,12 @@ msgctxt "on SIC pdf for date signature"
 msgid "On"
 msgstr ""
 
-#: forms/admission.py:187 models/enums/enums.py:32 models/enums/enums.py:40
+#: forms/admission.py:188 models/enums/enums.py:32 models/enums/enums.py:40
 #: templates/admission_detail.html:210 templates/admission_form.html:160
 msgid "Other"
 msgstr ""
 
-#: forms/admission.py:86 templates/admission_detail.html:134
+#: forms/admission.py:87 templates/admission_detail.html:134
 msgid "Other educational background"
 msgstr ""
 
@@ -973,7 +977,7 @@ msgstr ""
 msgid "Password reset unsuccessful"
 msgstr ""
 
-#: forms/admission.py:113 templates/admission_detail.html:151
+#: forms/admission.py:114 templates/admission_detail.html:151
 msgid "Past professional activities"
 msgstr ""
 
@@ -981,9 +985,9 @@ msgstr ""
 msgid "Payment complete"
 msgstr ""
 
-#: forms/admission.py:49 forms/admission.py:225
-#: templates/admission_detail.html:109 tests/views/test_admission.py:421
-#: views/common.py:246
+#: forms/admission.py:50 forms/admission.py:229
+#: templates/admission_detail.html:109 tests/views/test_admission.py:418
+#: views/common.py:245
 msgid "Phone mobile"
 msgstr ""
 
@@ -991,8 +995,8 @@ msgstr ""
 msgid "Phone number"
 msgstr ""
 
-#: forms/admission.py:11 tests/views/test_admission.py:422
-#: tests/views/test_registration.py:343
+#: forms/admission.py:12 tests/views/test_admission.py:419
+#: tests/views/test_registration.py:344
 msgid ""
 "Phone number must start with 0 or 00 or '+' followed by at least 7 digits "
 "and up to 15 digits."
@@ -1012,13 +1016,13 @@ msgstr ""
 msgid "Post"
 msgstr ""
 
-#: forms/address.py:21 forms/prospect.py:21 templates/admission_detail.html:114
+#: forms/address.py:24 forms/prospect.py:21 templates/admission_detail.html:114
 #: templates/prospect_form.html:63 templates/registration_detail.html:120
 #: templates/registration_detail.html:135 templates/registration_form.html:124
 #: templates/registration_form.html:150 templates/registration_pdf.html:154
-#: templates/registration_pdf.html:165 tests/views/test_admission.py:358
-#: tests/views/test_admission.py:389 tests/views/test_registration.py:299
-#: tests/views/test_registration.py:300 tests/views/test_registration.py:322
+#: templates/registration_pdf.html:165 tests/views/test_admission.py:356
+#: tests/views/test_admission.py:387 tests/views/test_registration.py:300
+#: tests/views/test_registration.py:301 tests/views/test_registration.py:323
 msgid "Postal code"
 msgstr ""
 
@@ -1036,7 +1040,7 @@ msgstr ""
 msgid "Previous UCLouvain registration"
 msgstr ""
 
-#: tests/views/test_registration.py:173 views/common.py:197
+#: tests/views/test_registration.py:173 views/common.py:196
 msgid "Print the completed registration form"
 msgstr ""
 
@@ -1056,7 +1060,7 @@ msgstr ""
 msgid "Professional"
 msgstr ""
 
-#: forms/admission.py:125 templates/admission_detail.html:159
+#: forms/admission.py:126 templates/admission_detail.html:159
 msgid "Professional and personal interests"
 msgstr ""
 
@@ -1064,7 +1068,7 @@ msgstr ""
 msgid "Professional background"
 msgstr ""
 
-#: forms/admission.py:93 templates/admission_detail.html:141
+#: forms/admission.py:94 templates/admission_detail.html:141
 msgid "Professional status"
 msgstr ""
 
@@ -1132,8 +1136,8 @@ msgstr ""
 
 #: forms/registration.py:104 forms/registration.py:167
 #: templates/registration_detail.html:140 templates/registration_pdf.html:160
-#: templates/registration_pdf.html:168 tests/views/test_registration.py:343
-#: views/common.py:246
+#: templates/registration_pdf.html:168 tests/views/test_registration.py:344
+#: views/common.py:245
 msgid "Residence phone"
 msgstr ""
 
@@ -1151,7 +1155,7 @@ msgstr ""
 msgid "Separated"
 msgstr ""
 
-#: tests/views/test_registration.py:177 views/common.py:202
+#: tests/views/test_registration.py:177 views/common.py:201
 #, python-format
 msgid "Sign it and send it by post to your manager's address : %(address)s"
 msgstr ""
@@ -1191,7 +1195,7 @@ msgstr ""
 msgid "State of file prevent this action"
 msgstr ""
 
-#: forms/admission.py:194
+#: forms/admission.py:195
 msgid "State reason"
 msgstr ""
 
@@ -1255,7 +1259,7 @@ msgstr ""
 msgid "The activation key you provided is invalid."
 msgstr ""
 
-#: tests/views/test_file.py:104 views/file.py:68
+#: tests/views/test_file.py:104 views/file.py:69
 msgid "The document is uploaded correctly"
 msgstr ""
 
@@ -1263,17 +1267,17 @@ msgstr ""
 msgid "This account has expired."
 msgstr ""
 
-#: forms/account.py:71
+#: forms/account.py:72
 #, python-format
 msgid "This email does not exist in our database: %(mail)s"
 msgstr ""
 
-#: tests/views/test_admission.py:357 tests/views/test_admission.py:358
-#: tests/views/test_admission.py:359 tests/views/test_admission.py:369
-#: tests/views/test_admission.py:379 tests/views/test_admission.py:389
-#: tests/views/test_admission.py:399 tests/views/test_registration.py:299
-#: tests/views/test_registration.py:300 tests/views/test_registration.py:311
-#: tests/views/test_registration.py:322
+#: tests/views/test_admission.py:355 tests/views/test_admission.py:356
+#: tests/views/test_admission.py:357 tests/views/test_admission.py:367
+#: tests/views/test_admission.py:377 tests/views/test_admission.py:387
+#: tests/views/test_admission.py:397 tests/views/test_registration.py:300
+#: tests/views/test_registration.py:301 tests/views/test_registration.py:312
+#: tests/views/test_registration.py:323
 msgid "This field is required."
 msgstr ""
 
@@ -1336,7 +1340,7 @@ msgid "You already have an account"
 msgstr ""
 
 #: tests/views/test_registration.py:99 tests/views/test_registration.py:132
-#: views/common.py:181
+#: views/common.py:180
 msgid "You are still able to edit the form, via the 'Edit' button"
 msgstr ""
 
@@ -1346,7 +1350,7 @@ msgid ""
 msgstr ""
 
 #: tests/views/test_registration.py:103 tests/views/test_registration.py:136
-#: views/common.py:182
+#: views/common.py:181
 msgid "You can upload documents via the 'Documents'"
 msgstr ""
 
@@ -1360,14 +1364,14 @@ msgid ""
 "information :"
 msgstr ""
 
-#: tests/views/test_registration.py:169 views/common.py:206
+#: tests/views/test_registration.py:169 views/common.py:205
 msgid ""
 "Your data has been successfully saved. Some tasks are remaining to complete "
 "the registration :"
 msgstr ""
 
 #: tests/views/test_admission.py:115 tests/views/test_admission.py:253
-#: tests/views/test_registration.py:146 views/common.py:158
+#: tests/views/test_registration.py:146 views/common.py:157
 msgid ""
 "Your file is not submittable because you did not provide the following "
 "data : "
@@ -1382,7 +1386,7 @@ msgid "Your password was successfully changed."
 msgstr ""
 
 #: tests/views/test_registration.py:95 tests/views/test_registration.py:128
-#: views/registration.py:61
+#: views/registration.py:62
 msgid ""
 "Your registration file has been saved. Please consider the following "
 "information :"
@@ -1403,13 +1407,13 @@ msgstr ""
 msgid "an other address"
 msgstr ""
 
-#: tests/views/test_registration.py:191 views/common.py:200
+#: tests/views/test_registration.py:191 views/common.py:199
 msgid ""
 "if you are a European citizen, add a photocopy of your identity card or "
 "passport"
 msgstr ""
 
-#: tests/views/test_registration.py:197 views/common.py:201
+#: tests/views/test_registration.py:197 views/common.py:200
 msgid "if you are a non-EU citizen, add a photocopy of your residence permit"
 msgstr ""
 

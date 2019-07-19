@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import base64
-import io
 from mimetypes import MimeTypes
 
 import requests
@@ -36,10 +35,9 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
-from rest_framework import status
-from rest_framework.parsers import JSONParser
 
-from continuing_education.views.api import REQUEST_HEADER, get_admission, get_registration
+from continuing_education.views.api import get_admission, get_registration, get_files_list, get_file, \
+    delete_file, upload_file as api_upload_file
 from continuing_education.views.common import display_error_messages, display_success_messages
 
 MAX_ADMISSION_FILE_NAME_LENGTH = 100
@@ -48,7 +46,7 @@ FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "/admissions/%(admissio
 
 @login_required
 def upload_file(request, admission_uuid):
-    admission_file = request.FILES['myfile'] if 'myfile' in request.FILES else None
+    admission_file = request.FILES
     try:
         admission = get_admission(request, admission_uuid)
     except Http404:
@@ -56,72 +54,60 @@ def upload_file(request, admission_uuid):
     data = {
         'uploaded_by': admission['person_uuid'],
     }
-    request_to_upload = requests.post(
-        FILES_URL % {'admission_uuid': str(admission_uuid)},
-        headers=REQUEST_HEADER,
-        files={'path': admission_file},
-        data=data
+
+    response = api_upload_file(
+        request,
+        admission_uuid,
+        content=request.POST,
     )
 
-    if request_to_upload.status_code == status.HTTP_201_CREATED:
-        display_success_messages(request, _("The document is uploaded correctly"))
-    else:
-        display_error_messages(request, request_to_upload.json())
+    print(response)
+
+    # if request_to_upload.status_code == status.HTTP_201_CREATED:
+    #     display_success_messages(request, _("The document is uploaded correctly"))
+    # else:
+    #     display_error_messages(request, request_to_upload.json())
 
     return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
 
 @login_required
 def download_file(request, file_uuid, admission_uuid):
-    request_to_get = requests.get(
-        FILES_URL % {'admission_uuid': str(admission_uuid)} + str(file_uuid),
-        headers=REQUEST_HEADER
-    )
-    if request_to_get.status_code == status.HTTP_200_OK:
-        stream = io.BytesIO(request_to_get.content)
-        admission_file = JSONParser().parse(stream)
+    try:
+        admission_file = get_file(request, admission_uuid, file_uuid)
         name = get_valid_filename(admission_file['name'])
         mime_type = MimeTypes().guess_type(admission_file['name'])
         response_file = base64.b64decode(admission_file['content'])
         response = HttpResponse(response_file, mime_type)
         response['Content-Disposition'] = "attachment; filename=%s" % name
         return response
-    else:
-        return HttpResponse(status=404)
+    except Exception:
+        display_error_messages(request, _('An unexpected error occurred during download'))
+    return redirect(request.META.get('HTTP_REFERER') + '#documents')
 
 
 @login_required
 def remove_file(request, file_uuid, admission_uuid):
-    request_to_delete = requests.delete(
-        FILES_URL % {'admission_uuid': str(admission_uuid)} + str(file_uuid),
-        headers=REQUEST_HEADER
-    )
-
-    if request_to_delete.status_code == status.HTTP_204_NO_CONTENT:
+    try:
+        delete_file(request, admission_uuid, file_uuid)
         display_success_messages(request, _("File correctly deleted"))
-    else:
+    except Exception:
         display_error_messages(request, _("A problem occured during delete"))
     return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
 
-def _get_files_list(request, admission, url_continuing_education_file_api):
+def _get_files_list(request, admission):
     """
     Get files list of an admission with OSIS IUFC API
     """
     files_list = []
     try:
-        response = requests.get(
-            url=url_continuing_education_file_api,
-            headers=REQUEST_HEADER,
-        )
-        if response.status_code == status.HTTP_200_OK:
-            stream = io.BytesIO(response.content)
-            files_list = JSONParser().parse(stream)['results']
-            for file in files_list:
-                file['created_date'] = parser.parse(
-                    file['created_date']
-                )
-                file['is_deletable'] = _is_file_uploaded_by_admission_person(admission, file)
+        files_list = get_files_list(request, admission['uuid'])['results']
+        for file in files_list:
+            file['created_date'] = parser.parse(
+                file['created_date']
+            )
+            file['is_deletable'] = _is_file_uploaded_by_admission_person(admission, file)
     except requests.exceptions.ConnectionError:
         display_error_messages(request, _('An unexpected error occurred'))
     return files_list

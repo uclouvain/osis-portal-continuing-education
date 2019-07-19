@@ -67,11 +67,7 @@ def registration_detail(request, admission_uuid):
             _show_submit_warning(registration_submission_errors, request)
     else:
         registration_is_submittable = False
-    list_files = _get_files_list(
-        request,
-        admission,
-        FILES_URL % {'admission_uuid': str(admission_uuid)}
-    )
+    list_files = _get_files_list(request, admission)
     is_accepted = admission['state'] == admission_state_choices.ACCEPTED
     is_registration_submitted = admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED
     return render(request, "registration_detail.html", locals())

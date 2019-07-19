@@ -62,11 +62,7 @@ def admission_detail(request, admission_uuid):
     else:
         admission_is_submittable = False
 
-    list_files = _get_files_list(
-        request,
-        admission,
-        FILES_URL % {'admission_uuid': str(admission_uuid)}
-    )
+    list_files = _get_files_list(request, admission)
     return render(
         request,
         "admission_detail.html",
