@@ -28,7 +28,7 @@ import itertools
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
