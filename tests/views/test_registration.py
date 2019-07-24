@@ -28,7 +28,7 @@ from unittest.mock import patch
 import mock
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
