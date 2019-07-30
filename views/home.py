@@ -33,7 +33,7 @@ from continuing_education.views import api
 
 def formations_list(request):
     limit = 10
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect(main_view)
     try:
         active_page = int(request.GET.get('page'))
