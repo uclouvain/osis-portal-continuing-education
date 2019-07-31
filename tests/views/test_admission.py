@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import datetime
+import uuid
 from unittest import mock
 from unittest.mock import patch
 
@@ -63,7 +64,7 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         self.patcher = patch(
             "continuing_education.views.admission._get_files_list",
-            return_value=Response()
+            return_value={}
         )
         self.get_patcher = patch(
             "continuing_education.views.api.get_data_from_osis",
@@ -317,6 +318,7 @@ class ViewStudentAdmissionTestCase(TestCase):
                 'username': 'Test',
                 'is_deletable': True
             },
+            'uuid': str(uuid.uuid4()),
         }
         mock_get_files_list.return_value = [file]
         url = reverse('admission_detail', args=[self.admission['uuid']])

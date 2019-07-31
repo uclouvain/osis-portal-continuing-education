@@ -27,7 +27,7 @@ from collections import OrderedDict
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
-from django.contrib.auth.views import login as django_login
+from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import translation
@@ -66,7 +66,7 @@ def login(request):
                 user_language = person.language
                 translation.activate(user_language)
                 request.session[translation.LANGUAGE_SESSION_KEY] = user_language
-        django_login(request)
+        LoginView.as_view()(request)
         if not person:
             return redirect(reverse('admission_new'))
         return redirect(reverse('continuing_education_home'))
