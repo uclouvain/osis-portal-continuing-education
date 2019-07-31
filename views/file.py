@@ -24,12 +24,16 @@
 #
 ##############################################################################
 import base64
+import os
 from mimetypes import MimeTypes
 
 import requests
 from dateutil import parser
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.forms import model_to_dict
 from django.http import Http404
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -46,7 +50,8 @@ FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "/admissions/%(admissio
 
 @login_required
 def upload_file(request, admission_uuid):
-    admission_file = request.FILES
+    admission_file = request.FILES['myfile']
+
     try:
         admission = get_admission(request, admission_uuid)
     except Http404:
@@ -55,15 +60,17 @@ def upload_file(request, admission_uuid):
         'uploaded_by': admission['person_uuid'],
     }
 
+    path = default_storage.save('tmp/{}'.format(admission_file.name), admission_file.file)
+    tmp_file = os.path.join(settings.MEDIA_ROOT, path)
+
     response = api_upload_file(
         request,
         admission_uuid,
-        content=request.POST,
+        path=tmp_file,
+        uploaded_by=admission['person_uuid']
     )
 
-    print(response)
-
-    # if request_to_upload.status_code == status.HTTP_201_CREATED:
+   # if request_to_upload.status_code == status.HTTP_201_CREATED:
     #     display_success_messages(request, _("The document is uploaded correctly"))
     # else:
     #     display_error_messages(request, request_to_upload.json())
