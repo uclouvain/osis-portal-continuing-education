@@ -55,7 +55,7 @@ class ViewStudentRegistrationTestCase(TestCase):
 
         self.patcher = patch(
             "continuing_education.views.registration._get_files_list",
-            return_value=Response()
+            return_value={}
         )
         self.mocked_called_api_function = self.patcher.start()
         self.addCleanup(self.patcher.stop)
