@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import base64
+import json
 import os
 from mimetypes import MimeTypes
 
@@ -39,6 +40,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
+from openapi_client.rest import ApiException
 
 from continuing_education.views.api import get_admission, get_registration, get_files_list, get_file, \
     delete_file, upload_file as api_upload_file
@@ -56,24 +58,17 @@ def upload_file(request, admission_uuid):
         admission = get_admission(request, admission_uuid)
     except Http404:
         admission = get_registration(request, admission_uuid)
-    data = {
-        'uploaded_by': admission['person_uuid'],
-    }
 
-    path = default_storage.save('tmp/{}'.format(admission_file.name), admission_file.file)
-    tmp_file = os.path.join(settings.MEDIA_ROOT, path)
-
-    response = api_upload_file(
-        request,
-        admission_uuid,
-        path=tmp_file,
-        uploaded_by=admission['person_uuid']
-    )
-
-   # if request_to_upload.status_code == status.HTTP_201_CREATED:
-    #     display_success_messages(request, _("The document is uploaded correctly"))
-    # else:
-    #     display_error_messages(request, request_to_upload.json())
+    try:
+        api_upload_file(
+            request,
+            admission_uuid,
+            path=admission_file,
+            uploaded_by=admission['person_uuid']
+        )
+        display_success_messages(request, _("The document is uploaded correctly"))
+    except ApiException as e:
+        display_error_messages(request, json.loads(e.body))
 
     return redirect(request.META.get('HTTP_REFERER')+'#documents')
 
