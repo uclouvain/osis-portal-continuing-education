@@ -201,20 +201,27 @@ class AdmissionForm(Form):
         formation = kwargs.pop('formation', None)
         super(AdmissionForm, self).__init__(*args, **kwargs)
         if formation:
-            self.initial['formation'] = (formation['uuid'], formation['education_group']['acronym'])
+            self.initial['formation'] = (formation['uuid'], formation['education_group']['acronym'], formation['education_group']['title'])
             self.fields['formation'].choices = [self.initial['formation']]
         elif self.initial:
             self._set_initial_fields()
 
     def _set_initial_fields(self):
-        fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', 'acronym', 'uuid')]
+        fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', ['acronym', 'title'], 'uuid')]
         for field, attribute, slug in fields_to_set:
             if self.initial.get(field):
-                self.initial[field] = (
-                    self.initial[field][slug],
-                    self.initial[field]['education_group'][attribute]
-                    if field == 'formation' else self.initial[field][attribute]
-                )
+                if isinstance(attribute, str):
+                    self.initial[field] = (
+                        self.initial[field][slug],
+                        self.initial[field][attribute]
+                    )
+                elif isinstance(attribute, list):
+                    self.initial[field] = (
+                        self.initial[field][slug],
+                        "{} - {}".format(self.initial[field]['education_group'][attribute[0]],
+                                         self.initial[field]['education_group'][
+                                             attribute[1]]) if field == 'formation' else self.initial[field][attribute]
+                    )
                 self.fields[field].choices = [self.initial[field]]
 
 

@@ -64,7 +64,7 @@
                             <tr>
                                 <td><a href="{% url 'admission_detail' admission_uuid=admission.uuid %}">
                                     {% if admission.formation.education_group.code %}{{ admission.formation.education_group.code }} - {% endif %}
-                                    {{ admission.formation.education_group.acronym }} - {{ admission.formation.education_group.academic_year }}
+                                    {{ admission.formation.education_group.acronym }} - {{ admission.formation.education_group.title }} - {{ admission.formation.education_group.academic_year }}
                                 </a></td>
                                 <td class="admission-state">
                                     {% if admission.state == "Waiting" %}
@@ -110,7 +110,7 @@
                             <tr>
                                 <td><a href="{% url 'registration_detail' admission_uuid=registration.uuid %}">
                                     {% if admission.formation.education_group.code %}{{ admission.formation.education_group.code }} - {% endif %}
-                                    {{ registration.formation.education_group.acronym }} - {{ registration.formation.education_group.academic_year }}
+                                    {{ registration.formation.education_group.acronym }} - {{ registration.formation.education_group.title }} - {{ registration.formation.education_group.academic_year }}
                                 </a></td>
                                 <td>{{ registration.formation.management_entity }}</td>
                                 <td class="admission-state">

@@ -63,7 +63,7 @@
             </a>
         {% endif %}
         <h2>{% trans 'Registration' %}</h2>
-        <h4>{{ admission.formation.education_group.acronym | default:"-" }}</h4>
+        <h4>{{ admission.formation.education_group.acronym | default:"-" }} - {{ admission.formation.education_group.title | default:"-" }}</h4>
     </div>
     {% include 'template_messages.html' %}
     <div class="panel panel-default">
@@ -81,7 +81,7 @@
                         <div class="col-md-3">{% bootstrap_label _("First name") %} <br/> {{ admission.person_information.person.first_name | default:"-" }} </div>
                         <div class="col-md-3">{% bootstrap_label _("Last name") %} <br/> {{ admission.person_information.person.last_name | default:"-" }} </div>
                         <div class="col-md-3">{% bootstrap_label _("Gender") %} <br/> {{ admission.person_information.person.gender | default:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Citizenship") %} <br/> {{ admission.citizenship.nationality | upper | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Citizenship") %} <br/>{{ admission.citizenship.nationality | default:"-" | upper }</div>
                     </div>
                     <div class="row form-group">
                         <div class="col-md-3">{% bootstrap_label _("Birth date") %} <br/> {{ admission.person_information.birth_date | default:"-" }} </div>
