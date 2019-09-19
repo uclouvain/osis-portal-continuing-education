@@ -40,7 +40,8 @@ def ContinuingEducationTrainingDictFactory(active=True):
         'active': active,
         'education_group': {
             'uuid': ed.uuid,
-            'acronym': edy.acronym
+            'acronym': edy.acronym,
+            'title': edy.title,
         },
         'managers': [
             {
