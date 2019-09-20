@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:54+0200\n"
+"POT-Creation-Date: 2019-09-20 14:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -613,12 +613,6 @@ msgid ""
 msgstr ""
 
 msgid ""
-"In accordance with regulation on the protection of individuals with regard "
-"to the processing of personal data, we undertake to protect your personal "
-"data."
-msgstr ""
-
-msgid ""
 "Individual course(s) or language course at the language institute of "
 "UCLouvain (ILV)"
 msgstr ""
@@ -791,6 +785,9 @@ msgid "Print the completed registration form"
 msgstr ""
 
 msgid "Prior experience validation"
+msgstr ""
+
+msgid "Privacy."
 msgstr ""
 
 msgid "Private"
@@ -977,11 +974,6 @@ msgid "Waiting"
 msgstr ""
 
 msgid "Waiting state reason"
-msgstr ""
-
-msgid ""
-"We ensures that these data are used for IUFC only, the data collected will "
-"not be communicated to a third party."
 msgstr ""
 
 msgid "Which address would you like your post to be sent to? *"
