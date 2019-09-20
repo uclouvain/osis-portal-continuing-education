@@ -68,7 +68,7 @@ class ContinuingEducationPasswordResetForm(forms.Form):
         try:
             user = User.objects.get(username=email)
         except (ObjectDoesNotExist, MultipleObjectsReturned):
-            error_message = _('This email does not exist in our database: %(mail)s').format(mail=email)
+            error_message = _('This email does not exist in our database: %(mail)s') % {"mail": email}
         else:
             scheme = 'https' if request.is_secure() else 'http'
             site = get_current_site(request)
