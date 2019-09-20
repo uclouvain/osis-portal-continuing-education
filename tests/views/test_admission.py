@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import datetime
+import json
 import uuid
 from unittest import mock
 from unittest.mock import patch
@@ -329,6 +330,15 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         self.assertEqual(response.context['admission'], self.admission)
         self.assertEqual(response.context['list_files'], [file])
+
+    @mock.patch('continuing_education.views.admission.get_continuing_education_training')
+    def test_ajax_get_formation_information(self, mock_get_training):
+        mock_get_training.return_value = {'additional_information_label': 'additional_information'}
+        response = self.client.get(reverse('get_formation_information'), data={
+            'formation_uuid': self.formation['uuid']
+        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), {'additional_information_label': 'additional_information'})
 
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
