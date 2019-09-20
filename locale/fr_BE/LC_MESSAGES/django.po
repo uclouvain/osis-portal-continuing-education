@@ -974,7 +974,7 @@ msgid "Payment complete"
 msgstr "En ordre de paiement"
 
 msgid "Phone mobile"
-msgstr "GSM"
+msgstr "Mobile"
 
 msgid "Phone number"
 msgstr "Numéro de téléphone"
