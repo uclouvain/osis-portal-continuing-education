@@ -1181,7 +1181,7 @@ msgstr "Ce compte a expiré."
 
 #, python-format
 msgid "This email does not exist in our database: %(mail)s"
-msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
+msgstr "Cette adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
