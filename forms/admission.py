@@ -194,6 +194,12 @@ class AdmissionForm(Form):
         label=_("State reason")
     )
 
+    additional_information = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+        label=_("Additional Information")
+    )
+
     def clean_phone_mobile(self):
         return self.cleaned_data['phone_mobile'].replace(' ', '')
 

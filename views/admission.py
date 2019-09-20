@@ -28,10 +28,11 @@ import itertools
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_GET
 
 from base.models.person import Person
 from continuing_education.forms.account import ContinuingEducationPersonForm
@@ -40,9 +41,11 @@ from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views import api
+from continuing_education.views.api import get_continuing_education_training
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message
 from continuing_education.views.file import _get_files_list, FILES_URL
+from osis_common.decorators.ajax import ajax_required
 
 
 @login_required
@@ -227,3 +230,12 @@ def _update_or_create_admission(adm_form, admission, request):
     else:
         admission, status = api.post_admission(request, adm_form.cleaned_data)
     return admission
+
+
+@ajax_required
+@login_required
+@require_GET
+def get_formation_information(request):
+    formation_uuid = request.GET.get('formation_uuid', None)
+    training = get_continuing_education_training(request, formation_uuid)
+    return JsonResponse(data={'additional_information_label': training['additional_information_label']})

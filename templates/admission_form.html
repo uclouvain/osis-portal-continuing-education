@@ -132,6 +132,11 @@
                 </div>
 
                 <div id="formation" role="tabpanel" class="panel-body tab-pane">
+                    <div id="additional_information_block">
+                        {% bootstrap_label content=_("Additional Information") label_class="required" %}
+                        <p class="additional_information_label" style="font-style: italic;">-</p>
+                        {% bootstrap_field admission_form.additional_information label_class="required" show_label=False%}
+                    </div>
                     {% bootstrap_field admission_form.motivation label_class="required" %}
                     {% bootstrap_field admission_form.professional_personal_interests label_class="required" %}
                 </div>
@@ -246,6 +251,33 @@
      $('.btnPrevious').click(function(){
         $('.nav-tabs > .active').prev('li').find('a').trigger('click');
      });
+
+    $("li a[href='#formation").on('click', function(){
+        let formation_uuid = $("#id_formation").val();
+        console.log(formation_uuid);
+        if(formation_uuid){
+            $.ajax({
+                url: '{% url 'get_formation_information' %}',
+                method: "GET",
+                data: {
+                    'formation_uuid': formation_uuid,
+                },
+                success: (data) => {
+                    if(data.additional_information_label) {
+                        $("#additional_information_block").show();
+                        $(".additional_information_label").text(data.additional_information_label);
+                    } else {
+                        console.log($("#additional_information_block"));
+                        $("#additional_information_block").hide();
+                    }
+                }
+            });
+        } else {
+            $("#additional_information_block").hide();
+        }
+    })
+
+
 </script>
 
 {% endblock %}
