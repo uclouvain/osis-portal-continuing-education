@@ -202,8 +202,8 @@ class AdmissionForm(Form):
         super(AdmissionForm, self).__init__(*args, **kwargs)
         if formation:
             self.initial['formation'] = (formation['uuid'],
-                                         formation['education_group']['acronym'],
-                                         formation['education_group']['title'])
+                                         "{} - {}".format(formation['education_group']['acronym'],
+                                                          formation['education_group']['title']))
             self.fields['formation'].choices = [self.initial['formation']]
         elif self.initial:
             self._set_initial_fields()
