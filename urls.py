@@ -96,4 +96,5 @@ urlpatterns = [
         ContinuingEducationTrainingAutocomplete.as_view(),
         name='cetraining-autocomplete',
     ),
+    url(r'^ajax/formation/', admission.get_formation_information, name='get_formation_information')
 ]
