@@ -254,7 +254,6 @@
 
     $("li a[href='#formation").on('click', function(){
         let formation_uuid = $("#id_formation").val();
-        console.log(formation_uuid);
         if(formation_uuid){
             $.ajax({
                 url: '{% url 'get_formation_information' %}',
@@ -267,7 +266,6 @@
                         $("#additional_information_block").show();
                         $(".additional_information_label").text(data.additional_information_label);
                     } else {
-                        console.log($("#additional_information_block"));
                         $("#additional_information_block").hide();
                     }
                 }
