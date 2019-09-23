@@ -152,6 +152,7 @@ def update_admission(request, object_to_update):
 
 
 def update_registration(request, object_to_update):
+    print(object_to_update)
     return update_data_to_osis(request, "registrations", object_to_update)
 
 
@@ -172,12 +173,12 @@ def prepare_registration_data(registration, address, forms):
 
     address['country'] = address['country']['iso_code']
 
-    if forms['registration'].cleaned_data['use_address_for_billing']:
+    if forms['registration'].cleaned_data['use_address_for_billing'] == "True":
         forms['registration'].cleaned_data['billing_address'] = address
     else:
         forms['registration'].cleaned_data['billing_address'] = forms['billing'].cleaned_data
 
-    if forms['registration'].cleaned_data['use_address_for_post']:
+    if forms['registration'].cleaned_data['use_address_for_post'] == "True":
         forms['registration'].cleaned_data['residence_address'] = address
     else:
         forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
