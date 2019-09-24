@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-20 14:14+0200\n"
+"POT-Creation-Date: 2019-09-24 07:58+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -511,6 +511,11 @@ msgstr ""
 "être collée sur le document intitulé « commande d’une carte d’accès "
 "UCLouvain »"
 
+#, fuzzy
+#| msgid "Additional email"
+msgid "Additional Information"
+msgstr "Adresse email additionnelle"
+
 msgid "Additional email"
 msgstr "Adresse email additionnelle"
 
@@ -609,6 +614,10 @@ msgid "By checking the checkbox, I accept that my data are used by IUFC."
 msgstr ""
 "En cochant cette case, j'accepte que les données fournies dans ce formulaire "
 "soient exploitées par l'IUFC."
+
+msgid "By checking this box, you undertake to pay the registration fees"
+msgstr ""
+"En cochant cette case, vous vous engagez à payer les droits d'inscription"
 
 msgid "By customized mail"
 msgstr "Par courrier personnalisé"
@@ -715,8 +724,9 @@ msgstr "Documents"
 msgid "Draft"
 msgstr "Brouillon"
 
+msgctxt "edit continuing_education"
 msgid "Edit"
-msgstr "Editer"
+msgstr "Modifier"
 
 msgid "Education"
 msgstr "Education"
