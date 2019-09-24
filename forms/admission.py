@@ -258,8 +258,11 @@ class StrictAdmissionForm(AdmissionForm):
             'activity_sector',
             'motivation',
             'professional_personal_interests',
-            'formation',
+            'formation'
         ]
+
+        if type(data['formation']) is dict and data['formation']['additional_information_label']:
+            required_fields.append('additional_information')
 
         for required_field in required_fields:
             self.fields[required_field].required = True
