@@ -42,13 +42,18 @@
           <div class="modal-body">
               {% if admission.state == 'Draft' %}
                 {% trans 'It is not possible to edit an admission once submitted' %}
+                  <br>
+                  <br>
+                  <input type="checkbox" id="chb_registration_fees"/>
+                  &nbsp;&nbsp;&nbsp;
+                  <label>{% trans 'By checking this box, you undertake to pay the registration fees' %}</label>
               {% elif admission.state == 'Accepted' %}
                 {% trans 'It is not possible to edit an registration once submitted' %}
               {% endif %}
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default text-capitalize" data-dismiss="modal">{% trans 'Cancel' %}</button>
-            <button type="submit" name="submit" value="submit" class="btn btn-primary">{% trans 'Finalize' %}</button>
+            <button type="submit" name="submit" value="submit" class="btn btn-primary" disabled id="btn_finalize">{% trans 'Finalize' %}</button>
           </div>
         </div>
       </div>
