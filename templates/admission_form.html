@@ -286,7 +286,7 @@
             success: (data) => {
                 if (data.additional_information_label) {
                     $("#additional_tab").show();
-                    $(".additional_information_label").text(data.additional_information_label);
+                    $(".additional_information_label").html(data.additional_information_label);
                 } else {
                     $("#additional_tab").hide();
                 }
