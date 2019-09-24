@@ -511,10 +511,8 @@ msgstr ""
 "être collée sur le document intitulé « commande d’une carte d’accès "
 "UCLouvain »"
 
-#, fuzzy
-#| msgid "Additional email"
 msgid "Additional Information"
-msgstr "Adresse email additionnelle"
+msgstr "Informations Complémentaires"
 
 msgid "Additional email"
 msgstr "Adresse email additionnelle"
