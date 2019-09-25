@@ -262,9 +262,9 @@ class StrictAdmissionForm(AdmissionForm):
             'formation'
         ]
 
-        formation_info = data['formation'] if type(data['formation']) is dict else data['formation_info']
+        formation_info = data['formation'] if type(data['formation']) is dict else data.get('formation_info', None)
 
-        if _has_required_additional_information(formation_info):
+        if formation_info and _has_required_additional_information(formation_info):
             required_fields.append('additional_information')
 
         for required_field in required_fields:
