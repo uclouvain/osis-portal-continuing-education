@@ -188,6 +188,8 @@ def _get_formation(request):
 
 def _is_admission_submittable_and_show_errors(admission, errors_fields, request):
     if admission and not request.POST:
+        formation_uuid, formation_acronym = admission['formation']
+        admission['formation_info'] = get_continuing_education_training(request, formation_uuid)
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:

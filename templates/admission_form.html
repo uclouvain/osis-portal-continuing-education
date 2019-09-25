@@ -228,6 +228,7 @@
 
     //show missing fields in golden
     let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
+    console.log(errors_fields);
     errors_fields = JSON.parse(errors_fields);
     for(field of errors_fields)
         $('#id_'+field).parent().addClass('has-warning');
@@ -284,7 +285,7 @@
                 'formation_uuid': formation_uuid,
             },
             success: (data) => {
-                if (data.additional_information_label) {
+                if (stripTags(data.additional_information_label)) {
                     $("#additional_tab").show();
                     $(".additional_information_label").html(data.additional_information_label);
                 } else {
@@ -292,6 +293,10 @@
                 }
             }
         });
+    }
+
+    function stripTags(str){
+        return str.replace(/(<([^>]+)>)/ig,"");
     }
 
 </script>
