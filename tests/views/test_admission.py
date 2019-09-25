@@ -338,7 +338,10 @@ class ViewStudentAdmissionTestCase(TestCase):
             'formation_uuid': self.formation['uuid']
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content.decode('utf-8')), {'additional_information_label': 'additional_information'})
+        self.assertEqual(
+            json.loads(response.content.decode('utf-8')),
+            {'additional_information_label': '<p>additional_information</p>'}
+        )
 
 
 class AdmissionSubmissionErrorsTestCase(TestCase):

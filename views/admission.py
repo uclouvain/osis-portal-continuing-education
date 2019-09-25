@@ -31,6 +31,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.urls import reverse
 from django.shortcuts import render, redirect
+from django.utils.html import linebreaks
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods, require_GET
 
@@ -238,4 +239,6 @@ def _update_or_create_admission(adm_form, admission, request):
 def get_formation_information(request):
     formation_uuid = request.GET.get('formation_uuid', None)
     training = get_continuing_education_training(request, formation_uuid)
-    return JsonResponse(data={'additional_information_label': training['additional_information_label']})
+    return JsonResponse(data={
+        'additional_information_label': linebreaks(training['additional_information_label'])
+    })
