@@ -5,6 +5,7 @@ from django.forms import ChoiceField, Form
 from django.utils.translation import gettext_lazy as _
 
 from continuing_education.models.enums import enums, admission_state_choices
+from continuing_education.views.api import get_continuing_education_training
 
 phone_regex = RegexValidator(
     regex=r'^(?P<prefix_intro>\+|0{1,2})\d{7,15}$',
@@ -261,7 +262,9 @@ class StrictAdmissionForm(AdmissionForm):
             'formation'
         ]
 
-        if type(data['formation']) is dict and _has_required_additional_information(data['formation']):
+        formation_info = data['formation'] if type(data['formation']) is dict else data.get('formation_info', None)
+
+        if formation_info and _has_required_additional_information(formation_info):
             required_fields.append('additional_information')
 
         for required_field in required_fields:

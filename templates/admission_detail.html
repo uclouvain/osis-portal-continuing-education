@@ -165,6 +165,11 @@
                         <div class="form-group">
                             {% bootstrap_label _("Formation") %} <br/> {{ admission.formation.education_group.acronym | default:"-" }} - {{ admission.formation.education_group.title | default:"-" }}
                         </div>
+                        {% if admission.formation.additional_information_label %}
+                        <div class="form-group">
+                            {% bootstrap_label _("Additional Information") %} <br/> {{ admission.additional_information | default:"-" }}
+                        </div>
+                        {% endif %}
                 </div>
 
                 <div class="panel-heading">
@@ -229,7 +234,6 @@
     <script>
         $('.high_school_graduation_year').hide();
         $('#id_high_school_diploma').on('change', function() {
-            console.log($(this).find(":selected").val());
             $('.high_school_graduation_year').toggle($(this).find(":selected").val());
         });
 

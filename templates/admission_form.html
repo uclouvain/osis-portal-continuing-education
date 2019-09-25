@@ -284,7 +284,7 @@
                 'formation_uuid': formation_uuid,
             },
             success: (data) => {
-                if (data.additional_information_label) {
+                if (stripTags(data.additional_information_label)) {
                     $("#additional_tab").show();
                     $(".additional_information_label").html(data.additional_information_label);
                 } else {
@@ -292,6 +292,10 @@
                 }
             }
         });
+    }
+
+    function stripTags(str){
+        return str.replace(/(<([^>]+)>)/ig,"");
     }
 
 </script>
