@@ -228,7 +228,6 @@
 
     //show missing fields in golden
     let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
-    console.log(errors_fields);
     errors_fields = JSON.parse(errors_fields);
     for(field of errors_fields)
         $('#id_'+field).parent().addClass('has-warning');
