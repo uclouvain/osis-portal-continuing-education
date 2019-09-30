@@ -44,9 +44,12 @@
                 {% trans 'It is not possible to edit an admission once submitted' %}
                   <br>
                   <br>
-                  <input type="checkbox" id="chb_registration_fees"/>
-                  &nbsp;&nbsp;&nbsp;
-                  <label>{% trans 'By checking this box, you undertake to pay the registration fees' %}</label>
+                  <div class="checkbox">
+                      <label>
+                          <input type="checkbox" id="chb_registration_fees"/>
+                          {% trans 'By finalizing my admission, I undertake to pay the registration fees upon receipt of invoice' %}
+                      </label>
+                  </div>
               {% elif admission.state == 'Accepted' %}
                 {% trans 'It is not possible to edit an registration once submitted' %}
               {% endif %}
