@@ -214,6 +214,9 @@ class AdmissionForm(Form):
             self.fields['formation'].choices = [self.initial['formation']]
         elif self.initial:
             self._set_initial_fields()
+        self.fields['additional_information_label'].widget.attrs['placeholder'] = _(
+            "Write down here the answers to further questions related to the chosen training"
+        )
 
     def _set_initial_fields(self):
         fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', ['acronym', 'title'], 'uuid')]
