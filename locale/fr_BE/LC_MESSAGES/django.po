@@ -1569,7 +1569,7 @@ msgid ""
 "Write down here the answers to further questions related to the chosen "
 "training"
 msgstr ""
-"ndiquez ici les réponses aux questions complémentaires relatives à la "
+"Indiquez ici les réponses aux questions complémentaires relatives à la "
 "formation choisie"
 
 #: models/enums/enums.py:5
