@@ -54,7 +54,7 @@ def admission_detail(request, admission_uuid):
     try:
         admission = api.get_admission(request, admission_uuid)
     except Http404:
-        _get_admission_or_redirect(request, admission_uuid )
+        _get_admission_or_redirect(request, admission_uuid)
 
     if admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
