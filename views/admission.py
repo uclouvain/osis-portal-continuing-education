@@ -54,15 +54,16 @@ def admission_detail(request, admission_uuid):
     try:
         admission = api.get_admission(request, admission_uuid)
     except Http404:
+
         registration = api.get_registration(request, admission_uuid)
         if registration and registration['state'] == admission_state_choices.ACCEPTED:
             return redirect(
                 reverse('registration_detail', kwargs={'admission_uuid': admission_uuid if registration else ''}),
             )
 
-    if admission and admission['state'] == admission_state_choices.SUBMITTED:
+    if admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
-    if admission and admission['state'] == admission_state_choices.DRAFT:
+    if admission['state'] == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,
             title=_("Your admission file has been saved. Please consider the following information :")
