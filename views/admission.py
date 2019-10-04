@@ -53,45 +53,42 @@ from osis_common.decorators.ajax import ajax_required
 def admission_detail(request, admission_uuid):
     try:
         admission = api.get_admission(request, admission_uuid)
-        if admission['state'] == admission_state_choices.SUBMITTED:
-            add_contact_for_edit_message(request, formation=admission['formation'])
-        if admission['state'] == admission_state_choices.DRAFT:
-            add_informations_message_on_submittable_file(
-                request=request,
-                title=_("Your admission file has been saved. Please consider the following information :")
-            )
-            admission_submission_errors, errors_fields = get_submission_errors(admission)
-            admission_is_submittable = not admission_submission_errors
-            if not admission_is_submittable:
-                _show_submit_warning(admission_submission_errors, request)
-        else:
-            admission_is_submittable = False
-
-        list_files = _get_files_list(
-            request,
-            admission,
-            FILES_URL % {'admission_uuid': str(admission_uuid)}
-        )
-        return render(
-            request,
-            "admission_detail.html",
-            {
-                'admission': admission,
-                'admission_is_submittable': admission_is_submittable,
-                'list_files': list_files,
-                'states': {
-                    'is_draft': admission['state'] == admission_state_choices.DRAFT,
-                    'is_rejected': admission['state'] == admission_state_choices.REJECTED,
-                    'is_waiting': admission['state'] == admission_state_choices.WAITING
-                }
-            }
-        )
     except Http404:
-        registration = api.get_registration(request, admission_uuid)
-        if registration and registration['state'] == admission_state_choices.ACCEPTED:
-            return redirect(
-                reverse('registration_detail', kwargs={'admission_uuid': admission_uuid if registration else ''}),
-            )
+        _get_admission_or_redirect(request, admission_uuid )
+
+    if admission['state'] == admission_state_choices.SUBMITTED:
+        add_contact_for_edit_message(request, formation=admission['formation'])
+    if admission['state'] == admission_state_choices.DRAFT:
+        add_informations_message_on_submittable_file(
+            request=request,
+            title=_("Your admission file has been saved. Please consider the following information :")
+        )
+        admission_submission_errors, errors_fields = get_submission_errors(admission)
+        admission_is_submittable = not admission_submission_errors
+        if not admission_is_submittable:
+            _show_submit_warning(admission_submission_errors, request)
+    else:
+        admission_is_submittable = False
+
+    list_files = _get_files_list(
+        request,
+        admission,
+        FILES_URL % {'admission_uuid': str(admission_uuid)}
+    )
+    return render(
+        request,
+        "admission_detail.html",
+        {
+            'admission': admission,
+            'admission_is_submittable': admission_is_submittable,
+            'list_files': list_files,
+            'states': {
+                'is_draft': admission['state'] == admission_state_choices.DRAFT,
+                'is_rejected': admission['state'] == admission_state_choices.REJECTED,
+                'is_waiting': admission['state'] == admission_state_choices.WAITING
+            }
+        }
+    )
 
 
 def _show_save_before_submit(request):
@@ -251,3 +248,12 @@ def get_formation_information(request):
     return JsonResponse(data={
         'additional_information_label': linebreaks(training['additional_information_label'])
     })
+
+
+def _get_admission_or_redirect(request, admission_uuid):
+    registration = api.get_registration(request, admission_uuid)
+    if registration and registration['state'] == admission_state_choices.ACCEPTED:
+        return redirect(
+            reverse('registration_detail', kwargs={'admission_uuid': admission_uuid if registration else ''}),
+        )
+    return
