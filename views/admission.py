@@ -54,7 +54,13 @@ def admission_detail(request, admission_uuid):
     try:
         admission = api.get_admission(request, admission_uuid)
     except Http404:
-        _get_admission_or_redirect(request, admission_uuid)
+        registration = api.get_registration(request, admission_uuid)
+        if registration and registration['state'] == admission_state_choices.ACCEPTED:
+            return redirect(reverse('registration_detail',
+                                    kwargs={'admission_uuid': admission_uuid if registration else ''}),
+                            )
+        else:
+            return Http404
 
     if admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
@@ -248,12 +254,3 @@ def get_formation_information(request):
     return JsonResponse(data={
         'additional_information_label': linebreaks(training['additional_information_label'])
     })
-
-
-def _get_admission_or_redirect(request, admission_uuid):
-    registration = api.get_registration(request, admission_uuid)
-    if registration and registration['state'] == admission_state_choices.ACCEPTED:
-        return redirect(
-            reverse('registration_detail', kwargs={'admission_uuid': admission_uuid if registration else ''}),
-        )
-    return
