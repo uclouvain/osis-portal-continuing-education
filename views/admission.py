@@ -28,7 +28,7 @@ import itertools
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.utils.html import linebreaks
@@ -51,10 +51,20 @@ from osis_common.decorators.ajax import ajax_required
 
 @login_required
 def admission_detail(request, admission_uuid):
-    admission = api.get_admission(request, admission_uuid)
-    if admission and admission['state'] == admission_state_choices.SUBMITTED:
+    try:
+        admission = api.get_admission(request, admission_uuid)
+    except Http404:
+        registration = api.get_registration(request, admission_uuid)
+        if registration and registration['state'] == admission_state_choices.ACCEPTED:
+            return redirect(reverse('registration_detail',
+                                    kwargs={'admission_uuid': admission_uuid if registration else ''}),
+                            )
+        else:
+            return Http404
+
+    if admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
-    if admission and admission['state'] == admission_state_choices.DRAFT:
+    if admission['state'] == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,
             title=_("Your admission file has been saved. Please consider the following information :")
