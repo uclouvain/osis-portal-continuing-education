@@ -46,6 +46,7 @@ from continuing_education.views.api import get_continuing_education_training
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message
 from continuing_education.views.file import _get_files_list, FILES_URL
+from frontoffice.settings.base import MAX_UPLOAD_SIZE
 from osis_common.decorators.ajax import ajax_required
 
 
@@ -92,7 +93,8 @@ def admission_detail(request, admission_uuid):
                 'is_draft': admission['state'] == admission_state_choices.DRAFT,
                 'is_rejected': admission['state'] == admission_state_choices.REJECTED,
                 'is_waiting': admission['state'] == admission_state_choices.WAITING
-            }
+            },
+            'MAX_UPLOAD_SIZE': MAX_UPLOAD_SIZE
         }
     )
 
