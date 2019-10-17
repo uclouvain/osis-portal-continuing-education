@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-02 15:34+0200\n"
+"POT-Creation-Date: 2019-10-17 16:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -262,6 +262,10 @@ msgid ""
 msgstr ""
 
 msgid " or "
+msgstr ""
+
+#, python-format
+msgid "\"File is too large: maximum upload size allowed is %(max_size)s.\""
 msgstr ""
 
 #, python-format
@@ -589,6 +593,9 @@ msgid "Home address"
 msgstr ""
 
 msgid "House name"
+msgstr ""
+
+msgid "I do not have a first name"
 msgstr ""
 
 msgid "I would like the billing address to be :"

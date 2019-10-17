@@ -33,12 +33,12 @@ from continuing_education.tests.factories.person import PersonDictFactory
 
 class TestPersonForm(TestCase):
     def test_valid_form(self):
-        person = PersonDictFactory(PersonFactory().uuid)
+        person = PersonDictFactory(PersonFactory())
         form = PersonForm(data=person, no_first_name_checked=False)
         self.assertTrue(form.is_valid(), form.errors)
 
     def test_no_first_name_form(self):
-        person = PersonDictFactory(PersonFactory().uuid)
+        person = PersonDictFactory(PersonFactory())
         person.pop('first_name')
         form = PersonForm(data=person, no_first_name_checked=True)
         self.assertTrue(form.is_valid(), form.errors)

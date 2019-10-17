@@ -33,15 +33,9 @@ from base.models.person import Person
 
 def ContinuingEducationPersonDictFactory(person_uuid):
     person = Person.objects.get(uuid=person_uuid)
-    person = {
+    return {
         'uuid': str(uuid.uuid4()),
-        'person': {
-            'uuid': str(person_uuid),
-            'email': person.email,
-            'first_name': person.first_name,
-            'last_name': person.last_name,
-            'gender': person.gender
-        },
+        'person': PersonDictFactory(person),
         'birth_country': {
             'name': factory.Sequence(lambda n: 'Country - %d' % n),
             'iso_code': factory.Sequence(lambda n: str(n)[-2:])
@@ -49,13 +43,11 @@ def ContinuingEducationPersonDictFactory(person_uuid):
         'birth_location': factory.Faker('city'),
         'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
     }
-    return person
 
 
-def PersonDictFactory(person_uuid):
-    person = Person.objects.get(uuid=person_uuid)
+def PersonDictFactory(person):
     return {
-        'uuid': str(person_uuid),
+        'uuid': str(person.uuid),
         'email': person.email,
         'first_name': person.first_name,
         'last_name': person.last_name,

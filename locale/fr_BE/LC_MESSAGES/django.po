@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-02 15:34+0200\n"
+"POT-Creation-Date: 2019-10-17 16:48+0200\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -463,6 +463,10 @@ msgid " or "
 msgstr " ou "
 
 #, python-format
+msgid "\"File is too large: maximum upload size allowed is %(max_size)s.\""
+msgstr ""
+
+#, python-format
 msgid ""
 "<span>Special Enrolment</span> application %(aca_year)s<br/>\n"
 "    Teaching and Training Department<br/>\n"
@@ -813,6 +817,9 @@ msgstr "Adresse du domicile"
 
 msgid "House name"
 msgstr "Lieu-dit (éventuellement)"
+
+msgid "I do not have a first name"
+msgstr "Je n'ai pas de prénom"
 
 msgid "I would like the billing address to be :"
 msgstr "Je souhaite que l'adresse de facturation soit :"
