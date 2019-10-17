@@ -1239,7 +1239,7 @@ msgid "You already have an account"
 msgstr "Vous avez déjà un compte"
 
 msgid "You are still able to edit the form, via the 'Edit' button"
-msgstr "Vous pouvez encore le modifier via le bouton 'Editer'"
+msgstr "Vous pouvez encore le modifier via le bouton 'Modifier'"
 
 msgid ""
 "You can save an application form and access it later until it is submitted"
