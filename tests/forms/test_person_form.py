@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,41 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-import uuid
 
-import factory.fuzzy
+from django.test import TestCase
 
-from base.models.person import Person
-
-
-def ContinuingEducationPersonDictFactory(person_uuid):
-    person = Person.objects.get(uuid=person_uuid)
-    person = {
-        'uuid': str(uuid.uuid4()),
-        'person': {
-            'uuid': str(person_uuid),
-            'email': person.email,
-            'first_name': person.first_name,
-            'last_name': person.last_name,
-            'gender': person.gender
-        },
-        'birth_country': {
-            'name': factory.Sequence(lambda n: 'Country - %d' % n),
-            'iso_code': factory.Sequence(lambda n: str(n)[-2:])
-        },
-        'birth_location': factory.Faker('city'),
-        'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
-    }
-    return person
+from base.tests.factories.person import PersonFactory
+from continuing_education.forms.person import PersonForm
+from continuing_education.tests.factories.person import PersonDictFactory
 
 
-def PersonDictFactory(person_uuid):
-    person = Person.objects.get(uuid=person_uuid)
-    return {
-        'uuid': str(person_uuid),
-        'email': person.email,
-        'first_name': person.first_name,
-        'last_name': person.last_name,
-        'gender': person.gender
-    }
+class TestPersonForm(TestCase):
+    def test_valid_form(self):
+        person = PersonDictFactory(PersonFactory().uuid)
+        form = PersonForm(data=person, no_first_name_checked=False)
+        self.assertTrue(form.is_valid(), form.errors)
+
+    def test_no_first_name_form(self):
+        person = PersonDictFactory(PersonFactory().uuid)
+        person.pop('first_name')
+        form = PersonForm(data=person, no_first_name_checked=True)
+        self.assertTrue(form.is_valid(), form.errors)
