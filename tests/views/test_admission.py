@@ -32,9 +32,9 @@ from unittest.mock import patch
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.urls import reverse
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
 
@@ -198,38 +198,38 @@ class ViewStudentAdmissionTestCase(TestCase):
         mock_post.return_value = (self.admission, HttpResponse.status_code)
         admission = {
             'activity_sector': 'PRIVATE',
-             'awareness_other': '',
-             'birth_country': 'BE',
-             'birth_date_day': '18',
-             'birth_date_month': '4',
-             'birth_date_year': '1992',
-             'birth_location': 'Bruxelles',
-             'citizenship': 'DZ',
-             'city': 'Roux',
-             'country': 'ZA',
-             'current_employer': 'da',
-             'current_occupation': 'da',
-             'email': 'benjamin@daubry.be',
-             'first_name': 'Benjamin',
-             'formation': self.formation['uuid'],
-             'gender': 'M',
-             'high_school_diploma': 'False',
-             'high_school_graduation_year': '',
-             'last_degree_field': 'da',
-             'last_degree_graduation_year': '2014',
-             'last_degree_institution': 'da',
-             'last_degree_level': 'dada',
-             'last_name': 'Daubry',
-             'location': 'Rue de Dinant 11',
-             'motivation': 'dada',
-             'other_educational_background': '',
-             'past_professional_activities': '',
-             'phone_mobile': '0474945669',
-             'postal_code': '5620',
-             'professional_impact': 'dada',
-             'professional_status': 'EMPLOYEE',
-             'state': 'Draft'
-                     }
+            'awareness_other': '',
+            'birth_country': 'BE',
+            'birth_date_day': '18',
+            'birth_date_month': '4',
+            'birth_date_year': '1992',
+            'birth_location': 'Bruxelles',
+            'citizenship': 'DZ',
+            'city': 'Roux',
+            'country': 'ZA',
+            'current_employer': 'da',
+            'current_occupation': 'da',
+            'email': 'benjamin@daubry.be',
+            'first_name': 'Benjamin',
+            'formation': self.formation['uuid'],
+            'gender': 'M',
+            'high_school_diploma': 'False',
+            'high_school_graduation_year': '',
+            'last_degree_field': 'da',
+            'last_degree_graduation_year': '2014',
+            'last_degree_institution': 'da',
+            'last_degree_level': 'dada',
+            'last_name': 'Daubry',
+            'location': 'Rue de Dinant 11',
+            'motivation': 'dada',
+            'other_educational_background': '',
+            'past_professional_activities': '',
+            'phone_mobile': '0474945669',
+            'postal_code': '5620',
+            'professional_impact': 'dada',
+            'professional_status': 'EMPLOYEE',
+            'state': 'Draft'
+        }
         response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
@@ -350,7 +350,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
         person_iufc = ContinuingEducationPersonDictFactory(PersonFactory().uuid)
         self.admission_model = AdmissionDictFactory(person_iufc)
-        person = PersonFactory()
+        PersonFactory()
         self.admission = AdmissionDictFactory(person_iufc, SUBMITTED)
 
     def test_admission_is_submittable(self):

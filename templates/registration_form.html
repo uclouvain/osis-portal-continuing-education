@@ -4,27 +4,27 @@
 {% load bootstrap3 %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% block breadcrumb %}
@@ -68,7 +68,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field id_form.gender %}</div>
-                        <div class="col-md-6">{% bootstrap_field person_form.birth_date%}</div>
+                        <div class="col-md-6">{% bootstrap_field person_form.birth_date %}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field person_form.birth_location %}</div>
@@ -106,7 +106,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            {% bootstrap_field form.previous_ucl_registration label=_("Previous UCLouvain registration")%}
+                            {% bootstrap_field form.previous_ucl_registration label=_("Previous UCLouvain registration") %}
                         </div>
                         <div class="col-md-6">
                             {% bootstrap_field form.previous_noma label_class="label_previous_noma" %}
@@ -117,18 +117,18 @@
                     {% bootstrap_field form.registration_type %}
                     {% bootstrap_field form.use_address_for_billing %}
                     <div class="panel panel-default">
-                            <div class="panel panel-body">
-                                {% bootstrap_field billing_address_form.location form_group_class="form-group" label=_("Location") %}
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {% bootstrap_field billing_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {% bootstrap_field billing_address_form.city form_group_class="form-group" label=_("City") %}
-                                    </div>
+                        <div class="panel panel-body">
+                            {% bootstrap_field billing_address_form.location form_group_class="form-group" label=_("Location") %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% bootstrap_field billing_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
                                 </div>
-                                {% bootstrap_field billing_address_form.country form_group_class="form-group" label=_("Country") %}
+                                <div class="col-md-6">
+                                    {% bootstrap_field billing_address_form.city form_group_class="form-group" label=_("City") %}
+                                </div>
                             </div>
+                            {% bootstrap_field billing_address_form.country form_group_class="form-group" label=_("Country") %}
+                        </div>
                     </div>
                     {% bootstrap_field form.head_office_name %}
                     <div class="row">
@@ -143,17 +143,17 @@
                 <div id="contact" role="tabpanel" class="panel-body tab-pane">
                     {% bootstrap_field form.use_address_for_post %}
                     <div class="panel panel-default">
-                            <div class="panel panel-body">
-                                {% bootstrap_field residence_address_form.location form_group_class="form-group" label=_("Location") %}
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {% bootstrap_field residence_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {% bootstrap_field residence_address_form.city form_group_class="form-group" label=_("City") %}
-                                    </div>
+                        <div class="panel panel-body">
+                            {% bootstrap_field residence_address_form.location form_group_class="form-group" label=_("Location") %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% bootstrap_field residence_address_form.postal_code form_group_class="form-group" label=_("Postal code") %}
                                 </div>
-                                {% bootstrap_field residence_address_form.country form_group_class="form-group" label=_("Country") %}
+                                <div class="col-md-6">
+                                    {% bootstrap_field residence_address_form.city form_group_class="form-group" label=_("City") %}
+                                </div>
+                            </div>
+                            {% bootstrap_field residence_address_form.country form_group_class="form-group" label=_("Country") %}
                         </div>
                     </div>
                     {% bootstrap_field form.residence_phone %}
@@ -178,12 +178,12 @@
 
         function enableFields(fields) {
             for (var field of fields) {
-                $("#id_" + field).prop( "disabled", false );
+                $("#id_" + field).prop("disabled", false);
             }
         }
 
         function showNOMA() {
-            if($("#id_previous_ucl_registration").value == undefined){
+            if ($("#id_previous_ucl_registration").value == undefined) {
                 hideNOMA();
             }
             $("#id_previous_ucl_registration").change(function () {
@@ -195,9 +195,10 @@
                 }
             });
         }
+
         showNOMA();
 
-        function hideNOMA(){
+        function hideNOMA() {
             $("#id_previous_noma").hide();
             $(".label_previous_noma").hide();
         }
@@ -234,60 +235,61 @@
         let billing_radio = $("[name='use_address_for_billing']:radio");
         let post_radio = $("[name='use_address_for_post']:radio");
 
-        billing_radio.change(function(){
-            if(this.value === "True"){
+        billing_radio.change(function () {
+            if (this.value === "True") {
                 copy_address("billing");
             } else {
                 empty_address("billing", billing_address);
             }
         });
         //check when page is loaded
-        billing_radio.prop('checked')?copy_address("billing"):empty_address(("billing"), billing_address);
+        billing_radio.prop('checked') ? copy_address("billing") : empty_address(("billing"), billing_address);
 
-        post_radio.change(function(){
-            if(this.value === "True"){
+        post_radio.change(function () {
+            if (this.value === "True") {
                 copy_address("residence");
             } else {
                 empty_address("residence", residence_address);
             }
         });
         //check when page is loaded
-        post_radio.prop('checked')?copy_address("residence"):empty_address(("residence"), residence_address);
+        post_radio.prop('checked') ? copy_address("residence") : empty_address(("residence"), residence_address);
 
         //re-enable disabled field on form submit
-        $( "#form" ).submit(function( event ) {
+        $("#form").submit(function (event) {
             enableFields(fields_to_enable);
         });
 
-        function copy_address(e){
-            ["location", "postal_code", "city"].forEach(function(field) {
-                $("#id_"+e+"-"+field).val(address[field]);
-                $("#id_"+e+"-"+field).prop("readonly", true);
+        function copy_address(e) {
+            ["location", "postal_code", "city"].forEach(function (field) {
+                $("#id_" + e + "-" + field).val(address[field]);
+                $("#id_" + e + "-" + field).prop("readonly", true);
             });
-            let selected_option = $("#id_"+e+"-country option")[0];
+            let selected_option = $("#id_" + e + "-country option")[0];
             selected_option.value = address.country.iso_code;
             selected_option.innerHTML = address.country.name;
-            $("#id_"+e+"-country").prop("disabled", true);
+            $("#id_" + e + "-country").prop("disabled", true);
         }
 
-        function empty_address(e, address){
-            ["location", "postal_code", "city"].forEach(function(field) {
-                $("#id_"+e+"-"+field).val(address[field]);
-                $("#id_"+e+"-"+field).prop("readonly", false);
+        function empty_address(e, address) {
+            ["location", "postal_code", "city"].forEach(function (field) {
+                $("#id_" + e + "-" + field).val(address[field]);
+                $("#id_" + e + "-" + field).prop("readonly", false);
             });
-            $("#id_"+e+"-country").prop("disabled", false);
-            let selected_option = $("#id_"+e+"-country option")[0];
+            $("#id_" + e + "-country").prop("disabled", false);
+            let selected_option = $("#id_" + e + "-country option")[0];
             selected_option.value = address.country.iso_code;
             selected_option.innerHTML = address.country.name;
         }
+
         //show missing fields in red
-        let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
+        let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g, '"');
         errors_fields = JSON.parse(errors_fields);
 
-        for(field of errors_fields){
-            $('#id_'+field).parent().addClass('has-warning');
+        for (field of errors_fields) {
+            $('#id_' + field).parent().addClass('has-warning');
 
-            if(field == 'national_registry_number'){
+            if (field == 'national_registry_number') {
                 $('#id_id_card_number').parent().addClass('has-warning');
                 $('#id_passport_number').parent().addClass('has-warning');
                 $('#identification_information').css("visibility", "visible");
@@ -296,19 +298,19 @@
         }
 
 
-        $('.tab-pane').each(function(){
+        $('.tab-pane').each(function () {
             let tabId = $(this)[0].id;
             let countWarning = $(this).find('.has-warning').length;
-            if(countWarning>0){
-                let tabBadge = $('a[href="#'+tabId+'"]').find('.badge')[0];
+            if (countWarning > 0) {
+                let tabBadge = $('a[href="#' + tabId + '"]').find('.badge')[0];
                 tabBadge.innerText = countWarning;
             }
         });
-        $('.btnNext').click(function(){
+        $('.btnNext').click(function () {
             $('.nav-tabs > .active').next('li').find('a').trigger('click');
         });
 
-        $('.btnPrevious').click(function(){
+        $('.btnPrevious').click(function () {
             $('.nav-tabs > .active').prev('li').find('a').trigger('click');
         });
     </script>

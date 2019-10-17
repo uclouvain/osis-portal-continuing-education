@@ -28,8 +28,8 @@ from unittest.mock import patch
 import mock
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
 
@@ -278,7 +278,7 @@ class ViewStudentRegistrationTestCase(TestCase):
 class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
         ac = AcademicYearFactory()
-        AcademicYearFactory(year=ac.year+1)
+        AcademicYearFactory(year=ac.year + 1)
         self.admission = RegistrationDictFactory(PersonFactory().uuid)
 
     def test_registration_is_submittable(self):

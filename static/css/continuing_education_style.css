@@ -23,31 +23,31 @@
 * OSIS Custom layout
 */
 
-.selected td{
+.selected td {
     background-color: #337ab7 !important;
     color: white;
 }
 
-.formation-item{
+.formation-item {
     cursor: pointer;
 }
 
-#formation-continue-button{
+#formation-continue-button {
     margin-top: 20px;
 }
 
-.admission-state{
+.admission-state {
     vertical-align: middle !important;
     width: 100px;
     text-transform: capitalize;
 }
 
-.admission-state span{
+.admission-state span {
     height: 20px;
     padding-top: 5px;
 }
 
-.admission-detail-state{
+.admission-detail-state {
     display: inline;
     position: relative;
     padding: 6px 12px;
@@ -58,27 +58,27 @@
     text-transform: capitalize;
 }
 
-.admission-detail-state-waiting{
+.admission-detail-state-waiting {
     background-color: #337ab7;
 }
 
-.admission-detail-state-accepted, .admission-detail-state-validated{
+.admission-detail-state-accepted, .admission-detail-state-validated {
     background-color: #5cb85c;
 }
 
-.admission-detail-state-rejected{
+.admission-detail-state-rejected {
     background-color: #d9534f;
 }
 
-.admission-detail-state-draft{
+.admission-detail-state-draft {
     background-color: #777777;
 }
 
-.admission-detail-state-submitted, .admission-detail-state-registration-submitted{
+.admission-detail-state-submitted, .admission-detail-state-registration-submitted {
     background-color: #5bc0de;
 }
 
-.admission-detail-state-cancelled{
+.admission-detail-state-cancelled {
     background-color: rgb(240, 173, 78);
 }
 
@@ -116,42 +116,44 @@
     display: block;
 }
 
-#btn-upload{
+#btn-upload {
     margin-left: 10px;
 }
 
-label.required:after{
-    content:" *";
+label.required:after {
+    content: " *";
 }
 
-.form-button-group{
+.form-button-group {
     margin-right: 15px;
     margin-top: 10px;
 }
 
-#tabs li a{
+#tabs li a {
     display: inline-block;
     padding-top: 15px;
-    padding-bottom:15px;
+    padding-bottom: 15px;
 }
 
-.no-pad{
-    margin-right:0 !important;
-    margin-left:0 !important;
+.no-pad {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
 .badge-warning {
-  background-color: #8a6d3b;
+    background-color: #8a6d3b;
 }
 
 .select2-container {
     width: 100% !important;
 }
-.disable-wrapper, #custom-file[disabled], .custom-file-input[disabled]{
+
+.disable-wrapper, #custom-file[disabled], .custom-file-input[disabled] {
     cursor: not-allowed;
 }
-a[disabled]{
+
+a[disabled] {
     pointer-events: none;
 }

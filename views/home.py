@@ -41,13 +41,13 @@ def formations_list(request):
         active_page = 1
     paginator = api.get_continuing_education_training_list(
         limit=limit,
-        offset=(active_page-1)*limit,
+        offset=(active_page - 1) * limit,
     )
     formations = paginator['results']
     pages_count = round(paginator['count'] / limit)
     return render(request, "continuing_education/formations.html", {
         'formations': formations,
-        'pages_count': range(1, pages_count+1),
+        'pages_count': range(1, pages_count + 1),
         'active_page': active_page
     })
 

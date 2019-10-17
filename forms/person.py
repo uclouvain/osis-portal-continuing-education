@@ -10,7 +10,6 @@ def _capitalize_choices(choices):
 
 
 class PersonForm(ModelForm):
-
     first_name = forms.CharField(
         required=True,
         label=_("First name")
