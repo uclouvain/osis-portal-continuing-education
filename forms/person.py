@@ -27,9 +27,10 @@ class PersonForm(ModelForm):
         label=_("Gender")
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, no_first_name_checked, *args, **kwargs):
         super(PersonForm, self).__init__(*args, **kwargs)
-
+        if no_first_name_checked or self._has_no_first_name():
+            self.fields['first_name'].required = False
         if self.instance.pk:
             self._disable_existing_person_fields()
         self.fields['email'].label = _('Email')
@@ -42,6 +43,12 @@ class PersonForm(ModelForm):
                 self.fields[field].widget.attrs['readonly'] = True
                 if field is "gender":
                     self.fields[field].widget.attrs['disabled'] = True
+            if self._has_no_first_name():
+                self.fields[field].required = False
+                self.fields[field].widget.attrs['readonly'] = True
+
+    def _has_no_first_name(self):
+        return self.instance.pk and not getattr(self.instance, 'first_name')
 
     class Meta:
         model = Person

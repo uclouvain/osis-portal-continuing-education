@@ -77,6 +77,12 @@
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field id_form.last_name label_class="required" %}</div>
                         <div class="col-md-6">{% bootstrap_field id_form.first_name label_class="required" %}</div>
+                        {% if not admission %}
+                        <div class="col-md-6 col-md-offset-6" style="margin-bottom: 15px;">
+                            <input id="no-firstname-checkbox" type="checkbox"/>
+                            <span>{% trans 'Je coche cette case si je ne dispose pas de prénom' %}</span>
+                        </div>
+                        {% endif %}
                     </div>
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field id_form.gender label_class="required" %}</div>
@@ -297,6 +303,21 @@
     function stripTags(str){
         return str.replace(/(<([^>]+)>)/ig,"");
     }
+
+    $("#no-firstname-checkbox").change(function(){
+        const input = $("#id_first_name");
+        const label = $("label[for='id_first_name']");
+        if(this.checked){
+            label.removeClass('required');
+            input.val('');
+            input.prop('disabled', true);
+            $("#form").append("<input id='no-first-name-input' type='hidden' name='no_first_name' value='1'/>");
+        } else {
+            label.addClass('required');
+            input.prop('disabled', false);
+            $("#form").remove('#no-first-name-input');
+        }
+    });
 
 </script>
 

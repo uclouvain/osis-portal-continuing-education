@@ -29,8 +29,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse, Http404
-from django.urls import reverse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils.html import linebreaks
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods, require_GET
@@ -145,7 +145,6 @@ def admission_form(request, admission_uuid=None):
         _show_save_before_submit(request)
 
     errors_fields = _is_admission_submittable_and_show_errors(admission, errors_fields, request)
-
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
         api.prepare_admission_data(
             admission,
@@ -218,8 +217,11 @@ def _fill_forms_with_existing_data(admission, formation, request):
         initial=person_information if _has_instance_with_values(person_information) else None
     )
     adm_form = AdmissionForm(request.POST or None, initial=admission, formation=formation)
-    id_form = PersonForm(request.POST or None, instance=base_person)
-
+    id_form = PersonForm(
+        data=request.POST or None,
+        instance=base_person,
+        no_first_name_checked=request.POST.get('no_first_name', False)
+    )
     admissions = api.get_admission_list(request, person_information['uuid'])['results']
     old_admission = _get_old_admission_if_exists(admissions, person_information, request)
     current_address = admission['address'] if admission else None
