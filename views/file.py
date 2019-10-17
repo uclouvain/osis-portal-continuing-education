@@ -42,7 +42,6 @@ from rest_framework.parsers import JSONParser
 from continuing_education.views.api import REQUEST_HEADER, get_admission, get_registration
 from continuing_education.views.common import display_error_messages, display_success_messages
 
-MAX_ADMISSION_FILE_NAME_LENGTH = 100
 FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/%(admission_uuid)s/files/"
 
 

@@ -42,16 +42,6 @@ def transform_response_to_data(response):
     return data
 
 
-def get_data_list_from_osis(request, object_name):
-    token = get_personal_token(request)
-    url = API_URL % {'object_name': object_name, 'object_uuid': ''}
-    response = requests.get(
-        url=url,
-        headers={'Authorization': 'Token ' + token}
-    )
-    return transform_response_to_data(response)
-
-
 def get_admission_list(request, person_uuid):
     token = get_personal_token(request)
     response = requests.get(
