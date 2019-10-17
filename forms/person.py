@@ -66,4 +66,4 @@ class PersonForm(ModelForm):
 
 class StrictPersonForm(PersonForm):
     def __init__(self, data, **kwargs):
-        super().__init__(data, **kwargs)
+        super().__init__(data=data, no_first_name_checked=False, **kwargs)
