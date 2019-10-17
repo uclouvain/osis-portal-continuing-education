@@ -32,9 +32,9 @@ from unittest.mock import patch
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.urls import reverse
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
 

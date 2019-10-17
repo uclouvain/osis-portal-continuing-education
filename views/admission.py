@@ -29,8 +29,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse, Http404
-from django.urls import reverse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils.html import linebreaks
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods, require_GET

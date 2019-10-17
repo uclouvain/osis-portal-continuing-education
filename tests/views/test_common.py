@@ -28,8 +28,8 @@ from collections import OrderedDict
 
 from django.test import TestCase
 from django.test.utils import override_settings
-from continuing_education.views.common import _build_error_data, ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION
 
+from continuing_education.views.common import _build_error_data, ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION
 
 A_FORM_FIELD = 'anything_else'
 OTHER_FORM_FIELD = 'other_field'
