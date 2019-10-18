@@ -31,7 +31,6 @@ from continuing_education.forms.admission import AdmissionForm
 from continuing_education.models.enums.admission_state_choices import ACCEPTED
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
-from reference.models import country
 
 
 class TestAdmissionForm(TestCase):
@@ -44,13 +43,3 @@ class TestAdmissionForm(TestCase):
         admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid), state=ACCEPTED)
         form = AdmissionForm(admission)
         self.assertFalse(form.is_valid(), form.errors)
-
-
-def convert_countries(person):
-    person['birth_country'] = country.Country.objects.get(pk=person["birth_country_id"])
-    person['citizenship'] = country.Country.objects.get(pk=person["citizenship_id"])
-
-
-def convert_dates(person):
-    person['high_school_graduation_year'] = person['high_school_graduation_year'].strftime('%Y-%m-%d')
-    person['last_degree_graduation_year'] = person['last_degree_graduation_year'].strftime('%Y-%m-%d')
