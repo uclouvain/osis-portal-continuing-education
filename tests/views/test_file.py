@@ -182,7 +182,7 @@ class AdmissionFileTestCase(TestCase):
 
     def get_mocked_file_response(self, headers):
         response = HttpResponse(status=status.HTTP_200_OK)
-        response.content = '{"content": "'+str(base64.b64encode(b'test'))+\
+        response.content = '{"content": "' + str(base64.b64encode(b'test')) + \
                            '", "path":"test_name.pdf", "name":"test_name.pdf"}'
         return response
 

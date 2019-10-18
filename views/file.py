@@ -68,7 +68,7 @@ def upload_file(request, admission_uuid):
     else:
         display_error_messages(request, request_to_upload.json())
 
-    return redirect(request.META.get('HTTP_REFERER')+'#documents')
+    return redirect(request.META.get('HTTP_REFERER') + '#documents')
 
 
 @login_required
@@ -101,7 +101,7 @@ def remove_file(request, file_uuid, admission_uuid):
         display_success_messages(request, _("File correctly deleted"))
     else:
         display_error_messages(request, _("A problem occured during delete"))
-    return redirect(request.META.get('HTTP_REFERER')+'#documents')
+    return redirect(request.META.get('HTTP_REFERER') + '#documents')
 
 
 def _get_files_list(request, admission, url_continuing_education_file_api):

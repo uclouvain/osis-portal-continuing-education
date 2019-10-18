@@ -95,7 +95,7 @@ class FormationsListTestCase(TestCase):
         url = reverse('formations_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['pages_count'], range(1,2))
+        self.assertEqual(response.context['pages_count'], range(1, 2))
         self.assertEqual(response.context['formations'], formations['results'])
         self.assertTemplateUsed(response, 'continuing_education/formations.html')
 

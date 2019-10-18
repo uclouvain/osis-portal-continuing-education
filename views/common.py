@@ -61,11 +61,10 @@ def login(request):
         user = authenticate(username=username, password=password)
         person = person_mdl.find_by_user(user)
         # ./manage.py createsuperuser (in local) doesn't create automatically a Person associated to User
-        if person:
-            if person.language:
-                user_language = person.language
-                translation.activate(user_language)
-                request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+        if person and person.language:
+            user_language = person.language
+            translation.activate(user_language)
+            request.session[translation.LANGUAGE_SESSION_KEY] = user_language
         LoginView.as_view()(request)
         if not person:
             return redirect(reverse('admission_new'))
@@ -183,7 +182,7 @@ def add_informations_message_on_submittable_file(request, title):
             _("Do not forget to submit your file when it is complete"),
         ]
         message = "<strong>{}</strong><br>".format(title) + \
-            "".join(["- {}<br>".format(item) for item in items])
+                  "".join(["- {}<br>".format(item) for item in items])
 
         messages.add_message(
             request=request,

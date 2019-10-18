@@ -13,7 +13,6 @@ phone_regex = RegexValidator(
 
 
 class AdmissionForm(Form):
-
     formation = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='cetraining-autocomplete'),
         required=True,

@@ -278,7 +278,7 @@ class ViewStudentRegistrationTestCase(TestCase):
 class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
         ac = AcademicYearFactory()
-        AcademicYearFactory(year=ac.year+1)
+        AcademicYearFactory(year=ac.year + 1)
         self.admission = RegistrationDictFactory(PersonFactory().uuid)
 
     def test_registration_is_submittable(self):

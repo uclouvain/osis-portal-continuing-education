@@ -41,14 +41,13 @@ OTHER_FIELD_LABEL = 'Other field'
 class CommonViewTestCase(TestCase):
 
     def test_build_warning_from_errors_dict(self):
-
         errors_dict = OrderedDict([(A_FORM_FIELD_LABEL, [A_FORM_FIELD]),
                                    (OTHER_FIELD_LABEL, [OTHER_FORM_FIELD])]
                                   )
 
         self.assertCountEqual(
             _build_error_data(errors_dict),
-                              ['Anything else', OTHER_FIELD_LABEL]
+            ['Anything else', OTHER_FIELD_LABEL]
         )
 
     @override_settings(LANGUAGES=[('en', 'English'), ], LANGUAGE_CODE='en')
