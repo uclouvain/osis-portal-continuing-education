@@ -51,7 +51,7 @@ class PersonForm(ModelForm):
             self.fields['first_name'].widget.attrs['readonly'] = True
 
     def _has_no_first_name(self):
-        return self.instance.pk and not getattr(self.instance, 'first_name')
+        return getattr(self.instance, 'last_name') and not getattr(self.instance, 'first_name')
 
     class Meta:
         model = Person
@@ -66,4 +66,4 @@ class PersonForm(ModelForm):
 
 class StrictPersonForm(PersonForm):
     def __init__(self, data, **kwargs):
-        super().__init__(data=data, no_first_name_checked=False, **kwargs)
+        super().__init__(data=data, no_first_name_checked=True, **kwargs)
