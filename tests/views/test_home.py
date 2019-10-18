@@ -29,8 +29,8 @@ from unittest import mock
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 from mock import patch
 
 from base.tests.factories.academic_year import AcademicYearFactory
