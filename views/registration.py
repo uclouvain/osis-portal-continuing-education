@@ -159,4 +159,3 @@ def generate_pdf_registration(request, admission_uuid):
         return response
     else:
         return common.page_not_found(request)
-

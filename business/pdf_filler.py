@@ -52,19 +52,8 @@ def get_data(admission):
 
     receive_letter_at_home = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
 
-    if residence_address:
-        receive_letter_at_residence = pdfrw.PdfName(CHECKBOX_SELECTED)
-    else:
-        receive_letter_at_residence = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
-
-    job_seeker_check_on = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
-    job_seeker_check_off = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
-
-    if admission.get('professional_status', None):
-        if admission.get('professional_status') == 'JOB_SEEKER':
-            job_seeker_check_on = pdfrw.PdfName(CHECKBOX_SELECTED)
-        else:
-            job_seeker_check_off = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+    receive_letter_at_residence = \
+        pdfrw.PdfName(CHECKBOX_SELECTED) if residence_address else pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
 
     birth_date = _format_birth_date(person_information)
 
@@ -82,12 +71,6 @@ def get_data(admission):
         'passport_number': admission.get('passport_number', EMPTY_VALUE),
         'gender_image_f': _checkbox_selection_status(person.get('gender'), "F"),
         'gender_image_m': _checkbox_selection_status(person.get('gender'), "M"),
-        'marital_single_check': _checkbox_selection_status(admission.get('marital_status'), "SINGLE"),
-        'marital_married_check': _checkbox_selection_status(admission.get('marital_status'), "MARRIED"),
-        'marital_widowed_check': _checkbox_selection_status(admission.get('marital_status'), "WIDOWED"),
-        'marital_divorced_check': _checkbox_selection_status(admission.get('marital_status'), "DIVORCED"),
-        'marital_separated_check': _checkbox_selection_status(admission.get('marital_status'), "SEPARATED"),
-        'marital_legal_cohabitant_check': _checkbox_selection_status(admission.get('marital_status'), "LEGAL_COHABITANT"),
         'spouse_name': admission.get('spouse_name', EMPTY_VALUE),
         'children_number': admission.get('children_number', EMPTY_VALUE),
         'previous_noma': admission.get('previous_noma', "-") if admission.get('previous_noma') and admission.get(
@@ -97,16 +80,13 @@ def get_data(admission):
         'residence_phone': admission.get('residence_phone', EMPTY_VALUE),
         'receive_letter_at_home': receive_letter_at_home,
         'receive_letter_at_residence': receive_letter_at_residence,
-        'employee_check': _checkbox_selection_status(admission.get('professional_status'), "EMPLOYEE"),
-        'self_employed_check': _checkbox_selection_status(admission.get('professional_status'), "SELF_EMPLOYED"),
-        'job_seeker_check': pdfrw.PdfName(CHECKBOX_NOT_SELECTED),
-        'other_check': _checkbox_selection_status(admission.get('professional_status'), "OTHER"),
-        'job_seeker_check_on': job_seeker_check_on,
-        'job_seeker_check_off': job_seeker_check_off,
+
         'procedure_66U': pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
     }
+    data_dict.update(_build_professional_status(admission.get('professional_status', None)))
+    data_dict.update(_build_marital_status(admission.get('marital_status')))
     data_dict.update(_build_address(admission.get('address', _build_empty_address()), 'contact'))
-    data_dict.update(_build_address(admission.get('postal_address',_build_empty_address()), 'postal'))
+    data_dict.update(_build_address(admission.get('postal_address', _build_empty_address()), 'postal'))
 
     if residence_address:
         data_dict.update(_build_address(residence_address, 'residence'))
@@ -151,16 +131,19 @@ def _update_pdf_fields(data_dict, template_pdf):
     for page in template_pdf.pages:
         annotations = page[ANNOT_KEY]
         for annotation in annotations:
-            if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY:
-                if annotation[ANNOT_FIELD_KEY]:
-                    key = annotation[ANNOT_FIELD_KEY][1:-1]
-                    if key in data_dict.keys():
-                        if annotation[ANNOT_BUTTON_KEY][1:-1] == "Bt":
-                            annotation.update(pdfrw.PdfDict(AS=data_dict[key]))
-                        else:
-                            annotation.update(
-                                pdfrw.PdfDict(V='{}'.format(data_dict[key]))
-                            )
+            if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY and annotation[ANNOT_FIELD_KEY]:
+                key = annotation[ANNOT_FIELD_KEY][1:-1]
+                if key in data_dict.keys():
+                    _update_form_field(annotation, data_dict, key)
+
+
+def _update_form_field(annotation, data_dict, key):
+    if annotation[ANNOT_BUTTON_KEY][1:-1] == "Bt":
+        annotation.update(pdfrw.PdfDict(AS=data_dict[key]))
+    else:
+        annotation.update(
+            pdfrw.PdfDict(V='{}'.format(data_dict[key]))
+        )
 
 
 def _checkbox_selection_status(value, expected_value):
@@ -173,13 +156,42 @@ def _capitalize(value):
 
 
 def _build_address(data_dict, type):
-    if type:
+    if type and data_dict:
         return{
-            '{}_address_location'.format(type): data_dict.get('location') if data_dict else EMPTY_VALUE,
-            '{}_address_postal_code'.format(type): data_dict.get('postal_code') if data_dict else EMPTY_VALUE,
-            '{}_address_city'.format(type): _capitalize(data_dict.get('city')) if data_dict else EMPTY_VALUE,
+            '{}_address_location'.format(type): data_dict.get('location'),
+            '{}_address_postal_code'.format(type): data_dict.get('postal_code'),
+            '{}_address_city'.format(type): _capitalize(data_dict.get('city')),
             '{}_address_country'.format(type):
                 _capitalize(data_dict.get('country').get('name'))
-                if data_dict and data_dict.get('country') else EMPTY_VALUE,
+                if data_dict.get('country') else EMPTY_VALUE,
         }
     return {}
+
+
+def _build_marital_status(marital_status):
+    return {'marital_single_check': _checkbox_selection_status(marital_status, "SINGLE"),
+            'marital_married_check': _checkbox_selection_status(marital_status, "MARRIED"),
+            'marital_widowed_check': _checkbox_selection_status(marital_status, "WIDOWED"),
+            'marital_divorced_check': _checkbox_selection_status(marital_status, "DIVORCED"),
+            'marital_separated_check': _checkbox_selection_status(marital_status, "SEPARATED"),
+            'marital_legal_cohabitant_check':
+                _checkbox_selection_status(marital_status, "LEGAL_COHABITANT")}
+
+
+def _build_professional_status(professional_status):
+    job_seeker_check_on = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+    job_seeker_check_off = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+
+    if professional_status:
+        if professional_status == 'JOB_SEEKER':
+            job_seeker_check_on = pdfrw.PdfName(CHECKBOX_SELECTED)
+        else:
+            job_seeker_check_off = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+    return {
+        'employee_check': _checkbox_selection_status(professional_status, "EMPLOYEE"),
+        'self_employed_check': _checkbox_selection_status(professional_status, "SELF_EMPLOYED"),
+        'job_seeker_check': pdfrw.PdfName(CHECKBOX_NOT_SELECTED),
+        'other_check': _checkbox_selection_status(professional_status, "OTHER"),
+        'job_seeker_check_on': job_seeker_check_on,
+        'job_seeker_check_off': job_seeker_check_off
+    }
