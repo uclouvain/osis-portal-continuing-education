@@ -130,11 +130,15 @@ def _update_pdf_fields(data_dict, template_pdf):
 
     for page in template_pdf.pages:
         annotations = page[ANNOT_KEY]
-        for annotation in annotations:
-            if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY and annotation[ANNOT_FIELD_KEY]:
-                key = annotation[ANNOT_FIELD_KEY][1:-1]
-                if key in data_dict.keys():
-                    _update_form_field(annotation, data_dict, key)
+        _check_pdf_annotations(annotations, data_dict)
+
+
+def _check_pdf_annotations(annotations, data_dict):
+    for annotation in annotations:
+        if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY and annotation[ANNOT_FIELD_KEY]:
+            key = annotation[ANNOT_FIELD_KEY][1:-1]
+            if key in data_dict.keys():
+                _update_form_field(annotation, data_dict, key)
 
 
 def _update_form_field(annotation, data_dict, key):
