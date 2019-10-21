@@ -31,7 +31,7 @@ CHECKBOX_NOT_SELECTED = 'Off'
 CHECKBOX_SELECTED = 'Yes'
 CHECK_SIZE = 3
 
-REGISTRATION_TEMPLATE_PATH = 'form_SIC_times.pdf'
+REGISTRATION_TEMPLATE_PATH = 'business/templates/form_SIC_times.pdf'
 
 ANNOT_KEY = '/Annots'
 ANNOT_FIELD_KEY = '/T'
@@ -127,7 +127,6 @@ def _get_pdf_template():
 
 
 def _update_pdf_fields(data_dict, template_pdf):
-
     for page in template_pdf.pages:
         annotations = page[ANNOT_KEY]
         _check_pdf_annotations(annotations, data_dict)
@@ -183,19 +182,19 @@ def _build_marital_status(marital_status):
 
 
 def _build_professional_status(professional_status):
-    job_seeker_check_on = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
-    job_seeker_check_off = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+    seeking_job_on = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+    seeking_job_off = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
 
     if professional_status:
         if professional_status == 'JOB_SEEKER':
-            job_seeker_check_on = pdfrw.PdfName(CHECKBOX_SELECTED)
+            seeking_job_on = pdfrw.PdfName(CHECKBOX_SELECTED)
         else:
-            job_seeker_check_off = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+            seeking_job_off = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
     return {
         'employee_check': _checkbox_selection_status(professional_status, "EMPLOYEE"),
         'self_employed_check': _checkbox_selection_status(professional_status, "SELF_EMPLOYED"),
         'job_seeker_check': pdfrw.PdfName(CHECKBOX_NOT_SELECTED),
         'other_check': _checkbox_selection_status(professional_status, "OTHER"),
-        'job_seeker_check_on': job_seeker_check_on,
-        'job_seeker_check_off': job_seeker_check_off
+        'seeking_job_on': seeking_job_on,
+        'seeking_job_off': seeking_job_off
     }
