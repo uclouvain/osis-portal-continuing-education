@@ -23,15 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import io
-import pdfrw
 import datetime
+import io
+
+import pdfrw
+from django.conf import settings
 
 CHECKBOX_NOT_SELECTED = 'Off'
 CHECKBOX_SELECTED = 'Yes'
 CHECK_SIZE = 3
 
-REGISTRATION_TEMPLATE_PATH = 'business/templates/form_SIC_times.pdf'
+REGISTRATION_TEMPLATE_PATH = '/continuing_education/business/templates/form_SIC_times.pdf'
 
 ANNOT_KEY = '/Annots'
 ANNOT_FIELD_KEY = '/T'
@@ -118,7 +120,7 @@ def write_fillable_pdf(data_dict):
 
 
 def _get_pdf_template():
-    input_pdf_path = REGISTRATION_TEMPLATE_PATH
+    input_pdf_path = "{}{}".format(settings.BASE_DIR, REGISTRATION_TEMPLATE_PATH)
     try:
         template_pdf = pdfrw.PdfReader(input_pdf_path)
     except pdfrw.errors.PdfParseError:
