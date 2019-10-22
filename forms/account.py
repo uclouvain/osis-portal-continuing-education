@@ -72,8 +72,10 @@ class ContinuingEducationPasswordResetForm(forms.Form):
         else:
             scheme = 'https' if request.is_secure() else 'http'
             site = get_current_site(request)
-            url = reverse('password_reset_confirm', kwargs={'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
-                                                            'token': token_generator.make_token(user)})
+            url = reverse('password_reset_confirm', kwargs={
+                'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': token_generator.make_token(user)
+            })
             change_password_url = '{scheme}://{site}{url}'.format(scheme=scheme,
                                                                   site=site,
                                                                   url=url)

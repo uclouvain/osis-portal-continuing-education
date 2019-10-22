@@ -1,5 +1,3 @@
-import os
-
 from django.conf import settings
 from django.core import mail
 from django.core import signing
@@ -42,10 +40,6 @@ class TestAuthentication(FunctionalTestCase, UserMixin):
         """
         self.login(username='non_valid_user', login_page_name='continuing_education_login')
         self.wait_until_title_is('Login')
-
-
-def get_email_file_path(function_name):
-    return os.path.join(settings.EMAIL_FILE_PATH, function_name)
 
 
 class TestRegistration(FunctionalTestCase, UserMixin):

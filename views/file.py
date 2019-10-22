@@ -42,7 +42,6 @@ from rest_framework.parsers import JSONParser
 from continuing_education.views.api import REQUEST_HEADER, get_admission, get_registration
 from continuing_education.views.common import display_error_messages, display_success_messages
 
-MAX_ADMISSION_FILE_NAME_LENGTH = 100
 FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "admissions/%(admission_uuid)s/files/"
 
 
@@ -69,7 +68,7 @@ def upload_file(request, admission_uuid):
     else:
         display_error_messages(request, request_to_upload.json())
 
-    return redirect(request.META.get('HTTP_REFERER')+'#documents')
+    return redirect(request.META.get('HTTP_REFERER') + '#documents')
 
 
 @login_required
@@ -102,7 +101,7 @@ def remove_file(request, file_uuid, admission_uuid):
         display_success_messages(request, _("File correctly deleted"))
     else:
         display_error_messages(request, _("A problem occured during delete"))
-    return redirect(request.META.get('HTTP_REFERER')+'#documents')
+    return redirect(request.META.get('HTTP_REFERER') + '#documents')
 
 
 def _get_files_list(request, admission, url_continuing_education_file_api):

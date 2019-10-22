@@ -3,27 +3,27 @@
 {% load i18n %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% block title %}Continuing Education{% endblock %}
@@ -40,48 +40,51 @@
     </div>
     {% include "template_messages.html" %}
     <div class="panel-heading clearfix">
-        <a class="btn btn-default pull-right" href="{% url 'admission_new'%}">
+        <a class="btn btn-default pull-right" href="{% url 'admission_new' %}">
             {% trans 'New admission' %}
         </a>
     </div>
     <div class="panel panel-default">
-    <ul id="tabs" class="nav nav-tabs">
-      <li role="presentation" class="active"><a href="#admission" role="tab" data-toggle="tab">{% trans 'Admission' %}</a></li>
-      <li role="presentation"><a href="#registration" role="tab" data-toggle="tab">{% trans 'Registration' %}</a></li>
-    </ul>
+        <ul id="tabs" class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#admission" role="tab"
+                                                      data-toggle="tab">{% trans 'Admission' %}</a></li>
+            <li role="presentation"><a href="#registration" role="tab" data-toggle="tab">{% trans 'Registration' %}</a>
+            </li>
+        </ul>
         <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="admission">
-                    <div class="panel-body">
+            <div role="tabpanel" class="tab-pane active" id="admission">
+                <div class="panel-body">
                     {% if admissions %}
                         <table class="table table-striped table-hover">
-                        <thead>
+                            <thead>
                             <tr>
                                 <th class="searchable">{% trans 'Formation' %}</th>
                                 <th class="searchable">{% trans 'State' %}</th>
                             </tr>
-                        </thead>
-                        {% for admission in admissions %}
-                            <tr>
-                                <td><a href="{% url 'admission_detail' admission_uuid=admission.uuid %}">
-                                    {{ admission.formation.education_group.acronym }} - {{ admission.formation.education_group.title }}
-                                </a></td>
-                                <td class="admission-state">
-                                    {% if admission.state == "Waiting" %}
-                                        <span class="label label-primary show">{% trans admission.state %}</span>
-                                    {% elif admission.state == "Accepted" %}
-                                        <span class="label label-success show">{% trans admission.state %}</span>
-                                    {% elif admission.state == "Rejected" %}
-                                        <span class="label label-danger show">{% trans admission.state %}</span>
-                                    {% elif admission.state == "Submitted" %}
-                                        <span class="label label-info show">{% trans admission.state %}</span>
-                                    {% elif admission.state == "Draft" %}
-                                        <span class="label label-default show">{% trans admission.state %}</span>
-                                    {% elif admission.state == "Cancelled" %}
-                                        <span class="label label-warning show">{% trans "Cancelled" %}</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
+                            </thead>
+                            {% for admission in admissions %}
+                                <tr>
+                                    <td><a href="{% url 'admission_detail' admission_uuid=admission.uuid %}">
+                                        {{ admission.formation.education_group.acronym }}
+                                        - {{ admission.formation.education_group.title }}
+                                    </a></td>
+                                    <td class="admission-state">
+                                        {% if admission.state == "Waiting" %}
+                                            <span class="label label-primary show">{% trans admission.state %}</span>
+                                            {% elif admission.state == "Accepted" %}
+                                            <span class="label label-success show">{% trans admission.state %}</span>
+                                            {% elif admission.state == "Rejected" %}
+                                            <span class="label label-danger show">{% trans admission.state %}</span>
+                                            {% elif admission.state == "Submitted" %}
+                                            <span class="label label-info show">{% trans admission.state %}</span>
+                                            {% elif admission.state == "Draft" %}
+                                            <span class="label label-default show">{% trans admission.state %}</span>
+                                            {% elif admission.state == "Cancelled" %}
+                                            <span class="label label-warning show">{% trans "Cancelled" %}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </table>
                     {% else %}
                         <div class="jumbotron">
@@ -92,55 +95,56 @@
                             {% endif %}
                         </div>
                     {% endif %}
-                    </div>
+                </div>
             </div>
-             <div role="tabpanel" class="tab-pane" id="registration">
-                    <div class="panel-body">
+            <div role="tabpanel" class="tab-pane" id="registration">
+                <div class="panel-body">
                     {% if registrations %}
                         <table class="table table-striped table-hover">
-                        <thead>
+                            <thead>
                             <tr>
                                 <th class="searchable">{% trans 'Formation' %}</th>
                                 <th class="searchable">{% trans 'Faculty' %}</th>
                                 <th class="searchable">{% trans 'State' %}</th>
                             </tr>
-                        </thead>
-                        {% for registration in registrations %}
-                            <tr>
-                                <td><a href="{% url 'registration_detail' admission_uuid=registration.uuid %}">
-                                    {{ registration.formation.education_group.acronym }} - {{ registration.formation.education_group.title }}
-                                </a></td>
-                                <td>{{ registration.formation.management_entity }}</td>
-                                <td class="admission-state">
-                                    {% if registration.state == "Registration submitted" %}
-                                        <span class="label label-info show">{% trans registration.state %}</span>
-                                    {% elif registration.state == "Validated" %}
-                                        <span class="label label-success show">{% trans registration.state %}</span>
-                                    {% elif registration.state == "Accepted" %}
-                                        <span class="label label-default show">{% trans "Not submitted" %}</span>
-                                    {% elif registration.state == "Cancelled" %}
-                                        <span class="label label-warning show">{% trans "Cancelled" %}</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
+                            </thead>
+                            {% for registration in registrations %}
+                                <tr>
+                                    <td><a href="{% url 'registration_detail' admission_uuid=registration.uuid %}">
+                                        {{ registration.formation.education_group.acronym }}
+                                        - {{ registration.formation.education_group.title }}
+                                    </a></td>
+                                    <td>{{ registration.formation.management_entity }}</td>
+                                    <td class="admission-state">
+                                        {% if registration.state == "Registration submitted" %}
+                                            <span class="label label-info show">{% trans registration.state %}</span>
+                                            {% elif registration.state == "Validated" %}
+                                            <span class="label label-success show">{% trans registration.state %}</span>
+                                            {% elif registration.state == "Accepted" %}
+                                            <span class="label label-default show">{% trans "Not submitted" %}</span>
+                                            {% elif registration.state == "Cancelled" %}
+                                            <span class="label label-warning show">{% trans "Cancelled" %}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </table>
                     {% else %}
                         <div class="jumbotron">
                             <span>{% trans 'No registration yet' %}</span>
                         </div>
                     {% endif %}
-                    </div>
+                </div>
             </div>
         </div>
-        </div>
+    </div>
 {% endblock %}
 
 {% block script %}
-<script>
-    $('#tabs a').click(function (e) {
-      e.preventDefault();
-      $(this).tab('show');
-    })
-</script>
+    <script>
+        $('#tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+    </script>
 {% endblock %}

@@ -47,8 +47,8 @@ def AdmissionDictFactory(person_information, state=DRAFT):
         'last_degree_level': "level",
         'formation': ContinuingEducationTrainingDictFactory(),
         'citizenship': {
-                'name': factory.Sequence(lambda n: 'Country - %d' % n),
-                'iso_code': factory.Sequence(lambda n: str(n)[-2:])
+            'name': str(factory.Sequence(lambda n: 'Country - %d' % n)),
+            'iso_code': factory.Sequence(lambda n: str(n)[-2:])
         },
         'phone_mobile': _get_fake_phone_number(),
         'email': person_information['person']['email'],
@@ -109,7 +109,7 @@ def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
         'reduced_rates': False,
         'spreading_payments': False,
         'citizenship': {
-            'name': factory.Sequence(lambda n: 'Country - %d' % n),
+            'name': str(factory.Sequence(lambda n: 'Country - %d' % n)),
             'iso_code': factory.Sequence(lambda n: str(n)[-2:])
         },
     }

@@ -5,7 +5,6 @@ from django.forms import ChoiceField, Form
 from django.utils.translation import gettext_lazy as _
 
 from continuing_education.models.enums import enums, admission_state_choices
-from continuing_education.views.api import get_continuing_education_training
 
 phone_regex = RegexValidator(
     regex=r'^(?P<prefix_intro>\+|0{1,2})\d{7,15}$',
@@ -14,7 +13,6 @@ phone_regex = RegexValidator(
 
 
 class AdmissionForm(Form):
-
     formation = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='cetraining-autocomplete'),
         required=True,

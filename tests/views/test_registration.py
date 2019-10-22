@@ -26,10 +26,11 @@
 from unittest.mock import patch
 
 import mock
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
 
@@ -41,9 +42,17 @@ from continuing_education.models.enums.admission_state_choices import REGISTRATI
 from continuing_education.tests.factories.admission import RegistrationDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.views.common import get_submission_errors, _get_managers_mails, format_formation_address
+from rest_framework import status
 
 
 class ViewStudentRegistrationTestCase(TestCase):
+
+    @staticmethod
+    def mock_pdf_template_return():
+        input_pdf_path = "{}{}".format(settings.BASE_DIR, '/continuing_education/tests/ressources/pdf_with_form.pdf')
+        import pdfrw
+        return pdfrw.PdfReader(input_pdf_path)
+
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
@@ -266,19 +275,23 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(post_response.status_code, 401)
         self.assertTemplateUsed(post_response, 'access_denied.html')
 
-    def test_pdf_content(self):
+    @mock.patch('continuing_education.business.pdf_filler._get_pdf_template')
+    def test_pdf_content(self, mock_pdf_template):
+        mock_pdf_template = self.mock_pdf_template_return()
         self.mocked_called_api_function_get.return_value = self.registration_submitted
+        self.mocked_called_api_function_get.return_value['person_information']['birth_date']="2019-10-17"
         a_superuser = SuperUserFactory()
         self.client.force_login(a_superuser)
         url = reverse('registration_pdf', args=[self.registration_submitted['uuid']])
         response = self.client.get(url)
-        self.assertTemplateUsed(response, 'registration_pdf.html')
+        self.assertEqual(response.__getitem__('content-type'), 'application/pdf;')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
         ac = AcademicYearFactory()
-        AcademicYearFactory(year=ac.year+1)
+        AcademicYearFactory(year=ac.year + 1)
         self.admission = RegistrationDictFactory(PersonFactory().uuid)
 
     def test_registration_is_submittable(self):
