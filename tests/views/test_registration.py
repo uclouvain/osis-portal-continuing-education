@@ -26,6 +26,7 @@
 from unittest.mock import patch
 
 import mock
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -48,10 +49,9 @@ class ViewStudentRegistrationTestCase(TestCase):
 
     @staticmethod
     def mock_pdf_template_return():
-        input_pdf_path = 'continuing_education/tests/ressources/pdf_with_form.pdf'
+        input_pdf_path = "{}{}".format(settings.BASE_DIR, '/continuing_education/tests/ressources/pdf_with_form.pdf')
         import pdfrw
         return pdfrw.PdfReader(input_pdf_path)
-
 
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
