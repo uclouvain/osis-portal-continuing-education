@@ -314,7 +314,8 @@
                 if (!$("#max-size-msg").length) {
                     errorMsg = $("<div/>").attr('id', 'max-size-msg').attr('class', 'col-md-12 text-danger no-pad').text(
                         {% blocktrans with max_size=MAX_UPLOAD_SIZE|filesizeformat %}
-                            "File is too large: maximum upload size allowed is {{max_size}}."{% endblocktrans %}
+                            "File is too large: maximum upload size allowed is {{max_size}}."
+                        {% endblocktrans %}
                     );
                     $("#upload_form").append(errorMsg);
                 }
