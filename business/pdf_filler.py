@@ -52,10 +52,12 @@ def get_data(admission):
 
     residence_address = admission.get('residence_address', None)
 
-    receive_letter_at_home = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
-
-    receive_letter_at_residence = \
-        pdfrw.PdfName(CHECKBOX_SELECTED) if residence_address else pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+    if not admission.get('use_address_for_post') and residence_address:
+        receive_letter_at_home = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+        receive_letter_at_residence = pdfrw.PdfName(CHECKBOX_SELECTED)
+    else:
+        receive_letter_at_home = pdfrw.PdfName(CHECKBOX_SELECTED)
+        receive_letter_at_residence = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
 
     birth_date = _format_birth_date(person_information)
 
@@ -90,7 +92,7 @@ def get_data(admission):
     data_dict.update(_build_address(admission.get('address', _build_empty_address()), 'contact'))
     data_dict.update(_build_address(admission.get('postal_address', _build_empty_address()), 'postal'))
 
-    if residence_address:
+    if residence_address and not admission.get('use_address_for_post'):
         data_dict.update(_build_address(residence_address, 'residence'))
     return data_dict
 
