@@ -37,10 +37,10 @@ def ContinuingEducationPersonDictFactory(person_uuid):
         'uuid': str(uuid.uuid4()),
         'person': PersonDictFactory(person),
         'birth_country': {
-            'name': factory.Sequence(lambda n: 'Country - %d' % n),
+            'name': str(factory.Sequence(lambda n: 'Country - %d' % n)),
             'iso_code': factory.Sequence(lambda n: str(n)[-2:])
         },
-        'birth_location': factory.Faker('city'),
+        'birth_location': str(factory.Faker('city')),
         'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
     }
 

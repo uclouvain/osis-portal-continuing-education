@@ -28,6 +28,7 @@ import itertools
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.text import get_valid_filename
@@ -46,7 +47,8 @@ from continuing_education.views.common import display_errors, get_submission_err
     add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
 from continuing_education.views.file import _get_files_list, FILES_URL
-from osis_common.document.pdf_build import render_pdf
+from continuing_education.business.pdf_filler import write_fillable_pdf, get_data
+from base.views import common
 
 
 @login_required
@@ -142,19 +144,18 @@ def generate_pdf_registration(request, admission_uuid):
         return redirect(
             reverse('registration_detail', kwargs={'admission_uuid': admission_uuid})
         )
-    context = {
-        'root': admission['formation'],
-        'admission': admission,
-        'created': datetime.datetime.now(),
-    }
     pdf_filename = get_valid_filename("{}_{}".format(
         admission['person_information']['person']['last_name'],
         admission['formation']['education_group']['acronym'])
     )
 
-    return render_pdf(
-        request,
-        context=context,
-        filename="{}".format(pdf_filename),
-        template='registration_pdf.html',
-    )
+    result = write_fillable_pdf(get_data(admission))
+    if result:
+        # Creating http response
+        response = HttpResponse(content_type='application/pdf;')
+        response['Content-Disposition'] = 'attachment; filename={}.pdf'.format(pdf_filename)
+        response['Content-Transfer-Encoding'] = 'binary'
+        response.write(result)
+        return response
+    else:
+        return common.page_not_found(request)
