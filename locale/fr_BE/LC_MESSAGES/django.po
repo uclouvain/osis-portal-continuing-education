@@ -846,7 +846,7 @@ msgid ""
 "If you want to edit again your admission, please contact the program "
 "manager : %(mail)s"
 msgstr ""
-"Si vous souhaitez encore éditer votre dossier d'admission, veuillez prendre "
+"Si vous souhaitez encore modifier votre dossier d'admission, veuillez prendre "
 "contact avec le·a gestionnaire de la formation : %(mail)s"
 
 #, python-format
@@ -854,7 +854,7 @@ msgid ""
 "If you want to edit again your registration, please contact the program "
 "manager : %(mail)s"
 msgstr ""
-"Si vous souhaitez encore éditer votre dossier d'inscription, veuillez "
+"Si vous souhaitez encore modifier votre dossier d'inscription, veuillez "
 "prendre contact avec le·a gestionnaire de la formation : %(mail)s"
 
 msgid ""
