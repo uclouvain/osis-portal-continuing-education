@@ -253,8 +253,8 @@ def _update_or_create_admission(adm_form, admission, request):
 @login_required
 @require_GET
 def get_formation_information(request):
-    formation_uuid = request.GET.get('formation_uuid', None)
+    formation_uuid = request.GET.get('formation_uuid')
     training = get_continuing_education_training(request, formation_uuid)
     return JsonResponse(data={
-        'additional_information_label': linebreaks(training['additional_information_label'])
+        'additional_information_label': linebreaks(training.get('additional_information_label', ''))
     })
