@@ -62,7 +62,6 @@ def admission_detail(request, admission_uuid):
                             )
         else:
             return Http404
-    print(admission['state'])
     if admission['state'] == admission_state_choices.ACCEPTED_NO_REGISTRATION_REQUIRED:
         admission['state'] = admission_state_choices.ACCEPTED
     if admission['state'] == admission_state_choices.SUBMITTED:

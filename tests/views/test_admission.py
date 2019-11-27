@@ -41,7 +41,8 @@ from requests import Response
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.models.enums.admission_state_choices import SUBMITTED
+from continuing_education.models.enums.admission_state_choices import SUBMITTED, ACCEPTED_NO_REGISTRATION_REQUIRED, \
+    ACCEPTED
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
@@ -342,6 +343,12 @@ class ViewStudentAdmissionTestCase(TestCase):
             json.loads(response.content.decode('utf-8')),
             {'additional_information_label': '<p>additional_information</p>'}
         )
+
+    def test_accepted_admission_detail_no_registration_required(self):
+        self.admission['state'] = ACCEPTED_NO_REGISTRATION_REQUIRED
+        url = reverse('admission_detail', args=[self.admission['uuid']])
+        response = self.client.get(url)
+        self.assertEqual(response.context['admission']['state'], ACCEPTED)
 
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
