@@ -1,6 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 ACCEPTED = 'Accepted'
+ACCEPTED_NO_REGISTRATION_REQUIRED = 'Accepted (no registration required)'
 REJECTED = 'Rejected'
 WAITING = 'Waiting'
 
