@@ -103,9 +103,9 @@
                            id="lnk_my_dropdow_language">{{ LANGUAGE_CODE }}<span
                                 class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            {% for lang in LANGUAGES %}
-                                {% if lang.0 != LANGUAGE_CODE %}
-                                    <li><a href="{% url 'set_language' lang.0 %}">{{ lang.0 }}</a></li>
+                            {% for lang, _ in LANGUAGES %}
+                                {% if lang != LANGUAGE_CODE %}
+                                    <li><a href="{% url 'set_language' lang %}">{{ lang }}</a></li>
                                 {% endif %}
                             {% endfor %}
                         </ul>
@@ -131,9 +131,9 @@
                            id="lnk_my_dropdow_language">{{ LANGUAGE_CODE }}<span
                                 class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            {% for lang in LANGUAGES %}
-                                {% if lang.0 != LANGUAGE_CODE %}
-                                    <li><a href="{% url 'set_language' lang.0 %}">{{ lang.0 }}</a></li>
+                            {% for lang, _ in LANGUAGES %}
+                                {% if lang != LANGUAGE_CODE %}
+                                    <li><a href="{% url 'set_language' lang %}">{{ lang }}</a></li>
                                 {% endif %}
                             {% endfor %}
                         </ul>
