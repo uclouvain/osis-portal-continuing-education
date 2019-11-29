@@ -235,14 +235,24 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
 
-    def test_admission_save_with_error(self):
+    @mock.patch('continuing_education.views.admission.get_continuing_education_training')
+    def test_admission_save_with_error(self, mock_get_training):
+        mock_get_training.return_value = {
+            'additional_information_label': 'additional_information',
+            'registration_required': True
+        }
         admission = AdmissionDictFactory(self.person_information)
         admission['person_information'] = "no valid pk"
         response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
 
-    def test_edit_get_admission_found_incomplete(self):
+    @mock.patch('continuing_education.views.admission.get_continuing_education_training')
+    def test_edit_get_admission_found_incomplete(self, mock_get_training):
+        mock_get_training.return_value = {
+            'additional_information_label': 'additional_information',
+            'registration_required': True
+        }
         self.admission['last_degree_level'] = ''
         url = reverse('admission_edit', args=[self.admission['uuid']])
         response = self.client.get(url)
@@ -262,7 +272,12 @@ class ViewStudentAdmissionTestCase(TestCase):
         )
         self.assertEqual(messages_list[0].level, messages.WARNING)
 
-    def test_edit_get_admission_found_complete(self):
+    @mock.patch('continuing_education.views.admission.get_continuing_education_training')
+    def test_edit_get_admission_found_complete(self, mock_get_training):
+        mock_get_training.return_value = {
+            'additional_information_label': 'additional_information',
+            'registration_required': True
+        }
         url = reverse('admission_edit', args=[self.admission['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
