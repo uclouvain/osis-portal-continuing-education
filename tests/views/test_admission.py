@@ -239,7 +239,7 @@ class ViewStudentAdmissionTestCase(TestCase):
     def test_admission_save_with_error(self, mock_get_training):
         mock_get_training.return_value = {
             'additional_information_label': 'additional_information',
-            'registration_required': True
+            'registration_required': 'true'
         }
         admission = AdmissionDictFactory(self.person_information)
         admission['person_information'] = "no valid pk"
