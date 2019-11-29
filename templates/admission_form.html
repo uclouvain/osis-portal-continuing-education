@@ -249,7 +249,6 @@
             }
         });
         //check when page is loaded
-        console.log($("#id_" + 'billing' + "-country option"))
         billing_radio.prop('checked') ? copy_address("billing") : empty_address(("billing"), billing_address);
         function copy_address(e) {
             ["location", "postal_code", "city"].forEach(function (field) {
