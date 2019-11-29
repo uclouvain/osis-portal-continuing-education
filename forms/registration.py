@@ -159,6 +159,11 @@ class RegistrationForm(forms.Form):
     def clean_residence_phone(self):
         return self.cleaned_data['residence_phone'].replace(' ', '')
 
+    def __init__(self, data, only_billing=False, **kwargs):
+        super().__init__(data, **kwargs)
+        if only_billing:
+            self.fields['previous_ucl_registration'].required = False
+
 
 class StrictRegistrationForm(RegistrationForm):
     residence_phone = forms.CharField(

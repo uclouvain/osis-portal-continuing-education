@@ -160,17 +160,22 @@ def prepare_registration_data(registration, address, forms):
     if registration:
         forms['registration'].cleaned_data['uuid'] = registration['uuid']
 
-    address['country'] = address['country']['iso_code']
+    address['country'] = address['country']['iso_code'] if 'iso_code' in address['country'] else address['country'][0]
 
     if forms['registration'].cleaned_data['use_address_for_billing'] == "True":
         forms['registration'].cleaned_data['billing_address'] = address
     else:
         forms['registration'].cleaned_data['billing_address'] = forms['billing'].cleaned_data
-
-    if forms['registration'].cleaned_data['use_address_for_post'] == "True":
-        forms['registration'].cleaned_data['residence_address'] = address
+    if registration['formation']['registration_required']:
+        if 'residence' in forms:
+            if forms['registration'].cleaned_data['use_address_for_post'] == "True":
+                forms['registration'].cleaned_data['residence_address'] = address
+            else:
+                forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
     else:
-        forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
+        keys = ['children_number', 'previous_ucl_registration', 'use_address_for_post', 'residence_address']
+        for key_field in keys:
+            forms['registration'].cleaned_data.pop(key_field)
 
 
 def prepare_registration_for_submit(registration):
