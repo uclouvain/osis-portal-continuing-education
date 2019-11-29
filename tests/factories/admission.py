@@ -62,7 +62,13 @@ def AdmissionDictFactory(person_information, state=DRAFT):
         'activity_sector': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.SECTOR_CHOICES)).fuzz(),
         'motivation': 'motivation',
         'professional_personal_interests': 'professional impact',
-        'state': state
+        'state': state,
+        'registration_type': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES)).fuzz(),
+        'use_address_for_billing': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'billing_address': AddressDictFactory(),
+        'head_office_name': factory.Faker('company'),
+        'company_number': factory.Faker('isbn10'),
+        'vat_number': factory.Faker('ssn'),
     }
     return admission
 
