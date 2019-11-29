@@ -141,7 +141,7 @@ def admission_form(request, admission_uuid=None):
     admission = _get_admission_or_403(admission_uuid, request)
     formation = _get_formation(request)
     registration_required = admission['formation']['registration_required'] \
-        if admission else formation.get('registration_required')
+        if admission else formation.get('registration_required', True)
 
     address_form, adm_form, id_form, person_form = _fill_forms_with_existing_data(admission, formation, request)
     forms_valid = all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()])
