@@ -341,7 +341,10 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             json.loads(response.content.decode('utf-8')),
-            {'additional_information_label': '<p>additional_information</p>'}
+            {
+                'additional_information_label': '<p>additional_information</p>',
+                'registration_required': True
+            }
         )
 
     def test_accepted_admission_detail_no_registration_required(self):
