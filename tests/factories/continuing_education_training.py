@@ -51,6 +51,7 @@ def ContinuingEducationTrainingDictFactory(active=True):
                 'last_name': manager.last_name
             }
         ],
-        'postal_address': AddressDictFactory()
+        'postal_address': AddressDictFactory(),
+        'registration_required': True
     }
     return cet
