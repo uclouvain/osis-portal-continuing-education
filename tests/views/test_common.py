@@ -28,8 +28,8 @@ from collections import OrderedDict
 
 from django.test import TestCase
 from django.test.utils import override_settings
-from continuing_education.views.common import _build_error_data, ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION
 
+from continuing_education.views.common import _build_error_data, ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION
 
 A_FORM_FIELD = 'anything_else'
 OTHER_FORM_FIELD = 'other_field'
@@ -41,14 +41,13 @@ OTHER_FIELD_LABEL = 'Other field'
 class CommonViewTestCase(TestCase):
 
     def test_build_warning_from_errors_dict(self):
-
         errors_dict = OrderedDict([(A_FORM_FIELD_LABEL, [A_FORM_FIELD]),
                                    (OTHER_FIELD_LABEL, [OTHER_FORM_FIELD])]
                                   )
 
         self.assertCountEqual(
             _build_error_data(errors_dict),
-                              ['Anything else', OTHER_FIELD_LABEL]
+            ['Anything else', OTHER_FIELD_LABEL]
         )
 
     @override_settings(LANGUAGES=[('en', 'English'), ], LANGUAGE_CODE='en')

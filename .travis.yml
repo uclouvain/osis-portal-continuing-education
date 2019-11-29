@@ -7,7 +7,7 @@ python: "3.5.5"
 services:
   - postgresql
 addons:
-    postgresql: "9.6"
+  postgresql: "9.6"
 
 install:
   - export PROJECT_DIR=`pwd`
@@ -19,7 +19,7 @@ install:
   - pip install -r requirements.txt
   - rm -Rf continuing_education
   - ln -s $PROJECT_DIR continuing_education
-  
+
 before_script:
   - cp .env.example .env
   - echo 'APPS_TO_TEST += ("continuing_education",)' >> frontoffice/settings/local.py
@@ -32,7 +32,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - python3 manage.py compilemessages && coverage run manage.py test --exclude-tag=selenium
+  - python3 manage.py compilemessages && coverage run manage.py test continuing_education --exclude-tag=selenium --no-logs
 
 after_script:
   - coverage xml

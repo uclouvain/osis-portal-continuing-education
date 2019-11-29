@@ -1,30 +1,30 @@
 <!doctype html>
-{% load staticfiles %}
+{% load static %}
 {% load statici18n i18n %}
 {% load analytical %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% get_current_language as LANGUAGE_CODE %}
@@ -52,7 +52,8 @@
     {% endblock %}
     {% analytical_head_bottom %}
 </head>
-<body {% if environment == 'DEV' %} class="devmode" {% elif environment == 'LOCAL' %} class="localmode" {% elif environment == 'QA' %} class="qamode" {% endif %}>
+<body {% if environment == 'DEV' %} class="devmode" {% elif environment == 'LOCAL' %}
+                                    class="localmode" {% elif environment == 'QA' %} class="qamode" {% endif %}>
 {% analytical_body_top %}
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -71,7 +72,7 @@
             {% else %}
                href="#"
             {% endif %} id="lnk_home">
-                <img src="{% static 'img/logo_header.jpg' %}"></a>
+                <img alt="header" src="{% static 'img/logo_header.jpg' %}"></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -80,7 +81,8 @@
                 {% if request.user.is_authenticated %}
                     {% if perms.base.can_access_administration %}
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true"
                                aria-expanded="false" id="bt_administrations">{% trans 'Administration' %}</a>
                             <ul class="dropdown-menu">
                                 {% if perms.base.is_administrator %}
@@ -101,9 +103,9 @@
                            id="lnk_my_dropdow_language">{{ LANGUAGE_CODE }}<span
                                 class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            {% for lang in LANGUAGES%}
-                                {% if lang.0 != LANGUAGE_CODE%}
-                                    <li><a href="{% url 'profile_lang' lang.0 %}">{{ lang.0 }}</a></li>
+                            {% for lang, _ in LANGUAGES %}
+                                {% if lang != LANGUAGE_CODE %}
+                                    <li><a href="{% url 'set_language' lang %}">{{ lang }}</a></li>
                                 {% endif %}
                             {% endfor %}
                         </ul>
@@ -121,6 +123,21 @@
                             </ul>
                         {% endif %}
                     </li>
+                {% else %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"
+                           id="lnk_my_dropdow_language">{{ LANGUAGE_CODE }}<span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            {% for lang, _ in LANGUAGES %}
+                                {% if lang != LANGUAGE_CODE %}
+                                    <li><a href="{% url 'set_language' lang %}">{{ lang }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
                 {% endif %}
             </ul>
         </div>
@@ -128,14 +145,14 @@
 </nav>
 {% if environment == 'DEV' %}
     <div class="devorange">DEV</div>
-{% elif environment == 'LOCAL'%}
+{% elif environment == 'LOCAL' %}
     <div class="localred">LOCAL</div>
-{% elif environment == 'QA'%}
+{% elif environment == 'QA' %}
     <div class="qagreen">QA</div>
 {% endif %}
 {% if subject %}
     <div class="container">
-        <div class="alert alert-warning" role="alert"><b>{{ subject }}</b><br>{{ notice }}</div>
+        <div class="alert alert-warning" role="alert"><strong>{{ subject }}</strong><br>{{ notice }}</div>
     </div>
 {% endif %}
 <div class="container">
@@ -143,8 +160,8 @@
     {% if request.user.is_authenticated %}
         {% block breadcrumb_area %}
             <ol class="breadcrumb">
-            {% block breadcrumb %}
-            {% endblock %}
+                {% block breadcrumb %}
+                {% endblock %}
             </ol>
         {% endblock %}
     {% endif %}

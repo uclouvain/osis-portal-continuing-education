@@ -1,30 +1,30 @@
 {% extends "continuing_education_layout.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 {% load bootstrap3 %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% block breadcrumb %}
     <li><a href="{% url 'continuing_education_home' %}">{% trans 'Continuing Education' %}</a></li>
@@ -63,8 +63,13 @@
                     {% trans 'References' %}
                     <span class="badge badge-warning"></span>
                 </a></li>
+                <li style="display:none;" id="additional_tab" role="presentation"><a
+                        href="#additional_information_block" role="tab" data-toggle="tab">
+                    {% trans 'Additional Information' %}
+                    <span class="badge badge-warning"></span>
+                </a></li>
                 <div class="form-button-group pull-right">
-                   {% include 'fragment/wizard_navbar.html' %}
+                    {% include 'fragment/wizard_navbar.html' %}
                 </div>
             </ul>
 
@@ -73,6 +78,12 @@
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field id_form.last_name label_class="required" %}</div>
                         <div class="col-md-6">{% bootstrap_field id_form.first_name label_class="required" %}</div>
+                        {% if not admission and not person_form.initial %}
+                        <div class="col-md-6 col-md-offset-6" style="margin-bottom: 15px;">
+                            <input id="no-firstname-checkbox" type="checkbox"/>
+                            <span>{% trans 'I do not have a first name' %}</span>
+                        </div>
+                        {% endif %}
                     </div>
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field id_form.gender label_class="required" %}</div>
@@ -150,24 +161,31 @@
                     {% bootstrap_field admission_form.awareness_former_students %}
                     {% bootstrap_field admission_form.awareness_moocs %}
                     {% with admission_form.awareness_other.value as other_value %}
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label for="id_awareness_other">
-                                <input type="checkbox" name="awareness_other" class="" id="id_awareness_other_checkbox"
-                                    {% if other_value != None and other_value != '' %}
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label for="id_awareness_other">
+                                    <input type="checkbox" name="awareness_other" class=""
+                                           id="id_awareness_other_checkbox"
+                                            {% if other_value != None and other_value != '' %}
                                            checked
-                                    {% endif %}>
+                                            {% endif %}>
                                     {% trans 'Other' %}
-                            </label>
+                                </label>
+                            </div>
+                            <div id="other-text-field" class="col-md-4"
+                                    {% if other_value == None or other_value == '' %}
+                                 hidden
+                                    {% endif %}>
+                                {% bootstrap_field admission_form.awareness_other show_label=False form_group_class='other-form-group' %}
+                            </div>
                         </div>
-                        <div id="other-text-field" class="col-md-4"
-                                {% if other_value == None or other_value == '' %}
-                                    hidden
-                                {% endif %}>
-                            {% bootstrap_field admission_form.awareness_other show_label=False form_group_class='other-form-group' %}
-                        </div>
-                    </div>
                     {% endwith %}
+                </div>
+
+                <div id="additional_information_block" role="tabpanel" class="panel-body tab-pane">
+                    {% bootstrap_label content=_("Additional Information") label_class="required" %}
+                    <p class="additional_information_label" style="font-style: italic;">-</p>
+                    {% bootstrap_field admission_form.additional_information label_class="required" show_label=False %}
                 </div>
             </div>
             <div class="panel-footer text-right">
@@ -183,69 +201,130 @@
 
 
 {% block script %}
-<script>
-    function showTab(tab) {
-        $('#tabs a[href="#' + tab + '"]').tab('show');
-    }
-    //re-enable disabled field on form submit
-    let fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year"];
-
-    function enableFields(fields) {
-        for (var field of fields) {
-            $("#id_" + field).prop( "disabled", false );
+    <script>
+        function showTab(tab) {
+            $('#tabs a[href="#' + tab + '"]').tab('show');
         }
-    }
 
-    function other_selected(){
-        return $('#id_awareness_other_checkbox').prop('checked');
-    }
+        //re-enable disabled field on form submit
+        let fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year"];
 
-    $( "#form" ).submit(function( event ) {
-        if(other_selected() && !$('#other-text-field input').val()){
-            event.preventDefault();
-            showTab("references");
-            $(".other-form-group").addClass('has-error');
+        function enableFields(fields) {
+            for (var field of fields) {
+                $("#id_" + field).prop("disabled", false);
+            }
         }
-        enableFields(fields_to_enable);
+
+        function other_selected() {
+            return $('#id_awareness_other_checkbox').prop('checked');
+        }
+
+        $("#form").submit(function (event) {
+            if (other_selected() && !$('#other-text-field input').val()) {
+                event.preventDefault();
+                showTab("references");
+                $(".other-form-group").addClass('has-error');
+            }
+            enableFields(fields_to_enable);
+        });
+
+        //show tab with missing mandatory input
+        $(".save-btn").click(function () {
+            if (!$('#id_formation').val() ||
+                !$('#id_last_name').val() ||
+                (!$('#id_first_name').val() &&  $("#no-firstname-checkbox").prop('checked')) ||
+                !$("#id_birth_location").val()){
+                showTab("identification");
+            }
+        });
+
+        //show missing fields in golden
+        let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g, '"');
+        errors_fields = JSON.parse(errors_fields);
+        for (field of errors_fields)
+            $('#id_' + field).parent().addClass('has-warning');
+
+        //show other text field when other is checked
+        $('#id_awareness_other_checkbox').change(function () {
+            $('#other-text-field').toggle(this.checked);
+            if (!this.checked) {
+                $('#other-text-field input').val('');
+            }
+        });
+
+        $('.tab-pane').each(function () {
+            let tabId = $(this)[0].id;
+            let countWarning = $(this).find('.has-warning').length;
+            if (countWarning > 0) {
+                let tabBadge = $('a[href="#' + tabId + '"]').find('.badge')[0];
+                tabBadge.innerText = countWarning;
+            }
+        });
+
+        $('.btnNext').click(function () {
+            $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        });
+
+        $('.btnPrevious').click(function () {
+            $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+        });
+
+        let selected_formation_uuid = $("#id_formation").val();
+
+        //trigger at first load
+        get_additional_information(selected_formation_uuid);
+
+        //listen changed value from dal autocomplete
+        $('#id_formation').next().bind('DOMSubtreeModified', function () {
+            $("#id_additional_information").val('');
+            let formation_uuid = $("#id_formation").val();
+            if (formation_uuid !== selected_formation_uuid) {
+                selected_formation_uuid = formation_uuid;
+                if (formation_uuid) {
+                    get_additional_information(formation_uuid);
+                } else {
+                    $("#additional_tab").hide();
+                }
+            }
+        });
+
+        function get_additional_information(formation_uuid) {
+            $.ajax({
+                url: '{% url 'get_formation_information' %}',
+                method: "GET",
+                data: {
+                    'formation_uuid': formation_uuid,
+                },
+                success: (data) => {
+                    if (stripTags(data.additional_information_label)) {
+                        $("#additional_tab").show();
+                        $(".additional_information_label").html(data.additional_information_label);
+                    } else {
+                        $("#additional_tab").hide();
+                    }
+                }
+            });
+        }
+
+        function stripTags(str) {
+            return str.replace(/(<([^>]+)>)/ig, "");
+        }
+
+    $("#no-firstname-checkbox").change(function(){
+        const input = $("#id_first_name");
+        const label = $("label[for='id_first_name']");
+        if(this.checked){
+            label.removeClass('required');
+            input.val('');
+            input.prop('disabled', true);
+            $("#form").append("<input id='no-first-name-input' type='hidden' name='no_first_name' value='1'/>");
+        } else {
+            label.addClass('required');
+            input.prop('disabled', false);
+            $("#form").remove('#no-first-name-input');
+        }
     });
 
-    //show tab with missing mandatory input
-    $(".save-btn").click(function(){
-        if(!$('#id_formation').val()){
-            showTab("identification");
-        }
-    });
-
-    //show missing fields in golden
-    let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g,'"');
-    errors_fields = JSON.parse(errors_fields);
-    for(field of errors_fields)
-        $('#id_'+field).parent().addClass('has-warning');
-
-    //show other text field when other is checked
-    $('#id_awareness_other_checkbox').change(function(){
-        $('#other-text-field').toggle(this.checked);
-        if(!this.checked){
-            $('#other-text-field input').val('');
-        }
-    });
-
-    $('.tab-pane').each(function(){
-        let tabId = $(this)[0].id;
-        let countWarning = $(this).find('.has-warning').length;
-        if(countWarning>0){
-            let tabBadge = $('a[href="#'+tabId+'"]').find('.badge')[0];
-            tabBadge.innerText = countWarning;
-        }
-    });
-
-     $('.btnNext').click(function(){
-        $('.nav-tabs > .active').next('li').find('a').trigger('click');;
-     });
-
-     $('.btnPrevious').click(function(){
-        $('.nav-tabs > .active').prev('li').find('a').trigger('click');
-     });
 </script>
 
 {% endblock %}

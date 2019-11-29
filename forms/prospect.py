@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 class ProspectForm(Form):
-
     first_name = forms.CharField(
         required=True,
         label=_("First name")

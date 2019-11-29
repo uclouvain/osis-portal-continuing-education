@@ -28,10 +28,12 @@ import itertools
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils.html import linebreaks
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_GET
 
 from base.models.person import Person
 from continuing_education.forms.account import ContinuingEducationPersonForm
@@ -40,17 +42,31 @@ from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views import api
+from continuing_education.views.api import get_continuing_education_training
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message
 from continuing_education.views.file import _get_files_list, FILES_URL
+from frontoffice.settings.base import MAX_UPLOAD_SIZE
+from osis_common.decorators.ajax import ajax_required
 
 
 @login_required
 def admission_detail(request, admission_uuid):
-    admission = api.get_admission(request, admission_uuid)
-    if admission and admission['state'] == admission_state_choices.SUBMITTED:
+    try:
+        admission = api.get_admission(request, admission_uuid)
+    except Http404:
+        registration = api.get_registration(request, admission_uuid)
+        if registration and registration['state'] == admission_state_choices.ACCEPTED:
+            return redirect(reverse('registration_detail',
+                                    kwargs={'admission_uuid': admission_uuid if registration else ''}),
+                            )
+        else:
+            return Http404
+    if admission['state'] == admission_state_choices.ACCEPTED_NO_REGISTRATION_REQUIRED:
+        admission['state'] = admission_state_choices.ACCEPTED
+    if admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
-    if admission and admission['state'] == admission_state_choices.DRAFT:
+    if admission['state'] == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,
             title=_("Your admission file has been saved. Please consider the following information :")
@@ -74,7 +90,8 @@ def admission_detail(request, admission_uuid):
                 'is_draft': admission['state'] == admission_state_choices.DRAFT,
                 'is_rejected': admission['state'] == admission_state_choices.REJECTED,
                 'is_waiting': admission['state'] == admission_state_choices.WAITING
-            }
+            },
+            'MAX_UPLOAD_SIZE': MAX_UPLOAD_SIZE
         }
     )
 
@@ -125,7 +142,6 @@ def admission_form(request, admission_uuid=None):
         _show_save_before_submit(request)
 
     errors_fields = _is_admission_submittable_and_show_errors(admission, errors_fields, request)
-
     if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
         api.prepare_admission_data(
             admission,
@@ -181,6 +197,8 @@ def _get_formation(request):
 
 def _is_admission_submittable_and_show_errors(admission, errors_fields, request):
     if admission and not request.POST:
+        formation_uuid, formation_acronym = admission['formation']
+        admission['formation_info'] = get_continuing_education_training(request, formation_uuid)
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
@@ -192,7 +210,11 @@ def _fill_forms_with_existing_data(admission, formation, request):
     Person.objects.filter(user=request.user).update(**_get_datas_from_admission('person', admission))
     base_person = Person.objects.get(user=request.user)
     adm_form = AdmissionForm(request.POST or None, initial=admission, formation=formation)
-    id_form = PersonForm(request.POST or None, instance=base_person)
+    id_form = PersonForm(
+        request.POST or None,
+        instance=base_person,
+        no_first_name_checked=request.POST.get('no_first_name', False)
+    )
     person_information = _get_datas_from_admission('person_information', admission)
     person_information.update(
         api.get_continuing_education_person(request)
@@ -239,3 +261,14 @@ def _update_or_create_admission(adm_form, admission, request):
     else:
         admission = api.post_admission(request, adm_form.cleaned_data)
     return admission
+
+
+@ajax_required
+@login_required
+@require_GET
+def get_formation_information(request):
+    formation_uuid = request.GET.get('formation_uuid')
+    training = get_continuing_education_training(request, formation_uuid)
+    return JsonResponse(data={
+        'additional_information_label': linebreaks(training.get('additional_information_label', ''))
+    })

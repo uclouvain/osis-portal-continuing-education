@@ -38,7 +38,11 @@ def ContinuingEducationTrainingDictFactory(active=True):
     cet = {
         'uuid': str(uuid.uuid4()),
         'active': active,
-        'acronym': edy.acronym,
+        'education_group': {
+            'uuid': ed.uuid,
+            'acronym': edy.acronym,
+            'title': edy.title,
+        },
         'managers': [
             {
                 'email': manager.email,

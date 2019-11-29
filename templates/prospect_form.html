@@ -1,30 +1,30 @@
 {% extends "continuing_education_layout.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 {% load bootstrap3 %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% block breadcrumb %}
@@ -35,12 +35,14 @@
 
 {% block content %}
     <form id="form" method="POST" class="post-form">
-    {% csrf_token %}
+        {% csrf_token %}
         <div class="page-header">
-            <a class="btn btn-default pull-right" id="cancel_prospect_form" href="{% url 'continuing_education_home' %}">
+            <a class="btn btn-default pull-right" id="cancel_prospect_form"
+               href="{% url 'continuing_education_home' %}">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'Cancel' %}
             </a>
-            <button type="submit" class="btn btn-primary pull-right" title="{%trans 'Save' %}"  style="margin-right: 10px;">
+            <button type="submit" class="btn btn-primary pull-right" title="{% trans 'Save' %}"
+                    style="margin-right: 10px;">
                 <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Save' %}
             </button>
             <h3>
@@ -51,14 +53,14 @@
 
             <div class="panel panel-body">
 
-                 <div id="formation" class="row">
-                     {% bootstrap_field form.formation form_group_class="form-group col-md-12" label=_("Formation") %}
+                <div id="formation" class="row">
+                    {% bootstrap_field form.formation form_group_class="form-group col-md-12" label=_("Formation") %}
                 </div>
                 <div id="identification" class="row">
                     {% bootstrap_field form.name form_group_class="form-group col-md-6" label=_("Name") %}
                     {% bootstrap_field form.first_name form_group_class="form-group col-md-6" label=_("First name") %}
                 </div>
-                 <div id="location" class="row">
+                <div id="location" class="row">
                     {% bootstrap_field form.city form_group_class="form-group col-md-6" label=_("City") %}
                     {% bootstrap_field form.postal_code form_group_class="form-group col-md-6" label=_("Postal code") %}
                 </div>
@@ -68,10 +70,11 @@
                 </div>
             </div>
         </div>
-            <a class="btn btn-default pull-right" id="cancel_prospect_form_bottom"  href="{% url 'continuing_education_home' %}">
+        <a class="btn btn-default pull-right" id="cancel_prospect_form_bottom"
+           href="{% url 'continuing_education_home' %}">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> {% trans 'Cancel' %}
         </a>
-        <button type="submit" class="btn btn-primary pull-right" title="{%trans 'Save' %}"  style="margin-right: 10px;">
+        <button type="submit" class="btn btn-primary pull-right" title="{% trans 'Save' %}" style="margin-right: 10px;">
             <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Save' %}
         </button>
     </form>

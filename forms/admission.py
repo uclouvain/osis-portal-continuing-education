@@ -5,7 +5,6 @@ from django.forms import ChoiceField, Form
 from django.utils.translation import gettext_lazy as _
 
 from continuing_education.models.enums import enums, admission_state_choices
-from reference.models.country import Country
 
 phone_regex = RegexValidator(
     regex=r'^(?P<prefix_intro>\+|0{1,2})\d{7,15}$',
@@ -14,7 +13,6 @@ phone_regex = RegexValidator(
 
 
 class AdmissionForm(Form):
-
     formation = autocomplete.Select2ListCreateChoiceField(
         widget=autocomplete.ListSelect2(url='cetraining-autocomplete'),
         required=True,
@@ -195,6 +193,12 @@ class AdmissionForm(Form):
         label=_("State reason")
     )
 
+    additional_information = forms.CharField(
+        widget=forms.Textarea,
+        required=False,
+        label=_("Additional Information")
+    )
+
     def clean_phone_mobile(self):
         return self.cleaned_data['phone_mobile'].replace(' ', '')
 
@@ -202,24 +206,36 @@ class AdmissionForm(Form):
         formation = kwargs.pop('formation', None)
         super(AdmissionForm, self).__init__(*args, **kwargs)
         if formation:
-            self.initial['formation'] = (formation['uuid'], formation['acronym'])
+            self.initial['formation'] = (
+                formation['uuid'],
+                "{} - {}".format(
+                    formation['education_group']['acronym'], formation['education_group']['title']
+                )
+            )
             self.fields['formation'].choices = [self.initial['formation']]
         elif self.initial:
             self._set_initial_fields()
+        self.fields['additional_information'].widget.attrs['placeholder'] = _(
+            "Write down here the answers to further questions related to the chosen training"
+        )
 
     def _set_initial_fields(self):
-        if self.initial.get('formation'):
-            self.initial['formation'] = (
-                self.initial['formation']['uuid'],
-                self.initial['formation']['acronym']
-            )
-            self.fields['formation'].choices = [self.initial['formation']]
-        if self.initial.get('citizenship'):
-            self.initial['citizenship'] = (
-                Country.objects.get(name=self.initial['citizenship']).iso_code,
-                self.initial['citizenship']
-            )
-            self.fields['citizenship'].choices = [self.initial['citizenship']]
+        fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', ['acronym', 'title'], 'uuid')]
+        for field, attribute, slug in fields_to_set:
+            if self.initial.get(field):
+                if isinstance(attribute, str):
+                    self.initial[field] = (
+                        self.initial[field][slug],
+                        self.initial[field][attribute]
+                    )
+                elif isinstance(attribute, list):
+                    self.initial[field] = (
+                        self.initial[field][slug],
+                        "{} - {}".format(self.initial[field]['education_group'][attribute[0]],
+                                         self.initial[field]['education_group'][
+                                             attribute[1]]) if field == 'formation' else self.initial[field][attribute]
+                    )
+                self.fields[field].choices = [self.initial[field]]
 
 
 class StrictAdmissionForm(AdmissionForm):
@@ -247,8 +263,17 @@ class StrictAdmissionForm(AdmissionForm):
             'activity_sector',
             'motivation',
             'professional_personal_interests',
-            'formation',
+            'formation'
         ]
+
+        formation_info = data['formation'] if type(data['formation']) is dict else data.get('formation_info', None)
+
+        if formation_info and _has_required_additional_information(formation_info):
+            required_fields.append('additional_information')
 
         for required_field in required_fields:
             self.fields[required_field].required = True
+
+
+def _has_required_additional_information(formation):
+    return 'additional_information_label' in formation.keys() and formation['additional_information_label']

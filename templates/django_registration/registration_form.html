@@ -3,27 +3,27 @@
 {% load bootstrap3 %}
 
 {% comment "License" %}
- * OSIS stands for Open Student Information System. It's an application
- * designed to manage the core business of higher education institutions,
- * such as universities, faculties, institutes and professional schools.
- * The core business involves the administration of students, teachers,
- * courses, programs and so on.
- *
- * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * A copy of this license - GNU General Public License - is available
- * at the root of the source code of this program.  If not,
- * see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% block title %}User Registration{% endblock %}
@@ -44,14 +44,16 @@
                 {% bootstrap_field form.password2 %}
                 <input type="hidden" name="username" id="id_username" value="{{ form.username.value }}"/>
                 <input type="checkbox" id="chbx_rgpd" required/>
-                {% trans 'By checking the checkbox, I accept that my data are used by IUFC.' %}
-                <br>
-                <br>
-                {% trans 'In accordance with regulation on the protection of individuals with regard to the processing of personal data, we undertake to protect your personal data.'  %}
-                {% trans 'We ensures that these data are used for IUFC only, the data collected will not be communicated to a third party.' %}
+                {% trans 'By checking the checkbox, I accept that my data are used by IUFC.' %}&nbsp;
+                <a target="_blank"
+                   href="https://uclouvain.be/fr/etudier/iufc/confidentialite-donnees.html">
+                    {% trans 'Privacy.' %}
+                </a>
+
             </div>
             <div class="panel panel-body">
-                <button type="submit" class="btn btn-primary" title="{%trans 'Submit' %}" id="bt_submit_registration" disabled>
+                <button type="submit" class="btn btn-primary" title="{% trans 'Submit' %}" id="bt_submit_registration"
+                        disabled>
                     <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' %}
                 </button>
                 <a class="btn btn-default" href="{% url 'continuing_education_home' %}" id="bt_cancel_registration">
@@ -64,22 +66,23 @@
 
 {% block script %}
     <script>
-        function fill_username(){
+        function fill_username() {
             var username = document.getElementById("id_username");
             var email = document.getElementById("id_email");
             username.value = email.value;
         }
-        $(document).ready(function(){
-            $("#bt_submit_registration").click(function(){
-               fill_username();
+
+        $(document).ready(function () {
+            $("#bt_submit_registration").click(function () {
+                fill_username();
             });
         });
 
-        $("#chbx_rgpd").click(function(){
-            if ($('#chbx_rgpd').is(':checked')){
-                $( "#bt_submit_registration" ).prop("disabled", false);
-            }else{
-                $( "#bt_submit_registration" ).prop("disabled", true);
+        $("#chbx_rgpd").click(function () {
+            if ($('#chbx_rgpd').is(':checked')) {
+                $("#bt_submit_registration").prop("disabled", false);
+            } else {
+                $("#bt_submit_registration").prop("disabled", true);
             }
         });
 

@@ -70,7 +70,7 @@ def upload_file(request, admission_uuid):
     except ApiException as e:
         display_error_messages(request, json.loads(e.body))
 
-    return redirect(request.META.get('HTTP_REFERER')+'#documents')
+    return redirect(request.META.get('HTTP_REFERER') + '#documents')
 
 
 @login_required
@@ -95,7 +95,7 @@ def remove_file(request, file_uuid, admission_uuid):
         display_success_messages(request, _("File correctly deleted"))
     except Exception:
         display_error_messages(request, _("A problem occured during delete"))
-    return redirect(request.META.get('HTTP_REFERER')+'#documents')
+    return redirect(request.META.get('HTTP_REFERER') + '#documents')
 
 
 def _get_files_list(request, admission):

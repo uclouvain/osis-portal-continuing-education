@@ -27,7 +27,7 @@ from collections import OrderedDict
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
-from django.contrib.auth.views import login as django_login
+from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import translation
@@ -61,12 +61,11 @@ def login(request):
         user = authenticate(username=username, password=password)
         person = person_mdl.find_by_user(user)
         # ./manage.py createsuperuser (in local) doesn't create automatically a Person associated to User
-        if person:
-            if person.language:
-                user_language = person.language
-                translation.activate(user_language)
-                request.session[translation.LANGUAGE_SESSION_KEY] = user_language
-        django_login(request)
+        if person and person.language:
+            user_language = person.language
+            translation.activate(user_language)
+            request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+        LoginView.as_view()(request)
         if not person:
             return redirect(reverse('admission_new'))
         return redirect(reverse('continuing_education_home'))
@@ -137,7 +136,7 @@ def get_submission_errors(admission, is_registration=False):
             data=admission['address']
         )
         adm_form = StrictAdmissionForm(
-            data=admission
+            data=admission,
         )
         forms = [person_form, person_information_form, address_form, adm_form]
         _update_errors(forms, errors, errors_field)
@@ -182,7 +181,7 @@ def add_informations_message_on_submittable_file(request, title):
             _("Do not forget to submit your file when it is complete"),
         ]
         message = "<strong>{}</strong><br>".format(title) + \
-            "".join(["- {}<br>".format(item) for item in items])
+                  "".join(["- {}<br>".format(item) for item in items])
 
         messages.add_message(
             request=request,

@@ -24,22 +24,25 @@
 #
 ##############################################################################
 import datetime
+import json
+import uuid
 from unittest import mock
 from unittest.mock import patch
 
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.models.enums.admission_state_choices import SUBMITTED
+from continuing_education.models.enums.admission_state_choices import SUBMITTED, ACCEPTED_NO_REGISTRATION_REQUIRED, \
+    ACCEPTED
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
@@ -63,7 +66,7 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         self.patcher = patch(
             "continuing_education.views.admission._get_files_list",
-            return_value=Response()
+            return_value={}
         )
         self.get_patcher = patch(
             "continuing_education.views.api.get_data_from_osis",
@@ -196,38 +199,38 @@ class ViewStudentAdmissionTestCase(TestCase):
         mock_post.return_value = (self.admission, HttpResponse.status_code)
         admission = {
             'activity_sector': 'PRIVATE',
-             'awareness_other': '',
-             'birth_country': 'BE',
-             'birth_date_day': '18',
-             'birth_date_month': '4',
-             'birth_date_year': '1992',
-             'birth_location': 'Bruxelles',
-             'citizenship': 'DZ',
-             'city': 'Roux',
-             'country': 'ZA',
-             'current_employer': 'da',
-             'current_occupation': 'da',
-             'email': 'benjamin@daubry.be',
-             'first_name': 'Benjamin',
-             'formation': self.formation['uuid'],
-             'gender': 'M',
-             'high_school_diploma': 'False',
-             'high_school_graduation_year': '',
-             'last_degree_field': 'da',
-             'last_degree_graduation_year': '2014',
-             'last_degree_institution': 'da',
-             'last_degree_level': 'dada',
-             'last_name': 'Daubry',
-             'location': 'Rue de Dinant 11',
-             'motivation': 'dada',
-             'other_educational_background': '',
-             'past_professional_activities': '',
-             'phone_mobile': '0474945669',
-             'postal_code': '5620',
-             'professional_impact': 'dada',
-             'professional_status': 'EMPLOYEE',
-             'state': 'Draft'
-                     }
+            'awareness_other': '',
+            'birth_country': 'BE',
+            'birth_date_day': '18',
+            'birth_date_month': '4',
+            'birth_date_year': '1992',
+            'birth_location': 'Bruxelles',
+            'citizenship': 'DZ',
+            'city': 'Roux',
+            'country': 'ZA',
+            'current_employer': 'da',
+            'current_occupation': 'da',
+            'email': 'benjamin@daubry.be',
+            'first_name': 'Benjamin',
+            'formation': self.formation['uuid'],
+            'gender': 'M',
+            'high_school_diploma': 'False',
+            'high_school_graduation_year': '',
+            'last_degree_field': 'da',
+            'last_degree_graduation_year': '2014',
+            'last_degree_institution': 'da',
+            'last_degree_level': 'dada',
+            'last_name': 'Daubry',
+            'location': 'Rue de Dinant 11',
+            'motivation': 'dada',
+            'other_educational_background': '',
+            'past_professional_activities': '',
+            'phone_mobile': '0474945669',
+            'postal_code': '5620',
+            'professional_impact': 'dada',
+            'professional_status': 'EMPLOYEE',
+            'state': 'Draft'
+        }
         response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
@@ -315,6 +318,7 @@ class ViewStudentAdmissionTestCase(TestCase):
                 'username': 'Test',
                 'is_deletable': True
             },
+            'uuid': str(uuid.uuid4()),
         }
         mock_get_files_list.return_value = [file]
         url = reverse('admission_detail', args=[self.admission['uuid']])
@@ -326,6 +330,24 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.context['admission'], self.admission)
         self.assertEqual(response.context['list_files'], [file])
 
+    @mock.patch('continuing_education.views.admission.get_continuing_education_training')
+    def test_ajax_get_formation_information(self, mock_get_training):
+        mock_get_training.return_value = {'additional_information_label': 'additional_information'}
+        response = self.client.get(reverse('get_formation_information'), data={
+            'formation_uuid': self.formation['uuid']
+        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            json.loads(response.content.decode('utf-8')),
+            {'additional_information_label': '<p>additional_information</p>'}
+        )
+
+    def test_accepted_admission_detail_no_registration_required(self):
+        self.admission['state'] = ACCEPTED_NO_REGISTRATION_REQUIRED
+        url = reverse('admission_detail', args=[self.admission['uuid']])
+        response = self.client.get(url)
+        self.assertEqual(response.context['admission']['state'], ACCEPTED)
+
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUp(self):
@@ -333,7 +355,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
         person_iufc = ContinuingEducationPersonDictFactory(PersonFactory().uuid)
         self.admission_model = AdmissionDictFactory(person_iufc)
-        person = PersonFactory()
+        PersonFactory()
         self.admission = AdmissionDictFactory(person_iufc, SUBMITTED)
 
     def test_admission_is_submittable(self):

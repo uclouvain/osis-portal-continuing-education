@@ -27,19 +27,18 @@
 from django.test import TestCase
 
 from base.tests.factories.person import PersonFactory
-from continuing_education.forms.admission import AdmissionForm
-from continuing_education.models.enums.admission_state_choices import ACCEPTED
-from continuing_education.tests.factories.admission import AdmissionDictFactory
-from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
+from continuing_education.forms.person import PersonForm
+from continuing_education.tests.factories.person import PersonDictFactory
 
 
-class TestAdmissionForm(TestCase):
+class TestPersonForm(TestCase):
     def test_valid_form(self):
-        admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid))
-        form = AdmissionForm(admission)
+        person = PersonDictFactory(PersonFactory())
+        form = PersonForm(data=person, no_first_name_checked=False)
         self.assertTrue(form.is_valid(), form.errors)
 
-    def test_invalid_student_state(self):
-        admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid), state=ACCEPTED)
-        form = AdmissionForm(admission)
-        self.assertFalse(form.is_valid(), form.errors)
+    def test_no_first_name_form(self):
+        person = PersonDictFactory(PersonFactory())
+        person.pop('first_name')
+        form = PersonForm(data=person, no_first_name_checked=True)
+        self.assertTrue(form.is_valid(), form.errors)

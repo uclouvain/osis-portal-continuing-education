@@ -1,30 +1,30 @@
 {% extends "continuing_education_layout.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 {% load bootstrap3 %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% block breadcrumb %}
@@ -35,118 +35,154 @@
 
 {% block content %}
     <div class="page-header">
-        {% if registration_is_submittable and is_accepted%}
+        {% if registration_is_submittable and is_accepted %}
             <form id="form" method="POST" class="post-form" action="{% url 'registration_submit' %}">
                 {% csrf_token %}
-                <a class="btn btn-primary pull-right" data-toggle="modal" data-target="#submit_confirmation_modal">
-                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> {% trans 'Submit' context "admission" %}
+                <a class="btn btn-primary pull-right" data-toggle="modal" data-target="#submit_confirmation_modal"
+                   id="btn_registration_finalize">
+                    <span class="glyphicon glyphicon-save"
+                          aria-hidden="true"></span> {% trans 'Submit' context "admission" %}
                 </a>
-                <input type="hidden" name="registration_uuid" value="{{ admission.uuid }}" />
+                <input type="hidden" name="registration_uuid" value="{{ admission.uuid }}"/>
                 {% include "fragment/submit_confirmation_modal.html" %}
             </form>
         {% endif %}
         {% if is_accepted %}
-            <a class="btn btn-default btn-space pull-right" href="{% url 'registration_edit' admission_uuid=admission.uuid%}">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> {% trans 'Edit' %}
+            <a class="btn btn-default btn-space pull-right"
+               href="{% url 'registration_edit' admission_uuid=admission.uuid %}">
+                <span class="glyphicon glyphicon-pencil"
+                      aria-hidden="true"></span> {% trans 'Edit' context 'edit continuing_education' %}
             </a>
             <span class="admission-detail-state admission-detail-state-draft btn-space pull-right">
                 {% trans "Not submitted" %}
             </span>
         {% else %}
-            <span class="admission-detail-state admission-detail-state-{{admission.state|lower|slugify}} btn-space pull-right">
+            <span class="admission-detail-state admission-detail-state-{{ admission.state|lower|slugify }} btn-space pull-right">
                 {% trans admission.state %}
             </span>
         {% endif %}
         {% if is_registration_submitted %}
-            <a class="btn btn-default btn-space pull-right" href="{% url 'registration_pdf' admission_uuid=admission_uuid%}">
+            <a class="btn btn-default btn-space pull-right"
+               href="{% url 'registration_pdf' admission_uuid=admission_uuid %}">
                 <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> {% trans 'Generate PDF' %}
             </a>
         {% endif %}
         <h2>{% trans 'Registration' %}</h2>
-        <h4>{{ admission.formation.acronym | default:"-" }}</h4>
+        <h4>{{ admission.formation.education_group.acronym | default:"-" }} -
+            {{ admission.formation.education_group.title | default:"-" }}</h4>
     </div>
     {% include 'template_messages.html' %}
     <div class="panel panel-default">
-        <ul id="tabs" class="nav nav-tabs">
-          <li role="presentation" class="active"><a href="#informations" role="tab" data-toggle="tab">{% trans 'Informations' %}</a></li>
-          <li role="presentation"><a href="#documents" role="tab" data-toggle="tab">{% trans 'Documents' %}</a></li>
-        </ul>
-          <div class="tab-content">
-           <div role="tabpanel" class="tab-pane active" id="informations">
+    <ul id="tabs" class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#informations" role="tab"
+                                                  data-toggle="tab">{% trans 'Informations' %}</a></li>
+        <li role="presentation"><a href="#documents" role="tab" data-toggle="tab">{% trans 'Documents' %}</a></li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="informations">
             <div class="panel panel-default">
                 {% csrf_token %}
-            <div class="panel-heading">{% trans 'Identification' %}</div>
+                <div class="panel-heading">{% trans 'Identification' %}</div>
                 <div class="panel panel-body">
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("First name") %} <br/> {{ admission.first_name | default:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Last name") %} <br/> {{ admission.last_name | default:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Gender") %} <br/> {{ admission.gender | default:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Citizenship") %} <br/> {{ admission.citizenship | upper | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("First name") %} <br/>
+                            {{ admission.person_information.person.first_name | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Last name") %} <br/>
+                            {{ admission.person_information.person.last_name | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Gender") %} <br/>
+                            {{ admission.person_information.person.gender | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Citizenship") %}
+                            <br/>{{ admission.citizenship.nationality | upper | default:"-" }}</div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Birth date") %} <br/> {{ admission.birth_date | default:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Birth location") %} <br/> {{ admission.birth_location | upper | default:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Birth country") %} <br/> {{ admission.birth_country| upper | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Birth date") %} <br/>
+                            {{ admission.person_information.birth_date | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Birth location") %} <br/>
+                            {{ admission.person_information.birth_location | upper | default:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Birth country") %} <br/>
+                            {{ admission.person_information.birth_country.name| upper | default:"-" }} </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("National registry number") %} <br/> {{ admission.national_registry_number | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("ID card number") %} <br/> {{ admission.id_card_number | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Passport number") %} <br/> {{ admission.passport_number | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("National registry number") %} <br/>
+                            {{ admission.national_registry_number | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("ID card number") %} <br/>
+                            {{ admission.id_card_number | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Passport number") %} <br/>
+                            {{ admission.passport_number | default_if_none:"-" }} </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Marital status") %} <br/> {{ admission.marital_status_text | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Spouse name") %} <br/> {{ admission.spouse_name | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Children number") %} <br/> {{ admission.children_number | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Marital status") %} <br/>
+                            {{ admission.marital_status_text | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Spouse name") %} <br/>
+                            {{ admission.spouse_name | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Children number") %} <br/>
+                            {{ admission.children_number | default_if_none:"-" }} </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-6">{% bootstrap_label _("Previous UCLouvain registration") %} <br/> {{ admission.previous_ucl_registration | yesno}} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Previous NOMA") %} <br/> {{ admission.previous_noma | default_if_none:"-" }} </div>
+                        <div class="col-md-6">{% bootstrap_label _("Previous UCLouvain registration") %}
+                            <br/> {{ admission.previous_ucl_registration | yesno }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Previous NOMA") %} <br/>
+                            {{ admission.previous_noma | default_if_none:"-" }} </div>
                     </div>
                     {% if is_accepted and  admission.condition_of_acceptance %}
-                    <div class="row form-group">
-                        <div class="col-md-12">{% bootstrap_label _("Conditionally accepted") %} <br/> {{ admission.condition_of_acceptance}} </div>
+                        <div class="row form-group">
+                            <div class="col-md-12">{% bootstrap_label _("Conditionally accepted") %}
+                                <br/> {{ admission.condition_of_acceptance }} </div>
 
-                    </div>
+                        </div>
                     {% endif %}
                 </div>
 
                 <div class="panel-heading">{% trans 'Billing' %}</div>
                 <div class="panel panel-body">
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Registration type") %} <br/> {{ admission.registration_type_text | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Registration type") %} <br/>
+                            {{ admission.registration_type_text | default_if_none:"-" }} </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Location") %} <br/> {{ admission.billing_address.location | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Postal code") %} <br/> {{ admission.billing_address.postal_code | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("City") %} <br/> {{ admission.billing_address.city | upper | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Country") %} <br/> {{ admission.billing_address.country | upper | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Location") %} <br/>
+                            {{ admission.billing_address.location | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Postal code") %} <br/>
+                            {{ admission.billing_address.postal_code | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("City") %} <br/>
+                            {{ admission.billing_address.city | upper | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Country") %} <br/>
+                            {{ admission.billing_address.country.name | upper | default_if_none:"-" }} </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Head office name") %} <br/> {{ admission.head_office_name | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Company number") %} <br/> {{ admission.company_number | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("VAT number") %} <br/> {{ admission.vat_number | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Head office name") %} <br/>
+                            {{ admission.head_office_name | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Company number") %} <br/>
+                            {{ admission.company_number | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("VAT number") %} <br/>
+                            {{ admission.vat_number | default_if_none:"-" }} </div>
                     </div>
                 </div>
 
                 <div class="panel-heading">{% trans 'Post' %}</div>
                 <div class="panel panel-body">
                     <div class="row form-group">
-                        <div class="col-md-3">{% bootstrap_label _("Location") %} <br/> {{ admission.residence_address.location | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Postal code") %} <br/> {{ admission.residence_address.postal_code | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("City") %} <br/> {{ admission.residence_address.city | upper | default_if_none:"-" }} </div>
-                        <div class="col-md-3">{% bootstrap_label _("Country") %} <br/> {{ admission.residence_address.country | upper | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Location") %} <br/>
+                            {{ admission.residence_address.location | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Postal code") %} <br/>
+                            {{ admission.residence_address.postal_code | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("City") %} <br/>
+                            {{ admission.residence_address.city | upper | default_if_none:"-" }} </div>
+                        <div class="col-md-3">{% bootstrap_label _("Country") %} <br/>
+                            {{ admission.residence_address.country.name | upper | default_if_none:"-" }} </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-md-4">{% bootstrap_label _("Residence phone") %} <br/> {{ admission.residence_phone | default_if_none:"-" }} </div>
+                        <div class="col-md-4">{% bootstrap_label _("Residence phone") %} <br/>
+                            {{ admission.residence_phone | default_if_none:"-" }} </div>
                     </div>
                 </div>
             </div>
-           </div>
-            <div role="tabpanel" class="tab-pane" id="documents">
-                <div class="panel-body">
-                    {% include 'fragment/files_panel.html' %}
-                </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="documents">
+            <div class="panel-body">
+                {% include 'fragment/files_panel.html' %}
             </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -154,7 +190,7 @@
 {% block script %}
     <script>
         $('.high_school_graduation_year').hide();
-        $('#id_high_school_diploma').on('change', function() {
+        $('#id_high_school_diploma').on('change', function () {
             console.log($(this).find(":selected").val());
             $('.high_school_graduation_year').toggle($(this).find(":selected").val());
         });
@@ -167,9 +203,15 @@
         var anchor = location.hash;
         $('#tabs a[href="' + anchor + '"]').tab('show');
 
-        $('#customFile').change(function(e) {
+        $('#customFile').change(function (e) {
             $('#custom-file-label').text(this.files[0].name);
             $('#btn-upload').removeAttr("disabled")
         });
+
+        $("#btn_registration_finalize").click(function (e) {
+            $('#btn_finalize').prop('disabled', false);
+        });
+
+
     </script>
 {% endblock %}

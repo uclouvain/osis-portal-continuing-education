@@ -35,6 +35,7 @@ from continuing_education.views.autocomplete.continuing_education_training impor
 
 urlpatterns = [
     url(r'^$', home.formations_list, name='formations_list'),
+    url(r'^set_lang/([A-Za-z-]+)/$', home.set_language, name='set_language'),
     url(r'^home/$', home.main_view, name='continuing_education_home'),
     url(r'^home/(?P<formation_id>[0-9a-f-]+)/$', home.main_view, name='continuing_education_home'),
     url(r'^authentication/', include([
@@ -96,4 +97,5 @@ urlpatterns = [
         ContinuingEducationTrainingAutocomplete.as_view(),
         name='cetraining-autocomplete',
     ),
+    url(r'^ajax/formation/', admission.get_formation_information, name='get_formation_information')
 ]

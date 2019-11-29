@@ -29,8 +29,8 @@ from unittest import mock
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.urls import reverse
 from mock import patch
 
 from base.tests.factories.academic_year import AcademicYearFactory
@@ -95,7 +95,7 @@ class FormationsListTestCase(TestCase):
         url = reverse('formations_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['pages_count'], range(1,2))
+        self.assertEqual(response.context['pages_count'], range(1, 2))
         self.assertEqual(response.context['formations'], formations['results'])
         self.assertTemplateUsed(response, 'continuing_education/formations.html')
 

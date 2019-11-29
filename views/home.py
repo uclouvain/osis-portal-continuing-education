@@ -26,6 +26,7 @@
 
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils import translation
 
 from base.models import person as mdl_person
 from continuing_education.views import api
@@ -33,7 +34,7 @@ from continuing_education.views import api
 
 def formations_list(request):
     limit = 10
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect(main_view)
     try:
         active_page = int(request.GET.get('page'))
@@ -41,13 +42,13 @@ def formations_list(request):
         active_page = 1
     paginator = api.get_continuing_education_training_list(
         limit=limit,
-        offset=(active_page-1)*limit,
+        offset=(active_page - 1) * limit,
     )
     formations = paginator['results']
     pages_count = round(paginator['count'] / limit)
     return render(request, "continuing_education/formations.html", {
         'formations': formations,
-        'pages_count': range(1, pages_count+1),
+        'pages_count': range(1, pages_count + 1),
         'active_page': active_page
     })
 
@@ -68,3 +69,9 @@ def main_view(request, formation_id=None):
             if not is_active:
                 return redirect(reverse('prospect_form', kwargs={'formation_uuid': formation_id}))
         return render(request, "authentication/login.html")
+
+
+def set_language(request, ui_language):
+    translation.activate(ui_language)
+    request.session[translation.LANGUAGE_SESSION_KEY] = ui_language
+    return redirect(request.META['HTTP_REFERER'])

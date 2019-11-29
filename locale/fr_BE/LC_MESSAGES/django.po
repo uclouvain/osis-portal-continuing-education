@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-19 11:46+0200\n"
+"POT-Creation-Date: 2019-11-22 14:04+0100\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,501 +17,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
 
-#: templates/registration_pdf.html:221
-msgid ""
-"\n"
-"                        - a photocopy of the internship agreement signed by "
-"all three parties<br/>\n"
-"                        <strong>Please bring your duly completed and signed "
-"application to the UCLouvain University's Enrolment Office</strong>\n"
-"                    "
-msgstr ""
-"\n"
-"                        - une photocopie de la convention de stage signée en "
-"bonne et due forme par tous les intervenants et de l’analyse de risques<br/"
-">\n"
-"                        <strong>merci de vous présenter avec ce dossier "
-"dûment complété et signé au service des inscriptions de l’UCLouvain</"
-"strong>\n"
-"                    "
-
-#: templates/registration_pdf.html:235
-msgid ""
-"\n"
-"                        - confirmation of enrolment at your home "
-"university<br/>\n"
-"                        <strong>Please return your duly completed and signed "
-"application for processing to the UCLouvain faculty in which you will be "
-"studying</strong>\n"
-"                    "
-msgstr ""
-"\n"
-"                        - une attestation d’inscription de votre université "
-"d’origine<br/>\n"
-"                        <strong>merci de renvoyer ce dossier dûment complété "
-"et signé à la faculté Uclouvain qui vous accueille pour suite utile</"
-"strong>\n"
-"                    "
-
-#: templates/registration_pdf.html:193
-msgid ""
-"\n"
-"                        - official offer of a place (\"autorisation "
-"d'inscription\") in a individual course(s) or language<br/>\n"
-"                        <strong>Please return your duly completed and signed "
-"application to the UCLouvain University's Enrolment Office</strong>\n"
-"                    "
-msgstr ""
-"\n"
-"                        - l’autorisation d’inscription de la faculté pour "
-"le(s) cours isolé(s) ou de l’Ilv pour le(s) cours de langue<br/>\n"
-"                        <strong>merci de renvoyer le dossier dûment complété "
-"et signé au service des inscriptions de l’UCLouvain</strong>\n"
-"                    "
-
-#: templates/registration_pdf.html:207
-msgid ""
-"\n"
-"                        - official offer of a place (\"autorisation "
-"d'inscription\") issued by the UCLouvain University's Enrolment Office<br/>\n"
-"                        <strong>Please bring your duly completed and signed "
-"application to the UCLouvain University's Enrolment Office</strong>\n"
-"                    "
-msgstr ""
-"\n"
-"                        - l’autorisation d’inscription délivrée par le "
-"Service des inscriptions de l’UCLouvain<br/>\n"
-"                        <strong>merci de vous présenter avec ce dossier "
-"dûment complété et signé au service des inscriptions de l’UCLouvain</"
-"strong>\n"
-"                    "
-
-#: templates/registration_pdf.html:332
-msgid ""
-"\n"
-"                        <h4>Reserved for continuing education</h4>\n"
-"                        [ ] This program is concerned with the \"66U\"\n"
-"                    "
-msgstr ""
-"\n"
-"                        <h4>Réservé à la formation continue</h4>\n"
-"                        [ ] Ce programme est concerné par la procédure « 66U "
-"»\n"
-"                    "
-
-#: templates/registration_pdf.html:310
-msgid ""
-"\n"
-"                        <h4>Reserved for the UCLouvain faculty</h4><br/>\n"
-"                        <small>(for enrolment on either an \"Inter-"
-"university programme\" or lifelong learning programme)</small><br/>\n"
-"                        The faculty where the student will study is required "
-"to:<br/>\n"
-"                        - specify the course title:<br/>\n"
-"                        - specify the UCLouvain course code to be used:<br/"
-">\n"
-"                        <table>\n"
-"                            <tr>\n"
-"                                <td>Date</td><td>Signature and stamp of the "
-"UCLouvain faculty</td>\n"
-"                            </tr>\n"
-"                        </table>\n"
-"                        Name and telephone extension\n"
-"                    "
-msgstr ""
-"\n"
-"                        <h4>Espace réservé à la faculté UCLouvain</h4><br/>\n"
-"                        <small>(soit pour une inscription « programme "
-"interuniversitaire », soit pour une inscription à un programme de formation "
-"continue)</small><br/>\n"
-"                        La faculté qui accueille l’étudiant est invitée<br/"
-">\n"
-"                        - à indiquer l’intitulé de la formation:<br/>\n"
-"                        - à indiquer le code programme UCLouvain à utiliser:"
-"<br/>\n"
-"                        <table>\n"
-"                            <tr>\n"
-"                                <td>Date</td><td>Signature et cachet de la "
-"faculté UCLouvain</td>\n"
-"                            </tr>\n"
-"                        </table>\n"
-"                        Nom + ext. téléphonique\n"
-"                    "
-
-#: templates/registration_pdf.html:400
-msgid ""
-"\n"
-"                        In accordance with the information at\n"
-"                        <a href=\"https://uclouvain.be/en/study/inscriptions/"
-"acces-aux-professions-reglementees.html\">\n"
-"                            https://uclouvain.be/en/study/inscriptions/acces-"
-"aux-professions-reglementees.html</a>,<br/>\n"
-"                        should it apply to me, I declare that I have "
-"received the information relating to the admission\n"
-"                        and graduation requirements and to the particular "
-"rules and restrictions of accreditation and\n"
-"                        professional establishment to which the professional "
-"or teacher training title is subject and\n"
-"                        I accept the terms.\n"
-"                    "
-msgstr ""
-"\n"
-"                       Conformément aux informations reprises sur le lien <a "
-"href=\"https://uclouvain.be/fr/etudier/inscriptions/acces-aux-professions-"
-"reglementees.html\">https://uclouvain.be/fr/etudier/inscriptions/acces-aux-"
-"professions-reglementees.html</a>, je déclare avoir reçu, si ces études me "
-"concernent, les informations relatives aux conditions d’accès à ces études "
-"ou d’accès à la suite de ces études et aux règles ou restrictions d’agrément "
-"ou d’établissement professionnel particulières auxquelles le titre "
-"professionnel ou d’agrégé est soumis et j’en accepte les termes.\n"
-"                    "
-
-#: templates/registration_pdf.html:367
-msgid ""
-"\n"
-"                        In accordance with the information at\n"
-"                        <a href=\"https://uclouvain.be/en/study/inscriptions/"
-"reglementations.html\">\n"
-"                            https://uclouvain.be/en/study/inscriptions/"
-"reglementations.html</a>,<br/>\n"
-"                        I declare that I have read and accept the terms of "
-"the university regulations.\n"
-"                    "
-msgstr ""
-"\n"
-"                       Conformément aux informations reprises sur le lien\n"
-"                        <a href=\"https://uclouvain.be/fr/etudier/"
-"inscriptions/reglementations.html\">\n"
-"                            https://uclouvain.be/fr/etudier/inscriptions/"
-"reglementations.html</a>,<br/>\n"
-"                        je déclare avoir lu le règlement de l’université et "
-"j’en accepte les termes.\n"
-"                    "
-
-#: templates/registration_pdf.html:383
-msgid ""
-"\n"
-"                        In accordance with the information at\n"
-"                        <a href=\"https://uclouvain.be/en/study/inscriptions/"
-"vie-privee.html\">\n"
-"                            https://uclouvain.be/en/study/inscriptions/vie-"
-"privee.html</a>,<br/>\n"
-"                        I declare that I have read and accept the terms of "
-"the data protection policy of the University\n"
-"                        of Louvain.\n"
-"                    "
-msgstr ""
-"\n"
-"                       Conformément aux informations reprises sur le lien\n"
-"                        <a href=\"https://uclouvain.be/fr/etudier/"
-"inscriptions/vie-privee.html\">\n"
-"                            https://uclouvain.be/fr/etudier/inscriptions/vie-"
-"privee.html</a>,<br/>\n"
-"                        je déclare avoir lu la politique de protection des "
-"données de l’Université catholique Louvain et j’en accepte les termes.\n"
-"                    "
-
-#: templates/registration_pdf.html:293
-msgid ""
-"\n"
-"                        Irrespective of the type of enrolment you have "
-"selected, please date and sign this document\n"
-"                        <table>\n"
-"                        <tr>\n"
-"                            <td>Date</td><td>Signature</td>\n"
-"                        </tr>\n"
-"                        </table>\n"
-"                    "
-msgstr ""
-"\n"
-"                        Quel que soit le type d’inscription choisi, veuillez "
-"dater et signer ce document\n"
-"                        <table>\n"
-"                        <tr>\n"
-"                            <td>Date</td><td>Signature</td>\n"
-"                        </tr>\n"
-"                        </table>\n"
-"                    "
-
-#: templates/registration_pdf.html:249
-#, python-format
-msgid ""
-"\n"
-"                        Please complete the questionnaire below<br/>\n"
-"                        (information provided on a voluntary basis and used "
-"for statistical purposes only):\n"
-"                        <table>\n"
-"                        <tr>\n"
-"                            <td>> If you have obtained a secondary education "
-"diploma, please specify the year in which it was earned:</td>\n"
-"                            <td><strong>%(hsgy)s</strong></td>\n"
-"                        </tr>\n"
-"                        <tr>\n"
-"                            <td>> If you have obtained one or more higher "
-"education diplomas either within or outside the French-speaking Community of "
-"Belgium, please specify the year in which you earned the most recent diploma:"
-"</td>\n"
-"                            <td><strong>%(ldgy)s</strong></td>\n"
-"                        </tr>\n"
-"                        </table>\n"
-"                        <table>\n"
-"                        <tr>\n"
-"                            <td>> What is your professional status?<br/>(you "
-"may select more than one)</td>\n"
-"                            <td><strong>%(sector)s</strong></td>\n"
-"                        </tr>\n"
-"                        <tr>\n"
-"                            <td>> Are you currently seeking employment</"
-"td><td>Yes [ ] No [ ]</td>\n"
-"                        </tr>\n"
-"                        <tr>\n"
-"                            <td></td>\n"
-"                            <td>\n"
-"                                <table class=\"main_table\">\n"
-"                                    <tr>\n"
-"                                        <td>Return application to:<br/><br/"
-">\n"
-"                                            _______________________________________________________________________</"
-"td>\n"
-"                                    </tr>\n"
-"                                </table>\n"
-"                            </td>\n"
-"                        </tr>\n"
-"                        </table>\n"
-"\n"
-"                    "
-msgstr ""
-"\n"
-"                        Veuillez compléter le questionnaire ci-dessous<br/>\n"
-"                        (Information fournie sur base volontaire et utilisée "
-"à des seules fins statistiques):\n"
-"                        <table>\n"
-"                        <tr>\n"
-"                            <td>> Si vous avez obtenu un diplôme de fin "
-"d’études secondaires, veuillez indiquer l’année d’obtention ?</td>\n"
-"                            <td><strong>%(hsgy)s</strong></td>\n"
-"                        </tr>\n"
-"                        <tr>\n"
-"                            <td>> Si vous avez obtenu un ou plusieurs "
-"diplôme(s) de l’enseignement supérieur, en ou hors\n"
-"Communauté française de Belgique, veuillez indiquer l’année d’obtention de "
-"celui obtenu le plus récemment ?</td>\n"
-"                            <td><strong>%(ldgy)s</strong></td>\n"
-"                        </tr>\n"
-"                        </table>\n"
-"                        <table>\n"
-"                        <tr>\n"
-"                            <td>> Quel est votre statut professionnel ?<br/"
-">(plusieurs réponses sont possibles)</td>\n"
-"                            <td><strong>%(sector)s</strong></td>\n"
-"                        </tr>\n"
-"                        <tr>\n"
-"                            <td>>Êtes-vous en recherche d’emploi ?</"
-"td><td>Oui [  ] Non [  ]</td>\n"
-"                        </tr>\n"
-"                        <tr>\n"
-"                            <td></td>\n"
-"                            <td>\n"
-"                                <table class=\"main_table\">\n"
-"                                    <tr>\n"
-"                                        <td>dossier à renvoyer à :<br/><br/"
-">\n"
-"                                            _______________________________________________________________________</"
-"td>\n"
-"                                    </tr>\n"
-"                                </table>\n"
-"                            </td>\n"
-"                        </tr>\n"
-"                        </table>\n"
-"\n"
-"                    "
-
-#: templates/registration_pdf.html:176
-msgid ""
-"\n"
-"                Please enclose the following with your application:<br/>\n"
-"                - this document, dated and signed AND, depending on the type "
-"of enrolment required\n"
-"                    (please mark your choice below), the additional "
-"document(s) requested<br/>\n"
-"                - the enclosed \"University Regulation and Data Protection\" "
-"document dated and signed<br/>\n"
-"                - a colour photo with a white background (of the correct "
-"size) glued to the attached\n"
-"                    \"Ordering a UCLouvain access card\" document<br/>\n"
-"                - a photocopy of your identity car or passport<br/>\n"
-"            "
-msgstr ""
-"\n"
-"                Veuillez joindre à votre demande :<br/>\n"
-"– le présent document daté et signé et, en fonction de votre choix "
-"d’inscription (merci de cocher votre choix ci-dessous), le(s) document(s) "
-"complémentaire(s) demandé(s)<br/>\n"
-"– le document « règlement - Vie privée » ci-joint daté et signé<br/>\n"
-"– une photo couleurs sur fond blanc (au format ad hoc) collée sur le "
-"document « commande d’une carte d’accès UCLouvain » ci-joint<br/>\n"
-"– une photocopie de votre carte d’identité ou de votre passeport<br/>\n"
-"            "
-
-#: templates/registration_pdf.html:468
-msgid ""
-"\n"
-"        <p>Dear Student,</p>\n"
-"        <p>The Université catholique de Louvain (UCLouvain) provides its "
-"students with a smartcard to access a growing number\n"
-"            of functions (to access buildings, car parks, computer rooms, …\n"
-"            For more information: https://uclouvain.be/fr/decouvrir/"
-"smartcard.html).</p>\n"
-"\n"
-"        <p>Do you already have a smartcard?<br/>\n"
-"        [  ] NO,<br/>I don’t have a UCLouvain access card yet; in this case "
-"I have enclosed a photograph in accordance with the\n"
-"            instructions below.<br/>\n"
-"        [  ] YES, I already have a UCLouvain access card (issued only by the "
-"Office of the Registrar or the UCLouvain Human Resources\n"
-"            Department); in this case, I have checked the box and enclosed "
-"this form with my enrolment application\n"
-"            WITHOUT a photograph.\n"
-"        </p>\n"
-"        <p>\n"
-"        In order to make these smartcards, we need to obtain a colour "
-"photograph from each student in accordance with\n"
-"            very precise requirements; these requirements are identical to "
-"those for\n"
-"            renewing an identity card or passport, i.e.:<br/>\n"
-"        - Colour photograph taken by a professional photographer "
-"(photocopies, computer printouts, etc. are not acceptable)<br/>\n"
-"        - Passport size photograph measuring 35 x 45 mm<br/>\n"
-"        - Photograph with a white background (photographs with a coloured "
-"background are not acceptable)<br/>\n"
-"        - Recent photograph of excellent quality<br/>\n"
-"        - The photograph must be carefully glued in position (photographs "
-"attached using Sellotape, staples, etc. are not acceptable)\n"
-"        </p>\n"
-"        <p>\n"
-"        any photograph supplied that does not meet these specific criteria "
-"will not be accepted (see example on\n"
-"            https://uclouvain.be/fr/decouvrir/smartcard.html).<br/>\n"
-"        In this case, it will not be possible to order an access card, which "
-"may make it difficult for you to complete\n"
-"            various procedures within the University. To avoid any "
-"inconvenience, please make sure that you:<br/>\n"
-"        - affix an appropriate photograph in the box provided below for this "
-"purpose (a photograph of the right size should cover the grey rectangle)<br/"
-">\n"
-"        - attach this document, duly completed, to your enrolment "
-"application.\n"
-"        </p>\n"
-"        <p>No reminders will be issued.</p>\n"
-"        <p>The access card will be sent to one of the addresses provided to "
-"Office of the Registrar when you enrol.\n"
-"            If an address in Belgium has not been provided during enrolment, "
-"the card must be collected from\n"
-"            the Office of the Registrar (at the start of the new academic "
-"year) within ten days of receipt of\n"
-"            the enrolment notice.</p>\n"
-"        <p>Thank you in advance</p>\n"
-"        <p id=\"signature\">Anne Van Laethem<br/>Director, Office of the "
-"Registrar</p>\n"
-"    "
-msgstr ""
-"\n"
-"        <p>Madame, Mademoiselle, Monsieur,</p>\n"
-"        <p>L’Université catholique de Louvain fournit à ses étudiants une "
-"carte d’accès aux fonctionnalités progressivement enrichies (Accès à "
-"différentes ressources. Voir le site https://uclouvain.be/fr/decouvrir/"
-"smartcard.html).</p>\n"
-"\n"
-"        <p>Disposez-vous déjà de cette carte ?<br/>\n"
-"        [  ] NON,<br/>je ne dispose pas encore d’une carte d’accès "
-"UCLouvain, auquel cas je colle une photo en suivant les instructions "
-"reprises ci-dessous.<br/>\n"
-"        [  ] OUI, je dispose déjà d’une carte d’accès UCLouvain (émise "
-"uniquement par le Service des inscriptions ou le Service du Personnel de "
-"l’UCLouvain) auquel cas je coche cette case et je joins ce document à ma "
-"demande d’inscription mais SANS photo.\n"
-"        </p>\n"
-"        <p>\n"
-"       La fabrication de ces cartes rend nécessaire la collecte, auprès de "
-"chaque étudiant, d’une photo couleurs répondant à des spécifications "
-"techniques très précises identiques à celles exigées pour le renouvellement "
-"d’une carte d’identité, à savoir :<br/>\n"
-"        - Photo couleurs réalisée par un photographe professionnel (les "
-"photocopies, les impressions par ordinateur, … ne sont pas acceptées)<br/>\n"
-"        - Photo de format passeport 35 sur 45 mm<br/>\n"
-"        - Photo sur fond blanc (les photos ayant un fond coloré ne sont pas "
-"acceptées)<br/>\n"
-"        - Photo récente et d’excellente qualité<br/>\n"
-"        - Photo collée avec soin (les photos collées avec du papier collant, "
-"agrafées, … ne sont pas acceptées)\n"
-"        </p>\n"
-"        <p>\n"
-"        Toute photo fournie qui ne répondrait pas à ces critères spécifiques "
-"ne sera pas acceptée (voir modèle sur https://uclouvain.be/ fr/decouvrir/"
-"smartcard.html).<br/>\n"
-"        Aucune carte d’accès ne pourra, de ce fait, être commandée, ce qui "
-"peut vous gêner dans les différentes démarches à accomplir au sein de "
-"l’Université. Conscients des désagréments qu’engendrerait une telle "
-"situation, nous vous invitons :<br/>\n"
-"        - à apposer ci-dessous une photo conforme dans le cadre prévu à cet "
-"effet (la photo de bonne dimension doit pouvoir cacher le rectangle gris)<br/"
-">\n"
-"        - à joindre le présent document dûment complété à votre demande "
-"d’inscription.\n"
-"        </p>\n"
-"        <p>Aucun rappel ne sera envoyé.</p>\n"
-"        <p>La carte d’accès sera envoyée à l’une des adresses communiquées "
-"au Service des inscriptions lors de votre inscription, soit au domicile en "
-"Belgique, soit, à défaut, à la résidence en Belgique. Si aucune adresse en "
-"Belgique n’a été communiquée lors de l’inscription, la carte devra être "
-"retirée au Service des inscriptions (à partir de la rentrée académique) dans "
-"les dix jours qui suivent la réception de l’avis d’enregistrement de "
-"l’inscription.</p>\n"
-"        <p>D’avance, nous vous en remercions.</p>\n"
-"        <p id=\"signature\">Anne Van Laethem<br/>Directrice du Service des "
-"inscriptions</p>\n"
-"    "
-
 #: views/common.py:240
 msgid " or "
 msgstr " ou "
 
-#: templates/registration_pdf.html:90
+#: templates/admission_detail.html:314
 #, python-format
-msgid ""
-"<span>Special Enrolment</span> application %(aca_year)s<br/>\n"
-"    Teaching and Training Department<br/>\n"
-"    University's Enrolment Office<br/>\n"
-"    <strong>PLEASE NOTE! Duplex printing or printing in a reduce format are "
-"not allowed</strong>\n"
+msgid "\"File is too large: maximum upload size allowed is %(max_size)s.\""
 msgstr ""
-"<span>Demande d'INSCRIPTION PARTICULIÈRE</span> %(aca_year)s<br/>\n"
-"    Administration de l'enseignement et de la formation<br/>\n"
-"   Service des inscriptions<br/>\n"
-"    <strong>ATTENTION ! Le document ne peut être imprimé en recto-verso ou "
-"en réduction</strong>\n"
+"\"Fichier trop volumineux: la taille maximale autorisée est de %(max_size)s."
+"\""
 
-#: templates/registration_pdf.html:437
-msgid ""
-"<strong>Ordering a UCLouvain access card (smartcard)</strong><br/>\n"
-"    Teaching and Training Department<br/>\n"
-"    Office of the Registrar<br/>\n"
-msgstr ""
-"<strong>Commande d'une carte d'acces UCLouvain</strong><br/>\n"
-"    Administration de l'enseignement et de la formation<br/>\n"
-"    Service des inscriptions<br/>\n"
-
-#: tests/views/test_file.py:178 views/file.py:97
+#: tests/views/test_file.py:178 views/file.py:103
 msgid "A problem occured during delete"
 msgstr "Un problème est survenu durant la suppression"
 
 #: models/enums/admission_state_choices.py:13
 msgid "Accepted"
 msgstr "Accepté"
-
-#: templates/registration_pdf.html:396
-msgid "Access to regulates professions"
-msgstr "Condition d'accès à la profession"
 
 #: templates/fragment/files_panel.html:41
 msgid "Actions"
@@ -521,11 +44,11 @@ msgstr "Actions"
 msgid "Activation failed"
 msgstr "Activation échouée"
 
-#: forms/admission.py:109 templates/admission_detail.html:148
+#: forms/admission.py:107 templates/admission_detail.html:176
 msgid "Activity sector"
 msgstr "Secteur d'activité"
 
-#: tests/views/test_registration.py:184 views/common.py:197
+#: tests/views/test_registration.py:193 views/common.py:197
 msgid ""
 "Add two colour passport photos on a white background, one of which must be "
 "pasted on the document entitled 'Ordering a UCLouvain access card'."
@@ -534,7 +57,12 @@ msgstr ""
 "être collée sur le document intitulé « commande d’une carte d’accès "
 "UCLouvain »"
 
-#: forms/admission.py:56
+#: forms/admission.py:199 templates/admission_detail.html:204
+#: templates/admission_form.html:68 templates/admission_form.html:186
+msgid "Additional Information"
+msgstr "Informations Complémentaires"
+
+#: forms/admission.py:54
 msgid "Additional email"
 msgstr "Adresse email additionnelle"
 
@@ -542,20 +70,16 @@ msgstr "Adresse email additionnelle"
 msgid "Address"
 msgstr "Adresse"
 
-#: templates/continuing_education_layout.html:84
+#: templates/continuing_education_layout.html:86
 msgid "Administration"
 msgstr "Administration"
 
-#: templates/admission_detail.html:33 templates/admission_detail.html:59
+#: templates/admission_detail.html:33 templates/admission_detail.html:62
 #: templates/admission_form.html:32 templates/admission_form.html:37
-#: templates/continuing_education/home.html:49
+#: templates/continuing_education/home.html:50
 #: templates/django_registration/complete_account_registration.html:52
 msgid "Admission"
 msgstr "Admission"
-
-#: templates/registration_pdf.html:170
-msgid "An asterisk * indicates you should check one box"
-msgstr "Une * vous invite à cocher une case."
 
 #: views/account_activation.py:314
 msgid ""
@@ -565,13 +89,9 @@ msgstr ""
 "Un email vous a été envoyé contenant les instructions de changement de mot "
 "de passe."
 
-#: views/file.py:114
+#: views/file.py:126
 msgid "An unexpected error occurred"
-msgstr "Une erreur innatendue s'est produite"
-
-#: views/file.py:87
-msgid "An unexpected error occurred during download"
-msgstr "Une erreur innatendue s'est produite durant le téléchargement"
+msgstr "Une erreur innatendue s'est produite."
 
 #: forms/registration.py:151
 msgid "Archived"
@@ -609,7 +129,7 @@ msgstr ""
 "Veuillez remplir au moins un des 3 champs suivants : numéro de registre "
 "national, numéro de carte d'identité ou numéro de passeport"
 
-#: templates/continuing_education/home.html:92
+#: templates/continuing_education/home.html:94
 msgid ""
 "At least one of your admission files is now processed as a registration file "
 "and is accessible via the registration tab"
@@ -617,12 +137,12 @@ msgstr ""
 "Au moins un de vos dossiers d'admissions est maintenant traité en tant que "
 "dossier d'inscription accessible via l'onglet 'Inscription'"
 
-#: templates/admission_detail.html:171 templates/admission_form.html:140
+#: templates/admission_detail.html:211 templates/admission_form.html:151
 #: templates/django_registration/complete_account_registration.html:55
 msgid "Awareness"
 msgstr "Comment avez-vous connu l'existence de ce programme ?"
 
-#: templates/registration_detail.html:113 templates/registration_form.html:52
+#: templates/registration_detail.html:136 templates/registration_form.html:52
 msgid "Billing"
 msgstr "Facturation"
 
@@ -630,39 +150,39 @@ msgstr "Facturation"
 msgid "Billing address"
 msgstr "Adresse de facturation"
 
-#: forms/account.py:23 templates/admission_detail.html:102
-#: templates/registration_detail.html:89 templates/registration_pdf.html:120
-#: tests/views/test_admission.py:355 tests/views/test_admission.py:377
+#: forms/account.py:22 templates/admission_detail.html:113
+#: templates/registration_detail.html:102 tests/views/test_admission.py:372
+#: tests/views/test_admission.py:394
 msgid "Birth country"
 msgstr "Pays de naissance"
 
-#: forms/account.py:28 templates/admission_detail.html:100
-#: templates/registration_detail.html:87 templates/registration_pdf.html:116
+#: forms/account.py:27 templates/admission_detail.html:109
+#: templates/registration_detail.html:98
 msgid "Birth date"
 msgstr "Date de naissance"
 
-#: forms/account.py:34 templates/admission_detail.html:101
-#: templates/registration_detail.html:88 templates/registration_pdf.html:118
+#: forms/account.py:33 templates/admission_detail.html:111
+#: templates/registration_detail.html:100
 msgid "Birth location"
 msgstr "Lieu de naissance"
 
-#: templates/fragment/files_panel.html:92
+#: templates/fragment/files_panel.html:94
 msgid "Browse"
 msgstr "Parcourir"
 
-#: forms/admission.py:148 templates/admission_detail.html:186
+#: forms/admission.py:146 templates/admission_detail.html:226
 msgid "By Facebook"
 msgstr "Sur Facebook"
 
-#: forms/admission.py:153 templates/admission_detail.html:189
+#: forms/admission.py:151 templates/admission_detail.html:229
 msgid "By LinkedIn"
 msgstr "Sur LinkedIn"
 
-#: forms/admission.py:183 templates/admission_detail.html:207
+#: forms/admission.py:181 templates/admission_detail.html:247
 msgid "By Moocs"
 msgstr "Par les Moocs"
 
-#: forms/admission.py:133 templates/admission_detail.html:177
+#: forms/admission.py:131 templates/admission_detail.html:217
 msgid "By UCLouvain website"
 msgstr "Par le site web de l'UCLouvain"
 
@@ -672,43 +192,51 @@ msgstr ""
 "En cochant cette case, j'accepte que les données fournies dans ce formulaire "
 "soient exploitées par l'IUFC."
 
-#: forms/admission.py:158 templates/admission_detail.html:192
+#: forms/admission.py:156 templates/admission_detail.html:232
 msgid "By customized mail"
 msgstr "Par courrier personnalisé"
 
-#: forms/admission.py:163 templates/admission_detail.html:195
+#: forms/admission.py:161 templates/admission_detail.html:235
 msgid "By emailing"
 msgstr "Par un emailing"
 
-#: forms/admission.py:138 templates/admission_detail.html:180
+#: templates/fragment/submit_confirmation_modal.html:50
+msgid ""
+"By finalizing my admission, I undertake to pay the registration fees upon "
+"receipt of invoice"
+msgstr ""
+"En finalisant ma demande d'admission je m’engage à payer les droits "
+"d’inscription dès réception de la facture"
+
+#: forms/admission.py:136 templates/admission_detail.html:220
 msgid "By formation website"
 msgstr "Par le site web de la formation continue"
 
-#: forms/admission.py:178 templates/admission_detail.html:204
+#: forms/admission.py:176 templates/admission_detail.html:244
 msgid "By former students"
 msgstr "Par des anciens étudiants"
 
-#: forms/admission.py:173 templates/admission_detail.html:201
+#: forms/admission.py:171 templates/admission_detail.html:241
 msgid "By friends"
 msgstr "Par des amis"
 
-#: forms/admission.py:143 templates/admission_detail.html:183
+#: forms/admission.py:141 templates/admission_detail.html:223
 msgid "By press"
 msgstr "Dans la presse"
 
-#: forms/admission.py:168 templates/admission_detail.html:198
+#: forms/admission.py:166 templates/admission_detail.html:238
 msgid "By word of mouth"
 msgstr "Par le bouche à oreille"
 
-#: templates/django_registration/registration_form.html:58
-#: templates/fragment/confirm_delete_document.html:43
-#: templates/fragment/submit_confirmation_modal.html:50
-#: templates/prospect_form.html:41 templates/prospect_form.html:72
+#: templates/django_registration/registration_form.html:60
+#: templates/fragment/confirm_delete_document.html:44
+#: templates/fragment/submit_confirmation_modal.html:59
+#: templates/prospect_form.html:42 templates/prospect_form.html:75
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/continuing_education/home.html:81
-#: templates/continuing_education/home.html:124
+#: templates/continuing_education/home.html:83
+#: templates/continuing_education/home.html:126
 msgid "Cancelled"
 msgstr "Annulé"
 
@@ -720,50 +248,44 @@ msgstr "Catégorie"
 msgid "Change my password"
 msgstr "Changer mon mot de passe"
 
-#: forms/registration.py:77 templates/registration_detail.html:99
-#: templates/registration_pdf.html:136
+#: forms/registration.py:77 templates/registration_detail.html:118
 msgid "Children number"
 msgstr "Nombre d'enfants"
 
-#: forms/admission.py:30 templates/admission_detail.html:97
-#: templates/registration_detail.html:84 templates/registration_pdf.html:122
+#: forms/admission.py:28 templates/admission_detail.html:105
+#: templates/registration_detail.html:94
 msgid "Citizenship"
 msgstr "Nationalité"
 
-#: forms/address.py:29 forms/prospect.py:26 templates/admission_detail.html:115
-#: templates/prospect_form.html:62 templates/registration_detail.html:121
-#: templates/registration_detail.html:136 templates/registration_form.html:127
-#: templates/registration_form.html:153 templates/registration_pdf.html:156
-#: templates/registration_pdf.html:166
+#: forms/address.py:26 forms/prospect.py:25 templates/admission_detail.html:131
+#: templates/prospect_form.html:64 templates/registration_detail.html:147
+#: templates/registration_detail.html:169 templates/registration_form.html:127
+#: templates/registration_form.html:153
 msgid "City"
 msgstr "Ville"
 
-#: forms/registration.py:41 templates/registration_detail.html:126
+#: forms/registration.py:41 templates/registration_detail.html:155
 msgid "Company number"
 msgstr "Numéro unique d'entreprise"
 
-#: templates/registration_detail.html:107
+#: templates/registration_detail.html:129
 msgid "Conditionally accepted"
 msgstr "Accepté sous condition"
 
 #: templates/fragment/confirm_delete_document.html:33
-#: templates/fragment/confirm_delete_document.html:46
+#: templates/fragment/confirm_delete_document.html:47
 msgid "Confirm"
 msgstr "Confirmer"
 
-#: templates/admission_detail.html:106 templates/registration_pdf.html:145
+#: templates/admission_detail.html:118
 msgid "Contact"
 msgstr "Contact"
-
-#: templates/registration_pdf.html:144
-msgid "Contact details"
-msgstr "Coordonnées"
 
 #: templates/admission_form.html:51 templates/registration_form.html:56
 msgid "Contact information"
 msgstr "Coordonnées"
 
-#: templates/continuing_education/formations.html:78
+#: templates/continuing_education/formations.html:79
 msgid "Continue"
 msgstr "Continuer"
 
@@ -774,11 +296,10 @@ msgstr "Continuer"
 msgid "Continuing Education"
 msgstr "Formations Continues"
 
-#: forms/address.py:13 templates/admission_detail.html:116
-#: templates/registration_detail.html:122
-#: templates/registration_detail.html:137 templates/registration_form.html:130
-#: templates/registration_form.html:156 templates/registration_pdf.html:158
-#: templates/registration_pdf.html:167
+#: forms/address.py:10 templates/admission_detail.html:133
+#: templates/registration_detail.html:149
+#: templates/registration_detail.html:171 templates/registration_form.html:130
+#: templates/registration_form.html:156
 msgid "Country"
 msgstr "Pays"
 
@@ -786,11 +307,11 @@ msgstr "Pays"
 msgid "Creating a user account"
 msgstr "Création d'un compte utilisateur"
 
-#: forms/admission.py:104 templates/admission_detail.html:147
+#: forms/admission.py:102 templates/admission_detail.html:174
 msgid "Current employer"
 msgstr "Employeur actuel"
 
-#: forms/admission.py:99 templates/admission_detail.html:144
+#: forms/admission.py:97 templates/admission_detail.html:170
 msgid "Current occupation"
 msgstr "Fonction actuelle"
 
@@ -798,16 +319,8 @@ msgstr "Fonction actuelle"
 msgid "Curriculum"
 msgstr "Curriculum"
 
-#: templates/continuing_education_layout.html:89
+#: templates/continuing_education_layout.html:91
 msgid "Data"
-msgstr ""
-
-#: templates/registration_pdf.html:379
-msgid "Data protection policy"
-msgstr "Politique de protection des données"
-
-#: templates/registration_pdf.html:101 templates/registration_pdf.html:447
-msgid "Date"
 msgstr ""
 
 #: forms/registration.py:156
@@ -818,12 +331,12 @@ msgstr "Diplôme produit"
 msgid "Divorced"
 msgstr "Divorcé"
 
-#: tests/views/test_registration.py:107 tests/views/test_registration.py:140
+#: tests/views/test_registration.py:116 tests/views/test_registration.py:149
 #: views/common.py:182
 msgid "Do not forget to submit your file when it is complete"
 msgstr "N'oubliez pas de soumettre votre dossier lorsqu'il est complet"
 
-#: templates/admission_detail.html:84 templates/registration_detail.html:72
+#: templates/admission_detail.html:89 templates/registration_detail.html:79
 msgid "Documents"
 msgstr "Documents"
 
@@ -831,39 +344,24 @@ msgstr "Documents"
 msgid "Draft"
 msgstr "Brouillon"
 
-#: templates/admission_detail.html:51 templates/registration_detail.html:50
+#: templates/admission_detail.html:54 templates/registration_detail.html:54
+msgctxt "edit continuing_education"
 msgid "Edit"
-msgstr "Editer"
+msgstr "Modifier"
 
-#: templates/admission_detail.html:120
+#: templates/admission_detail.html:138
 msgid "Education"
 msgstr "Education"
 
-#: forms/account.py:58 forms/person.py:35 forms/prospect.py:31
-#: templates/admission_detail.html:110 templates/authentication/login.html:50
-#: templates/authentication/login.html:52 templates/prospect_form.html:67
+#: forms/account.py:57 forms/person.py:36 forms/prospect.py:30
+#: templates/admission_detail.html:123 templates/authentication/login.html:50
+#: templates/authentication/login.html:52 templates/prospect_form.html:69
 msgid "Email"
 msgstr ""
 
 #: models/enums/enums.py:28
 msgid "Employee"
 msgstr "Employé"
-
-#: templates/registration_pdf.html:203
-msgid "Enrolment on a \"Certificat de recherche\""
-msgstr "Inscription \"au certificat de recherche\""
-
-#: templates/registration_pdf.html:231
-msgid "Enrolment on a \"Inter-university programme\""
-msgstr "Inscription «programme inter-universitaire»"
-
-#: templates/registration_pdf.html:245
-msgid "Enrolment on a lifelong learning programme"
-msgstr "Inscription à un programme de formation continue"
-
-#: templates/registration_pdf.html:217
-msgid "Enrolment on an \"Intern\""
-msgstr "Inscription en tant que «stagiaire»"
 
 #: templates/registration/continuing_education_password_reset_confirm.html:32
 #: views/account_activation.py:326
@@ -878,7 +376,7 @@ msgstr ""
 "Indiquez votre adresse mail ci-dessous, nous vous enverrons un email avec "
 "les instructions pour définir un nouveau mot de passe"
 
-#: templates/continuing_education/home.html:105
+#: templates/continuing_education/home.html:107
 msgid "Faculty"
 msgstr "Faculté"
 
@@ -886,30 +384,28 @@ msgstr "Faculté"
 msgid "Female"
 msgstr "Femme"
 
-#: tests/views/test_file.py:159 views/file.py:95
+#: tests/views/test_file.py:159 views/file.py:101
 msgid "File correctly deleted"
 msgstr "Le fichier a bien été supprimé"
 
-#: templates/fragment/submit_confirmation_modal.html:51
+#: templates/fragment/submit_confirmation_modal.html:61
 msgid "Finalize"
 msgstr "Finaliser"
 
-#: forms/person.py:16 forms/prospect.py:11 templates/admission_detail.html:94
-#: templates/prospect_form.html:59 templates/registration_detail.html:81
-#: templates/registration_pdf.html:114 templates/registration_pdf.html:353
-#: templates/registration_pdf.html:465
+#: forms/person.py:15 forms/prospect.py:10 templates/admission_detail.html:99
+#: templates/prospect_form.html:61 templates/registration_detail.html:88
 msgid "First name"
 msgstr "Prénom"
 
-#: templates/authentication/login.html:65
+#: templates/authentication/login.html:67
 #: templates/registration/continuing_education_password_reset_form.html:32
 msgid "Forgot your password ?"
 msgstr "Mot de passe oublié ?"
 
-#: forms/prospect.py:42 templates/admission_detail.html:163
-#: templates/admission_detail.html:166 templates/admission_form.html:59
-#: templates/continuing_education/home.html:59
-#: templates/continuing_education/home.html:104 templates/prospect_form.html:55
+#: forms/prospect.py:41 templates/admission_detail.html:195
+#: templates/admission_detail.html:198 templates/admission_form.html:59
+#: templates/continuing_education/home.html:61
+#: templates/continuing_education/home.html:106 templates/prospect_form.html:57
 msgid "Formation"
 msgstr "Formation"
 
@@ -925,17 +421,16 @@ msgstr "Intitulé de la formation"
 msgid "Formations"
 msgstr "Formations"
 
-#: forms/person.py:27 templates/admission_detail.html:96
-#: templates/registration_detail.html:83 templates/registration_pdf.html:130
-#: tests/views/test_admission.py:397
+#: forms/person.py:26 templates/admission_detail.html:103
+#: templates/registration_detail.html:92 tests/views/test_admission.py:414
 msgid "Gender"
 msgstr "Genre"
 
-#: templates/registration_detail.html:62
+#: templates/registration_detail.html:67
 msgid "Generate PDF"
 msgstr "Générer le PDF"
 
-#: forms/registration.py:36 templates/registration_detail.html:125
+#: forms/registration.py:36 templates/registration_detail.html:153
 msgid "Head office name"
 msgstr "Nom du siège social"
 
@@ -943,21 +438,17 @@ msgstr "Nom du siège social"
 msgid "Health"
 msgstr "Santé"
 
-#: forms/admission.py:36 templates/admission_detail.html:123
+#: forms/admission.py:34 templates/admission_detail.html:141
 msgid "High school diploma"
 msgstr "Diplôme d'études secondaires"
 
-#: forms/admission.py:63 templates/admission_detail.html:124
+#: forms/admission.py:61 templates/admission_detail.html:143
 msgid "High school graduation year"
 msgstr "Année d'obtention (secondaire)"
 
-#: templates/registration_pdf.html:150
-msgid "Home address"
-msgstr "Adresse du domicile"
-
-#: templates/registration_pdf.html:151 templates/registration_pdf.html:163
-msgid "House name"
-msgstr "Lieu-dit (éventuellement)"
+#: templates/admission_form.html:84
+msgid "I do not have a first name"
+msgstr "Je n'ai pas de prénom"
 
 #: forms/registration.py:26
 msgid "I would like the billing address to be :"
@@ -967,12 +458,7 @@ msgstr "Je souhaite que l'adresse de facturation soit :"
 msgid "I would like the post address to be :"
 msgstr "Je souhaite recevoir mon courrier à :"
 
-#: templates/registration_pdf.html:348
-msgid "I, the undersigned"
-msgstr "Je soussignée"
-
-#: forms/registration.py:57 templates/registration_detail.html:93
-#: templates/registration_pdf.html:126
+#: forms/registration.py:57 templates/registration_detail.html:108
 msgid "ID card number"
 msgstr "Numéro de carte d'identité"
 
@@ -982,55 +468,39 @@ msgstr "Numéro de carte d'identité"
 msgid "IUFC - Continuing Education"
 msgstr "IUFC - Formation Continue"
 
-#: templates/admission_detail.html:91 templates/admission_form.html:47
+#: templates/admission_detail.html:96 templates/admission_form.html:47
 #: templates/django_registration/complete_account_registration.html:40
-#: templates/registration_detail.html:78 templates/registration_form.html:48
-#: templates/registration_pdf.html:111
+#: templates/registration_detail.html:85 templates/registration_form.html:48
 msgid "Identification"
 msgstr "Identification"
 
-#: tests/views/test_admission.py:137 views/common.py:229
+#: tests/views/test_admission.py:139 views/common.py:229
 #, python-format
 msgid ""
 "If you want to edit again your admission, please contact the program "
 "manager : %(mail)s"
 msgstr ""
-"Si vous souhaitez encore éditer votre dossier d'admission, veuillez prendre "
+"Si vous souhaitez encore modifier votre dossier d'admission, veuillez prendre "
 "contact avec le·a gestionnaire de la formation : %(mail)s"
 
-#: tests/views/test_registration.py:204 views/common.py:226
+#: tests/views/test_registration.py:213 views/common.py:226
 #, python-format
 msgid ""
 "If you want to edit again your registration, please contact the program "
 "manager : %(mail)s"
 msgstr ""
-"Si vous souhaitez encore éditer votre dossier d'inscription, veuillez "
+"Si vous souhaitez encore modifier votre dossier d'inscription, veuillez "
 "prendre contact avec le·a gestionnaire de la formation : %(mail)s"
-
-#: templates/django_registration/registration_form.html:50
-msgid ""
-"In accordance with regulation on the protection of individuals with regard "
-"to the processing of personal data, we undertake to protect your personal "
-"data."
-msgstr ""
-"Conformément au règlement général sur la protection des données, nous nous "
-"engageons à protéger vos données personnelles."
-
-#: templates/registration_pdf.html:189
-msgid ""
-"Individual course(s) or language course at the language institute of "
-"UCLouvain (ILV)"
-msgstr "Cours isolé(s) ou cours de langue à l'ILV"
 
 #: templates/django_registration/complete_account_registration.html:48
 msgid "Information"
 msgstr "Information"
 
-#: templates/admission_detail.html:83 templates/registration_detail.html:71
+#: templates/admission_detail.html:88 templates/registration_detail.html:78
 msgid "Informations"
 msgstr "Informations"
 
-#: templates/prospect_form.html:33 templates/prospect_form.html:47
+#: templates/prospect_form.html:33 templates/prospect_form.html:49
 msgid "Interest form"
 msgstr "Formulaire d'intérêt"
 
@@ -1038,7 +508,7 @@ msgstr "Formulaire d'intérêt"
 msgid "It is not possible to edit an admission once submitted"
 msgstr "Il est impossible de modifier une admission une fois celle-ci soumise"
 
-#: templates/fragment/submit_confirmation_modal.html:46
+#: templates/fragment/submit_confirmation_modal.html:54
 msgid "It is not possible to edit an registration once submitted"
 msgstr ""
 "Il est impossible de modifier une inscription une fois celle-ci soumise"
@@ -1047,26 +517,26 @@ msgstr ""
 msgid "Job seeker"
 msgstr "Chercheur d'emploi"
 
-#: forms/admission.py:73 templates/admission_detail.html:128
+#: forms/admission.py:71 templates/admission_detail.html:149
 msgid "Last degree field"
 msgstr "Domaine d'étude"
 
-#: forms/admission.py:82 templates/admission_detail.html:131
+#: forms/admission.py:80 templates/admission_detail.html:154
 msgid "Last degree graduation year"
 msgstr "Année d'obtention"
 
-#: forms/admission.py:78 templates/admission_detail.html:130
+#: forms/admission.py:76 templates/admission_detail.html:152
 msgid "Last degree institution"
 msgstr "Institution"
 
-#: forms/admission.py:68 templates/admission_detail.html:127
-#: tests/views/test_admission.py:119 tests/views/test_admission.py:257
-#: tests/views/test_admission.py:357 tests/views/test_admission.py:367
+#: forms/admission.py:66 templates/admission_detail.html:147
+#: tests/views/test_admission.py:121 tests/views/test_admission.py:259
+#: tests/views/test_admission.py:374 tests/views/test_admission.py:384
 msgid "Last degree level"
 msgstr "Niveau du dernier diplôme"
 
-#: forms/person.py:21 templates/admission_detail.html:95
-#: templates/registration_detail.html:82 templates/registration_pdf.html:112
+#: forms/person.py:20 templates/admission_detail.html:101
+#: templates/registration_detail.html:90
 msgid "Last name"
 msgstr "Nom"
 
@@ -1074,7 +544,7 @@ msgstr "Nom"
 msgid "Last update"
 msgstr "Dernière modification"
 
-#: templates/admission_form.html:96
+#: templates/admission_form.html:107
 msgid "Legal address"
 msgstr "Domicile légal"
 
@@ -1082,16 +552,15 @@ msgstr "Domicile légal"
 msgid "Legal cohabitant"
 msgstr "Cohabitant légal"
 
-#: forms/address.py:19 templates/admission_detail.html:113
-#: templates/registration_detail.html:119
-#: templates/registration_detail.html:134 templates/registration_form.html:121
-#: templates/registration_form.html:147 templates/registration_pdf.html:152
-#: templates/registration_pdf.html:164
+#: forms/address.py:16 templates/admission_detail.html:127
+#: templates/registration_detail.html:143
+#: templates/registration_detail.html:165 templates/registration_form.html:121
+#: templates/registration_form.html:147
 msgid "Location"
 msgstr "Rue - numéro - boîte"
 
 #: templates/authentication/logged_out.html:39
-#: templates/authentication/login.html:62
+#: templates/authentication/login.html:63
 #: templates/django_registration/activation_complete.html:36
 msgid "Login"
 msgstr "Se connecter"
@@ -1104,9 +573,8 @@ msgstr "Déconnecté"
 msgid "Male"
 msgstr "Homme"
 
-#: forms/registration.py:67 templates/registration_detail.html:97
-#: templates/registration_pdf.html:132 tests/views/test_registration.py:150
-#: tests/views/test_registration.py:312
+#: forms/registration.py:67 templates/registration_detail.html:114
+#: tests/views/test_registration.py:159 tests/views/test_registration.py:324
 msgid "Marital status"
 msgstr "Etat civil"
 
@@ -1114,12 +582,8 @@ msgstr "Etat civil"
 msgid "Married"
 msgstr "Marié"
 
-#: templates/registration_pdf.html:146
-msgid "Mobile phone"
-msgstr "Téléphone mobile"
-
-#: forms/admission.py:121 templates/admission_detail.html:155
-#: templates/admission_detail.html:158
+#: forms/admission.py:119 templates/admission_detail.html:185
+#: templates/admission_detail.html:188
 msgid "Motivation"
 msgstr "Motivation"
 
@@ -1127,13 +591,12 @@ msgstr "Motivation"
 msgid "NOMA"
 msgstr "NOMA"
 
-#: forms/prospect.py:16 templates/fragment/files_panel.html:36
-#: templates/prospect_form.html:58
+#: forms/prospect.py:15 templates/fragment/files_panel.html:36
+#: templates/prospect_form.html:60
 msgid "Name"
 msgstr "Nom"
 
-#: forms/registration.py:52 templates/registration_detail.html:92
-#: templates/registration_pdf.html:124
+#: forms/registration.py:52 templates/registration_detail.html:106
 msgid "National registry number"
 msgstr "Numéro de registre national belge"
 
@@ -1149,7 +612,7 @@ msgstr "Suivant"
 msgid "No"
 msgstr "Non"
 
-#: templates/continuing_education/home.html:90
+#: templates/continuing_education/home.html:92
 msgid "No admission yet"
 msgstr "Vous n'avez pas soumis de formulaire d'admission"
 
@@ -1157,39 +620,29 @@ msgstr "Vous n'avez pas soumis de formulaire d'admission"
 msgid "No document available"
 msgstr "Pas de document disponible"
 
-#: templates/fragment/files_panel.html:79
+#: templates/fragment/files_panel.html:80
 msgid "No file chosen"
 msgstr "Aucun fichier choisi"
 
-#: templates/continuing_education/home.html:132
+#: templates/continuing_education/home.html:134
 msgid "No registration yet"
 msgstr "Pas de formulaire d'inscription disponible"
 
-#: templates/registration_pdf.html:104 templates/registration_pdf.html:450
-msgid "Noma"
-msgstr ""
-
-#: templates/continuing_education/home.html:122
-#: templates/registration_detail.html:53
+#: templates/continuing_education/home.html:124
+#: templates/registration_detail.html:57
 msgid "Not submitted"
 msgstr "Non-soumise"
 
-#: templates/registration_pdf.html:421
-msgctxt "on SIC pdf for date signature"
-msgid "On"
-msgstr "Le"
-
-#: forms/admission.py:188 models/enums/enums.py:32 models/enums/enums.py:40
-#: templates/admission_detail.html:210 templates/admission_form.html:160
+#: forms/admission.py:186 models/enums/enums.py:32 models/enums/enums.py:40
+#: templates/admission_detail.html:250 templates/admission_form.html:172
 msgid "Other"
 msgstr "Autre"
 
-#: forms/admission.py:87 templates/admission_detail.html:134
+#: forms/admission.py:85 templates/admission_detail.html:158
 msgid "Other educational background"
 msgstr "Autres formations"
 
-#: forms/registration.py:62 templates/registration_detail.html:94
-#: templates/registration_pdf.html:128
+#: forms/registration.py:62 templates/registration_detail.html:110
 msgid "Passport number"
 msgstr "Numéro de passeport"
 
@@ -1205,7 +658,7 @@ msgstr "Réinitialiser le mot de passe"
 msgid "Password reset unsuccessful"
 msgstr "Réinitialisation du mot de passe échouée"
 
-#: forms/admission.py:114 templates/admission_detail.html:151
+#: forms/admission.py:112 templates/admission_detail.html:180
 msgid "Past professional activities"
 msgstr "Expériences professionnelles passées"
 
@@ -1213,18 +666,18 @@ msgstr "Expériences professionnelles passées"
 msgid "Payment complete"
 msgstr "En ordre de paiement"
 
-#: forms/admission.py:50 forms/admission.py:229
-#: templates/admission_detail.html:109 tests/views/test_admission.py:418
+#: forms/admission.py:48 forms/admission.py:242
+#: templates/admission_detail.html:121 tests/views/test_admission.py:435
 #: views/common.py:245
 msgid "Phone mobile"
-msgstr "GSM"
+msgstr "Mobile"
 
-#: forms/prospect.py:36 templates/prospect_form.html:66
+#: forms/prospect.py:35 templates/prospect_form.html:68
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: forms/admission.py:12 tests/views/test_admission.py:419
-#: tests/views/test_registration.py:344
+#: forms/admission.py:11 tests/views/test_admission.py:436
+#: tests/views/test_registration.py:356
 msgid ""
 "Phone number must start with 0 or 00 or '+' followed by at least 7 digits "
 "and up to 15 digits."
@@ -1240,21 +693,16 @@ msgstr ""
 "Veuillez compléter le formulaire suivant pour finaliser la création de votre "
 "compte utilisateur."
 
-#: templates/registration_pdf.html:459
-msgid "Please state you"
-msgstr "Veuillez indiquer votre"
-
-#: templates/registration_detail.html:131
+#: templates/registration_detail.html:162
 msgid "Post"
 msgstr "Courrier"
 
-#: forms/address.py:24 forms/prospect.py:21 templates/admission_detail.html:114
-#: templates/prospect_form.html:63 templates/registration_detail.html:120
-#: templates/registration_detail.html:135 templates/registration_form.html:124
-#: templates/registration_form.html:150 templates/registration_pdf.html:154
-#: templates/registration_pdf.html:165 tests/views/test_admission.py:356
-#: tests/views/test_admission.py:387 tests/views/test_registration.py:300
-#: tests/views/test_registration.py:301 tests/views/test_registration.py:323
+#: forms/address.py:21 forms/prospect.py:20 templates/admission_detail.html:129
+#: templates/prospect_form.html:65 templates/registration_detail.html:145
+#: templates/registration_detail.html:167 templates/registration_form.html:124
+#: templates/registration_form.html:150 tests/views/test_admission.py:373
+#: tests/views/test_admission.py:404 tests/views/test_registration.py:312
+#: tests/views/test_registration.py:313 tests/views/test_registration.py:335
 msgid "Postal code"
 msgstr "Code postal"
 
@@ -1262,17 +710,15 @@ msgstr "Code postal"
 msgid "Previous"
 msgstr "Précédent"
 
-#: forms/registration.py:83 templates/registration_detail.html:103
-#: templates/registration_pdf.html:140
+#: forms/registration.py:83 templates/registration_detail.html:124
 msgid "Previous NOMA"
 msgstr "Précédent NOMA"
 
-#: templates/registration_detail.html:102 templates/registration_form.html:109
-#: templates/registration_pdf.html:138
+#: templates/registration_detail.html:122 templates/registration_form.html:109
 msgid "Previous UCLouvain registration"
 msgstr "Avez-vous déjà été inscrit(e) à l'UCLouvain ?"
 
-#: tests/views/test_registration.py:173 views/common.py:196
+#: tests/views/test_registration.py:182 views/common.py:196
 msgid "Print the completed registration form"
 msgstr "Imprimer le formulaire d'inscription complété"
 
@@ -1280,27 +726,27 @@ msgstr "Imprimer le formulaire d'inscription complété"
 msgid "Prior experience validation"
 msgstr "Valorisation des Acquis d'Experience"
 
+#: templates/django_registration/registration_form.html:50
+msgid "Privacy."
+msgstr "Vie privée"
+
 #: models/enums/enums.py:9 models/enums/enums.py:36
 msgid "Private"
 msgstr "Privé"
-
-#: templates/registration_pdf.html:148
-msgid "Private e-mail"
-msgstr "E-mail privé"
 
 #: models/enums/enums.py:10
 msgid "Professional"
 msgstr "Professionel"
 
-#: forms/admission.py:126 templates/admission_detail.html:159
+#: forms/admission.py:124 templates/admission_detail.html:190
 msgid "Professional and personal interests"
 msgstr "Intérêts professionnels et personnels"
 
-#: templates/admission_detail.html:138 templates/admission_form.html:122
+#: templates/admission_detail.html:163 templates/admission_form.html:133
 msgid "Professional background"
 msgstr "Parcours professionnel"
 
-#: forms/admission.py:94 templates/admission_detail.html:141
+#: forms/admission.py:92 templates/admission_detail.html:166
 msgid "Professional status"
 msgstr "Statut professionel"
 
@@ -1316,20 +762,16 @@ msgstr "Public"
 msgid "Public servant"
 msgstr "Fonctionnaire"
 
-#: templates/registration_pdf.html:98 templates/registration_pdf.html:444
-msgid "RESERVED FOR UCLOUVAIN USE"
-msgstr "CADRE RÉSERVÉ À L'UCLOUVAIN"
-
 #: templates/admission_form.html:63
 msgid "References"
 msgstr "Références"
 
-#: templates/admission_detail.html:75
+#: templates/admission_detail.html:79
 msgid "Refusal state reason"
 msgstr "Motif d'état de refus"
 
-#: templates/continuing_education/home.html:50
-#: templates/registration_detail.html:33 templates/registration_detail.html:65
+#: templates/continuing_education/home.html:51
+#: templates/registration_detail.html:33 templates/registration_detail.html:70
 #: templates/registration_form.html:33 templates/registration_form.html:38
 msgid "Registration"
 msgstr "Inscription"
@@ -1350,13 +792,9 @@ msgstr "Fichier d'inscription reçu"
 msgid "Registration submitted"
 msgstr "Inscription soumise"
 
-#: forms/registration.py:18 templates/registration_detail.html:116
+#: forms/registration.py:18 templates/registration_detail.html:139
 msgid "Registration type"
 msgstr "Type d'inscription"
-
-#: templates/registration_pdf.html:363
-msgid "Reglementations"
-msgstr "Réglementations"
 
 #: models/enums/admission_state_choices.py:14
 msgid "Rejected"
@@ -1367,15 +805,14 @@ msgid "Residence address"
 msgstr "Adresse"
 
 #: forms/registration.py:104 forms/registration.py:167
-#: templates/registration_detail.html:140 templates/registration_pdf.html:160
-#: templates/registration_pdf.html:168 tests/views/test_registration.py:344
+#: templates/registration_detail.html:175 tests/views/test_registration.py:356
 #: views/common.py:245
 msgid "Residence phone"
 msgstr "Téléphone fixe"
 
-#: templates/fragment/wizard_navbar.html:34 templates/prospect_form.html:43
-#: templates/prospect_form.html:44 templates/prospect_form.html:74
-#: templates/prospect_form.html:75
+#: templates/fragment/wizard_navbar.html:34 templates/prospect_form.html:44
+#: templates/prospect_form.html:46 templates/prospect_form.html:77
+#: templates/prospect_form.html:78
 msgid "Save"
 msgstr "Sauver"
 
@@ -1387,22 +824,14 @@ msgstr "Indépendant"
 msgid "Separated"
 msgstr "Séparé"
 
-#: tests/views/test_registration.py:177 views/common.py:201
+#: tests/views/test_registration.py:186 views/common.py:201
 #, python-format
 msgid "Sign it and send it by post to your manager's address : %(address)s"
 msgstr ""
 "Le signer et l’envoyer par courrier postal à l’adresse de votre "
 "gestionnaire : %(address)s"
 
-#: templates/registration_pdf.html:422
-msgid "Signature"
-msgstr "Signature"
-
-#: templates/registration_pdf.html:420
-msgid "Signed in"
-msgstr "Fait à"
-
-#: templates/authentication/login.html:82
+#: templates/authentication/login.html:84
 msgid "Signup"
 msgstr "Créer un compte"
 
@@ -1414,22 +843,21 @@ msgstr "Célibataire"
 msgid "Size"
 msgstr "Taille"
 
-#: forms/registration.py:72 templates/registration_detail.html:98
-#: templates/registration_pdf.html:134
+#: forms/registration.py:72 templates/registration_detail.html:116
 msgid "Spouse name"
 msgstr "Nom du conjoint"
 
-#: templates/continuing_education/home.html:60
-#: templates/continuing_education/home.html:106
+#: templates/continuing_education/home.html:62
+#: templates/continuing_education/home.html:108
 msgid "State"
 msgstr "Statut"
 
 #: templates/fragment/files_panel.html:62
-#: templates/fragment/files_panel.html:90
+#: templates/fragment/files_panel.html:92
 msgid "State of file prevent this action"
 msgstr "L'état du dossier empêche cette action"
 
-#: forms/admission.py:195
+#: forms/admission.py:193
 msgid "State reason"
 msgstr "Raison du changement d'état"
 
@@ -1441,14 +869,14 @@ msgid "Student"
 msgstr "Etudiant"
 
 #: templates/django_registration/complete_account_registration.html:69
-#: templates/django_registration/complete_account_registration.html:70
-#: templates/django_registration/registration_form.html:54
+#: templates/django_registration/complete_account_registration.html:71
 #: templates/django_registration/registration_form.html:55
+#: templates/django_registration/registration_form.html:57
 #: templates/registration/continuing_education_password_reset_form.html:40
 msgid "Submit"
 msgstr "Soumettre"
 
-#: templates/admission_detail.html:42 templates/registration_detail.html:42
+#: templates/admission_detail.html:43 templates/registration_detail.html:44
 msgctxt "admission"
 msgid "Submit"
 msgstr "Soumettre"
@@ -1469,14 +897,6 @@ msgstr "Soumis"
 msgid "Succesfull logout"
 msgstr "Vous êtes à présent déconnecté."
 
-#: templates/registration_pdf.html:352 templates/registration_pdf.html:462
-msgid "Surname"
-msgstr "Nom de famille"
-
-#: templates/registration_pdf.html:162
-msgid "Term-time address (student accommodation)"
-msgstr "Résidence universitaire (kot)"
-
 #: views/account_activation.py:184
 msgid "The account you attempted to activate is invalid."
 msgstr "Le compte que vous avez tenté d'activer n'est pas valide."
@@ -1493,7 +913,7 @@ msgstr "L'activation a échoué."
 msgid "The activation key you provided is invalid."
 msgstr "La clé d'activation que vous avez fournie n'est pas valide."
 
-#: tests/views/test_file.py:104 views/file.py:69
+#: tests/views/test_file.py:104 views/file.py:67
 msgid "The document is uploaded correctly"
 msgstr "Le document a bien été uploadé"
 
@@ -1501,21 +921,21 @@ msgstr "Le document a bien été uploadé"
 msgid "This account has expired."
 msgstr "Ce compte a expiré."
 
-#: forms/account.py:72
+#: forms/account.py:71
 #, python-format
 msgid "This email does not exist in our database: %(mail)s"
-msgstr "Cet adresse mail n'existe pas dans notre base de donnée : %(mail)s"
+msgstr "Cette adresse mail n'existe pas dans notre base de donnée : %(mail)s"
 
-#: tests/views/test_admission.py:355 tests/views/test_admission.py:356
-#: tests/views/test_admission.py:357 tests/views/test_admission.py:367
-#: tests/views/test_admission.py:377 tests/views/test_admission.py:387
-#: tests/views/test_admission.py:397 tests/views/test_registration.py:300
-#: tests/views/test_registration.py:301 tests/views/test_registration.py:312
-#: tests/views/test_registration.py:323
+#: tests/views/test_admission.py:372 tests/views/test_admission.py:373
+#: tests/views/test_admission.py:374 tests/views/test_admission.py:384
+#: tests/views/test_admission.py:394 tests/views/test_admission.py:404
+#: tests/views/test_admission.py:414 tests/views/test_registration.py:312
+#: tests/views/test_registration.py:313 tests/views/test_registration.py:324
+#: tests/views/test_registration.py:335
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
-#: templates/fragment/files_panel.html:85
+#: templates/fragment/files_panel.html:87
 msgid "Upload"
 msgstr "Envoyer"
 
@@ -1535,7 +955,7 @@ msgstr "Information du compte utilisateur"
 msgid "Username and password not matching"
 msgstr "Nom d'utilisateur et mot de passe ne correspondent pas"
 
-#: forms/registration.py:46 templates/registration_detail.html:127
+#: forms/registration.py:46 templates/registration_detail.html:157
 msgid "VAT number"
 msgstr "Numéro de TVA"
 
@@ -1547,26 +967,21 @@ msgstr "Validé"
 msgid "Waiting"
 msgstr "En attente"
 
-#: templates/admission_detail.html:68
+#: templates/admission_detail.html:72
 msgid "Waiting state reason"
 msgstr "Raison de la mise en attente"
-
-#: templates/django_registration/registration_form.html:51
-msgid ""
-"We ensures that these data are used for IUFC only, the data collected will "
-"not be communicated to a third party."
-msgstr ""
-"Nous vous assurons que ces données seront utilisées exclusivement par la "
-"plateforme d'admission/inscription et qu'elles ne seront en aucun cas "
-"communiquées à des tiers."
-
-#: templates/registration_pdf.html:169
-msgid "Which address would you like your post to be sent to? *"
-msgstr "À quelle adresse souhaitez-vous recevoir votre courrier? *"
 
 #: models/enums/enums.py:16
 msgid "Widowed"
 msgstr "Veuf(ve)"
+
+#: forms/admission.py:216
+msgid ""
+"Write down here the answers to further questions related to the chosen "
+"training"
+msgstr ""
+"Indiquez ici les réponses aux questions complémentaires relatives à la "
+"formation choisie"
 
 #: models/enums/enums.py:5
 msgid "Yes"
@@ -1576,28 +991,28 @@ msgstr "Oui"
 msgid "You already have an account"
 msgstr "Vous avez déjà un compte"
 
-#: tests/views/test_registration.py:99 tests/views/test_registration.py:132
+#: tests/views/test_registration.py:108 tests/views/test_registration.py:141
 #: views/common.py:180
 msgid "You are still able to edit the form, via the 'Edit' button"
-msgstr "Vous pouvez encore le modifier via le bouton 'Editer'"
+msgstr "Vous pouvez encore le modifier via le bouton 'Modifier'"
 
-#: views/admission.py:90
+#: views/admission.py:106
 msgid ""
 "You can save an application form and access it later until it is submitted"
 msgstr ""
 "Vous pouvez enregistrer et encore modifier les données de votre demande "
 "d’admission, tant que celle-ci n’est pas soumise"
 
-#: tests/views/test_registration.py:103 tests/views/test_registration.py:136
+#: tests/views/test_registration.py:112 tests/views/test_registration.py:145
 #: views/common.py:181
 msgid "You can upload documents via the 'Documents'"
 msgstr "Vous pouvez uploader des documents via l'onglet 'Documents'"
 
-#: templates/authentication/login.html:78
+#: templates/authentication/login.html:80
 msgid "You don't have an account"
 msgstr "Vous n'avez pas encore de compte"
 
-#: views/admission.py:56
+#: views/admission.py:71
 msgid ""
 "Your admission file has been saved. Please consider the following "
 "information :"
@@ -1605,7 +1020,7 @@ msgstr ""
 "Votre dossier d'admission a été enregistré. Veuillez prendre en compte les "
 "informations suivantes :"
 
-#: tests/views/test_registration.py:169 views/common.py:205
+#: tests/views/test_registration.py:178 views/common.py:205
 msgid ""
 "Your data has been successfully saved. Some tasks are remaining to complete "
 "the registration :"
@@ -1613,8 +1028,8 @@ msgstr ""
 "Vos données ont bien été enregistrées. Il reste quelques actions à effectuer "
 "pour finaliser votre inscription :"
 
-#: tests/views/test_admission.py:115 tests/views/test_admission.py:253
-#: tests/views/test_registration.py:146 views/common.py:157
+#: tests/views/test_admission.py:117 tests/views/test_admission.py:255
+#: tests/views/test_registration.py:155 views/common.py:157
 msgid ""
 "Your file is not submittable because you did not provide the following "
 "data : "
@@ -1630,8 +1045,8 @@ msgstr "Votre formulaire a correctement été envoyé."
 msgid "Your password was successfully changed."
 msgstr "Votre mot de passe à été modifié avec succès."
 
-#: tests/views/test_registration.py:95 tests/views/test_registration.py:128
-#: views/registration.py:62
+#: tests/views/test_registration.py:104 tests/views/test_registration.py:137
+#: views/registration.py:63
 msgid ""
 "Your registration file has been saved. Please consider the following "
 "information :"
@@ -1658,7 +1073,7 @@ msgstr ""
 msgid "an other address"
 msgstr "une autre adresse"
 
-#: tests/views/test_registration.py:191 views/common.py:199
+#: tests/views/test_registration.py:200 views/common.py:199
 msgid ""
 "if you are a European citizen, add a photocopy of your identity card or "
 "passport"
@@ -1666,7 +1081,7 @@ msgstr ""
 "si vous êtes citoyen européen, ajouter une photocopie de votre carte "
 "d’identité ou de votre passeport"
 
-#: tests/views/test_registration.py:197 views/common.py:200
+#: tests/views/test_registration.py:206 views/common.py:200
 msgid "if you are a non-EU citizen, add a photocopy of your residence permit"
 msgstr ""
 "si vous êtes de nationalité hors UE, ajouter une photocopie de votre titre "

@@ -64,7 +64,7 @@ class AdmissionFileTestCase(TestCase):
 
         self.patcher = patch(
             "continuing_education.views.admission._get_files_list",
-            return_value=Response()
+            return_value={}
         )
         self.mocked_called_api_function = self.patcher.start()
         self.addCleanup(self.patcher.stop)
@@ -99,7 +99,7 @@ class AdmissionFileTestCase(TestCase):
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
         response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
-        self.assertEquals(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
         self.assertIn(
             gettext(_("The document is uploaded correctly")),
             messages_list
@@ -112,7 +112,7 @@ class AdmissionFileTestCase(TestCase):
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
         response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
-        self.assertEquals(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
         # an error should raise as the admission is not retrieved from test
         self.assertIn("BAD REQUEST", messages_list)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
@@ -129,7 +129,7 @@ class AdmissionFileTestCase(TestCase):
         )
         response = self.client.post(url, {'myfile': file}, HTTP_REFERER=redirect_url)
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
-        self.assertEquals(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
         # an error should raise as the admission is not retrieved from test
         self.assertIn("NAME TOO LONG", messages_list)
 
@@ -154,7 +154,7 @@ class AdmissionFileTestCase(TestCase):
         )
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.assertIn(
             gettext(_("File correctly deleted")),
             str(messages_list[0])
@@ -172,7 +172,7 @@ class AdmissionFileTestCase(TestCase):
             HTTP_REFERER=redirect_url
         )
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         # an error should raise as the admission is not retrieved from test
         self.assertIn(
             gettext(_("A problem occured during delete")),
@@ -182,7 +182,7 @@ class AdmissionFileTestCase(TestCase):
 
     def get_mocked_file_response(self, headers):
         response = HttpResponse(status=status.HTTP_200_OK)
-        response.content = '{"content": "'+str(base64.b64encode(b'test'))+\
+        response.content = '{"content": "' + str(base64.b64encode(b'test')) + \
                            '", "path":"test_name.pdf", "name":"test_name.pdf"}'
         return response
 
@@ -190,7 +190,7 @@ class AdmissionFileTestCase(TestCase):
     def test_download_file_success(self, mock_get):
         url = reverse('download_file', args=[uuid.uuid4(), self.admission['uuid']])
         response = self.client.get(url)
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         for value in ['attachment', 'test_name']:
             self.assertIn(value, response['Content-Disposition'])
 
@@ -198,4 +198,4 @@ class AdmissionFileTestCase(TestCase):
     def test_download_file_error(self, mock_get):
         url = reverse('download_file', args=[uuid.uuid4(), self.admission['uuid']])
         response = self.client.get(url)
-        self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
