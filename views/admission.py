@@ -140,25 +140,19 @@ def _has_instance_with_values(instance):
 def admission_form(request, admission_uuid=None):
     admission = _get_admission_or_403(admission_uuid, request)
     registration_required = admission['formation']['registration_required']
-    address = admission['address']
+
+    # Why ? admission['formation'] ?
     formation = _get_formation(request)
 
     address_form, adm_form, id_form, person_form = _fill_forms_with_existing_data(admission, formation, request)
-    billing_address_form, registration_form, registration = None, None, None
+    forms_valid = all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()])
+    billing_address_form, registration, registration_form, forms_valid = _manage_billing_informations(
+        request, admission_uuid, forms_valid, registration_required
+    )
+
     errors_fields = []
     if not admission and not request.POST:
         _show_save_before_submit(request)
-
-    forms_valid = all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()])
-    if not registration_required:
-        registration = api.get_registration(request, admission_uuid)
-        registration_form = RegistrationForm(request.POST or None, initial=registration, only_billing=True)
-        billing_address_form = AddressForm(
-            request.POST or None,
-            initial=registration['billing_address'],
-            prefix='billing',
-        )
-        forms_valid = forms_valid and registration_form.is_valid() and billing_address_form.is_valid()
 
     errors_fields = _is_admission_submittable_and_show_errors(admission, errors_fields, request)
     if forms_valid:
@@ -212,6 +206,25 @@ def admission_form(request, admission_uuid=None):
             'registration_form': registration_form,
             'registration': registration
         }
+    )
+
+
+def _manage_billing_informations(request, admission_uuid, forms_valid, registration_required):
+    if not registration_required:
+        registration = api.get_registration(request, admission_uuid)
+        registration_form = RegistrationForm(request.POST or None, initial=registration, only_billing=True)
+        billing_address_form = AddressForm(
+            request.POST or None,
+            initial=registration['billing_address'],
+            prefix='billing',
+        )
+        forms_valid = forms_valid and registration_form.is_valid() and billing_address_form.is_valid()
+        return billing_address_form, registration, registration_form, forms_valid
+    return (
+        AddressForm(request.POST or None, prefix='billing'),
+        None,
+        RegistrationForm(request.POST or None, only_billing=True),
+        forms_valid
     )
 
 
