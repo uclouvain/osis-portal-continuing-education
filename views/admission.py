@@ -170,7 +170,10 @@ def admission_form(request, admission_uuid=None):
         admission = _update_or_create_admission(adm_form, admission, request)
 
         _update_billing_informations(
-            request, billing_address_form, registration, registration_form, registration_required
+            request, {
+                'billing': billing_address_form,
+                'registration': registration_form
+            }, registration, registration_required
         )
 
         request.session.pop('formation_id', '')
@@ -201,17 +204,17 @@ def admission_form(request, admission_uuid=None):
     )
 
 
-def _update_billing_informations(request, billing_address_form, registration, registration_form, registration_required):
+def _update_billing_informations(request, forms, registration, registration_required):
     if not registration_required:
         api.prepare_registration_data(
             registration,
             registration['address'],
             forms={
-                'registration': registration_form,
-                'billing': billing_address_form,
+                'registration': forms['registration'],
+                'billing': forms['billing'],
             },
         )
-        api.update_registration(request, registration_form.cleaned_data)
+        api.update_registration(request, forms['registration'].cleaned_data)
 
 
 def _get_billing_datas(request, admission_uuid, forms_valid, registration_required):
