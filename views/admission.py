@@ -139,26 +139,18 @@ def _has_instance_with_values(instance):
 @login_required
 def admission_form(request, admission_uuid=None):
     admission = _get_admission_or_403(admission_uuid, request)
-    registration_required = admission['formation']['registration_required']
-    address = admission['address']
     formation = _get_formation(request)
+    registration_required = admission['formation']['registration_required'] if admission else True
 
     address_form, adm_form, id_form, person_form = _fill_forms_with_existing_data(admission, formation, request)
-    billing_address_form, registration_form, registration = None, None, None
+    forms_valid = all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()])
+    billing_address_form, registration, registration_form, forms_valid = _get_billing_datas(
+        request, admission_uuid, forms_valid, registration_required
+    )
+
     errors_fields = []
     if not admission and not request.POST:
         _show_save_before_submit(request)
-
-    forms_valid = all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()])
-    if not registration_required:
-        registration = api.get_registration(request, admission_uuid)
-        registration_form = RegistrationForm(request.POST or None, initial=registration, only_billing=True)
-        billing_address_form = AddressForm(
-            request.POST or None,
-            initial=registration['billing_address'],
-            prefix='billing',
-        )
-        forms_valid = forms_valid and registration_form.is_valid() and billing_address_form.is_valid()
 
     errors_fields = _is_admission_submittable_and_show_errors(admission, errors_fields, request)
     if forms_valid:
@@ -175,19 +167,14 @@ def admission_form(request, admission_uuid=None):
 
         admission = _update_or_create_admission(adm_form, admission, request)
 
-        if not registration_required:
-            api.prepare_registration_data(
-                registration,
-                admission['address'],
-                forms={
-                    'registration': registration_form,
-                    'billing': billing_address_form,
-                },
-            )
-            api.update_registration(request, registration_form.cleaned_data)
+        _update_billing_informations(
+            request, {
+                'billing': billing_address_form,
+                'registration': registration_form
+            }, registration, registration_required
+        )
 
-        if request.session.get('formation_id'):
-            del request.session['formation_id']
+        request.session.pop('formation_id', '')
 
         return redirect(
             reverse('admission_detail', kwargs={'admission_uuid': admission['uuid'] if admission else ''}),
@@ -213,6 +200,33 @@ def admission_form(request, admission_uuid=None):
             'registration': registration
         }
     )
+
+
+def _update_billing_informations(request, forms, registration, registration_required):
+    if not registration_required:
+        api.prepare_registration_data(
+            registration,
+            registration['address'],
+            forms={
+                'registration': forms['registration'],
+                'billing': forms['billing'],
+            },
+        )
+        api.update_registration(request, forms['registration'].cleaned_data)
+
+
+def _get_billing_datas(request, admission_uuid, forms_valid, registration_required):
+    registration, registration_form, billing_address_form = None, None, None
+    if not registration_required:
+        registration = api.get_registration(request, admission_uuid)
+        registration_form = RegistrationForm(request.POST or None, initial=registration, only_billing=True)
+        billing_address_form = AddressForm(
+            request.POST or None,
+            initial=registration['billing_address'],
+            prefix='billing',
+        )
+        forms_valid = forms_valid and registration_form.is_valid() and billing_address_form.is_valid()
+    return billing_address_form, registration, registration_form, forms_valid
 
 
 def _get_admission_or_403(admission_uuid, request):

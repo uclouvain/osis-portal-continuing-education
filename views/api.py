@@ -162,20 +162,20 @@ def prepare_registration_data(registration, address, forms):
 
     address['country'] = address['country']['iso_code'] if 'iso_code' in address['country'] else address['country'][0]
 
-    if forms['registration'].cleaned_data['use_address_for_billing'] == "True":
-        forms['registration'].cleaned_data['billing_address'] = address
-    else:
-        forms['registration'].cleaned_data['billing_address'] = forms['billing'].cleaned_data
+    _prepare_address(address, forms, 'billing', 'billing')
     if registration['formation']['registration_required']:
-        if 'residence' in forms:
-            if forms['registration'].cleaned_data['use_address_for_post'] == "True":
-                forms['registration'].cleaned_data['residence_address'] = address
-            else:
-                forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
+        _prepare_address(address, forms, 'post', 'residence')
     else:
         keys = ['children_number', 'previous_ucl_registration', 'use_address_for_post', 'residence_address']
         for key_field in keys:
             forms['registration'].cleaned_data.pop(key_field)
+
+
+def _prepare_address(address, forms, utility, address_type):
+    if forms['registration'].cleaned_data['use_address_for_' + utility] == "True":
+        forms['registration'].cleaned_data[address_type + '_address'] = address
+    else:
+        forms['registration'].cleaned_data[address_type + '_address'] = forms[address_type].cleaned_data
 
 
 def prepare_registration_for_submit(registration):

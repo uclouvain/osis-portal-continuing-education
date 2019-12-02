@@ -62,7 +62,13 @@ def AdmissionDictFactory(person_information, state=DRAFT, formation=None):
         'activity_sector': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.SECTOR_CHOICES)).fuzz(),
         'motivation': 'motivation',
         'professional_personal_interests': 'professional impact',
-        'state': state
+        'state': state,
+        'registration_type': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES)).fuzz(),
+        'use_address_for_billing': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'billing_address': AddressDictFactory(),
+        'head_office_name': factory.Faker('company'),
+        'company_number': factory.Faker('isbn10'),
+        'vat_number': factory.Faker('ssn'),
     }
     return admission
 
@@ -74,10 +80,10 @@ def _get_fake_phone_number():
     return fake
 
 
-def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
+def RegistrationDictFactory(person_information, state=ACCEPTED):
     registration = {
         'uuid': str(uuid.uuid4()),
-        'formation': formation if formation else ContinuingEducationTrainingDictFactory(),
+        'formation': ContinuingEducationTrainingDictFactory(),
         'person_information': person_information,
         'address': AddressDictFactory(),
         'registration_type': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES)).fuzz(),

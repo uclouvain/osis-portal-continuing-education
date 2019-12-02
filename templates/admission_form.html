@@ -241,7 +241,7 @@
             }
         };
         let billing_radio = $("[name='use_address_for_billing']:radio");
-                billing_radio.change(function () {
+        billing_radio.change(function () {
             if (this.value === "True") {
                 copy_address("billing");
             } else {
@@ -255,7 +255,6 @@
                 $("#id_" + e + "-" + field).val(address[field]);
                 $("#id_" + e + "-" + field).prop("readonly", true);
             });
-            console.log($("#id_" + e + "-country option"))
             let selected_option = $("#id_" + e + "-country option")[0];
             selected_option.value = address.country.iso_code;
             selected_option.innerHTML = address.country.name;
@@ -280,7 +279,7 @@
         let fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year"];
 
         function enableFields(fields) {
-            for (var field of fields) {
+            for (let field of fields) {
                 $("#id_" + field).prop("disabled", false);
             }
         }
@@ -311,7 +310,7 @@
         //show missing fields in golden
         let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g, '"');
         errors_fields = JSON.parse(errors_fields);
-        for (field of errors_fields)
+        for (let field of errors_fields)
             $('#id_' + field).parent().addClass('has-warning');
 
         //show other text field when other is checked
