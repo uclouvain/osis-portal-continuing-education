@@ -143,8 +143,8 @@ def prepare_admission_data(admission, username, forms):
     forms['admission'].cleaned_data['address'] = forms['address'].cleaned_data
     forms['id'].cleaned_data['email'] = username
     forms['person'].cleaned_data['birth_date'] = forms['person'].cleaned_data['birth_date'].__str__()
-    forms['admission'].cleaned_data.update(**forms['person'].cleaned_data)
-    forms['admission'].cleaned_data.update(**forms['id'].cleaned_data)
+    forms['admission'].cleaned_data['person_information'] = forms['person'].cleaned_data
+    forms['admission'].cleaned_data['person_information']['person'] = forms['id'].cleaned_data
 
 
 def prepare_registration_data(registration, address, forms):

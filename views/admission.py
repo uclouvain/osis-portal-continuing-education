@@ -198,7 +198,7 @@ def _get_formation(request):
 def _is_admission_submittable_and_show_errors(admission, errors_fields, request):
     if admission and not request.POST:
         formation_uuid, formation_acronym = admission['formation']
-        admission['formation_info'] = get_continuing_education_training(request, formation_uuid)
+        admission['formation_info'] = get_continuing_education_training(formation_uuid)
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
@@ -207,17 +207,14 @@ def _is_admission_submittable_and_show_errors(admission, errors_fields, request)
 
 
 def _fill_forms_with_existing_data(admission, formation, request):
-    Person.objects.filter(user=request.user).update(**_get_datas_from_admission('person', admission))
+    person_information = api.get_continuing_education_person(request)
+    Person.objects.filter(user=request.user).update(**person_information.get('person'))
     base_person = Person.objects.get(user=request.user)
     adm_form = AdmissionForm(request.POST or None, initial=admission, formation=formation)
     id_form = PersonForm(
-        request.POST or None,
+        data=request.POST or None,
         instance=base_person,
         no_first_name_checked=request.POST.get('no_first_name', False)
-    )
-    person_information = _get_datas_from_admission('person_information', admission)
-    person_information.update(
-        api.get_continuing_education_person(request)
     )
     admissions = api.get_admission_list(request, person_information['uuid'])['results']
     old_admission = _get_old_admission_if_exists(admissions, person_information, request)
@@ -268,7 +265,7 @@ def _update_or_create_admission(adm_form, admission, request):
 @require_GET
 def get_formation_information(request):
     formation_uuid = request.GET.get('formation_uuid')
-    training = get_continuing_education_training(request, formation_uuid)
+    training = get_continuing_education_training(formation_uuid)
     return JsonResponse(data={
         'additional_information_label': linebreaks(training.get('additional_information_label', ''))
     })

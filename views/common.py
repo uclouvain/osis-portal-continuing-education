@@ -126,19 +126,13 @@ def get_submission_errors(admission, is_registration=False):
             )
             _update_errors([residence_address_form], errors, errors_field)
     else:
-        person_form = StrictPersonForm(
-            data=admission
-        )
-        person_information_form = ContinuingEducationPersonForm(
-            data=admission
-        )
         address_form = StrictAddressForm(
             data=admission['address']
         )
         adm_form = StrictAdmissionForm(
             data=admission,
         )
-        forms = [person_form, person_information_form, address_form, adm_form]
+        forms = [address_form, adm_form]
         _update_errors(forms, errors, errors_field)
 
     return errors, errors_field
