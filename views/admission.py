@@ -228,19 +228,6 @@ def _fill_forms_with_existing_data(admission, formation, request):
     return address_form, adm_form, id_form, person_form
 
 
-def _get_datas_from_admission(data_type, admission):
-    if admission:
-        keys = []
-        if data_type == 'person':
-            keys = ['first_name', 'last_name', 'gender']
-        if data_type == 'person_information':
-            keys = ['birth_date', 'birth_location', 'birth_country']
-        return {
-            key: admission[key] for key in keys
-        }
-    return {}
-
-
 def _get_old_admission_if_exists(admissions, person_information, request):
     old_admission = admissions[0] if admissions \
         else api.get_registration_list(request, person_information['uuid'])['results']

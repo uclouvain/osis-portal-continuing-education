@@ -43,13 +43,13 @@ from continuing_education.forms.registration import RegistrationForm
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
 from continuing_education.views import api
-from continuing_education.views.admission import _get_datas_from_admission
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
 from continuing_education.views.file import _get_files_list, FILES_URL
 from continuing_education.business.pdf_filler import write_fillable_pdf, get_data
 from base.views import common
+from reference.models.country import Country
 
 
 @login_required
@@ -102,13 +102,12 @@ def registration_edit(request, admission_uuid):
     )
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
-    person_information = _get_datas_from_admission('person_information', registration)
+    person_information = api.get_continuing_education_person(request)
     person_information.update(
         api.get_continuing_education_person(request)
     )
     person_form = ContinuingEducationPersonForm(request.POST or None, initial=person_information)
     address = registration['address']
-
     errors = []
     errors_fields = []
     if registration and not request.POST:
@@ -134,6 +133,7 @@ def registration_edit(request, admission_uuid):
     else:
         errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))
         display_errors(request, errors)
+    address['country'] = Country.objects.get(name=address['country'])
     return render(request, 'registration_form.html', locals())
 
 

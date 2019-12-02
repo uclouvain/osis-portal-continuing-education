@@ -111,7 +111,7 @@
                             <div class="col-md-3">{% bootstrap_label _("Birth location") %} <br/>
                                 {{ admission.person_information.birth_location | upper | default:"-" }} </div>
                             <div class="col-md-3">{% bootstrap_label _("Birth country") %} <br/>
-                                {{ admission.person_information.birth_country.name| upper | default:"-" }} </div>
+                                {{ admission.person_information.birth_country | upper | default:"-" }} </div>
                         </div>
                     </div>
 
@@ -131,7 +131,7 @@
                             <div class="col-md-3">{% bootstrap_label _("City") %} <br/>
                                 {{ admission.address.city | upper | default:"-" }} </div>
                             <div class="col-md-3">{% bootstrap_label _("Country") %} <br/>
-                                {{ admission.address.country.name | upper | default:"-" }} </div>
+                                {{ admission.address.country | upper | default:"-" }} </div>
                         </div>
                     </div>
 

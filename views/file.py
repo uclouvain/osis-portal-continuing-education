@@ -25,26 +25,22 @@
 ##############################################################################
 import base64
 import json
-import os
 from mimetypes import MimeTypes
 
 import requests
 from dateutil import parser
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.files.storage import default_storage
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.forms import model_to_dict
 from django.http import Http404
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
-from openapi_client.rest import ApiException
 
 from continuing_education.views.api import get_admission, get_registration, get_files_list, get_file, \
     delete_file, upload_file as api_upload_file
 from continuing_education.views.common import display_error_messages, display_success_messages
+from openapi_client.rest import ApiException
 
 MAX_ADMISSION_FILE_NAME_LENGTH = 100
 FILES_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "/admissions/%(admission_uuid)s/files/"
@@ -118,4 +114,4 @@ def _get_files_list(request, admission):
 def _is_file_uploaded_by_admission_person(admission, file):
     uploaded_by = file.get('uploaded_by', None)
     uploader_uuid = uploaded_by.get('uuid', None) if uploaded_by else None
-    return uploader_uuid == str(admission['person_uuid'])
+    return uploader_uuid == str(admission['person_information']['uuid'])

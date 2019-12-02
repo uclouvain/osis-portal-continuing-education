@@ -231,7 +231,7 @@
                 "name": "{{registration.residence_address.country.1 | escapejs}}",
             },
         };
-
+        console.log(address);
         let billing_radio = $("[name='use_address_for_billing']:radio");
         let post_radio = $("[name='use_address_for_post']:radio");
 
@@ -269,6 +269,7 @@
             selected_option.value = address.country.iso_code;
             selected_option.innerHTML = address.country.name;
             $("#id_" + e + "-country").prop("disabled", true);
+            $("#select2-id_" + e + "-country-container")[0].innerText = address.country.name;
         }
 
         function empty_address(e, address) {
@@ -280,6 +281,7 @@
             let selected_option = $("#id_" + e + "-country option")[0];
             selected_option.value = address.country.iso_code;
             selected_option.innerHTML = address.country.name;
+            $("#select2-id_" + e + "-country-container")[0].innerText = address.country.name;
         }
 
         //show missing fields in red
