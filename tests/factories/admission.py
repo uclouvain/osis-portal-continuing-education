@@ -39,13 +39,13 @@ factory.Faker._DEFAULT_LOCALE = 'nl_BE'
 CONTINUING_EDUCATION_TYPE = 8
 
 
-def AdmissionDictFactory(person_information, state=DRAFT):
+def AdmissionDictFactory(person_information, state=DRAFT, formation=None):
     admission = {
         'uuid': str(uuid.uuid4()),
         'person_information': person_information,
         'address': AddressDictFactory(),
         'last_degree_level': "level",
-        'formation': ContinuingEducationTrainingDictFactory(),
+        'formation': formation if formation else ContinuingEducationTrainingDictFactory(),
         'citizenship': {
             'name': str(factory.Sequence(lambda n: 'Country - %d' % n)),
             'iso_code': factory.Sequence(lambda n: str(n)[-2:])
