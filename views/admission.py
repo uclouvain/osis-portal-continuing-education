@@ -216,7 +216,9 @@ def _update_billing_informations(request, forms, registration, registration_requ
 
 
 def _get_billing_datas(request, admission_uuid, forms_valid, registration_required):
-    registration, registration_form, billing_address_form = None, None, None
+    registration = None
+    registration_form = RegistrationForm(None)
+    billing_address_form = AddressForm(None)
     if not registration_required:
         registration = api.get_registration(request, admission_uuid)
         registration_form = RegistrationForm(request.POST or None, initial=registration, only_billing=True)
