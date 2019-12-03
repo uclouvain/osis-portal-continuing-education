@@ -296,17 +296,10 @@ class ViewStudentAdmissionTestCase(TestCase):
             'birth_date': person_information['birth_date'],
         }
         admission = {
-            'person_information': person_information,
-            'motivation': 'abcd',
-            'professional_personal_interests': 'abcd',
             'formation': self.formation['uuid'],
-            'awareness_ucl_website': True,
-            'state': admission_state_choices.DRAFT
         }
         url = reverse('admission_edit', args=[self.admission['uuid']])
-        data = person.copy()
-        data.update(admission)
-        response = self.client.post(url, data=data)
+        response = self.client.post(url, data={**person, **admission})
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
 
@@ -330,17 +323,10 @@ class ViewStudentAdmissionTestCase(TestCase):
             'birth_date': person_information['birth_date'],
         }
         admission = {
-            'person_information': person_information,
-            'motivation': 'abcd',
-            'professional_personal_interests': 'abcd',
-            'formation': self.admission_no_reg['formation']['uuid'],
-            'awareness_ucl_website': True,
-            'state': admission_state_choices.DRAFT
+            'formation': admission_no_reg['formation']['uuid'],
         }
-        url = reverse('admission_edit', args=[self.admission_no_reg['uuid']])
-        data = person.copy()
-        data.update(admission)
-        response = self.client.post(url, data=data)
+        url = reverse('admission_edit', args=[admission_no_reg['uuid']])
+        response = self.client.post(url, data={**person, **admission})
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('admission_detail', args=[admission_no_reg['uuid']]))
 
