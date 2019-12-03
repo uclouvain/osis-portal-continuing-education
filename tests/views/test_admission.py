@@ -305,7 +305,8 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     @patch('continuing_education.views.api.get_admission')
     @patch('continuing_education.views.api.get_continuing_education_training')
-    def test_edit_post_admission_found_no_reg(self, mock_get_training, mock_get_admission):
+    @patch('continuing_education.views.api.update_data_to_osis')
+    def test_edit_post_admission_found_no_reg(self, mock_update_data, mock_get_training, mock_get_admission):
         admission_no_reg = AdmissionDictFactory(
             person_information=self.person_information,
             state=admission_state_choices.DRAFT,
