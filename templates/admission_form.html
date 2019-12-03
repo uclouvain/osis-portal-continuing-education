@@ -113,7 +113,7 @@
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field address_form.country label_class="required" %}</div>
                     </div>
-                    <hr>
+                    <hr id="billing_info_divider">
                     <div id="billing_info">
                         <h4>{% trans 'Billing' %}</h4>
                         <div class="row">
@@ -375,8 +375,10 @@
 
                     if(data.registration_required){
                         $("#billing_info").hide();
+                        $("#billing_info_divider").hide();
                     } else {
                         $("#billing_info").show();
+                        $("#billing_info_divider").show();
                     }
                 }
             })
