@@ -156,14 +156,14 @@ def prepare_admission_data(admission, username, forms):
     forms['admission'].cleaned_data['person_information'] = forms['person'].cleaned_data
 
 
-def prepare_registration_data(registration, address, forms):
+def prepare_registration_data(registration, address, forms, registration_required):
     if registration:
         forms['registration'].cleaned_data['uuid'] = registration['uuid']
 
     address['country'] = address['country']['iso_code'] if 'iso_code' in address['country'] else address['country'][0]
 
     _prepare_address(address, forms, 'billing', 'billing')
-    if registration['formation']['registration_required']:
+    if registration_required:
         _prepare_address(address, forms, 'post', 'residence')
     else:
         keys = ['children_number', 'previous_ucl_registration', 'use_address_for_post', 'residence_address']

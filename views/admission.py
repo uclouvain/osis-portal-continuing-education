@@ -211,6 +211,7 @@ def _update_billing_informations(request, forms, registration, registration_requ
                 'registration': forms['registration'],
                 'billing': forms['billing'],
             },
+            registration_required=registration_required
         )
         api.update_registration(request, forms['registration'].cleaned_data)
 

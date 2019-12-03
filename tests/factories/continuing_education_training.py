@@ -31,7 +31,7 @@ from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.address import AddressDictFactory
 
 
-def ContinuingEducationTrainingDictFactory(active=True):
+def ContinuingEducationTrainingDictFactory(active=True, registration_required=True):
     ed = EducationGroupFactory()
     edy = EducationGroupYearFactory(education_group=ed)
     manager = PersonFactory()
@@ -52,6 +52,6 @@ def ContinuingEducationTrainingDictFactory(active=True):
             }
         ],
         'postal_address': AddressDictFactory(),
-        'registration_required': True
+        'registration_required': registration_required
     }
     return cet
