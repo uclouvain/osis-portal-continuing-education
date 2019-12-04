@@ -40,6 +40,7 @@ from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
+from continuing_education.forms.registration import RegistrationForm
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.views import api
 from continuing_education.views.api import get_continuing_education_training
@@ -54,6 +55,7 @@ from osis_common.decorators.ajax import ajax_required
 def admission_detail(request, admission_uuid):
     try:
         admission = api.get_admission(request, admission_uuid)
+        registration = api.get_registration(request, admission_uuid)
     except Http404:
         registration = api.get_registration(request, admission_uuid)
         if registration and registration['state'] == admission_state_choices.ACCEPTED:
@@ -95,7 +97,8 @@ def admission_detail(request, admission_uuid):
                 'is_rejected': admission['state'] == admission_state_choices.REJECTED,
                 'is_waiting': admission['state'] == admission_state_choices.WAITING
             },
-            'MAX_UPLOAD_SIZE': MAX_UPLOAD_SIZE
+            'MAX_UPLOAD_SIZE': MAX_UPLOAD_SIZE,
+            'registration': registration
         }
     )
 
@@ -136,17 +139,21 @@ def _has_instance_with_values(instance):
 @login_required
 def admission_form(request, admission_uuid=None):
     admission = _get_admission_or_403(admission_uuid, request)
-
     formation = _get_formation(request)
+    registration_required = admission['formation']['registration_required'] if admission else True
 
     address_form, adm_form, id_form, person_form = _fill_forms_with_existing_data(admission, formation, request)
+    forms_valid = all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()])
+    billing_address_form, registration, registration_form, forms_valid = _get_billing_datas(
+        request, admission_uuid, forms_valid, registration_required
+    )
 
     errors_fields = []
     if not admission and not request.POST:
         _show_save_before_submit(request)
 
     errors_fields = _is_admission_submittable_and_show_errors(admission, errors_fields, request)
-    if all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()]):
+    if forms_valid:
         api.prepare_admission_data(
             admission,
             request.user.username,
@@ -160,14 +167,22 @@ def admission_form(request, admission_uuid=None):
 
         admission = _update_or_create_admission(adm_form, admission, request)
 
-        if request.session.get('formation_id'):
-            del request.session['formation_id']
+        _update_billing_informations(
+            request, {
+                'billing': billing_address_form,
+                'registration': registration_form
+            }, registration, registration_required
+        )
+
+        request.session.pop('formation_id', '')
 
         return redirect(
             reverse('admission_detail', kwargs={'admission_uuid': admission['uuid'] if admission else ''}),
         )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
+        if not registration_required:
+            errors += list(itertools.product(registration_form.errors, billing_address_form.errors))
         display_errors(request, errors)
 
     return render(
@@ -179,9 +194,42 @@ def admission_form(request, admission_uuid=None):
             'address_form': address_form,
             'id_form': id_form,
             'admission': admission,
-            'errors_fields': errors_fields
+            'errors_fields': errors_fields,
+            'billing_address_form': billing_address_form,
+            'registration_form': registration_form,
+            'registration': registration
         }
     )
+
+
+def _update_billing_informations(request, forms, registration, registration_required):
+    if not registration_required:
+        api.prepare_registration_data(
+            registration,
+            registration['address'],
+            forms={
+                'registration': forms['registration'],
+                'billing': forms['billing'],
+            },
+            registration_required=registration_required
+        )
+        api.update_registration(request, forms['registration'].cleaned_data)
+
+
+def _get_billing_datas(request, admission_uuid, forms_valid, registration_required):
+    registration = None
+    registration_form = RegistrationForm(None)
+    billing_address_form = AddressForm(None)
+    if not registration_required:
+        registration = api.get_registration(request, admission_uuid)
+        registration_form = RegistrationForm(request.POST or None, initial=registration, only_billing=True)
+        billing_address_form = AddressForm(
+            request.POST or None,
+            initial=registration['billing_address'],
+            prefix='billing',
+        )
+        forms_valid = forms_valid and registration_form.is_valid() and billing_address_form.is_valid()
+    return billing_address_form, registration, registration_form, forms_valid
 
 
 def _get_admission_or_403(admission_uuid, request):
@@ -257,5 +305,6 @@ def get_formation_information(request):
     formation_uuid = request.GET.get('formation_uuid')
     training = get_continuing_education_training(request, formation_uuid)
     return JsonResponse(data={
-        'additional_information_label': linebreaks(training.get('additional_information_label', ''))
+        'additional_information_label': linebreaks(training.get('additional_information_label', '')),
+        'registration_required': training.get('registration_required', True)
     })

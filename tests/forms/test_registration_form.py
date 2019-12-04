@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,35 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import uuid
+from django.test import TestCase
 
-from base.tests.factories.education_group import EducationGroupFactory
-from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
-from continuing_education.tests.factories.address import AddressDictFactory
+from continuing_education.forms.registration import RegistrationForm
+from continuing_education.tests.factories.admission import AdmissionDictFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
+from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 
 
-def ContinuingEducationTrainingDictFactory(active=True, registration_required=True):
-    ed = EducationGroupFactory()
-    edy = EducationGroupYearFactory(education_group=ed)
-    manager = PersonFactory()
-    cet = {
-        'uuid': str(uuid.uuid4()),
-        'active': active,
-        'education_group': {
-            'uuid': ed.uuid,
-            'acronym': edy.acronym,
-            'title': edy.title,
-        },
-        'managers': [
-            {
-                'email': manager.email,
-                'uuid': manager.uuid,
-                'first_name': manager.first_name,
-                'last_name': manager.last_name
-            }
-        ],
-        'postal_address': AddressDictFactory(),
-        'registration_required': registration_required
-    }
-    return cet
+class TestRegistrationForm(TestCase):
+    def setUp(self):
+        base_person = PersonFactory()
+        self.person = ContinuingEducationPersonDictFactory(person_uuid=base_person.uuid)
+        self.formation = ContinuingEducationTrainingDictFactory()
+
+    def test_previous_ucl_registration_not_required_if_only_billing(self):
+        registration = AdmissionDictFactory(person_information=self.person, formation=self.formation)
+        form = RegistrationForm(data=registration, only_billing=True)
+        self.assertFalse(form.fields['previous_ucl_registration'].required)

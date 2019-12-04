@@ -32,11 +32,11 @@ from unittest.mock import patch
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
-from requests import Response
+from requests import Response, HTTPError
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
@@ -61,7 +61,6 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
         self.formation = ContinuingEducationTrainingDictFactory()
         self.admission = AdmissionDictFactory(self.person_information)
-
         self.admission_submitted = AdmissionDictFactory(self.person_information, SUBMITTED)
 
         self.patcher = patch(
@@ -294,19 +293,40 @@ class ViewStudentAdmissionTestCase(TestCase):
             'birth_date': person_information['birth_date'],
         }
         admission = {
-            'person_information': person_information,
-            'motivation': 'abcd',
-            'professional_personal_interests': 'abcd',
             'formation': self.formation['uuid'],
-            'awareness_ucl_website': True,
-            'state': admission_state_choices.DRAFT
         }
         url = reverse('admission_edit', args=[self.admission['uuid']])
-        data = person.copy()
-        data.update(admission)
-        response = self.client.post(url, data=data)
+        response = self.client.post(url, data={**person, **admission})
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
+
+    @patch('continuing_education.views.api.get_admission')
+    @patch('continuing_education.views.api.get_continuing_education_training')
+    @patch('continuing_education.views.api.update_data_to_osis')
+    def test_edit_post_admission_found_no_reg(self, mock_update_data, mock_get_training, mock_get_admission):
+        admission_no_reg = AdmissionDictFactory(
+            person_information=self.person_information,
+            state=admission_state_choices.DRAFT,
+            formation=ContinuingEducationTrainingDictFactory(active=True, registration_required=False)
+        )
+        mock_get_admission.return_value = admission_no_reg
+        mock_get_training.return_value = admission_no_reg['formation']
+        person_information = self.admission['person_information']
+        person = {
+            'first_name': self.person.first_name,
+            'last_name': self.person.last_name,
+            'gender': self.person.gender,
+            'birth_country': person_information['birth_country'],
+            'birth_location': person_information['birth_location'],
+            'birth_date': person_information['birth_date'],
+        }
+        admission = {
+            'formation': admission_no_reg['formation']['uuid'],
+        }
+        url = reverse('admission_edit', args=[admission_no_reg['uuid']])
+        response = self.client.post(url, data={**person, **admission})
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('admission_detail', args=[admission_no_reg['uuid']]))
 
     @mock.patch('continuing_education.views.admission._get_files_list')
     def test_admission_detail_files_list(self, mock_get_files_list):
@@ -334,14 +354,20 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     @mock.patch('continuing_education.views.admission.get_continuing_education_training')
     def test_ajax_get_formation_information(self, mock_get_training):
-        mock_get_training.return_value = {'additional_information_label': 'additional_information'}
+        mock_get_training.return_value = {
+            'additional_information_label': 'additional_information',
+            'registration_required': True
+        }
         response = self.client.get(reverse('get_formation_information'), data={
             'formation_uuid': self.formation['uuid']
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             json.loads(response.content.decode('utf-8')),
-            {'additional_information_label': '<p>additional_information</p>'}
+            {
+                'additional_information_label': '<p>additional_information</p>',
+                'registration_required': True
+            }
         )
 
     def test_accepted_admission_detail_no_registration_required(self):
