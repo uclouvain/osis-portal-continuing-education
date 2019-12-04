@@ -61,9 +61,6 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
         self.formation = ContinuingEducationTrainingDictFactory()
         self.admission = AdmissionDictFactory(self.person_information)
-        self.admission_no_reg = AdmissionDictFactory(
-            self.person_information, ContinuingEducationTrainingDictFactory(registration_required=False)
-        )
         self.admission_submitted = AdmissionDictFactory(self.person_information, SUBMITTED)
 
         self.patcher = patch(
