@@ -223,15 +223,6 @@
 
 {% block script %}
     <script>
-        let address = {
-            location: "{{admission.address.location | escapejs}}",
-            postal_code: "{{admission.address.postal_code | escapejs}}",
-            city: "{{admission.address.city | escapejs}}",
-            country: {
-                "iso_code": "{{admission.address.country.iso_code | escapejs}}",
-                "name": "{{admission.address.country.name | escapejs}}"
-            }
-        };
         let billing_address = {
             location: "{{registration.billing_address.location | escapejs}}",
             postal_code: "{{registration.billing_address.postal_code | escapejs}}",
@@ -241,42 +232,72 @@
                 "name": "{{registration.billing_address.country.1 | escapejs}}"
             }
         };
-        let billing_radio = $("[name='use_address_for_billing']:radio");
+        const billing_radio = $("[name='use_address_for_billing']:radio");
         billing_radio.change(function () {
             if (this.value === "True") {
-                copy_address("billing");
+                copy_address();
             } else {
-                empty_address("billing", billing_address);
+                empty_address(billing_address);
             }
         });
         //check when page is loaded
-        billing_radio.prop('checked') ? copy_address("billing") : empty_address(("billing"), billing_address);
+        billing_radio.prop('checked') ? copy_address() : empty_address(billing_address);
+        $("#id_country, #id_location, #id_city, #id_postal_code").change(function () {
+            const billing_checked = $("[name='use_address_for_billing']:checked").val();
+            if (billing_checked === "True") {
+                copy_address();
+                set_billing_country_value();
+            }
+        });
+        function copy_address() {
+            ["location", "postal_code", "city"].forEach(function (field) {
+                $("#id_billing-" + field).val($("#id_" + field).val());
+                $("#id_billing-" + field).prop("readonly", true);
+            });
+            let selected_option = $("#id_billing-country option")[0];
+            if (selected_option) {
+                selected_option.value = $('#id_country').val();
+                selected_option.innerHTML = $('#id_country').text();
+            }
+            set_billing_country_value();
+            $("#id_billing-country").prop("disabled", true);
+        }
 
-        function set_country_option(e, address) {
-            let selected_option = $("#id_" + e + "-country option")[0];
-            if(selected_option){
-                selected_option.value = address.country.iso_code;
-                selected_option.innerHTML = address.country.name;
+        function empty_address(address) {
+            ["location", "postal_code", "city"].forEach(function (field) {
+                $("#id_billing-" + field).val(address[field]);
+                $("#id_billing-" + field).prop("readonly", false);
+            });
+            $("#id_billing-country").prop("disabled", false);
+            set_billing_country_value(billing_address);
+        }
+
+        function set_billing_country_value(address=null) {
+            const option = $('#id_country').find('option:last');
+            const selected_country_id = option.data('select2Id');
+            const selected_country_value = option.val();
+            const selected_country_name = option[0].innerHTML;
+            let select_billing_country = $("#id_billing-country");
+            let select2_container = $('#select2-id_billing-country-container');
+            if (select2_container && select_billing_country[0]) {
+                select_billing_country.find('option:last').val(selected_country_value);
+                if (address){
+                    select2_container[0].title = address.country.name;
+                    select2_container[0].lastChild.nodeValue = address.country.name;
+                }
+                else {
+                    select2_container[0].title = selected_country_name;
+                    select2_container[0].lastChild.nodeValue = selected_country_name;
+                }
+                select2_container.children()[0].setAttribute('data-select2-id', selected_country_id);
             }
         }
 
-        function copy_address(e) {
-            ["location", "postal_code", "city"].forEach(function (field) {
-                $("#id_" + e + "-" + field).val(address[field]);
-                $("#id_" + e + "-" + field).prop("readonly", true);
-            });
-            set_country_option(e, address);
-            $("#id_" + e + "-country").prop("disabled", true);
-        }
-
-        function empty_address(e, address) {
-            ["location", "postal_code", "city"].forEach(function (field) {
-                $("#id_" + e + "-" + field).val(address[field]);
-                $("#id_" + e + "-" + field).prop("readonly", false);
-            });
-            $("#id_" + e + "-country").prop("disabled", false);
-            set_country_option(e, address);
-        }
+        $('#id_country').next().bind('DOMSubtreeModified', function () {
+            if($("#id_use_address_for_billing_0").prop('checked')){
+                set_billing_country_value();
+            }
+        });
         function showTab(tab) {
             $('#tabs a[href="#' + tab + '"]').tab('show');
         }
