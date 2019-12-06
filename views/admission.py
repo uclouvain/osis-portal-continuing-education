@@ -98,7 +98,8 @@ def admission_detail(request, admission_uuid):
                 'is_waiting': admission['state'] == admission_state_choices.WAITING
             },
             'MAX_UPLOAD_SIZE': MAX_UPLOAD_SIZE,
-            'registration': registration
+            'registration': registration,
+            'registration_required': registration['formation']['registration_required']
         }
     )
 
@@ -219,7 +220,7 @@ def _update_billing_informations(request, forms, registration, registration_requ
 def _get_billing_datas(request, admission_uuid, forms_valid, registration_required):
     registration = None
     registration_form = RegistrationForm(None)
-    billing_address_form = AddressForm(None)
+    billing_address_form = AddressForm(None, prefix='billing')
     if not registration_required:
         registration = api.get_registration(request, admission_uuid)
         registration_form = RegistrationForm(request.POST or None, initial=registration, only_billing=True)
