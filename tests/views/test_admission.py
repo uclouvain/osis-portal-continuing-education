@@ -298,8 +298,10 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
 
+    @patch('continuing_education.views.api.get_registration')
     @patch('continuing_education.views.api.update_admission')
-    def test_edit_post_admission_found(self, mock_update):
+    def test_edit_post_admission_found(self, mock_update, mock_get_registration):
+        mock_get_registration.return_value = RegistrationDictFactory(self.person_information, formation=self.formation)
         person_information = self.admission['person_information']
         person = {
             'first_name': self.person.first_name,
