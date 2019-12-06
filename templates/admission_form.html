@@ -274,22 +274,24 @@
 
         function set_billing_country_value(address=null) {
             const option = $('#id_country').find('option:last');
-            const selected_country_id = option.data('select2Id');
-            const selected_country_value = option.val();
-            const selected_country_name = option[0].innerHTML;
+            const selected_country = {
+                id: option.data('select2Id'),
+                value: option.val(),
+                name: option[0].innerHTML
+            };
             let select_billing_country = $("#id_billing-country");
             let select2_container = $('#select2-id_billing-country-container');
             if (select2_container && select_billing_country[0]) {
-                select_billing_country.find('option:last').val(selected_country_value);
+                select_billing_country.find('option:last').val(selected_country.value);
                 if (address){
                     select2_container[0].title = address.country.name;
                     select2_container[0].lastChild.nodeValue = address.country.name;
                 }
                 else {
-                    select2_container[0].title = selected_country_name;
-                    select2_container[0].lastChild.nodeValue = selected_country_name;
+                    select2_container[0].title = selected_country.name;
+                    select2_container[0].lastChild.nodeValue = selected_country.name;
                 }
-                select2_container.children()[0].setAttribute('data-select2-id', selected_country_id);
+                select2_container.children()[0].setAttribute('data-select2-id', selected_country.id);
             }
         }
 
