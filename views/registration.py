@@ -125,6 +125,7 @@ def registration_edit(request, admission_uuid):
                 'residence': residence_address_form,
                 'billing': billing_address_form,
             },
+            registration_required=True
         )
         api.update_registration(request, form.cleaned_data)
         return redirect(

@@ -40,13 +40,13 @@ factory.Faker._DEFAULT_LOCALE = 'nl_BE'
 CONTINUING_EDUCATION_TYPE = 8
 
 
-def AdmissionDictFactory(person_information, state=DRAFT):
+def AdmissionDictFactory(person_information, state=DRAFT, formation=None):
     admission = {
         'uuid': str(uuid.uuid4()),
         'person_information': person_information,
         'address': AddressDictFactory(),
         'last_degree_level': "level",
-        'formation': ContinuingEducationTrainingDictFactory(),
+        'formation': formation if formation else ContinuingEducationTrainingDictFactory(),
         'citizenship': {
             'name': str(factory.Sequence(lambda n: 'Country - %d' % n)),
             'iso_code': factory.Sequence(lambda n: str(n)[-2:])
@@ -63,7 +63,13 @@ def AdmissionDictFactory(person_information, state=DRAFT):
         'activity_sector': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.SECTOR_CHOICES)).fuzz(),
         'motivation': 'motivation',
         'professional_personal_interests': 'professional impact',
-        'state': state
+        'state': state,
+        'registration_type': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES)).fuzz(),
+        'use_address_for_billing': factory.fuzzy.FuzzyChoice([True, False]).fuzz(),
+        'billing_address': AddressDictFactory(),
+        'head_office_name': factory.Faker('company'),
+        'company_number': factory.Faker('isbn10'),
+        'vat_number': factory.Faker('ssn'),
     }
     return admission
 
@@ -75,10 +81,10 @@ def _get_fake_phone_number():
     return fake
 
 
-def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
+def RegistrationDictFactory(person_information, state=ACCEPTED):
     registration = {
         'uuid': str(uuid.uuid4()),
-        'formation': formation if formation else ContinuingEducationTrainingDictFactory(),
+        'formation': ContinuingEducationTrainingDictFactory(),
         'person_information': person_information,
         'address': AddressDictFactory(),
         'registration_type': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES)).fuzz(),

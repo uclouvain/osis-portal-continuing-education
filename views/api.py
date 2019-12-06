@@ -147,21 +147,26 @@ def prepare_admission_data(admission, username, forms):
     forms['admission'].cleaned_data['person_information']['person'] = forms['id'].cleaned_data
 
 
-def prepare_registration_data(registration, address, forms):
+def prepare_registration_data(registration, address, forms, registration_required):
     if registration:
         forms['registration'].cleaned_data['uuid'] = registration['uuid']
 
     address['country'] = Country.objects.get(name=address['country']).iso_code
 
-    if forms['registration'].cleaned_data['use_address_for_billing'] == "True":
-        forms['registration'].cleaned_data['billing_address'] = address
+    _prepare_address(address, forms, 'billing', 'billing')
+    if registration_required:
+        _prepare_address(address, forms, 'post', 'residence')
     else:
-        forms['registration'].cleaned_data['billing_address'] = forms['billing'].cleaned_data
+        keys = ['children_number', 'previous_ucl_registration', 'use_address_for_post', 'residence_address']
+        for key_field in keys:
+            forms['registration'].cleaned_data.pop(key_field)
 
-    if forms['registration'].cleaned_data['use_address_for_post'] == "True":
-        forms['registration'].cleaned_data['residence_address'] = address
+
+def _prepare_address(address, forms, utility, address_type):
+    if forms['registration'].cleaned_data['use_address_for_' + utility] == "True":
+        forms['registration'].cleaned_data[address_type + '_address'] = address
     else:
-        forms['registration'].cleaned_data['residence_address'] = forms['residence'].cleaned_data
+        forms['registration'].cleaned_data[address_type + '_address'] = forms[address_type].cleaned_data
 
 
 def prepare_registration_for_submit(registration):

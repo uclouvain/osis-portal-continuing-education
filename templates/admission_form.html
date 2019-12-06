@@ -113,6 +113,27 @@
                     <div class="row">
                         <div class="col-md-6">{% bootstrap_field address_form.country label_class="required" %}</div>
                     </div>
+                    <hr id="billing_info_divider">
+                    <div id="billing_info">
+                        <h4>{% trans 'Billing' %}</h4>
+                        <div class="row">
+                            {% bootstrap_field registration_form.registration_type form_group_class="form-group col-md-3" label=_("Registration type") %}
+                            {% bootstrap_field registration_form.head_office_name form_group_class="form-group col-md-3" label=_("Head office name") %}
+                            {% bootstrap_field registration_form.company_number form_group_class="form-group col-md-3" label=_("Company number") %}
+                            {% bootstrap_field registration_form.vat_number form_group_class="form-group col-md-3" label=_("VAT number") %}
+                        </div>
+                        <div class="row">
+                            {% bootstrap_field registration_form.use_address_for_billing form_group_class="form-group col-md-12"%}
+                        </div>
+                        {% bootstrap_field billing_address_form.location label_class="required" %}
+                        <div class="row">
+                            <div class="col-md-6">{% bootstrap_field billing_address_form.postal_code label_class="required" %}</div>
+                            <div class="col-md-6">{% bootstrap_field billing_address_form.city label_class="required" %}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">{% bootstrap_field billing_address_form.country label_class="required" label=_("Country") %}</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="curriculum" role="tabpanel" class="panel-body tab-pane">
@@ -202,6 +223,60 @@
 
 {% block script %}
     <script>
+        let address = {
+            location: "{{admission.address.location | escapejs}}",
+            postal_code: "{{admission.address.postal_code | escapejs}}",
+            city: "{{admission.address.city | escapejs}}",
+            country: {
+                "iso_code": "{{admission.address.country.iso_code | escapejs}}",
+                "name": "{{admission.address.country.name | escapejs}}"
+            }
+        };
+        let billing_address = {
+            location: "{{registration.billing_address.location | escapejs}}",
+            postal_code: "{{registration.billing_address.postal_code | escapejs}}",
+            city: "{{registration.billing_address.city | escapejs}}",
+            country: {
+                "iso_code": "{{registration.billing_address.country.0 | escapejs}}",
+                "name": "{{registration.billing_address.country.1 | escapejs}}"
+            }
+        };
+        let billing_radio = $("[name='use_address_for_billing']:radio");
+        billing_radio.change(function () {
+            if (this.value === "True") {
+                copy_address("billing");
+            } else {
+                empty_address("billing", billing_address);
+            }
+        });
+        //check when page is loaded
+        billing_radio.prop('checked') ? copy_address("billing") : empty_address(("billing"), billing_address);
+
+        function set_country_option(e, address) {
+            let selected_option = $("#id_" + e + "-country option")[0];
+            if(selected_option){
+                selected_option.value = address.country.iso_code;
+                selected_option.innerHTML = address.country.name;
+            }
+        }
+
+        function copy_address(e) {
+            ["location", "postal_code", "city"].forEach(function (field) {
+                $("#id_" + e + "-" + field).val(address[field]);
+                $("#id_" + e + "-" + field).prop("readonly", true);
+            });
+            set_country_option(e, address);
+            $("#id_" + e + "-country").prop("disabled", true);
+        }
+
+        function empty_address(e, address) {
+            ["location", "postal_code", "city"].forEach(function (field) {
+                $("#id_" + e + "-" + field).val(address[field]);
+                $("#id_" + e + "-" + field).prop("readonly", false);
+            });
+            $("#id_" + e + "-country").prop("disabled", false);
+            set_country_option(e, address);
+        }
         function showTab(tab) {
             $('#tabs a[href="#' + tab + '"]').tab('show');
         }
@@ -210,7 +285,7 @@
         let fields_to_enable = ["birth_country", "gender", "birth_date_day", "birth_date_month", "birth_date_year"];
 
         function enableFields(fields) {
-            for (var field of fields) {
+            for (let field of fields) {
                 $("#id_" + field).prop("disabled", false);
             }
         }
@@ -241,7 +316,7 @@
         //show missing fields in golden
         let errors_fields = "{{ errors_fields|escapejs }}".replace(/'/g, '"');
         errors_fields = JSON.parse(errors_fields);
-        for (field of errors_fields)
+        for (let field of errors_fields)
             $('#id_' + field).parent().addClass('has-warning');
 
         //show other text field when other is checked
@@ -253,10 +328,10 @@
         });
 
         $('.tab-pane').each(function () {
-            let tabId = $(this)[0].id;
-            let countWarning = $(this).find('.has-warning').length;
+            const tabId = $(this)[0].id;
+            const countWarning = $(this).find('.has-warning').length;
             if (countWarning > 0) {
-                let tabBadge = $('a[href="#' + tabId + '"]').find('.badge')[0];
+                const tabBadge = $('a[href="#' + tabId + '"]').find('.badge')[0];
                 tabBadge.innerText = countWarning;
             }
         });
@@ -293,17 +368,25 @@
                 url: '{% url 'get_formation_information' %}',
                 method: "GET",
                 data: {
-                    'formation_uuid': formation_uuid,
+                    'formation_uuid': formation_uuid
                 },
                 success: (data) => {
-                    if (stripTags(data.additional_information_label)) {
+                    if (stripTags(data.additional_information_label)){
                         $("#additional_tab").show();
                         $(".additional_information_label").html(data.additional_information_label);
                     } else {
                         $("#additional_tab").hide();
                     }
+
+                    if(data.registration_required){
+                        $("#billing_info").hide();
+                        $("#billing_info_divider").hide();
+                    } else {
+                        $("#billing_info").show();
+                        $("#billing_info_divider").show();
+                    }
                 }
-            });
+            })
         }
 
         function stripTags(str) {
@@ -324,7 +407,5 @@
             $("#form").remove('#no-first-name-input');
         }
     });
-
 </script>
-
 {% endblock %}
