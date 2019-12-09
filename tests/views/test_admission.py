@@ -32,18 +32,18 @@ from unittest.mock import patch
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
-from requests import Response, HTTPError
+from requests import Response
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import SUBMITTED, ACCEPTED_NO_REGISTRATION_REQUIRED, \
     ACCEPTED
-from continuing_education.tests.factories.admission import AdmissionDictFactory
+from continuing_education.tests.factories.admission import AdmissionDictFactory, RegistrationDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.views.admission import admission_form
@@ -98,6 +98,23 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertTemplateUsed(response, 'admission_detail.html')
         self.assertEqual(response.context['admission'], self.admission)
         self.assertTrue(response.context['admission_is_submittable'])
+        self.assertTrue(response.context['registration_required'])
+
+    @patch('continuing_education.views.api.get_admission')
+    @patch('continuing_education.views.api.get_registration')
+    def test_admission_detail_no_reg(self, mock_get_registration, mock_get_admission):
+        formation = ContinuingEducationTrainingDictFactory(registration_required=False)
+        admission = AdmissionDictFactory(self.person_information, formation=formation)
+        mock_get_admission.return_value = admission
+        mock_get_registration.return_value = RegistrationDictFactory(self.person_information, formation=formation)
+        url = reverse('admission_detail', args=[admission['uuid']])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'admission_detail.html')
+        self.assertEqual(response.context['admission'], admission)
+        self.assertTrue(response.context['admission_is_submittable'])
+        self.assertFalse(response.context['registration_required'])
 
     def test_admission_detail_not_submittable(self):
         self.admission['last_degree_level'] = ''
@@ -281,8 +298,10 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
 
+    @patch('continuing_education.views.api.get_registration')
     @patch('continuing_education.views.api.update_admission')
-    def test_edit_post_admission_found(self, mock_update):
+    def test_edit_post_admission_found(self, mock_update, mock_get_registration):
+        mock_get_registration.return_value = RegistrationDictFactory(self.person_information, formation=self.formation)
         person_information = self.admission['person_information']
         person = {
             'first_name': self.person.first_name,
