@@ -29,17 +29,16 @@ import uuid
 import factory.fuzzy
 
 from base.models.person import Person
+from reference.tests.factories.country import CountryFactory
 
 
 def ContinuingEducationPersonDictFactory(person_uuid):
     person = Person.objects.get(uuid=person_uuid)
+    country = CountryFactory()
     return {
         'uuid': str(uuid.uuid4()),
         'person': PersonDictFactory(person),
-        'birth_country': {
-            'name': str(factory.Sequence(lambda n: 'Country - %d' % n)),
-            'iso_code': factory.Sequence(lambda n: str(n)[-2:])
-        },
+        'birth_country': country.name,
         'birth_location': str(factory.Faker('city')),
         'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
     }

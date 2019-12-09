@@ -69,13 +69,6 @@ class AdmissionFileTestCase(TestCase):
         self.mocked_called_api_function = self.patcher.start()
         self.addCleanup(self.patcher.stop)
 
-        self.get_patcher = patch(
-            "continuing_education.views.api.get_data_from_osis",
-            return_value=self.admission
-        )
-        self.mocked_called_api_function_get = self.get_patcher.start()
-        self.addCleanup(self.get_patcher.stop)
-
     def mocked_success_post_request(self, **kwargs):
         response = Response()
         response.status_code = status.HTTP_201_CREATED

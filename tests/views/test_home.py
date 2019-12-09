@@ -37,6 +37,7 @@ from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
+from continuing_education.tests.utils.api_patcher import api_create_patcher, api_start_patcher, api_add_cleanup_patcher
 
 
 class ViewHomeTestCase(TestCase):
@@ -47,13 +48,9 @@ class ViewHomeTestCase(TestCase):
         self.cet = ContinuingEducationTrainingDictFactory(
             active=False
         )
-        self.patcher = patch(
-            "continuing_education.views.api.get_continuing_education_training",
-            return_value=self.cet
-        )
-        self.mocked_called_api_function = self.patcher.start()
-
-        self.addCleanup(self.patcher.stop)
+        api_create_patcher(self)
+        api_start_patcher(self)
+        api_add_cleanup_patcher(self)
 
     @mock.patch('requests.get')
     @mock.patch('continuing_education.views.api.get_personal_token')

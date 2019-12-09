@@ -37,10 +37,11 @@ class ContinuingEducationPersonForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ContinuingEducationPersonForm, self).__init__(*args, **kwargs)
         if self.initial and 'birth_country' in self.initial:
-            self.initial['birth_country'] = (
-                Country.objects.get(name=self.initial['birth_country']).iso_code,
-                self.initial['birth_country']
-            )
+            if type(self.initial['birth_country']) is not tuple:
+                self.initial['birth_country'] = (
+                    Country.objects.get(name=self.initial['birth_country']).iso_code,
+                    self.initial['birth_country']
+                )
             self._disable_existing_person_fields()
 
     def _disable_existing_person_fields(self):

@@ -46,7 +46,7 @@ from continuing_education.views import api
 from continuing_education.views.api import get_continuing_education_training
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message
-from continuing_education.views.file import _get_files_list, FILES_URL
+from continuing_education.views.file import _get_files_list
 from frontoffice.settings.base import MAX_UPLOAD_SIZE
 from osis_common.decorators.ajax import ajax_required
 
@@ -246,7 +246,7 @@ def _get_formation(request):
 def _is_admission_submittable_and_show_errors(admission, errors_fields, request):
     if admission and not request.POST:
         formation_uuid, formation_acronym = admission['formation']
-        admission['formation_info'] = get_continuing_education_training(formation_uuid)
+        admission['formation_info'] = api.get_continuing_education_training(formation_uuid)
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
@@ -256,6 +256,7 @@ def _is_admission_submittable_and_show_errors(admission, errors_fields, request)
 
 def _fill_forms_with_existing_data(admission, formation, request):
     person_information = api.get_continuing_education_person(request)
+    _discard_person_uuid(person_information.get('person'))
     Person.objects.filter(user=request.user).update(**person_information.get('person'))
     base_person = Person.objects.get(user=request.user)
     adm_form = AdmissionForm(request.POST or None, initial=admission, formation=formation)
@@ -274,6 +275,11 @@ def _fill_forms_with_existing_data(admission, formation, request):
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, initial=address)
     return address_form, adm_form, id_form, person_form
+
+
+def _discard_person_uuid(person):
+    if 'uuid' in person:
+        person.pop('uuid')
 
 
 def _get_old_admission_if_exists(admissions, person_information, request):

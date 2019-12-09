@@ -41,6 +41,7 @@ CONTINUING_EDUCATION_TYPE = 8
 
 
 def AdmissionDictFactory(person_information, state=DRAFT, formation=None):
+    country = CountryFactory()
     admission = {
         'uuid': str(uuid.uuid4()),
         'person_information': person_information,
@@ -48,8 +49,8 @@ def AdmissionDictFactory(person_information, state=DRAFT, formation=None):
         'last_degree_level': "level",
         'formation': formation if formation else ContinuingEducationTrainingDictFactory(),
         'citizenship': {
-            'name': str(factory.Sequence(lambda n: 'Country - %d' % n)),
-            'iso_code': factory.Sequence(lambda n: str(n)[-2:])
+            'name': country.name,
+            'iso_code': country.iso_code
         },
         'phone_mobile': _get_fake_phone_number(),
         'email': person_information['person']['email'],

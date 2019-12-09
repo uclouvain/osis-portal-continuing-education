@@ -33,6 +33,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
+from rest_framework import status
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
@@ -41,8 +42,8 @@ from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED, ACCEPTED, REJECTED
 from continuing_education.tests.factories.admission import RegistrationDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
+from continuing_education.tests.utils.api_patcher import api_create_patcher, api_start_patcher, api_add_cleanup_patcher
 from continuing_education.views.common import get_submission_errors, _get_managers_mails, format_formation_address
-from rest_framework import status
 
 
 class ViewStudentRegistrationTestCase(TestCase):
@@ -69,25 +70,9 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.mocked_called_api_function = self.patcher.start()
         self.addCleanup(self.patcher.stop)
 
-        self.get_patcher = patch(
-            "continuing_education.views.api.get_data_from_osis",
-            return_value=self.admission_accepted
-        )
-        self.mocked_called_api_function_get = self.get_patcher.start()
-        self.addCleanup(self.get_patcher.stop)
-
-        self.get_list_patcher = patch(
-            "continuing_education.views.api.get_admission_list",
-            return_value={'results': [self.admission_accepted]}
-        )
-        self.get_list_person_patcher = patch(
-            "continuing_education.views.api.get_continuing_education_person",
-            return_value=self.person_information
-        )
-        self.mocked_called_api_function_get_list = self.get_list_patcher.start()
-        self.mocked_called_api_function_get_persons = self.get_list_person_patcher.start()
-        self.addCleanup(self.get_list_patcher.stop)
-        self.addCleanup(self.get_list_person_patcher.stop)
+        api_create_patcher(self)
+        api_start_patcher(self)
+        api_add_cleanup_patcher(self)
 
     def test_registration_detail(self):
         url = reverse('registration_detail', args=[self.admission_accepted['uuid']])
