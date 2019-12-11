@@ -26,12 +26,10 @@
 from random import choice
 from string import ascii_lowercase
 from unittest import mock
-from unittest.mock import patch
 
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
-from mock import patch
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
@@ -43,27 +41,26 @@ from continuing_education.tests.utils.api_patcher import api_create_patcher, api
 class ViewHomeTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.client.force_login(self.user)
         PersonFactory(user=self.user)
         self.cet = ContinuingEducationTrainingDictFactory(
             active=False
         )
-        api_create_patcher(self)
         api_start_patcher(self)
         api_add_cleanup_patcher(self)
 
-    @mock.patch('requests.get')
-    @mock.patch('continuing_education.views.api.get_personal_token')
-    @mock.patch('continuing_education.views.api.transform_response_to_data')
-    def test_main_view(self, mock_transform, mock_token, mock_get):
+    @classmethod
+    def setUpTestData(cls):
+        api_create_patcher(cls)
+
+    def test_main_view(self):
+        self.client.force_login(self.user)
         url = reverse('continuing_education_home')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'continuing_education/home.html')
 
-    @mock.patch('continuing_education.views.api.get_personal_token')
-    def test_redirect_to_prospect_form_if_formation_not_activated_in_url(self, mock_token):
-        self.client.logout()
+    def test_redirect_to_prospect_form_if_formation_not_activated_in_url(self):
+        self.mocked_get_continuing_education_training.return_value['active'] = False
         url = reverse('continuing_education_home', kwargs={'formation_id': self.cet['uuid']})
         response = self.client.get(url)
         self.assertRedirects(response, reverse('prospect_form', kwargs={'formation_uuid': self.cet['uuid']}))
@@ -71,14 +68,19 @@ class ViewHomeTestCase(TestCase):
 
 class FormationsListTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.person = PersonFactory(user=self.user)
-        self.person_iufc = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.an_academic_year = AcademicYearFactory(current=True)
+        api_start_patcher(self)
+        api_add_cleanup_patcher(self)
 
-    @mock.patch('continuing_education.views.api.get_continuing_education_training_list')
-    def test_formations_list(self, mock_get_training_list):
-        mock_get_training_list.return_value = {
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.person = PersonFactory(user=cls.user)
+        cls.person_iufc = ContinuingEducationPersonDictFactory(cls.person.uuid)
+        cls.an_academic_year = AcademicYearFactory(current=True)
+        api_create_patcher(cls)
+
+    def test_formations_list(self):
+        self.mocked_get_training_list.return_value = {
             'count': 11,
             'results': [
                 {
@@ -88,7 +90,7 @@ class FormationsListTestCase(TestCase):
                 for i in range(11)
             ]
         }
-        formations = mock_get_training_list.return_value
+        formations = self.mocked_get_training_list.return_value
         url = reverse('formations_list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -96,10 +98,7 @@ class FormationsListTestCase(TestCase):
         self.assertEqual(response.context['formations'], formations['results'])
         self.assertTemplateUsed(response, 'continuing_education/formations.html')
 
-    @mock.patch('requests.get')
-    @mock.patch('continuing_education.views.api.get_personal_token')
-    @mock.patch('continuing_education.views.api.transform_response_to_data')
-    def test_bypass_formations_list_when_logged_in(self, mock_get, mock_token, mock_transform):
+    def test_bypass_formations_list_when_logged_in(self):
         self.client.force_login(self.user)
         url = reverse('formations_list')
         response = self.client.get(url)

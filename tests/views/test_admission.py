@@ -32,7 +32,6 @@ from unittest.mock import patch
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
@@ -58,6 +57,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             return_value={}
         )
         self.mocked_called_api_function = self.files_list_patcher.start()
+        self.admission = AdmissionDictFactory(self.person_information)
         self.addCleanup(self.files_list_patcher.stop)
         api_start_patcher(self)
         api_add_cleanup_patcher(self)
@@ -71,7 +71,6 @@ class ViewStudentAdmissionTestCase(TestCase):
         cls.person = PersonFactory(user=cls.user)
         cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
         cls.formation = ContinuingEducationTrainingDictFactory()
-        cls.admission = AdmissionDictFactory(cls.person_information)
         cls.admission_submitted = AdmissionDictFactory(cls.person_information, SUBMITTED)
         api_create_patcher(cls)
 
@@ -177,46 +176,25 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
 
-    @patch('continuing_education.views.api.post_admission')
-    def test_admission_new_save(self, mock_post):
-        mock_post.return_value = (self.admission, HttpResponse.status_code)
+    def test_admission_new_save(self):
         admission = {
-            'activity_sector': 'PRIVATE',
-            'awareness_other': '',
             'birth_country': 'BE',
             'birth_date_day': '18',
             'birth_date_month': '4',
             'birth_date_year': '1992',
             'birth_location': 'Bruxelles',
-            'citizenship': 'DZ',
-            'city': 'Roux',
-            'country': 'ZA',
-            'current_employer': 'da',
-            'current_occupation': 'da',
-            'email': 'benjamin@daubry.be',
-            'first_name': 'Benjamin',
+            'email': 'firstname@lastname.be',
+            'first_name': 'Firstname',
             'formation': self.formation['uuid'],
             'gender': 'M',
-            'high_school_diploma': 'False',
-            'high_school_graduation_year': '',
-            'last_degree_field': 'da',
-            'last_degree_graduation_year': '2014',
-            'last_degree_institution': 'da',
-            'last_degree_level': 'dada',
-            'last_name': 'Daubry',
-            'location': 'Rue de Dinant 11',
-            'motivation': 'dada',
-            'other_educational_background': '',
-            'past_professional_activities': '',
-            'phone_mobile': '0474945669',
-            'postal_code': '5620',
-            'professional_impact': 'dada',
-            'professional_status': 'EMPLOYEE',
+            'last_name': 'Lastname',
             'state': 'Draft'
         }
+        mocked_admission_uuid = self.mocked_get_admission.return_value['uuid']
+        self.mocked_post_admission.return_value['uuid'] = mocked_admission_uuid
         response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
+        self.assertRedirects(response, reverse('admission_detail', args=[mocked_admission_uuid]))
 
     def test_admission_save_with_error(self):
         admission = AdmissionDictFactory(self.person_information)
@@ -224,6 +202,16 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
+
+    def test_edit_get_admission_found_complete(self):
+        self.mocked_get_admission.return_value = self.admission
+        url = reverse('admission_edit', args=[self.admission['uuid']])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'admission_form.html')
+        # No warning message should be displayed
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertEqual(len(messages_list), 0)
 
     def test_edit_get_admission_found_incomplete(self):
         self.admission['last_degree_level'] = ''
@@ -245,18 +233,6 @@ class ViewStudentAdmissionTestCase(TestCase):
             str(messages_list[0])
         )
         self.assertEqual(messages_list[0].level, messages.WARNING)
-
-    def test_edit_get_admission_found_complete(self):
-        self.mocked_get_admission.return_value = self.admission
-
-        url = reverse('admission_edit', args=[self.admission['uuid']])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'admission_form.html')
-
-        # No warning message should be displayed
-        messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 0)
 
     def test_admission_edit_permission_denied_invalid_state(self):
         self.mocked_get_admission.return_value = self.admission_submitted
@@ -287,16 +263,14 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
 
-    @patch('continuing_education.views.api.get_admission')
-    @patch('continuing_education.views.api.get_continuing_education_training')
-    def test_edit_post_admission_found_no_reg(self, mock_get_training, mock_get_admission):
+    def test_edit_post_admission_found_no_reg(self):
         admission_no_reg = AdmissionDictFactory(
             person_information=self.person_information,
             state=admission_state_choices.DRAFT,
             formation=ContinuingEducationTrainingDictFactory(active=True, registration_required=False)
         )
-        mock_get_admission.return_value = admission_no_reg
-        mock_get_training.return_value = admission_no_reg['formation']
+        self.mocked_get_admission.return_value = admission_no_reg
+        self.mocked_get_continuing_education_training.return_value = admission_no_reg['formation']
         person_information = self.admission['person_information']
         person = {
             'first_name': self.person.first_name,
@@ -366,30 +340,29 @@ class ViewStudentAdmissionTestCase(TestCase):
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUp(self):
-        current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
         person_iufc = ContinuingEducationPersonDictFactory(PersonFactory().uuid)
-        self.admission_model = AdmissionDictFactory(person_iufc)
-        PersonFactory()
         self.admission = AdmissionDictFactory(person_iufc, SUBMITTED)
+
+    @classmethod
+    def setUpTestData(cls):
+        current_acad_year = create_current_academic_year()
+        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        cls.person_iufc = ContinuingEducationPersonDictFactory(PersonFactory().uuid)
 
     def test_admission_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission)
-
         self.assertFalse(
             errors
         )
 
     def test_admission_is_not_submittable_missing_data_in_all_objects(self):
         self.admission['person_information']['person']['email'] = ''
-        self.admission['person_information']['birth_country'] = ''
         self.admission['address']['postal_code'] = ''
         self.admission['last_degree_level'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
         self.assertDictEqual(
             errors,
             {
-                _("Birth country"): [_("This field is required.")],
                 _("Postal code"): [_("This field is required.")],
                 _("Last degree level"): [_("This field is required.")]
             }
@@ -405,16 +378,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
             }
         )
 
-    def test_admission_is_not_submittable_missing_person_information_data(self):
-        self.admission['person_information']['birth_country'] = ''
-        errors, errors_fields = get_submission_errors(self.admission)
-        self.assertDictEqual(
-            errors,
-            {
-                _("Birth country"): [_("This field is required.")],
-            }
-        )
-
     def test_admission_is_not_submittable_missing_address_data(self):
         self.admission['address']['postal_code'] = ''
         errors, errors_fields = get_submission_errors(self.admission)
@@ -422,16 +385,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
             errors,
             {
                 _("Postal code"): [_("This field is required.")],
-            }
-        )
-
-    def test_admission_is_not_submittable_missing_person_data(self):
-        self.admission['person_information']['person']['gender'] = None
-        errors, errors_fields = get_submission_errors(self.admission)
-        self.assertDictEqual(
-            errors,
-            {
-                _("Gender"): [_("This field is required.")],
             }
         )
 

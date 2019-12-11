@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 import itertools
 
 from django.contrib.auth.decorators import login_required
@@ -42,11 +41,11 @@ from continuing_education.forms.person import PersonForm
 from continuing_education.forms.registration import RegistrationForm
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
-from continuing_education.views import api
+from continuing_education.views.utils import sdk
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
-from continuing_education.views.file import _get_files_list, FILES_URL
+from continuing_education.views.file import _get_files_list
 from continuing_education.business.pdf_filler import write_fillable_pdf, get_data
 from base.views import common
 from reference.models.country import Country
@@ -54,7 +53,7 @@ from reference.models.country import Country
 
 @login_required
 def registration_detail(request, admission_uuid):
-    admission = api.get_registration(request, admission_uuid)
+    admission = sdk.get_registration(request, admission_uuid)
     if admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED:
         add_remaining_tasks_message(request, admission['formation'])
         add_contact_for_edit_message(request, formation=admission['formation'], is_registration=True)
@@ -78,18 +77,18 @@ def registration_detail(request, admission_uuid):
 @login_required
 @require_http_methods(["POST"])
 def registration_submit(request):
-    registration = api.get_registration(request, request.POST.get('registration_uuid'))
-    api.prepare_registration_for_submit(registration)
+    registration = sdk.get_registration(request, request.POST.get('registration_uuid'))
+    sdk.prepare_registration_for_submit(registration)
     registration_submission_errors, errors_fields = get_submission_errors(registration, is_registration=True)
     if request.POST.get("submit") and not registration_submission_errors:
         registration['state'] = admission_state_choices.REGISTRATION_SUBMITTED
-        api.update_registration(request, registration)
+        sdk.update_registration(request, registration)
     return redirect('registration_detail', registration['uuid'])
 
 
 @login_required
 def registration_edit(request, admission_uuid):
-    registration = api.get_registration(request, admission_uuid)
+    registration = sdk.get_registration(request, admission_uuid)
     if registration and registration['state'] != admission_state_choices.ACCEPTED:
         raise PermissionDenied
 
@@ -102,9 +101,9 @@ def registration_edit(request, admission_uuid):
     )
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
-    person_information = api.get_continuing_education_person(request)
+    person_information = sdk.get_continuing_education_person(request)
     person_information.update(
-        api.get_continuing_education_person(request)
+        sdk.get_continuing_education_person(request)
     )
     person_form = ContinuingEducationPersonForm(request.POST or None, initial=person_information)
     address = registration['address']
@@ -117,7 +116,7 @@ def registration_edit(request, admission_uuid):
             _show_submit_warning(registration_submission_errors, request)
 
     if all([form.is_valid(), billing_address_form.is_valid(), residence_address_form.is_valid()]):
-        api.prepare_registration_data(
+        sdk.prepare_registration_data(
             registration,
             address,
             forms={
@@ -127,7 +126,7 @@ def registration_edit(request, admission_uuid):
             },
             registration_required=True
         )
-        api.update_registration(request, form.cleaned_data)
+        sdk.update_registration(request, form.cleaned_data)
         return redirect(
             reverse('registration_detail', kwargs={'admission_uuid': admission_uuid})
         )
@@ -140,14 +139,14 @@ def registration_edit(request, admission_uuid):
 
 @login_required
 def generate_pdf_registration(request, admission_uuid):
-    admission = api.get_registration(request, admission_uuid)
+    admission = sdk.get_registration(request, admission_uuid)
     if admission['state'] != REGISTRATION_SUBMITTED:
         return redirect(
             reverse('registration_detail', kwargs={'admission_uuid': admission_uuid})
         )
     pdf_filename = get_valid_filename("{}_{}".format(
-        admission['last_name'],
-        admission['formation']['acronym'])
+        admission['person_information']['person']['last_name'],
+        admission['formation']['education_group']['acronym'])
     )
 
     result = write_fillable_pdf(get_data(admission))

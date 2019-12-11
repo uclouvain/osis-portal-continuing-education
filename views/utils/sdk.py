@@ -88,9 +88,7 @@ def get_registration(request, uuid):
     return api.registrations_uuid_get(uuid)
 
 
-def post_prospect(request, object_to_post):
-    token = get_personal_token(request)
-    api.api_client.configuration.api_key['Authorization'] = token
+def post_prospect(object_to_post):
     return api.prospects_post(object_to_post)
 
 
@@ -172,8 +170,9 @@ def _prepare_address(address, forms, utility, address_type):
 def prepare_registration_for_submit(registration):
     registration.pop('address')
     registration.pop('citizenship')
+    country_name = registration['residence_address']['country']
     registration['residence_address']['country'] = Country.objects.get(
-        name=registration['residence_address']['country']
+        name=country_name
     ).iso_code
     registration['billing_address']['country'] = Country.objects.get(
         name=registration['billing_address']['country']

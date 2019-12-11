@@ -37,9 +37,8 @@ from django.shortcuts import redirect
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
 
-from continuing_education.views.api import get_admission, get_registration, get_files_list, get_file, \
-    delete_file, upload_file as api_upload_file
 from continuing_education.views.common import display_error_messages, display_success_messages
+from continuing_education.views.utils import sdk
 from openapi_client.rest import ApiException
 
 MAX_ADMISSION_FILE_NAME_LENGTH = 100
@@ -51,12 +50,12 @@ def upload_file(request, admission_uuid):
     admission_file = request.FILES['myfile']
 
     try:
-        admission = get_admission(request, admission_uuid)
+        admission = sdk.get_admission(request, admission_uuid)
     except Http404:
-        admission = get_registration(request, admission_uuid)
+        admission = sdk.get_registration(request, admission_uuid)
 
     try:
-        api_upload_file(
+        sdk.upload_file(
             request,
             admission_uuid,
             path=admission_file,
@@ -64,7 +63,7 @@ def upload_file(request, admission_uuid):
         )
         display_success_messages(request, _("The document is uploaded correctly"))
     except ApiException as e:
-        display_error_messages(request, json.loads(e.body))
+        display_error_messages(request, e.body)
 
     return redirect(request.META.get('HTTP_REFERER') + '#documents')
 
@@ -72,14 +71,14 @@ def upload_file(request, admission_uuid):
 @login_required
 def download_file(request, file_uuid, admission_uuid):
     try:
-        admission_file = get_file(request, admission_uuid, file_uuid)
+        admission_file = sdk.get_file(request, admission_uuid, file_uuid)
         name = get_valid_filename(admission_file['name'])
         mime_type = MimeTypes().guess_type(admission_file['name'])
         response_file = base64.b64decode(admission_file['content'])
         response = HttpResponse(response_file, mime_type)
         response['Content-Disposition'] = "attachment; filename=%s" % name
         return response
-    except Exception:
+    except ApiException:
         display_error_messages(request, _('An unexpected error occurred during download'))
     return redirect(request.META.get('HTTP_REFERER') + '#documents')
 
@@ -87,7 +86,7 @@ def download_file(request, file_uuid, admission_uuid):
 @login_required
 def remove_file(request, file_uuid, admission_uuid):
     try:
-        delete_file(request, admission_uuid, file_uuid)
+        sdk.delete_file(request, admission_uuid, file_uuid)
         display_success_messages(request, _("File correctly deleted"))
     except Exception:
         display_error_messages(request, _("A problem occured during delete"))
@@ -100,7 +99,7 @@ def _get_files_list(request, admission):
     """
     files_list = []
     try:
-        files_list = get_files_list(request, admission['uuid'])['results']
+        files_list = sdk.get_files_list(request, admission['uuid'])['results']
         for file in files_list:
             file['created_date'] = parser.parse(
                 file['created_date']
@@ -114,4 +113,4 @@ def _get_files_list(request, admission):
 def _is_file_uploaded_by_admission_person(admission, file):
     uploaded_by = file.get('uploaded_by', None)
     uploader_uuid = uploaded_by.get('uuid', None) if uploaded_by else None
-    return uploader_uuid == str(admission['person_information']['uuid'])
+    return uploader_uuid == str(admission['person_uuid'])

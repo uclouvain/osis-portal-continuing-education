@@ -23,27 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import uuid
-from unittest.mock import patch
 
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext, gettext_lazy as _
-from rest_framework import status
+from mock import patch
 
 from base.tests.factories.person import PersonFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
+from continuing_education.tests.utils.api_patcher import api_create_patcher, api_start_patcher, api_add_cleanup_patcher
+from openapi_client.rest import ApiException
 
 
 class ProspectTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
-        self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
         self.prospect = {
             'name': 'NameTest',
             'first_name': 'FirstNameTest',
@@ -51,31 +48,36 @@ class ProspectTestCase(TestCase):
             'city': 'CityTest',
             'phone_number': 1234567809,
             'email': 'a@b.com',
-            'formation': uuid.uuid4()
+            'formation': self.formation['uuid']
         }
+        api_start_patcher(self)
+        api_add_cleanup_patcher(self)
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.person = PersonFactory(user=cls.user)
+        cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
+        cls.formation = ContinuingEducationTrainingDictFactory()
+        api_create_patcher(cls)
 
     def test_post_prospect_with_missing_information(self):
         prospect = self.prospect
         prospect['name'] = ''
-        response = self.client.post(reverse('prospect_form'), data=prospect)
+        response = self.client.post(reverse('prospect_form', args=[self.formation['uuid']]), data=prospect)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'prospect_form.html')
 
     def test_post_prospect_with_not_valid_email(self):
         prospect = self.prospect
         prospect['email'] = 'A'
-        response = self.client.post(reverse('prospect_form'), data=prospect)
+        response = self.client.post(reverse('prospect_form', args=[self.formation['uuid']]), data=prospect)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'prospect_form.html')
 
-    def mocked_failed_post_request(*args, **kwargs):
-        return {}, status.HTTP_400_BAD_REQUEST
-
-    @patch('continuing_education.views.api.transform_response_to_data')
-    @patch('requests.get')
-    @patch('requests.post', return_value=HttpResponse(status=status.HTTP_201_CREATED))
-    def test_post_valid_prospect(self, mock_post, mock_get, mock_transform):
-        response = self.client.post(reverse('prospect_form'), data=self.prospect)
+    def test_post_valid_prospect(self):
+        self.mocked_post_prospect.return_value = self.prospect
+        response = self.client.post(reverse('prospect_form', args=[self.formation['uuid']]), data=self.prospect)
         self.assertEqual(response.status_code, 302)
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertIn(
@@ -84,8 +86,13 @@ class ProspectTestCase(TestCase):
         )
         self.assertRedirects(response, reverse('continuing_education_home'))
 
-    @patch('continuing_education.views.api.post_data_to_osis', side_effect=mocked_failed_post_request)
-    def test_post_valid_prospect_but_server_error(self, mock_fail):
-        response = self.client.post(reverse('prospect_form'), data=self.prospect)
+    @patch('json.loads')
+    def test_post_valid_prospect_but_server_error(self, mock_json):
+        self.mocked_post_prospect.side_effect = mocked_failed_post_request
+        response = self.client.post(reverse('prospect_form', args=[self.formation['uuid']]), data=self.prospect)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'prospect_form.html')
+
+
+def mocked_failed_post_request(*args, **kwargs):
+    raise ApiException()

@@ -48,7 +48,7 @@ class ProspectForm(Form):
             self.fields['formation'] = forms.CharField(
                 disabled=True
             )
-            self.initial['formation'] = formation['acronym']
+            self.initial['formation'] = formation['education_group']['acronym']
 
     class Meta:
         fields = [

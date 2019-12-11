@@ -66,7 +66,7 @@ def get_data(admission):
         'first_name': person.get('first_name', EMPTY_VALUE),
         'birth_date': birth_date,
         'birth_location': _capitalize(person_information.get('birth_location')),
-        'birth_country': _capitalize(person_information.get('birth_country').get('name')) if person_information.get(
+        'birth_country': _capitalize(person_information.get('birth_country')) if person_information.get(
             'birth_country') else EMPTY_VALUE,
         'citizenship':
             _capitalize(admission.get('citizenship').get('name')) if admission.get('citizenship') else EMPTY_VALUE,
@@ -105,10 +105,12 @@ def _format_birth_date(person_information):
 
 
 def _build_empty_address():
-    return {'location': EMPTY_VALUE,
-            'postal_code': EMPTY_VALUE,
-            'city': EMPTY_VALUE,
-            'country': {'name': EMPTY_VALUE}}
+    return {
+        'location': EMPTY_VALUE,
+        'postal_code': EMPTY_VALUE,
+        'city': EMPTY_VALUE,
+        'country': EMPTY_VALUE
+    }
 
 
 def write_fillable_pdf(data_dict):
@@ -169,7 +171,7 @@ def _build_address(data_dict, type):
             '{}_address_postal_code'.format(type): data_dict.get('postal_code'),
             '{}_address_city'.format(type): _capitalize(data_dict.get('city')),
             '{}_address_country'.format(type):
-                _capitalize(data_dict.get('country').get('name'))
+                _capitalize(data_dict.get('country'))
                 if data_dict.get('country') else EMPTY_VALUE,
         }
     return {}

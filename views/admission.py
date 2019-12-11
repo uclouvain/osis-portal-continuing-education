@@ -42,8 +42,8 @@ from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.forms.registration import RegistrationForm
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.views import api
-from continuing_education.views.api import get_continuing_education_training
+from continuing_education.views.utils import sdk
+from continuing_education.views.utils.sdk import get_continuing_education_training
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message
 from continuing_education.views.file import _get_files_list
@@ -54,10 +54,10 @@ from osis_common.decorators.ajax import ajax_required
 @login_required
 def admission_detail(request, admission_uuid):
     try:
-        admission = api.get_admission(request, admission_uuid)
-        registration = api.get_registration(request, admission_uuid)
+        admission = sdk.get_admission(request, admission_uuid)
+        registration = sdk.get_registration(request, admission_uuid)
     except Http404:
-        registration = api.get_registration(request, admission_uuid)
+        registration = sdk.get_registration(request, admission_uuid)
         if registration and registration['state'] == admission_state_choices.ACCEPTED:
             return redirect(reverse('registration_detail',
                                     kwargs={'admission_uuid': admission_uuid if registration else ''}),
@@ -110,7 +110,7 @@ def _show_save_before_submit(request):
 @login_required
 @require_http_methods(["POST"])
 def admission_submit(request):
-    admission = api.get_admission(request, request.POST.get('admission_uuid'))
+    admission = sdk.get_admission(request, request.POST.get('admission_uuid'))
     admission_submission_errors, errors_fields = get_submission_errors(admission)
     if request.POST.get("submit") and not admission_submission_errors:
         _update_admission_state(request, admission)
@@ -122,7 +122,7 @@ def _update_admission_state(request, admission):
         'state': admission_state_choices.SUBMITTED,
         'uuid': admission['uuid']
     }
-    api.update_admission(request, submitted_admission)
+    sdk.update_admission(request, submitted_admission)
 
 
 def _has_instance_with_values(instance):
@@ -150,7 +150,7 @@ def admission_form(request, admission_uuid=None):
 
     errors_fields = _is_admission_submittable_and_show_errors(admission, errors_fields, request)
     if forms_valid:
-        api.prepare_admission_data(
+        sdk.prepare_admission_data(
             admission,
             request.user.username,
             forms={
@@ -171,7 +171,6 @@ def admission_form(request, admission_uuid=None):
         )
 
         request.session.pop('formation_id', '')
-
         return redirect(
             reverse('admission_detail', kwargs={'admission_uuid': admission['uuid'] if admission else ''}),
         )
@@ -200,7 +199,7 @@ def admission_form(request, admission_uuid=None):
 
 def _update_billing_informations(request, forms, registration, registration_required):
     if not registration_required:
-        api.prepare_registration_data(
+        sdk.prepare_registration_data(
             registration,
             registration['address'],
             forms={
@@ -209,7 +208,7 @@ def _update_billing_informations(request, forms, registration, registration_requ
             },
             registration_required=registration_required
         )
-        api.update_registration(request, forms['registration'].cleaned_data)
+        sdk.update_registration(request, forms['registration'].cleaned_data)
 
 
 def _get_billing_datas(request, admission_uuid, forms_valid, registration_required):
@@ -217,7 +216,7 @@ def _get_billing_datas(request, admission_uuid, forms_valid, registration_requir
     registration_form = RegistrationForm(None)
     billing_address_form = AddressForm(None)
     if not registration_required:
-        registration = api.get_registration(request, admission_uuid)
+        registration = sdk.get_registration(request, admission_uuid)
         registration_form = RegistrationForm(request.POST or None, initial=registration, only_billing=True)
         billing_address_form = AddressForm(
             request.POST or None,
@@ -229,7 +228,7 @@ def _get_billing_datas(request, admission_uuid, forms_valid, registration_requir
 
 
 def _get_admission_or_403(admission_uuid, request):
-    admission = api.get_admission(request, admission_uuid) if admission_uuid else None
+    admission = sdk.get_admission(request, admission_uuid) if admission_uuid else None
     if admission and admission['state'] != admission_state_choices.DRAFT:
         raise PermissionDenied
     return admission
@@ -239,14 +238,14 @@ def _get_formation(request):
     formation = None
     formation_id = request.session.get('formation_id')
     if formation_id:
-        formation = api.get_continuing_education_training(formation_id)
+        formation = sdk.get_continuing_education_training(formation_id)
     return formation
 
 
 def _is_admission_submittable_and_show_errors(admission, errors_fields, request):
     if admission and not request.POST:
         formation_uuid, formation_acronym = admission['formation']
-        admission['formation_info'] = api.get_continuing_education_training(formation_uuid)
+        admission['formation_info'] = sdk.get_continuing_education_training(formation_uuid)
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
@@ -255,7 +254,7 @@ def _is_admission_submittable_and_show_errors(admission, errors_fields, request)
 
 
 def _fill_forms_with_existing_data(admission, formation, request):
-    person_information = api.get_continuing_education_person(request)
+    person_information = sdk.get_continuing_education_person(request)
     _discard_person_uuid(person_information.get('person'))
     Person.objects.filter(user=request.user).update(**person_information.get('person'))
     base_person = Person.objects.get(user=request.user)
@@ -265,7 +264,7 @@ def _fill_forms_with_existing_data(admission, formation, request):
         instance=base_person,
         no_first_name_checked=request.POST.get('no_first_name', False)
     )
-    admissions = api.get_admission_list(request, person_information['uuid'])['results']
+    admissions = sdk.get_admission_list(request, person_information['uuid'])['results']
     old_admission = _get_old_admission_if_exists(admissions, person_information, request)
     person_form = ContinuingEducationPersonForm(
         request.POST or None,
@@ -284,20 +283,20 @@ def _discard_person_uuid(person):
 
 def _get_old_admission_if_exists(admissions, person_information, request):
     old_admission = admissions[0] if admissions \
-        else api.get_registration_list(request, person_information['uuid'])['results']
+        else sdk.get_registration_list(request, person_information['uuid'])['results']
     if old_admission:
         if admissions:
-            old_admission = api.get_admission(request, old_admission['uuid'])
+            old_admission = sdk.get_admission(request, old_admission['uuid'])
         else:
-            old_admission = api.get_registration(request, old_admission[0]['uuid'])
+            old_admission = sdk.get_registration(request, old_admission[0]['uuid'])
     return old_admission
 
 
 def _update_or_create_admission(adm_form, admission, request):
     if admission:
-        api.update_admission(request, adm_form.cleaned_data)
+        sdk.update_admission(request, adm_form.cleaned_data)
     else:
-        admission = api.post_admission(request, adm_form.cleaned_data)
+        admission = sdk.post_admission(request, adm_form.cleaned_data)
     return admission
 
 

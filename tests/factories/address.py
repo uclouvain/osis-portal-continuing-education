@@ -30,10 +30,11 @@ from reference.tests.factories.country import CountryFactory
 
 
 def AddressDictFactory():
+    country = CountryFactory()
     address = {
-        'location': factory.Faker('street_name'),
+        'location': 'street_name',
         'postal_code': 1348,
-        'country': CountryFactory().name,
-        'city': factory.Faker('city')
+        'country': country.name,
+        'city': 'city'
     }
     return address

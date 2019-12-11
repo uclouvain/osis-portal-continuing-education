@@ -1,18 +1,20 @@
+import json
+
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from openapi_client.rest import ApiException
 from rest_framework import status
 
 from continuing_education.forms.prospect import ProspectForm
-from continuing_education.views import api
-from continuing_education.views.api import post_prospect
-from continuing_education.views.common import display_success_messages
+from continuing_education.views.common import display_success_messages, display_error_messages
+from continuing_education.views.utils import sdk
 
 
 def prospect_form(request, formation_uuid=None):
     cet = None
     if formation_uuid:
-        cet = api.get_continuing_education_training(request)
+        cet = sdk.get_continuing_education_training(formation_uuid)
     form = ProspectForm(request.POST or None, ce_training=cet)
 
     if form.is_valid():
@@ -25,8 +27,10 @@ def prospect_form(request, formation_uuid=None):
             'formation': formation_uuid,
             'phone_number': request.POST.get('phone_number')
         }
-        data, response_status_code = post_prospect(request, prospect)
-        if response_status_code == status.HTTP_201_CREATED:
+        try:
+            data = sdk.post_prospect(prospect)
             display_success_messages(request, _("Your form was correctly send."))
             return redirect(reverse('continuing_education_home'))
+        except ApiException as e:
+            display_error_messages(request, json.loads(e.body))
     return render(request, 'prospect_form.html', locals())

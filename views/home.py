@@ -29,7 +29,7 @@ from django.urls import reverse
 from django.utils import translation
 
 from base.models import person as mdl_person
-from continuing_education.views import api
+from continuing_education.views.utils import sdk
 
 
 def formations_list(request):
@@ -40,7 +40,7 @@ def formations_list(request):
         active_page = int(request.GET.get('page'))
     except TypeError:
         active_page = 1
-    paginator = api.get_continuing_education_training_list(
+    paginator = sdk.get_continuing_education_training_list(
         limit=limit,
         offset=(active_page - 1) * limit,
     )
@@ -57,15 +57,15 @@ def main_view(request, formation_id=None):
     if formation_id:
         request.session['formation_id'] = formation_id
     if request.user.is_authenticated:
-        api.get_personal_token(request)
+        sdk.get_personal_token(request)
         person = mdl_person.find_by_user(request.user)
-        person_information = api.get_continuing_education_person(request)
-        admissions = api.get_admission_list(request, person_information['uuid'])['results']
-        registrations = api.get_registration_list(request, person_information['uuid'])['results']
+        person_information = sdk.get_continuing_education_person(request)
+        admissions = sdk.get_admission_list(request, person_information['uuid'])['results']
+        registrations = sdk.get_registration_list(request, person_information['uuid'])['results']
         return render(request, "continuing_education/home.html", locals())
     else:
         if formation_id:
-            is_active = api.get_continuing_education_training(formation_id)['active']
+            is_active = sdk.get_continuing_education_training(formation_id)['active']
             if not is_active:
                 return redirect(reverse('prospect_form', kwargs={'formation_uuid': formation_id}))
         return render(request, "authentication/login.html")

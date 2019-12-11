@@ -57,15 +57,13 @@ class PdfFillerTestCase(TestCase):
             'location': 'Rue de Bruxelles 22',
             'postal_code': '5000',
             'city': 'Namur',
-            'country':
-                {'name': 'Belgium'}
+            'country': 'Belgium'
         }
         self.data_dict_for_empty_address = {
             'location': pdf_filler.EMPTY_VALUE,
             'postal_code': pdf_filler.EMPTY_VALUE,
             'city': pdf_filler.EMPTY_VALUE,
-            'country':
-                {'name': pdf_filler.EMPTY_VALUE}
+            'country': pdf_filler.EMPTY_VALUE
         }
 
         self.default_keys_for_address = ['_address_location',

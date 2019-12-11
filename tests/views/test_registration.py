@@ -32,7 +32,6 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
-from requests import Response
 from rest_framework import status
 
 from base.tests.factories.academic_year import AcademicYearFactory
@@ -55,14 +54,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         return pdfrw.PdfReader(input_pdf_path)
 
     def setUp(self):
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
-        self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.admission_accepted = RegistrationDictFactory(self.person_information, state=ACCEPTED)
-        self.admission_rejected = RegistrationDictFactory(self.person_information, state=REJECTED)
-        self.registration_submitted = RegistrationDictFactory(self.person_information, state=REGISTRATION_SUBMITTED)
-
         self.patcher = patch(
             "continuing_education.views.registration._get_files_list",
             return_value={}
@@ -70,11 +62,21 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.mocked_called_api_function = self.patcher.start()
         self.addCleanup(self.patcher.stop)
 
-        api_create_patcher(self)
         api_start_patcher(self)
         api_add_cleanup_patcher(self)
 
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.person = PersonFactory(user=cls.user)
+        cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
+        cls.admission_accepted = RegistrationDictFactory(cls.person_information, state=ACCEPTED)
+        cls.admission_rejected = RegistrationDictFactory(cls.person_information, state=REJECTED)
+        cls.registration_submitted = RegistrationDictFactory(cls.person_information, state=REGISTRATION_SUBMITTED)
+        api_create_patcher(cls)
+
     def test_registration_detail(self):
+        self.mocked_get_registration.return_value = self.admission_accepted
         url = reverse('registration_detail', args=[self.admission_accepted['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -104,6 +106,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(messages_list[0].level, messages.INFO)
 
     def test_registration_detail_not_submittable(self):
+        self.mocked_get_registration.return_value = self.admission_accepted
         self.admission_accepted['marital_status'] = ''
 
         url = reverse('registration_detail', args=[self.admission_accepted['uuid']])
@@ -147,7 +150,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(messages_list[1].level, messages.WARNING)
 
     def test_registration_submitted_detail(self):
-        self.mocked_called_api_function_get.return_value = self.registration_submitted
+        self.mocked_get_registration.return_value = self.registration_submitted
         url = reverse('registration_detail', args=[self.registration_submitted['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -201,9 +204,10 @@ class ViewStudentRegistrationTestCase(TestCase):
         )
         self.assertEqual(messages_list[1].level, messages.WARNING)
 
-    @mock.patch('continuing_education.views.api.prepare_registration_for_submit')
-    @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
-    def test_registration_submit(self, mock_update, mock_prepare):
+    def test_registration_submit(self):
+        self.mocked_get_registration.return_value = self.admission_accepted
+        self.mocked_update_registration.return_value = self.admission_accepted
+        self.mocked_update_registration.return_value['state'] = admission_state_choices.REGISTRATION_SUBMITTED
         url = reverse('registration_submit')
         response = self.client.post(
             url,
@@ -217,9 +221,8 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(response.context['admission']['state'], admission_state_choices.REGISTRATION_SUBMITTED)
         self.assertTemplateUsed(response, 'registration_detail.html')
 
-    @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
-    def test_registration_submit_not_registration_submitted(self, mock_update):
-        self.mocked_called_api_function_get.return_value = self.registration_submitted
+    def test_registration_submit_not_registration_submitted(self):
+        self.mocked_get_registration.return_value = self.registration_submitted
         url = reverse('registration_submit')
         response = self.client.post(
             url,
@@ -232,6 +235,9 @@ class ViewStudentRegistrationTestCase(TestCase):
 
     def test_registration_submit_not_complete(self):
         self.admission_accepted['marital_status'] = ''
+        self.mocked_get_registration.return_value = RegistrationDictFactory(
+            person_information=self.person_information
+        )
 
         url = reverse('registration_submit')
         response = self.client.post(
@@ -250,8 +256,8 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertTemplateUsed(response, 'registration_form.html')
 
     def test_edit_registration_submitted_unauthorized(self):
-        self.admission_accepted['state'] = REGISTRATION_SUBMITTED
-        url = reverse('registration_edit', args=[self.admission_accepted['uuid']])
+        self.mocked_get_registration.return_value = self.registration_submitted
+        url = reverse('registration_edit', args=[self.registration_submitted['uuid']])
         get_response = self.client.get(url)
         self.assertEqual(get_response.status_code, 401)
         self.assertTemplateUsed(get_response, 'access_denied.html')
@@ -263,8 +269,10 @@ class ViewStudentRegistrationTestCase(TestCase):
     @mock.patch('continuing_education.business.pdf_filler._get_pdf_template')
     def test_pdf_content(self, mock_pdf_template):
         mock_pdf_template = self.mock_pdf_template_return()
-        self.mocked_called_api_function_get.return_value = self.registration_submitted
-        self.mocked_called_api_function_get.return_value['person_information']['birth_date']="2019-10-17"
+        self.mocked_get_registration.return_value = self.registration_submitted
+        country_name = self.mocked_get_registration.return_value['citizenship']
+        self.mocked_get_registration.return_value['citizenship'] = {'name': country_name}
+        self.mocked_get_registration.return_value['person_information']['birth_date'] = "2019-10-17"
         a_superuser = SuperUserFactory()
         self.client.force_login(a_superuser)
         url = reverse('registration_pdf', args=[self.registration_submitted['uuid']])
@@ -277,14 +285,11 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUp(self):
         ac = AcademicYearFactory()
         AcademicYearFactory(year=ac.year + 1)
-        self.admission = RegistrationDictFactory(PersonFactory().uuid)
+        self.admission = RegistrationDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid))
 
     def test_registration_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
-
-        self.assertFalse(
-            errors
-        )
+        self.assertFalse(errors)
 
     def test_registration_is_not_submittable_missing_data_in_all_objects(self):
         self.admission['residence_address']['postal_code'] = ''

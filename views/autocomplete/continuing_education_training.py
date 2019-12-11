@@ -3,7 +3,7 @@ import json
 from dal import autocomplete
 from django import http
 
-from continuing_education.views.api import get_continuing_education_training_list
+from continuing_education.views.utils.sdk import get_continuing_education_training_list
 
 
 class ContinuingEducationTrainingAutocomplete(autocomplete.Select2ListView):

@@ -23,19 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import base64
 import uuid
-from unittest import mock
-from unittest.mock import patch
+from collections import namedtuple
+from unittest.mock import patch, Mock
 
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
-from requests import Response
 from rest_framework import status
 
 from base.tests.factories.academic_year import AcademicYearFactory
@@ -43,51 +40,37 @@ from base.tests.factories.academic_year import create_current_academic_year
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
+from continuing_education.tests.utils.api_patcher import api_start_patcher, api_add_cleanup_patcher, api_create_patcher
+from openapi_client.rest import ApiException
 
 
 class AdmissionFileTestCase(TestCase):
     def setUp(self):
-        current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
         self.client.force_login(self.user)
-        self.request = RequestFactory()
-        self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.admission = AdmissionDictFactory(self.person_information)
-        self.admission_file = SimpleUploadedFile(
+        api_start_patcher(self)
+        api_add_cleanup_patcher(self)
+
+    @classmethod
+    def setUpTestData(cls):
+        current_acad_year = create_current_academic_year()
+        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.request = RequestFactory()
+        cls.person = PersonFactory(user=cls.user)
+        cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
+        cls.admission = AdmissionDictFactory(cls.person_information)
+        cls.admission_file = SimpleUploadedFile(
             name='upload_test.pdf',
             content=str.encode("test_content"),
             content_type="application/pdf"
         )
+        api_create_patcher(cls)
 
-        self.patcher = patch(
-            "continuing_education.views.admission._get_files_list",
-            return_value={}
-        )
-        self.mocked_called_api_function = self.patcher.start()
-        self.addCleanup(self.patcher.stop)
+    def mocked_api_exception(self, *args, **kwargs):
+        raise ApiException(
+            http_resp=namedtuple('Response', 'status, reason, data, getheaders')('', '', '', Mock()))
 
-    def mocked_success_post_request(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_201_CREATED
-        return response
-
-    def mocked_failed_post_request(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_400_BAD_REQUEST
-        response.json = lambda *args, **kwargs: "BAD REQUEST"
-        return response
-
-    def mocked_failed_post_request_name_too_long(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_406_NOT_ACCEPTABLE
-        response.json = lambda *args, **kwargs: "NAME TOO LONG"
-        return response
-
-    @mock.patch('requests.post', side_effect=mocked_success_post_request)
-    def test_upload_file_success(self, mock_post):
+    def test_upload_file_success(self):
         url = reverse('upload_file', args=[self.admission['uuid']])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
         response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
@@ -99,45 +82,14 @@ class AdmissionFileTestCase(TestCase):
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
 
-    @mock.patch('requests.post', side_effect=mocked_failed_post_request)
-    def test_upload_file_error(self, mock_post):
+    def test_upload_file_error(self):
+        self.mocked_upload_file.side_effect = self.mocked_api_exception
         url = reverse('upload_file', args=[self.admission['uuid']])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
         response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
-        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
-        # an error should raise as the admission is not retrieved from test
-        self.assertIn("BAD REQUEST", messages_list)
-        self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
+        self.assertRedirects(response, redirect_url + '#documents')
 
-    @mock.patch('requests.post', side_effect=mocked_failed_post_request_name_too_long)
-    def test_upload_file_error_name_too_long(self, mock_fail):
-        url = reverse('upload_file', args=[self.admission['uuid']])
-        redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
-        file = SimpleUploadedFile(
-            name='upload_test_with_too_much_character_oh_no_this_will_fail_upload_test_' +
-                 'with_too_much_character_oh_no_this_will_fail.pdf',
-            content=str.encode("test_content"),
-            content_type="application/pdf"
-        )
-        response = self.client.post(url, {'myfile': file}, HTTP_REFERER=redirect_url)
-        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
-        # an error should raise as the admission is not retrieved from test
-        self.assertIn("NAME TOO LONG", messages_list)
-
-    def mocked_success_delete_request(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_204_NO_CONTENT
-        return response
-
-    def mocked_failed_delete_request(self, **kwargs):
-        response = Response()
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        return response
-
-    @mock.patch('requests.delete', side_effect=mocked_success_delete_request)
-    def test_delete_file_success(self, mock_delete):
+    def test_delete_file_success(self):
         url = reverse('remove_file', args=[self.admission['uuid'], "1452"])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
         response = self.client.delete(
@@ -145,7 +97,6 @@ class AdmissionFileTestCase(TestCase):
             {'myfile': self.admission_file},
             HTTP_REFERER=redirect_url
         )
-
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 302)
         self.assertIn(
@@ -154,8 +105,8 @@ class AdmissionFileTestCase(TestCase):
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
 
-    @mock.patch('requests.delete', side_effect=mocked_failed_delete_request)
-    def test_delete_file_error(self, mock_delete):
+    def test_delete_file_error(self):
+        self.mocked_delete_file.side_effect = self.mocked_api_exception
         url = reverse('remove_file', args=[self.admission['uuid'], "5478"])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
 
@@ -173,22 +124,25 @@ class AdmissionFileTestCase(TestCase):
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
 
-    def get_mocked_file_response(self, headers):
-        response = HttpResponse(status=status.HTTP_200_OK)
-        response.content = '{"content": "' + str(base64.b64encode(b'test')) + \
-                           '", "path":"test_name.pdf", "name":"test_name.pdf"}'
-        return response
-
-    @mock.patch('requests.get', side_effect=get_mocked_file_response)
-    def test_download_file_success(self, mock_get):
+    def test_download_file_success(self):
+        self.mocked_get_file.return_value = {
+            'name': self.admission_file.name,
+            'content': "bW9jaw==",
+            'content_type': "application/pdf"
+        }
         url = reverse('download_file', args=[uuid.uuid4(), self.admission['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        for value in ['attachment', 'test_name']:
+        for value in ['attachment', self.admission_file.name]:
             self.assertIn(value, response['Content-Disposition'])
 
-    @mock.patch('requests.get', return_value=HttpResponse(status=status.HTTP_404_NOT_FOUND))
-    def test_download_file_error(self, mock_get):
+    def test_download_file_error(self):
+        self.mocked_get_file.side_effect = self.mocked_api_exception
         url = reverse('download_file', args=[uuid.uuid4(), self.admission['uuid']])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        redirect_url = reverse('admission_detail', args=[self.admission['uuid']]) + '#documents'
+        response = self.client.get(url, HTTP_REFERER=redirect_url)
+        messages_list = list(messages.get_messages(response.wsgi_request))
+        self.assertIn(
+            gettext(('An unexpected error occurred during download')),
+            str(messages_list[0])
+        )
