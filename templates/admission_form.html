@@ -223,21 +223,30 @@
 
 {% block script %}
     <script>
+
+        hide_or_show_nav_buttons($('.nav-tabs li.active')[0]);
+
         $('.nav-tabs li').on('shown.bs.tab', function () {
-            const additional_tab = $("#additional_tab");
-            if (this.id === 'identification_tab') {
+            hide_or_show_nav_buttons(this)
+        });
+
+        function hide_or_show_nav_buttons(element) {
+            let last_tab = $('.nav-tabs li:visible:last')[0];
+            let first_tab = $('.nav-tabs li:first-of-type')[0];
+
+            if (element === first_tab) {
                 $('.btnPrevious').hide();
             }
             else {
                 $('.btnPrevious').show();
             }
-            if (this.id === 'additional_tab' || (additional_tab[0].style.display === 'none' && this.id === 'reference_tab')) {
+            if (element === last_tab) {
                 $('.btnNext').hide();
             }
             else {
                 $('.btnNext').show();
             }
-        });
+        }
         let billing_address = {
             location: "{{registration.billing_address.location | escapejs}}",
             postal_code: "{{registration.billing_address.postal_code | escapejs}}",
