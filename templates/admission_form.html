@@ -43,23 +43,23 @@
         <form id="form" method="POST" class="post-form" enctype="multipart/form-data">
             {% csrf_token %}
             <ul id="tabs" class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#identification" role="tab" data-toggle="tab">
+                <li role="presentation" id="identification_tab" class="active"><a href="#identification" role="tab" data-toggle="tab">
                     {% trans 'Identification' %}
                     <span class="badge badge-warning"></span>
                 </a></li>
-                <li role="presentation"><a href="#contact" role="tab" data-toggle="tab">
+                <li role="presentation" id="contact_tab"><a href="#contact" role="tab" data-toggle="tab">
                     {% trans 'Contact information' %}
                     <span class="badge badge-warning"></span>
                 </a></li>
-                <li role="presentation"><a href="#curriculum" role="tab" data-toggle="tab">
+                <li role="presentation" id="cv_tab"><a href="#curriculum" role="tab" data-toggle="tab">
                     {% trans 'Curriculum' %}
                     <span class="badge badge-warning"></span>
                 </a></li>
-                <li role="presentation"><a href="#formation" role="tab" data-toggle="tab">
+                <li role="presentation" id="formation_tab"><a href="#formation" role="tab" data-toggle="tab">
                     {% trans 'Formation' %}
                     <span class="badge badge-warning"></span>
                 </a></li>
-                <li role="presentation"><a href="#references" role="tab" data-toggle="tab">
+                <li role="presentation" id="reference_tab"><a href="#references" role="tab" data-toggle="tab">
                     {% trans 'References' %}
                     <span class="badge badge-warning"></span>
                 </a></li>
@@ -223,6 +223,21 @@
 
 {% block script %}
     <script>
+        $('.nav-tabs li').on('shown.bs.tab', function () {
+            const additional_tab = $("#additional_tab");
+            if (this.id === 'identification_tab') {
+                $('.btnPrevious').hide();
+            }
+            else {
+                $('.btnPrevious').show();
+            }
+            if (this.id === 'additional_tab' || (additional_tab[0].style.display === 'none' && this.id === 'reference_tab')) {
+                $('.btnNext').hide();
+            }
+            else {
+                $('.btnNext').show();
+            }
+        });
         let billing_address = {
             location: "{{registration.billing_address.location | escapejs}}",
             postal_code: "{{registration.billing_address.postal_code | escapejs}}",

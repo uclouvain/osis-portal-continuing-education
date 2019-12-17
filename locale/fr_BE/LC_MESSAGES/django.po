@@ -60,7 +60,7 @@ msgstr ""
 #: forms/admission.py:199 templates/admission_detail.html:204
 #: templates/admission_form.html:68 templates/admission_form.html:186
 msgid "Additional Information"
-msgstr "Informations Complémentaires"
+msgstr "Informations Compl."
 
 #: forms/admission.py:54
 msgid "Additional email"
