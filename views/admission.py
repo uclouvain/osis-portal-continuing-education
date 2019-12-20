@@ -108,7 +108,10 @@ def _show_save_before_submit(request):
     messages.add_message(
         request=request,
         level=messages.INFO,
-        message=_("You can save an application form and access it later until it is submitted"),
+        message=_(
+            "You can save your file, even if it is not fully completed. "
+            "You will then be able to modify it and submit it when it is complete."
+        ),
     )
 
 
