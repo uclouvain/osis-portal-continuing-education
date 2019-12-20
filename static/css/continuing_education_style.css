@@ -157,3 +157,7 @@ label.required:after {
 a[disabled] {
     pointer-events: none;
 }
+
+select#id_birth_date_month {
+    text-transform: capitalize;
+}
