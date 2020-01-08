@@ -235,16 +235,16 @@
             let first_tab = $('.nav-tabs li:first-of-type')[0];
 
             if (element === first_tab) {
-                $('.btnPrevious').hide();
+                $('.btnPrevious').attr('disabled', true);
             }
             else {
-                $('.btnPrevious').show();
+                $('.btnPrevious').attr('disabled', false);
             }
             if (element === last_tab) {
-                $('.btnNext').hide();
+                $('.btnNext').attr('disabled', true);
             }
             else {
-                $('.btnNext').show();
+                $('.btnNext').attr('disabled', false);
             }
         }
         let billing_address = {
