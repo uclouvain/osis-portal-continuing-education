@@ -87,7 +87,7 @@ def get_data(admission):
 
         'procedure_66U': pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
     }
-    data_dict.update(_build_professional_status(admission.get('professional_status', None)))
+    data_dict.update(_build_professional_status(admission.get('professional_status')))
     data_dict.update(_build_marital_status(admission.get('marital_status')))
     data_dict.update(_build_address(admission.get('address', _build_empty_address()), 'contact'))
     data_dict.update(_build_address(admission.get('postal_address', _build_empty_address()), 'postal'))
