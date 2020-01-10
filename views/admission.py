@@ -144,7 +144,7 @@ def _has_instance_with_values(instance):
 def admission_form(request, admission_uuid=None):
     admission = _get_admission_or_403(admission_uuid, request)
     formation = _get_formation(request)
-    registration_required = admission['formation']['registration_required'] if admission else True
+    registration_required = admission['formation']['registration_required'] if admission else False
     address_form, adm_form, id_form, person_form = _fill_forms_with_existing_data(admission, formation, request)
     forms_valid = all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()])
     billing_address_form, registration, registration_form, forms_valid = _get_billing_datas(
@@ -170,6 +170,7 @@ def admission_form(request, admission_uuid=None):
 
         admission = _update_or_create_admission(adm_form, admission, request)
 
+        registration = registration or {'uuid': admission['uuid'], 'address': admission['address']}
         _update_billing_informations(
             request, {
                 'billing': billing_address_form,
@@ -221,9 +222,9 @@ def _update_billing_informations(request, forms, registration, registration_requ
 
 def _get_billing_datas(request, admission_uuid, forms_valid, registration_required):
     registration = None
-    registration_form = RegistrationForm(None)
-    billing_address_form = AddressForm(None, prefix='billing')
-    if not registration_required:
+    registration_form = RegistrationForm(request.POST or None, only_billing=True)
+    billing_address_form = AddressForm(request.POST or None, prefix='billing')
+    if not registration_required and admission_uuid:
         registration = api.get_registration(request, admission_uuid)
         registration_form = RegistrationForm(request.POST or None, initial=registration, only_billing=True)
         billing_address_form = AddressForm(
@@ -231,7 +232,7 @@ def _get_billing_datas(request, admission_uuid, forms_valid, registration_requir
             initial=registration['billing_address'],
             prefix='billing',
         )
-        forms_valid = forms_valid and registration_form.is_valid() and billing_address_form.is_valid()
+    forms_valid = forms_valid and registration_form.is_valid() and billing_address_form.is_valid()
     return billing_address_form, registration, registration_form, forms_valid
 
 
