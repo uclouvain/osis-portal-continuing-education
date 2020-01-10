@@ -170,6 +170,10 @@ def admission_form(request, admission_uuid=None):
 
         admission = _update_or_create_admission(adm_form, admission, request)
 
+        registration_required = api.get_continuing_education_training(
+            request,
+            admission['formation']
+        ).get('registration_required', registration_required)
         registration = registration or {'uuid': admission['uuid'], 'address': admission['address']}
         _update_billing_informations(
             request, {
@@ -185,8 +189,7 @@ def admission_form(request, admission_uuid=None):
         )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
-        if not registration_required:
-            errors += list(itertools.product(registration_form.errors, billing_address_form.errors))
+        errors += list(itertools.product(registration_form.errors, billing_address_form.errors))
         display_errors(request, errors)
 
     return render(
