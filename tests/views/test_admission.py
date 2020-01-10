@@ -210,8 +210,9 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
 
+    @patch('continuing_education.views.api.update_registration')
     @patch('continuing_education.views.api.post_admission')
-    def test_admission_new_save(self, mock_post):
+    def test_admission_new_save(self, mock_post, mock_update):
         mock_post.return_value = (self.admission, HttpResponse.status_code)
         admission = {
             'activity_sector': 'PRIVATE',
