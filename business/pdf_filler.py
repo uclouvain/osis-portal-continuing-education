@@ -84,6 +84,8 @@ def get_data(admission):
         'residence_phone': admission.get('residence_phone', EMPTY_VALUE),
         'receive_letter_at_home': receive_letter_at_home,
         'receive_letter_at_residence': receive_letter_at_residence,
+        'last_degree_graduation_year': admission.get('last_degree_graduation_year', EMPTY_VALUE),
+        'high_school_graduation_year': admission.get('high_school_graduation_year', EMPTY_VALUE),
 
         'procedure_66U': pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
     }
