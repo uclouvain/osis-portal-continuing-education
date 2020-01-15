@@ -39,12 +39,12 @@ from continuing_education.tests.factories.person import ContinuingEducationPerso
 
 
 class ProspectTestCase(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.client.force_login(self.user)
-        self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.prospect = {
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.person = PersonFactory(user=cls.user)
+        cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
+        cls.prospect = {
             'name': 'NameTest',
             'first_name': 'FirstNameTest',
             'postal_code': 5620,
@@ -54,15 +54,18 @@ class ProspectTestCase(TestCase):
             'formation': uuid.uuid4()
         }
 
+    def setUp(self):
+        self.client.force_login(self.user)
+
     def test_post_prospect_with_missing_information(self):
-        prospect = self.prospect
+        prospect = self.prospect.copy()
         prospect['name'] = ''
         response = self.client.post(reverse('prospect_form'), data=prospect)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'prospect_form.html')
 
     def test_post_prospect_with_not_valid_email(self):
-        prospect = self.prospect
+        prospect = self.prospect.copy()
         prospect['email'] = 'A'
         response = self.client.post(reverse('prospect_form'), data=prospect)
         self.assertEqual(response.status_code, 200)

@@ -32,7 +32,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponse
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
@@ -46,22 +46,23 @@ from continuing_education.tests.factories.person import ContinuingEducationPerso
 
 
 class AdmissionFileTestCase(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
 
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.client.force_login(self.user)
-        self.request = RequestFactory()
-        self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.admission = AdmissionDictFactory(self.person_information)
-        self.admission_file = SimpleUploadedFile(
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.person = PersonFactory(user=cls.user)
+        cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
+        cls.admission = AdmissionDictFactory(cls.person_information)
+        cls.admission_file = SimpleUploadedFile(
             name='upload_test.pdf',
             content=str.encode("test_content"),
             content_type="application/pdf"
         )
 
+    def setUp(self):
+        self.client.force_login(self.user)
         self.patcher = patch(
             "continuing_education.views.admission._get_files_list",
             return_value={}
