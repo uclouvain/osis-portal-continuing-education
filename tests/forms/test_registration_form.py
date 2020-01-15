@@ -33,10 +33,11 @@ from continuing_education.tests.factories.person import ContinuingEducationPerso
 
 
 class TestRegistrationForm(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         base_person = PersonFactory()
-        self.person = ContinuingEducationPersonDictFactory(person_uuid=base_person.uuid)
-        self.formation = ContinuingEducationTrainingDictFactory()
+        cls.person = ContinuingEducationPersonDictFactory(person_uuid=base_person.uuid)
+        cls.formation = ContinuingEducationTrainingDictFactory()
 
     def test_previous_ucl_registration_not_required_if_only_billing(self):
         registration = AdmissionDictFactory(person_information=self.person, formation=self.formation)

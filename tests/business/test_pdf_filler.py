@@ -23,44 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-import json
-import uuid
-from unittest import mock
-from unittest.mock import patch
 
-from django.contrib import messages
-from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
-from django.urls import reverse
-from django.http import HttpResponse
-from django.test import TestCase, RequestFactory
-from django.utils.translation import gettext_lazy as _, gettext
-from requests import Response
-
-from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
-from base.tests.factories.person import PersonFactory
-from continuing_education.models.enums import admission_state_choices
-from continuing_education.models.enums.admission_state_choices import SUBMITTED
-from continuing_education.tests.factories.admission import AdmissionDictFactory
-from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
-from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
-from continuing_education.views.admission import admission_form
-from continuing_education.views.common import get_submission_errors, _get_managers_mails
-from continuing_education.business import pdf_filler
 import pdfrw
+from django.test import TestCase
+
+from continuing_education.business import pdf_filler
 
 
 class PdfFillerTestCase(TestCase):
-    def setUp(self):
-        self.data_dict_for_address = {
+    @classmethod
+    def setUpTestData(cls):
+        cls.data_dict_for_address = {
             'location': 'Rue de Bruxelles 22',
             'postal_code': '5000',
             'city': 'Namur',
             'country':
                 {'name': 'Belgium'}
         }
-        self.data_dict_for_empty_address = {
+        cls.data_dict_for_empty_address = {
             'location': pdf_filler.EMPTY_VALUE,
             'postal_code': pdf_filler.EMPTY_VALUE,
             'city': pdf_filler.EMPTY_VALUE,
@@ -68,11 +48,11 @@ class PdfFillerTestCase(TestCase):
                 {'name': pdf_filler.EMPTY_VALUE}
         }
 
-        self.default_keys_for_address = ['_address_location',
-                                         '_address_postal_code',
-                                         '_address_city',
-                                         '_address_country'
-                                         ]
+        cls.default_keys_for_address = ['_address_location',
+                                        '_address_postal_code',
+                                        '_address_city',
+                                        '_address_country'
+                                        ]
 
     def test_checkbox_selection_status_is_selected(self):
         checkbox_status = pdf_filler._checkbox_selection_status("juste", "juste")

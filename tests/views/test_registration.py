@@ -33,6 +33,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
+from rest_framework import status
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
@@ -42,7 +43,6 @@ from continuing_education.models.enums.admission_state_choices import REGISTRATI
 from continuing_education.tests.factories.admission import RegistrationDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.views.common import get_submission_errors, _get_managers_mails, format_formation_address
-from rest_framework import status
 
 
 class ViewStudentRegistrationTestCase(TestCase):
@@ -53,15 +53,17 @@ class ViewStudentRegistrationTestCase(TestCase):
         import pdfrw
         return pdfrw.PdfReader(input_pdf_path)
 
-    def setUp(self):
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.client.force_login(self.user)
-        self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.admission_accepted = RegistrationDictFactory(self.person_information, state=ACCEPTED)
-        self.admission_rejected = RegistrationDictFactory(self.person_information, state=REJECTED)
-        self.registration_submitted = RegistrationDictFactory(self.person_information, state=REGISTRATION_SUBMITTED)
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.person = PersonFactory(user=cls.user)
 
+    def setUp(self):
+        self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
+        self.admission_rejected = RegistrationDictFactory(self.person_information, state=REJECTED)
+        self.admission_accepted = RegistrationDictFactory(self.person_information, state=ACCEPTED)
+        self.registration_submitted = RegistrationDictFactory(self.person_information, state=REGISTRATION_SUBMITTED)
+        self.client.force_login(self.user)
         self.patcher = patch(
             "continuing_education.views.registration._get_files_list",
             return_value={}
@@ -289,9 +291,12 @@ class ViewStudentRegistrationTestCase(TestCase):
 
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         ac = AcademicYearFactory()
         AcademicYearFactory(year=ac.year + 1)
+
+    def setUp(self):
         self.admission = RegistrationDictFactory(PersonFactory().uuid)
 
     def test_registration_is_submittable(self):

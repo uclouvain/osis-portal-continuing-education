@@ -43,19 +43,22 @@ from continuing_education.views.api import get_token_from_osis, get_personal_tok
 
 
 class ApiMethodsTestCase(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.person = PersonFactory(user=cls.user)
+        cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
+        cls.formation = ContinuingEducationTrainingDictFactory()
+        cls.admission = AdmissionDictFactory(cls.person_information)
+        cls.admission_submitted = AdmissionDictFactory(cls.person_information, SUBMITTED)
+
+    def setUp(self):
         self.client.force_login(self.user)
         self.request = RequestFactory()
-        self.request.session = {}
         self.request.user = self.user
-        self.person = PersonFactory(user=self.user)
-        self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.formation = ContinuingEducationTrainingDictFactory()
-        self.admission = AdmissionDictFactory(self.person_information)
-        self.admission_submitted = AdmissionDictFactory(self.person_information, SUBMITTED)
+        self.request.session = {}
 
     @mock.patch('requests.post')
     def test_get_token_from_osis(self, mock_post):

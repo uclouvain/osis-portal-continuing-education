@@ -40,13 +40,16 @@ from continuing_education.tests.factories.person import ContinuingEducationPerso
 
 
 class ViewHomeTestCase(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.client.force_login(self.user)
-        PersonFactory(user=self.user)
-        self.cet = ContinuingEducationTrainingDictFactory(
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        PersonFactory(user=cls.user)
+        cls.cet = ContinuingEducationTrainingDictFactory(
             active=False
         )
+
+    def setUp(self):
+        self.client.force_login(self.user)
         self.patcher = patch(
             "continuing_education.views.api.get_continuing_education_training",
             return_value=self.cet
@@ -73,11 +76,12 @@ class ViewHomeTestCase(TestCase):
 
 
 class FormationsListTestCase(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.person = PersonFactory(user=self.user)
-        self.person_iufc = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.an_academic_year = AcademicYearFactory(current=True)
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.person = PersonFactory(user=cls.user)
+        cls.person_iufc = ContinuingEducationPersonDictFactory(cls.person.uuid)
+        cls.an_academic_year = AcademicYearFactory(current=True)
 
     @mock.patch('continuing_education.views.api.get_continuing_education_training_list')
     def test_formations_list(self, mock_get_training_list):
