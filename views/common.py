@@ -205,7 +205,8 @@ def add_remaining_tasks_message(request, formation):
     title = _("Your data has been successfully saved. Some tasks are remaining to complete the registration :")
     message = "<strong>{}</strong><br>".format(title) + \
               "".join(["- {}<br>".format(item) for item in items])
-
+    if not formation['postal_address']:
+        message = message.replace(' : ', '.')
     messages.add_message(
         request=request,
         level=messages.INFO,
@@ -228,6 +229,8 @@ def add_contact_for_edit_message(request, formation=None, is_registration=False)
     else:
         message = _("If you want to edit again your admission, please contact the program manager : %(mail)s") \
                   % {'mail': mails}
+    if not mails:
+        message = message.replace(' : ', '.')
     messages.add_message(
         request=request,
         level=messages.WARNING,
