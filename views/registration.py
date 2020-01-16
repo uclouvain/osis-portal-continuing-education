@@ -74,7 +74,7 @@ def registration_detail(request, admission_uuid):
     )
     is_accepted = admission['state'] == admission_state_choices.ACCEPTED
     is_registration_submitted = admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED
-    can_upload = is_accepted or is_registration_submitted
+    can_upload = is_accepted
     return render(request, "registration_detail.html", locals())
 
 
