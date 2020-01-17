@@ -99,7 +99,8 @@ def admission_detail(request, admission_uuid):
             },
             'MAX_UPLOAD_SIZE': MAX_UPLOAD_SIZE,
             'registration': registration,
-            'registration_required': registration['formation']['registration_required']
+            'registration_required': registration['formation']['registration_required'],
+            'can_upload': admission['state'] in [admission_state_choices.DRAFT, admission_state_choices.ACCEPTED]
         }
     )
 
