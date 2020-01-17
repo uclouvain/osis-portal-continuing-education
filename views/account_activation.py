@@ -29,10 +29,12 @@ from django.contrib.auth import login, get_user_model
 from django.contrib.auth.backends import UserModel
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordContextMixin, INTERNAL_RESET_URL_TOKEN, INTERNAL_RESET_SESSION_TOKEN
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
+from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
@@ -46,6 +48,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView
 from django_registration import signals
 from django_registration.exceptions import ActivationError
+from django_registration.forms import RegistrationFormUniqueEmail
 from django_registration.views import RegistrationView, ActivationView
 
 from base.models.person import Person
@@ -58,6 +61,19 @@ from continuing_education.views.common import display_errors
 from osis_common.messaging import message_config, send_message as message_service
 
 REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
+
+
+def email_not_from_uclouvain(value):
+    domain = value.split('@')[1]
+    if domain == 'uclouvain.be':
+        raise ValidationError(_("Your email cannot end with uclouvain.be"))
+
+
+class ContinuingEducationRegistrationForm(RegistrationFormUniqueEmail):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        email_field = User.get_email_field_name()
+        self.fields[email_field].validators.append(email_not_from_uclouvain)
 
 
 class ContinuingEducationRegistrationView(RegistrationView):

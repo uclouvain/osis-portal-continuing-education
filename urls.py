@@ -24,12 +24,11 @@
 #
 ##############################################################################
 from django.conf.urls import url, include
-from django_registration.forms import RegistrationFormUniqueEmail
 
 from continuing_education.views import account_activation, prospect
 from continuing_education.views import (home, admission, registration, common, file)
 from continuing_education.views.account_activation import ContinuingEducationPasswordResetView, \
-    ContinuingEducationPasswordResetConfirmView
+    ContinuingEducationPasswordResetConfirmView, ContinuingEducationRegistrationForm
 from continuing_education.views.autocomplete.continuing_education_training import \
     ContinuingEducationTrainingAutocomplete
 
@@ -44,7 +43,9 @@ urlpatterns = [
         url(r'^logged_out$', common.logged_out, name='continuing_education_logged_out')])),
     url(r'^account/', include([
         url(r'^register/$',
-            account_activation.ContinuingEducationRegistrationView.as_view(form_class=RegistrationFormUniqueEmail),
+            account_activation.ContinuingEducationRegistrationView.as_view(
+                form_class=ContinuingEducationRegistrationForm
+            ),
             name='django_registration_register'),
         url(
             r'^complete_account_registration/$',
