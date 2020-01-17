@@ -195,7 +195,7 @@ def _build_professional_status(professional_status):
         if professional_status == 'JOB_SEEKER':
             seeking_job_on = pdfrw.PdfName(CHECKBOX_SELECTED)
         else:
-            seeking_job_off = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+            seeking_job_off = pdfrw.PdfName(CHECKBOX_SELECTED)
     return {
         'employee_check': _checkbox_selection_status(professional_status, "EMPLOYEE"),
         'self_employed_check': _checkbox_selection_status(professional_status, "SELF_EMPLOYED"),
