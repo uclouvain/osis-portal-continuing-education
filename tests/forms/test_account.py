@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2017 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,22 +24,30 @@
 #
 ##############################################################################
 from django.test import TestCase
+from django.utils.translation import gettext_lazy as _
 
-from base.tests.factories.person import PersonFactory
-from continuing_education.forms.registration import RegistrationForm
-from continuing_education.tests.factories.admission import AdmissionDictFactory
-from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
-from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
+from continuing_education.forms.account import ContinuingEducationRegistrationForm
 
 
-class TestRegistrationForm(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        base_person = PersonFactory()
-        cls.person = ContinuingEducationPersonDictFactory(person_uuid=base_person.uuid)
-        cls.formation = ContinuingEducationTrainingDictFactory()
+class TestContinuingEducationRegistrationForm(TestCase):
+    def test_valid_form(self):
+        form = ContinuingEducationRegistrationForm(data={
+            'password1': 'eheqneqrnherqner',
+            'email': 'aaaa@bbbb.be',
+            'username': 'aaaa@bbbb.be',
+            'password2': 'eheqneqrnherqner'
+        })
+        self.assertTrue(form.is_valid(), form.errors)
 
-    def test_previous_ucl_registration_not_required_if_only_billing(self):
-        registration = AdmissionDictFactory(person_information=self.person, formation=self.formation)
-        form = RegistrationForm(data=registration, only_billing=True)
-        self.assertFalse(form.fields['previous_ucl_registration'].required)
+    def test_form_with_uclouvain_mail_is_not_valid(self):
+        form = ContinuingEducationRegistrationForm(data={
+            'password1': 'eheqneqrnherqner',
+            'email': 'aaaa@uclouvain.be',
+            'username': 'aaaa@bbbb.be',
+            'password2': 'eheqneqrnherqner'
+        })
+        self.assertFalse(form.is_valid(), form.errors)
+        self.assertEqual(
+            {'email': [_("Your email cannot end with uclouvain.be")]},
+            form.errors
+        )

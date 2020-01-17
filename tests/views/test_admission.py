@@ -33,7 +33,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
@@ -51,18 +51,19 @@ from continuing_education.views.common import get_submission_errors, _get_manage
 
 
 class ViewStudentAdmissionTestCase(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
-        self.client.force_login(self.user)
-        self.request = RequestFactory()
-        self.person = PersonFactory(user=self.user)
+        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.person = PersonFactory(user=cls.user)
+        cls.formation = ContinuingEducationTrainingDictFactory()
+
+    def setUp(self):
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
-        self.formation = ContinuingEducationTrainingDictFactory()
         self.admission = AdmissionDictFactory(self.person_information)
         self.admission_submitted = AdmissionDictFactory(self.person_information, SUBMITTED)
-
+        self.client.force_login(self.user)
         self.patcher = patch(
             "continuing_education.views.admission._get_files_list",
             return_value={}
@@ -292,10 +293,9 @@ class ViewStudentAdmissionTestCase(TestCase):
     def test_admission_edit_permission_denied_invalid_state(self):
         self.mocked_called_api_function_get.return_value = self.admission_submitted
         url = reverse('admission_edit', args=[self.admission_submitted['uuid']])
-        request = self.request.get(url)
-        request.user = self.user
+        response = self.client.get(url)
         with self.assertRaises(PermissionDenied):
-            admission_form(request, self.admission_submitted['uuid'])
+            admission_form(response.wsgi_request, self.admission_submitted['uuid'])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
 
@@ -398,13 +398,15 @@ class ViewStudentAdmissionTestCase(TestCase):
 
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
-        self.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-        person_iufc = ContinuingEducationPersonDictFactory(PersonFactory().uuid)
-        self.admission_model = AdmissionDictFactory(person_iufc)
-        PersonFactory()
-        self.admission = AdmissionDictFactory(person_iufc, SUBMITTED)
+        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+
+    def setUp(self):
+        self.person_iufc = ContinuingEducationPersonDictFactory(PersonFactory().uuid)
+        self.admission = AdmissionDictFactory(self.person_iufc, SUBMITTED)
+        self.admission_model = AdmissionDictFactory(self.person_iufc)
 
     def test_admission_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission)

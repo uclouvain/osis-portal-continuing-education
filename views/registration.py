@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 import itertools
 
 from django.contrib.auth.decorators import login_required
@@ -36,6 +35,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
+from base.views import common
+from continuing_education.business.pdf_filler import write_fillable_pdf, get_data
 from continuing_education.forms.account import ContinuingEducationPersonForm
 from continuing_education.forms.address import AddressForm
 from continuing_education.forms.person import PersonForm
@@ -47,8 +48,6 @@ from continuing_education.views.common import display_errors, get_submission_err
     add_informations_message_on_submittable_file, add_contact_for_edit_message, \
     add_remaining_tasks_message
 from continuing_education.views.file import _get_files_list, FILES_URL
-from continuing_education.business.pdf_filler import write_fillable_pdf, get_data
-from base.views import common
 
 
 @login_required
@@ -75,6 +74,7 @@ def registration_detail(request, admission_uuid):
     )
     is_accepted = admission['state'] == admission_state_choices.ACCEPTED
     is_registration_submitted = admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED
+    can_upload = is_accepted
     return render(request, "registration_detail.html", locals())
 
 
