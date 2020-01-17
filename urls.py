@@ -25,10 +25,11 @@
 ##############################################################################
 from django.conf.urls import url, include
 
+from continuing_education.forms.account import ContinuingEducationRegistrationForm
 from continuing_education.views import account_activation, prospect
 from continuing_education.views import (home, admission, registration, common, file)
 from continuing_education.views.account_activation import ContinuingEducationPasswordResetView, \
-    ContinuingEducationPasswordResetConfirmView, ContinuingEducationRegistrationForm
+    ContinuingEducationPasswordResetConfirmView
 from continuing_education.views.autocomplete.continuing_education_training import \
     ContinuingEducationTrainingAutocomplete
 
