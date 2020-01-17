@@ -26,7 +26,6 @@
 import uuid
 from unittest import mock
 
-from django.contrib.auth.models import User
 from django.http import HttpResponse, Http404
 from django.test import TestCase, RequestFactory
 from rest_framework import status
@@ -34,6 +33,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.user import UserFactory
 from continuing_education.models.enums.admission_state_choices import SUBMITTED
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
@@ -47,7 +47,7 @@ class ApiMethodsTestCase(TestCase):
     def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
         cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
         cls.formation = ContinuingEducationTrainingDictFactory()

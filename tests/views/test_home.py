@@ -28,13 +28,13 @@ from string import ascii_lowercase
 from unittest import mock
 from unittest.mock import patch
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from mock import patch
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.user import UserFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 
@@ -42,11 +42,9 @@ from continuing_education.tests.factories.person import ContinuingEducationPerso
 class ViewHomeTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.user = UserFactory()
         PersonFactory(user=cls.user)
-        cls.cet = ContinuingEducationTrainingDictFactory(
-            active=False
-        )
+        cls.cet = ContinuingEducationTrainingDictFactory(active=False)
 
     def setUp(self):
         self.client.force_login(self.user)
@@ -78,7 +76,7 @@ class ViewHomeTestCase(TestCase):
 class FormationsListTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_iufc = ContinuingEducationPersonDictFactory(cls.person.uuid)
         cls.an_academic_year = AcademicYearFactory(current=True)

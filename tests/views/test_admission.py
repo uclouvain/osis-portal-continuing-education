@@ -30,7 +30,6 @@ from unittest import mock
 from unittest.mock import patch
 
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.test import TestCase
@@ -40,6 +39,7 @@ from requests import Response
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.user import UserFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import SUBMITTED, ACCEPTED_NO_REGISTRATION_REQUIRED, \
     ACCEPTED
@@ -55,7 +55,7 @@ class ViewStudentAdmissionTestCase(TestCase):
     def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
         cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.formation = ContinuingEducationTrainingDictFactory()
 
@@ -401,19 +401,18 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
-        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
+        AcademicYearFactory(year=current_acad_year.year + 1)
+        cls.person = PersonFactory()
 
     def setUp(self):
-        self.person_iufc = ContinuingEducationPersonDictFactory(PersonFactory().uuid)
+        self.person_iufc = ContinuingEducationPersonDictFactory(self.person.uuid)
         self.admission = AdmissionDictFactory(self.person_iufc, SUBMITTED)
         self.admission_model = AdmissionDictFactory(self.person_iufc)
 
     def test_admission_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission)
 
-        self.assertFalse(
-            errors
-        )
+        self.assertFalse(errors)
 
     def test_admission_is_not_submittable_missing_data_in_all_objects(self):
         self.admission['person_information']['person']['email'] = ''
