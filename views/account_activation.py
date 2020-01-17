@@ -63,9 +63,8 @@ from osis_common.messaging import message_config, send_message as message_servic
 REGISTRATION_SALT = getattr(settings, 'REGISTRATION_SALT', 'registration')
 
 
-def email_not_from_uclouvain(value):
-    domain = value.split('@')[1]
-    if domain == 'uclouvain.be':
+def email_not_from_uclouvain(email):
+    if email.endswith('uclouvain.be'):
         raise ValidationError(_("Your email cannot end with uclouvain.be"))
 
 
