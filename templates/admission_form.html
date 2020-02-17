@@ -348,7 +348,7 @@
         $(".save-btn").click(function () {
             if (!$('#id_formation').val() ||
                 !$('#id_last_name').val() ||
-                (!$('#id_first_name').val() &&  $("#no-firstname-checkbox").prop('checked')) ||
+                (!$('#id_first_name').val() &&  !$("#no-firstname-checkbox").prop('checked')) ||
                 !$("#id_birth_location").val()){
                 showTab("identification");
             }
