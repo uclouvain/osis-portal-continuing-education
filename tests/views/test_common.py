@@ -26,9 +26,13 @@
 
 from collections import OrderedDict
 
+from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.urls import reverse
+from django.utils.translation import gettext
 
+from base.tests.factories.person import PersonFactory
 from continuing_education.views.common import _build_error_data, ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION
 
 A_FORM_FIELD = 'anything_else'
@@ -62,4 +66,21 @@ class CommonViewTestCase(TestCase):
                 'At least one of the 3 following fields must be filled-in : national registry, id card number or '
                 'passport number'
             ]
+        )
+
+
+class LoginViewTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.person = PersonFactory()
+
+    def test_login_failed(self):
+        login_url = reverse('continuing_education_login')
+        response = self.client.post(login_url, data={'username': 'user', 'password': 'password'})
+        self.assertRedirects(response, reverse('continuing_education_home'))
+        messages = [m.message for m in get_messages(response.wsgi_request)]
+        self.assertIn(
+            gettext("Please enter a correct %(username)s and password. Note that both fields may be case-sensitive.")
+            % {'username': 'email'},
+            messages
         )
