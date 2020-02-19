@@ -34,7 +34,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, gettext
 
 from base.models.person import Person
-from base.models.utils.utils import get_object_or_none
 from base.views import layout
 from base.views.layout import render
 from continuing_education.forms.account import ContinuingEducationPersonForm
@@ -43,6 +42,7 @@ from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
 from continuing_education.views.login import ContinuingEducationLoginView
+from osis_common.utils.models import get_object_or_none
 
 ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION = 'national_registry_number'
 
