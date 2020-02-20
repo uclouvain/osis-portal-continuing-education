@@ -29,7 +29,6 @@ from unittest import mock
 from unittest.mock import patch
 
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponse
 from django.test import TestCase
@@ -41,6 +40,7 @@ from rest_framework import status
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.academic_year import create_current_academic_year
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.user import UserFactory
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 
@@ -51,7 +51,7 @@ class AdmissionFileTestCase(TestCase):
         current_acad_year = create_current_academic_year()
         cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
 
-        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
         cls.admission = AdmissionDictFactory(cls.person_information)

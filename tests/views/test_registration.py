@@ -28,7 +28,6 @@ from unittest.mock import patch
 import mock
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
@@ -37,7 +36,7 @@ from rest_framework import status
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
-from base.tests.factories.user import SuperUserFactory
+from base.tests.factories.user import SuperUserFactory, UserFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED, ACCEPTED, REJECTED
 from continuing_education.tests.factories.admission import RegistrationDictFactory
@@ -55,7 +54,7 @@ class ViewStudentRegistrationTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
 
     def setUp(self):
@@ -295,9 +294,10 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
     def setUpTestData(cls):
         ac = AcademicYearFactory()
         AcademicYearFactory(year=ac.year + 1)
+        cls.person = PersonFactory()
 
     def setUp(self):
-        self.admission = RegistrationDictFactory(PersonFactory().uuid)
+        self.admission = RegistrationDictFactory(self.person.uuid)
 
     def test_registration_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission, is_registration=True)

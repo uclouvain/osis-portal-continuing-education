@@ -204,6 +204,7 @@ class AdmissionForm(Form):
 
     def __init__(self, *args, **kwargs):
         formation = kwargs.pop('formation', None)
+
         super(AdmissionForm, self).__init__(*args, **kwargs)
         if formation:
             self.initial['formation'] = (formation['uuid'],
