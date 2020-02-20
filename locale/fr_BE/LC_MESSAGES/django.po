@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-17 09:06+0100\n"
+"POT-Creation-Date: 2020-02-20 16:35+0100\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -422,6 +422,15 @@ msgstr "Marié"
 
 msgid "Motivation"
 msgstr "Motivation"
+
+msgid "My account"
+msgstr "Mon compte"
+
+msgid "My admissions"
+msgstr "Mes admissions"
+
+msgid "My registrations"
+msgstr "Mes inscriptions"
 
 msgid "NOMA"
 msgstr "NOMA"

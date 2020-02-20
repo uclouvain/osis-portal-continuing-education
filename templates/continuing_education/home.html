@@ -35,7 +35,7 @@
 
 {% block content %}
     <div class="page-header">
-        <h2 class="text-capitalize">{% trans 'Student' %}</h2>
+        <h2 class="text-capitalize">{% trans 'My account' %}</h2>
         <h3>{{ user.first_name }} {{ user.last_name }}</h3>
     </div>
     {% include "template_messages.html" %}
@@ -47,8 +47,8 @@
     <div class="panel panel-default">
         <ul id="tabs" class="nav nav-tabs">
             <li role="presentation" class="active"><a href="#admission" role="tab"
-                                                      data-toggle="tab">{% trans 'Admission' %}</a></li>
-            <li role="presentation"><a href="#registration" role="tab" data-toggle="tab">{% trans 'Registration' %}</a>
+                                                      data-toggle="tab">{% trans 'My admissions' %}</a></li>
+            <li role="presentation"><a href="#registration" role="tab" data-toggle="tab">{% trans 'My registrations' %}</a>
             </li>
         </ul>
         <div class="tab-content">
