@@ -179,7 +179,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertIn(
             gettext(
                 "Your registration file has been saved. "
-                "Please consider the following remaining instructions to complete submission. "
+                "<b>Please consider the following remaining instructions</b> to complete submission. "
             ),
             str(messages_list[0])
         )
