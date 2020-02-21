@@ -193,7 +193,7 @@ def add_informations_message_on_submittable_file(request, title):
 
 def add_remaining_tasks_message(request, formation):
     message = _("Your registration file has been saved. "
-                "Please consider the following remaining instructions to complete submission. ")
+                "<b>Please consider the following remaining instructions</b> to complete submission. ")
     message += "<a id='show-instructions-button'><b>{}</b></a>".format(_("Show instructions"))
     if not formation['postal_address']:
         message = message.replace(' : ', '.')
