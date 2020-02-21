@@ -151,7 +151,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertFalse(response.context['admission_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(len(messages_list), 2)
         mails = _get_managers_mails(self.admission_submitted['formation'])
         self.assertIn(
             gettext("If you want to edit again your admission, please contact the program manager : %(mail)s")

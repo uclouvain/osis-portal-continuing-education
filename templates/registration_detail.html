@@ -184,6 +184,7 @@
             </div>
         </div>
     </div>
+    {% include 'fragment/registration_instructions_modal.html' %}
 {% endblock %}
 
 
@@ -212,6 +213,9 @@
             $('#btn_finalize').prop('disabled', false);
         });
 
+        $("#show-instructions-button").click(function(){
+            $("#instructions_modal").modal('show');
+        });
 
     </script>
 {% endblock %}

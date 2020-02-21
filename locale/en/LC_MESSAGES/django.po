@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-20 16:49+0100\n"
+"POT-Creation-Date: 2020-02-21 10:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,9 @@ msgstr ""
 
 #, python-format
 msgid "\"File is too large: maximum upload size allowed is %(max_size)s.\""
+msgstr ""
+
+msgid "(retrieved through 'Generate PDF' button)"
 msgstr ""
 
 msgid "A problem occured during delete"
@@ -41,7 +44,7 @@ msgstr ""
 
 msgid ""
 "Add two colour passport photos on a white background, one of which must be "
-"pasted on the document entitled 'Ordering a UCLouvain access card'."
+"pasted on the document entitled 'Ordering a UCLouvain access card'"
 msgstr ""
 
 msgid "Additional Info"
@@ -183,6 +186,9 @@ msgstr ""
 msgid "City"
 msgstr ""
 
+msgid "Close"
+msgstr ""
+
 msgid "Company number"
 msgstr ""
 
@@ -256,6 +262,9 @@ msgstr ""
 msgid ""
 "Enter your email address below, and we will email instructions for setting a "
 "new password."
+msgstr ""
+
+msgid "European citizen must add a copy of her identity card or passport"
 msgstr ""
 
 msgid "Faculty"
@@ -340,6 +349,9 @@ msgid "Information"
 msgstr ""
 
 msgid "Informations"
+msgstr ""
+
+msgid "Instructions"
 msgstr ""
 
 msgid "Interest form"
@@ -438,6 +450,9 @@ msgstr ""
 msgid "No registration yet"
 msgstr ""
 
+msgid "Non-EU citizen must add a copy of her residence permit"
+msgstr ""
+
 msgid "Not submitted"
 msgstr ""
 
@@ -479,6 +494,9 @@ msgstr ""
 msgid ""
 "Please complete the following form to finalize the creation of your user "
 "account."
+msgstr ""
+
+msgid "Please follow these instructions in order to complete your submission:"
 msgstr ""
 
 msgid "Post"
@@ -569,6 +587,12 @@ msgid "Self employed"
 msgstr ""
 
 msgid "Separated"
+msgstr ""
+
+msgid "Show instructions"
+msgstr ""
+
+msgid "Sign it and send it by post to your manager's address"
 msgstr ""
 
 #, python-format
@@ -730,6 +754,11 @@ msgstr ""
 msgid ""
 "Your registration file has been saved. Please consider the following "
 "information :"
+msgstr ""
+
+msgid ""
+"Your registration file has been saved. Please consider the following "
+"remaining instructions to complete submission. "
 msgstr ""
 
 msgid ""

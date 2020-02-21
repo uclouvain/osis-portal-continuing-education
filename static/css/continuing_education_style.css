@@ -161,3 +161,22 @@ a[disabled] {
 select#id_birth_date_month {
     text-transform: capitalize;
 }
+
+#show-instructions-button{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.order-divider{
+    display: inline-block;
+    width: 20px;
+    border-right: 1px solid lightgrey;
+    padding-right: 30px;
+    margin-right: 10px;
+    padding-bottom: 200%;
+    margin-bottom: -200%;
+}
+
+.list-row{
+    overflow: hidden;
+}
