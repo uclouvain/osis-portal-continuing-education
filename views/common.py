@@ -58,18 +58,23 @@ def login(request):
         formation_id = request.GET['next'].rsplit('/', 1)[-1]
     if request.method == 'POST':
         _handle_login_view(request)
-        user = request.user if request.user.pk else None
-        person = get_object_or_none(Person, user=user) if user else None
-        # ./manage.py createsuperuser (in local) doesn't create automatically a Person associated to User
-        if person and person.language:
-            user_language = person.language
-            translation.activate(user_language)
-            request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+        person, user = _retrieve_auth_info(request)
         if user and not person:
             return redirect(reverse('admission_new'))
         return redirect(reverse('continuing_education_home'))
     else:
         return render(request, "authentication/login.html", locals())
+
+
+def _retrieve_auth_info(request):
+    user = request.user if request.user.pk else None
+    person = get_object_or_none(Person, user=user) if user else None
+    # ./manage.py createsuperuser (in local) doesn't create automatically a Person associated to User
+    if person and person.language:
+        user_language = person.language
+        translation.activate(user_language)
+        request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+    return person, user
 
 
 def _handle_login_view(request):
