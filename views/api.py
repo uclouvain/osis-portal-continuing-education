@@ -74,6 +74,7 @@ def get_continuing_education_training_list(**kwargs):
 
 
 def get_data_from_osis(request, object_name, uuid):
+
     response = requests.get(
         url=API_URL % {'object_name': object_name, 'object_uuid': str(uuid)},
         headers={'Authorization': 'Token ' + get_personal_token(request)} if request.user.is_authenticated
