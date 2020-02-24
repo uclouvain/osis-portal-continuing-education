@@ -42,11 +42,12 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import SUBMITTED, ACCEPTED_NO_REGISTRATION_REQUIRED, \
-    ACCEPTED
+    ACCEPTED, STATE_CHOICES
+from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionDictFactory, RegistrationDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
-from continuing_education.views.admission import admission_form
+from continuing_education.views.admission import admission_form, admission_detail
 from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
 
@@ -92,7 +93,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.addCleanup(self.get_list_person_patcher.stop)
 
     def test_admission_detail(self):
-        url = reverse('admission_detail', args=[self.admission['uuid']])
+        url = reverse(admission_detail, args=[self.admission['uuid']])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
@@ -108,7 +109,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         admission = AdmissionDictFactory(self.person_information, formation=formation)
         mock_get_admission.return_value = admission
         mock_get_registration.return_value = RegistrationDictFactory(self.person_information, formation=formation)
-        url = reverse('admission_detail', args=[admission['uuid']])
+        url = reverse(admission_detail, args=[admission['uuid']])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
@@ -120,7 +121,7 @@ class ViewStudentAdmissionTestCase(TestCase):
     def test_admission_detail_not_submittable(self):
         self.admission['last_degree_level'] = ''
 
-        url = reverse('admission_detail', args=[self.admission['uuid']])
+        url = reverse(admission_detail, args=[self.admission['uuid']])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
@@ -142,7 +143,7 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_admission_submitted_detail(self):
         self.mocked_called_api_function_get.return_value = self.admission_submitted
-        url = reverse('admission_detail', args=[self.admission_submitted['uuid']])
+        url = reverse(admission_detail, args=[self.admission_submitted['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_detail.html')
@@ -251,7 +252,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         }
         response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
+        self.assertRedirects(response, reverse(admission_detail, args=[self.admission['uuid']]))
 
     def test_admission_save_with_error(self):
         admission = AdmissionDictFactory(self.person_information)
@@ -318,7 +319,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         url = reverse('admission_edit', args=[self.admission['uuid']])
         response = self.client.post(url, data={**person, **admission})
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
+        self.assertRedirects(response, reverse(admission_detail, args=[self.admission['uuid']]))
 
     @patch('continuing_education.views.api.get_admission')
     @patch('continuing_education.views.api.get_continuing_education_training')
@@ -346,7 +347,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         url = reverse('admission_edit', args=[admission_no_reg['uuid']])
         response = self.client.post(url, data={**person, **admission})
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_detail', args=[admission_no_reg['uuid']]))
+        self.assertRedirects(response, reverse(admission_detail, args=[admission_no_reg['uuid']]))
 
     @mock.patch('continuing_education.views.admission._get_files_list')
     def test_admission_detail_files_list(self, mock_get_files_list):
@@ -363,7 +364,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'uuid': str(uuid.uuid4()),
         }
         mock_get_files_list.return_value = [file]
-        url = reverse('admission_detail', args=[self.admission['uuid']])
+        url = reverse(admission_detail, args=[self.admission['uuid']])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
@@ -371,6 +372,20 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         self.assertEqual(response.context['admission'], self.admission)
         self.assertEqual(response.context['list_files'], [file])
+
+    def test_admission_can_upload(self):
+        states_can_upload_file = [
+            admission_state_choices.DRAFT,
+            admission_state_choices.ACCEPTED,
+            admission_state_choices.WAITING,
+        ]
+        url = reverse(admission_detail, args=[self.admission['uuid']])
+
+        for state in get_enum_keys(STATE_CHOICES):
+            with self.subTest():
+                self.admission['state'] = state
+                response = self.client.get(url)
+                self.assertEqual(response.context['can_upload'], state in states_can_upload_file)
 
     @mock.patch('continuing_education.views.admission.get_continuing_education_training')
     def test_ajax_get_formation_information(self, mock_get_training):
@@ -392,7 +407,7 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_accepted_admission_detail_no_registration_required(self):
         self.admission['state'] = ACCEPTED_NO_REGISTRATION_REQUIRED
-        url = reverse('admission_detail', args=[self.admission['uuid']])
+        url = reverse(admission_detail, args=[self.admission['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.context['admission']['state'], ACCEPTED)
 
