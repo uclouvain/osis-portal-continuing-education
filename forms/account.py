@@ -64,7 +64,7 @@ class ContinuingEducationPasswordResetForm(forms.Form):
     def save(self, token_generator=default_token_generator, request=None):
         """
         Generates a one-use only link for resetting password and sends to the
-        user.
+        user
         """
         email = self.cleaned_data["email"]
         try:
