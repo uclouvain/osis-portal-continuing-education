@@ -50,6 +50,12 @@ from continuing_education.views.file import _get_files_list, FILES_URL
 from frontoffice.settings.base import MAX_UPLOAD_SIZE
 from osis_common.decorators.ajax import ajax_required
 
+STATES_CAN_UPLOAD_FILE = [
+    admission_state_choices.DRAFT,
+    admission_state_choices.ACCEPTED,
+    admission_state_choices.WAITING,
+]
+
 
 @login_required
 def admission_detail(request, admission_uuid):
@@ -104,7 +110,7 @@ def admission_detail(request, admission_uuid):
             'MAX_UPLOAD_SIZE': MAX_UPLOAD_SIZE,
             'registration': registration,
             'registration_required': registration['formation']['registration_required'],
-            'can_upload': admission['state'] in [admission_state_choices.DRAFT, admission_state_choices.ACCEPTED]
+            'can_upload': admission['state'] in STATES_CAN_UPLOAD_FILE
         }
     )
 
