@@ -45,6 +45,8 @@ WIDGET_SUBTYPE_KEY = '/Widget'
 
 EMPTY_VALUE = '-'
 
+MARITAL_STATUS = ["SINGLE", "MARRIED", "WIDOWED", "DIVORCED", "SEPARATED", "LEGAL_COHABITANT"]
+
 
 def get_data(admission):
     person_information = admission['person_information']
@@ -52,7 +54,7 @@ def get_data(admission):
 
     residence_address = admission.get('residence_address', None)
 
-    if not admission.get('use_address_for_post') and residence_address:
+    if residence_address and admission.get('use_address_for_post'):
         receive_letter_at_home = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
         receive_letter_at_residence = pdfrw.PdfName(CHECKBOX_SELECTED)
     else:
@@ -81,7 +83,7 @@ def get_data(admission):
         'previous_noma': admission.get('previous_noma', "-") if admission.get('previous_noma') and admission.get(
             'previous_noma') != '' else EMPTY_VALUE,
         'mobile': admission.get('phone_mobile', EMPTY_VALUE),
-        'private_email': admission.get('email', EMPTY_VALUE),
+        'private_email': person.get('email', EMPTY_VALUE),
         'residence_phone': admission.get('residence_phone', EMPTY_VALUE),
         'receive_letter_at_home': receive_letter_at_home,
         'receive_letter_at_residence': receive_letter_at_residence,
@@ -95,7 +97,7 @@ def get_data(admission):
     data_dict.update(_build_address(admission.get('address', _build_empty_address()), 'contact'))
     data_dict.update(_build_address(admission.get('postal_address', _build_empty_address()), 'postal'))
 
-    if residence_address and not admission.get('use_address_for_post'):
+    if residence_address:
         data_dict.update(_build_address(residence_address, 'residence'))
     return data_dict
 
@@ -179,13 +181,12 @@ def _build_address(data_dict, type):
 
 
 def _build_marital_status(marital_status):
-    return {'marital_single_check': _checkbox_selection_status(marital_status, "SINGLE"),
-            'marital_married_check': _checkbox_selection_status(marital_status, "MARRIED"),
-            'marital_widowed_check': _checkbox_selection_status(marital_status, "WIDOWED"),
-            'marital_divorced_check': _checkbox_selection_status(marital_status, "DIVORCED"),
-            'marital_separated_check': _checkbox_selection_status(marital_status, "SEPARATED"),
-            'marital_legal_cohabitant_check':
-                _checkbox_selection_status(marital_status, "LEGAL_COHABITANT")}
+    dict_marital_status = {}
+    for status in MARITAL_STATUS:
+        dict_marital_status.update(
+            {"marital_{}_check".format(status.lower()): _checkbox_selection_status(marital_status, status)}
+        )
+    return dict_marital_status
 
 
 def _build_professional_status(professional_status):
