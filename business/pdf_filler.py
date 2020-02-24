@@ -62,6 +62,7 @@ def get_data(admission):
     birth_date = _format_birth_date(person_information)
 
     data_dict = {
+        'academic_year': admission.get('academic_yr', EMPTY_VALUE),
         'last_name': person.get('last_name', EMPTY_VALUE),
         'first_name': person.get('first_name', EMPTY_VALUE),
         'birth_date': birth_date,
