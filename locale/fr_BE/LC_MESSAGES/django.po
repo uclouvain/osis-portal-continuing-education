@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-17 09:06+0100\n"
+"POT-Creation-Date: 2020-02-21 12:02+0100\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -26,6 +26,9 @@ msgstr ""
 "\"Fichier trop volumineux: la taille maximale autorisée est de %(max_size)s."
 "\""
 
+msgid "(retrieved through 'Generate PDF' button)"
+msgstr "(récupéré à l'aide du bouton 'Générer le PDF')"
+
 msgid "A problem occured during delete"
 msgstr "Un problème est survenu durant la suppression"
 
@@ -43,7 +46,7 @@ msgstr "Secteur d'activité"
 
 msgid ""
 "Add two colour passport photos on a white background, one of which must be "
-"pasted on the document entitled 'Ordering a UCLouvain access card'."
+"pasted on the document entitled 'Ordering a UCLouvain access card'"
 msgstr ""
 "Ajouter deux photos d'identité en couleurs sur fond blanc dont une devra "
 "être collée sur le document intitulé « commande d’une carte d’accès "
@@ -200,6 +203,9 @@ msgstr "Nationalité"
 msgid "City"
 msgstr "Ville"
 
+msgid "Close"
+msgstr "Fermer"
+
 msgid "Company number"
 msgstr "Numéro unique d'entreprise"
 
@@ -276,6 +282,11 @@ msgid ""
 msgstr ""
 "Indiquez votre adresse mail ci-dessous, nous vous enverrons un email avec "
 "les instructions pour définir un nouveau mot de passe"
+
+msgid "European citizen must add a copy of her identity card or passport"
+msgstr ""
+"Les citoyens européens doivent ajouter une photocopie de leur carte "
+"d’identité ou de leur passeport"
 
 msgid "Faculty"
 msgstr "Faculté"
@@ -365,6 +376,9 @@ msgstr "Information"
 msgid "Informations"
 msgstr "Informations"
 
+msgid "Instructions"
+msgstr "Instructions"
+
 msgid "Interest form"
 msgstr "Formulaire d'intérêt"
 
@@ -423,6 +437,15 @@ msgstr "Marié"
 msgid "Motivation"
 msgstr "Motivation"
 
+msgid "My account"
+msgstr "Mon compte"
+
+msgid "My admissions"
+msgstr "Mes admissions"
+
+msgid "My registrations"
+msgstr "Mes inscriptions"
+
 msgid "NOMA"
 msgstr "NOMA"
 
@@ -452,6 +475,11 @@ msgstr "Aucun fichier choisi"
 
 msgid "No registration yet"
 msgstr "Pas de formulaire d'inscription disponible"
+
+msgid "Non-EU citizen must add a copy of her residence permit"
+msgstr ""
+"Les citoyens de nationalité hors UE doivent ajouter une photocopie de leur "
+"titre de séjour"
 
 msgid "Not submitted"
 msgstr "Non-soumise"
@@ -499,6 +527,11 @@ msgid ""
 msgstr ""
 "Veuillez compléter le formulaire suivant pour finaliser la création de votre "
 "compte utilisateur."
+
+msgid "Please follow these instructions in order to complete your submission:"
+msgstr ""
+"Veuillez suivre les instructions ci-dessous afin de compléter la soumission "
+"du dossier:"
 
 msgid "Post"
 msgstr "Courrier"
@@ -590,11 +623,12 @@ msgstr "Indépendant"
 msgid "Separated"
 msgstr "Séparé"
 
-#, python-format
-msgid "Sign it and send it by post to your manager's address : %(address)s"
+msgid "Show instructions"
+msgstr "Lire les instructions"
+
+msgid "Sign the form and send it by post to the following address: "
 msgstr ""
-"Le signer et l’envoyer par courrier postal à l’adresse de votre "
-"gestionnaire : %(address)s"
+"Signer le formulaire et l’envoyer par courrier postal à l’adresse suivante: "
 
 msgid "Signup"
 msgstr "Créer un compte"
@@ -732,11 +766,11 @@ msgstr ""
 "informations suivantes :"
 
 msgid ""
-"Your data has been successfully saved. Some tasks are remaining to complete "
-"the registration :"
+"Your admission request has been correctly submitted. The program manager "
+"will get back to you shortly."
 msgstr ""
-"Vos données ont bien été enregistrées. Il reste quelques actions à effectuer "
-"pour finaliser votre inscription :"
+"Votre demande d'admission a été correctement soumise. Le responsable du "
+"programme vous répondra dans les plus brefs délais."
 
 msgid "Your email cannot end with uclouvain.be"
 msgstr "Votre adresse email ne peut pas se terminer par uclouvain.be"
@@ -755,11 +789,25 @@ msgid "Your password was successfully changed."
 msgstr "Votre mot de passe à été modifié avec succès."
 
 msgid ""
+"Your registration file has been saved. <b>Please consider the following "
+"remaining instructions</b> to complete submission. "
+msgstr ""
+"Votre dossier d'inscription a été enregistré. <b>Veuillez suivre les "
+"instructions</b> afin de compléter la soumission. "
+
+msgid ""
 "Your registration file has been saved. Please consider the following "
 "information :"
 msgstr ""
 "Votre dossier d'inscription a été enregistré. Veuillez prendre en compte les "
 "informations suivantes :"
+
+msgid ""
+"Your registration file has been saved. Please consider the following "
+"remaining instructions to complete submission. "
+msgstr ""
+"Votre dossier d'inscription a été enregistré. Veuillez suivre les "
+"instructions afin de compléter la soumission. "
 
 msgid ""
 "Your registration to the platform has been successfully completed. Please "
@@ -776,18 +824,6 @@ msgstr ""
 
 msgid "an other address"
 msgstr "une autre adresse"
-
-msgid ""
-"if you are a European citizen, add a photocopy of your identity card or "
-"passport"
-msgstr ""
-"si vous êtes citoyen européen, ajouter une photocopie de votre carte "
-"d’identité ou de votre passeport"
-
-msgid "if you are a non-EU citizen, add a photocopy of your residence permit"
-msgstr ""
-"si vous êtes de nationalité hors UE, ajouter une photocopie de votre titre "
-"de séjour"
 
 msgid "residence address mentioned earlier"
 msgstr "l'adresse du domicile légal mentionnée précédemment"

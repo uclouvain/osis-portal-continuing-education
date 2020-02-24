@@ -46,7 +46,7 @@ from continuing_education.models.enums.admission_state_choices import REGISTRATI
 from continuing_education.views import api
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
     add_informations_message_on_submittable_file, add_contact_for_edit_message, \
-    add_remaining_tasks_message
+    add_remaining_tasks_message, format_formation_address
 from continuing_education.views.file import _get_files_list, FILES_URL
 
 
@@ -75,6 +75,7 @@ def registration_detail(request, admission_uuid):
     is_accepted = admission['state'] == admission_state_choices.ACCEPTED
     is_registration_submitted = admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED
     can_upload = is_accepted
+    manager_address = format_formation_address(admission['formation']['postal_address'])
     return render(request, "registration_detail.html", locals())
 
 

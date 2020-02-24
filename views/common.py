@@ -192,19 +192,9 @@ def add_informations_message_on_submittable_file(request, title):
 
 
 def add_remaining_tasks_message(request, formation):
-    items = [
-        _("Print the completed registration form"),
-        _("Add two colour passport photos on a white background, one of which must be pasted on the document entitled "
-          "'Ordering a UCLouvain access card'."),
-        _("if you are a European citizen, add a photocopy of your identity card or passport"),
-        _("if you are a non-EU citizen, add a photocopy of your residence permit"),
-        _("Sign it and send it by post to your manager's address : %(address)s") %
-        {'address': format_formation_address(formation['postal_address'])},
-    ]
-
-    title = _("Your data has been successfully saved. Some tasks are remaining to complete the registration :")
-    message = "<strong>{}</strong><br>".format(title) + \
-              "".join(["- {}<br>".format(item) for item in items])
+    message = _("Your registration file has been saved. "
+                "<b>Please consider the following remaining instructions</b> to complete submission. ")
+    message += "<a id='show-instructions-button'><b>{}</b></a>".format(_("Show instructions"))
     if not formation['postal_address']:
         message = message.replace(' : ', '.')
     messages.add_message(

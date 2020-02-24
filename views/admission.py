@@ -45,7 +45,7 @@ from continuing_education.models.enums import admission_state_choices
 from continuing_education.views import api
 from continuing_education.views.api import get_continuing_education_training
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
-    add_informations_message_on_submittable_file, add_contact_for_edit_message
+    add_informations_message_on_submittable_file, add_contact_for_edit_message, display_info_messages
 from continuing_education.views.file import _get_files_list, FILES_URL
 from frontoffice.settings.base import MAX_UPLOAD_SIZE
 from osis_common.decorators.ajax import ajax_required
@@ -68,6 +68,10 @@ def admission_detail(request, admission_uuid):
         admission['state'] = admission_state_choices.ACCEPTED
     if admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
+        display_info_messages(
+            request,
+            _("Your admission request has been correctly submitted. The program manager will get back to you shortly.")
+        )
     if admission['state'] == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,
