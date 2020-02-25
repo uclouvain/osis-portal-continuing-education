@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 import uuid
 
 import factory.fuzzy
@@ -41,7 +40,7 @@ def ContinuingEducationPersonDictFactory(person_uuid):
             'iso_code': factory.Sequence(lambda n: str(n)[-2:])
         },
         'birth_location': str(factory.Faker('city')),
-        'birth_date': factory.fuzzy.FuzzyDate(datetime.date(1950, 1, 1)).fuzz()
+        'birth_date': '2020-02-01'
     }
 
 
