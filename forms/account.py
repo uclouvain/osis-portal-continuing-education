@@ -3,6 +3,7 @@ from datetime import datetime
 from dal import autocomplete
 from django import forms
 from django.conf import settings
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -63,7 +64,7 @@ class ContinuingEducationPasswordResetForm(forms.Form):
     def save(self, token_generator=default_token_generator, request=None):
         """
         Generates a one-use only link for resetting password and sends to the
-        user.
+        user
         """
         email = self.cleaned_data["email"]
         try:
@@ -108,3 +109,9 @@ class ContinuingEducationRegistrationForm(RegistrationFormUniqueEmail):
         super().__init__(*args, **kwargs)
         email_field = User.get_email_field_name()
         self.fields[email_field].validators.append(email_not_from_uclouvain)
+
+
+class ContinuingEducationAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.username_field.verbose_name = User.get_email_field_name()
