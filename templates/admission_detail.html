@@ -327,6 +327,17 @@
             }
         });
 
+        $( ".conditions_checkboxes" ).change(function(e) {
+            if ($(".conditions_checkboxes:checked").length === 4)
+            {
+                $('#btn_finalize').prop('disabled', false);
+            }
+            else
+            {
+                $('#btn_finalize').prop('disabled', true);
+            }
+        });
+
         $('#customFile').change(function (e) {
             $('#custom-file-label').text(this.files[0].name);
             if (this.files[0].size <= {{MAX_UPLOAD_SIZE}}) {
