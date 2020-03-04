@@ -25,7 +25,7 @@
 {% endcomment %}
 
 <div class="modal fade" id="submit_confirmation_modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -45,10 +45,22 @@
                     <br>
                     <br>
                     <div class="checkbox">
-                        <label>
-                            <input type="checkbox" id="chb_registration_fees"/>
+                        <p><label>
+                            <input type="checkbox" class="conditions_checkboxes"/>
                             {% trans 'By finalizing my admission, I undertake to pay the registration fees upon receipt of invoice' %}
-                        </label>
+                        </label></p>
+                        <p><label>
+                            <input type="checkbox" class="conditions_checkboxes"/>
+                            {% blocktrans %}In accordance with the information at <a href="https://uclouvain.be/en/study/inscriptions/reglementations.html" target="_blank">https://uclouvain.be/en/study/inscriptions/reglementations.html</a>, I declare that I have read and accept the terms of the university regulations.{% endblocktrans %}
+                        </label></p>
+                        <p><label>
+                            <input type="checkbox" class="conditions_checkboxes"/>
+                            {% blocktrans %}In accordance with the information at <a href="https://uclouvain.be/en/study/inscriptions/vie-privee.html" target="_blank">https://uclouvain.be/en/study/inscriptions/vie-privee.html</a>, I declare that I have read and accept the terms of the data protection policy of the University of Louvain.{% endblocktrans %}
+                        </label></p>
+                        <p><label>
+                            <input type="checkbox" class="conditions_checkboxes"/>
+                            {% blocktrans %}In accordance with the information at <a href="https://uclouvain.be/en/study/inscriptions/acces-aux-professions-reglementees.html" target="_blank">https://uclouvain.be/en/study/inscriptions/acces-aux-professions-reglementees.html</a>, should it apply to me, I declare that I have received the information relating to the admission and graduation requirements and to the particular rules and restrictions of accreditation and professional establishment to which the professional or teacher training title is subject and I accept the terms.{% endblocktrans %}
+                        </label></p>
                     </div>
                     {% elif admission.state == 'Accepted' %}
                     {% trans 'It is not possible to edit an registration once submitted' %}

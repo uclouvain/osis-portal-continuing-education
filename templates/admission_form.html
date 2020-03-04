@@ -95,6 +95,12 @@
                     </div>
 
                     {% bootstrap_field admission_form.citizenship label_class="required" %}
+                    <div id="pnl_info_messages" class="alert alert-info" role="alert" style="display:inline-block;">
+                      <table>
+                          <tr><td style="padding-right:10px; font-size:0.8em;"><i class="fa fa-info-circle" style="font-size:180%" aria-hidden="true"></i></td>
+                          <td>{% blocktrans %}Certifying and short training programs (continuing education) do not allow to obtain visa or residence permit in Belgium.<br>Find out more : <a href="https://uclouvain.be/fr/etudier/iufc/participants-de-nationalite-hue.html" target="_blank">https://uclouvain.be/fr/etudier/iufc/participants-de-nationalite-hue.html</a>{% endblocktrans %}</td></tr>
+                      </table>
+                    </div>
                     {% bootstrap_field admission_form.formation label_class="required" %}
                 </div>
 
