@@ -328,14 +328,8 @@
         });
 
         $( ".conditions_checkboxes" ).change(function(e) {
-            if ($(".conditions_checkboxes:checked").length === 4)
-            {
-                $('#btn_finalize').prop('disabled', false);
-            }
-            else
-            {
-                $('#btn_finalize').prop('disabled', true);
-            }
+            let four_checks = $(".conditions_checkboxes:checked").length === 4;
+            $('#btn_finalize').prop('disabled', !four_checks);
         });
 
         $('#customFile').change(function (e) {
