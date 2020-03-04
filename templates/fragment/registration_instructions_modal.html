@@ -35,7 +35,7 @@
             <div class="panel-default">
                 <div class="panel-heading">
                     <p>
-                        {% trans "Please follow these instructions in order to complete your submission:" %} </p>
+                        {% trans "Please follow these instructions in order to complete your registration file:" %} </p>
                     <ol class="list-group">
                         <li class="list-group-item">
                             <div class="row list-row">
@@ -56,18 +56,6 @@
                                 </div>
                                 <div class="col-xs-9">
                                     {% trans "Add two colour passport photos on a white background, one of which must be pasted on the document entitled 'Ordering a UCLouvain access card'" %}
-                                    <ul>
-                                        <li>
-                                            <small>
-                                                {% trans "European citizen must add a copy of her identity card or passport" %}
-                                            </small>
-                                        </li>
-                                        <li>
-                                            <small>
-                                                {% trans "Non-EU citizen must add a copy of her residence permit" %}
-                                            </small>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </li>
@@ -77,8 +65,24 @@
                                     3
                                 </div>
                                 <div class="col-xs-9 col-md-9">
-                                    {% trans "Sign the form and send it by post to the following address: " %}
-                                    <div>{{ manager_address }}</div>
+                                    <p>{% trans "European citizen must add a copy of her identity card or passport" %}</p>
+                                    <p>{% trans "Non-EU citizen must add a copy of her residence permit" %}</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="row list-row">
+                                <div class="col-xs-3 col-md-3 order-divider">
+                                    4
+                                </div>
+                                <div class="col-xs-9 col-md-9">
+                                    <div>
+                                        {% trans "Sign the form and send it by post to the following address: " %}
+                                    </div>
+                                    <br/>
+                                    <div>{{ managers }}</div>
+                                    <div>{{ manager_address | safe }}</div>
+                                    <br/>
                                 </div>
                             </div>
                         </li>
