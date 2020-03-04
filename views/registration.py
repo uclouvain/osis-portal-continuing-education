@@ -75,7 +75,9 @@ def registration_detail(request, admission_uuid):
     is_accepted = admission['state'] == admission_state_choices.ACCEPTED
     is_registration_submitted = admission['state'] == admission_state_choices.REGISTRATION_SUBMITTED
     can_upload = is_accepted
-    managers = ', '.join(["{} {}".format(mgr['first_name'], mgr['last_name']) for mgr in admission['formation']['managers']])
+    managers = ', '.join(
+        ["{} {}".format(mgr['first_name'], mgr['last_name']) for mgr in admission['formation']['managers']]
+    )
     manager_address = format_formation_address(admission['formation']['postal_address'])
     return render(request, "registration_detail.html", locals())
 

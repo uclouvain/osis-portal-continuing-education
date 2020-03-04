@@ -159,7 +159,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             % {'mail': mails},
             str(messages_list[0])
         )
-        self.assertEqual(messages_list[0].level, messages.WARNING)
+        self.assertEqual(messages_list[0].level, messages.INFO)
 
     @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
     def test_admission_submit(self, mock_update):
