@@ -183,13 +183,13 @@ class ViewStudentRegistrationTestCase(TestCase):
             str(messages_list[0])
         )
         mails = _get_managers_mails(self.registration_submitted['formation'])
-        self.assertEqual(messages_list[0].level, messages.INFO)
+        self.assertEqual(messages_list[0].level, messages.WARNING)
         self.assertIn(
             gettext("If you want to edit again your registration, please contact the program manager : %(mail)s")
             % {'mail': mails},
             str(messages_list[1])
         )
-        self.assertEqual(messages_list[1].level, messages.WARNING)
+        self.assertEqual(messages_list[1].level, messages.INFO)
 
     @mock.patch('continuing_education.views.api.prepare_registration_for_submit')
     @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())

@@ -211,14 +211,14 @@ def add_remaining_tasks_message(request, formation):
         message = message.replace(' : ', '.')
     messages.add_message(
         request=request,
-        level=messages.INFO,
+        level=messages.WARNING,
         message=mark_safe(message)
     )
 
 
 def format_formation_address(address):
     if address:
-        return address['location'] + ' · ' + address['postal_code'] + ' ' + address['city'] + \
+        return address['location'] + '<br/>' + address['postal_code'] + ' ' + address['city'] + \
                (' (' + address['country']['name'] + ')' if address['country'] else '')
     return ''
 
@@ -235,7 +235,7 @@ def add_contact_for_edit_message(request, formation=None, is_registration=False)
         message = message.replace(' : ', '.')
     messages.add_message(
         request=request,
-        level=messages.WARNING,
+        level=messages.INFO,
         message=mark_safe(message)
     )
 
