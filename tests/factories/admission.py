@@ -80,12 +80,12 @@ def _get_fake_phone_number():
     return fake
 
 
-def RegistrationDictFactory(person_information, state=ACCEPTED):
+def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
     country = CountryFactory()
     registration = {
         'uuid': str(uuid.uuid4()),
-        'person_uuid': person_information['person']['uuid'],
-        'formation': ContinuingEducationTrainingDictFactory(),
+        'person_uuid': person_information['uuid'],
+        'formation': formation if formation else ContinuingEducationTrainingDictFactory(),
         'person_information': person_information,
         'address': AddressDictFactory(),
         'registration_type': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.REGISTRATION_TITLE_CHOICES)).fuzz(),

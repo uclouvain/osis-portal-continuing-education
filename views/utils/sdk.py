@@ -33,7 +33,7 @@ from openapi_client.api.default_api import DefaultApi
 from reference.models.country import Country
 
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "/%(object_name)s/%(object_uuid)s"
+API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "%(object_name)s/%(object_uuid)s"
 
 api_config = Configuration()
 api_config.api_key_prefix['Authorization'] = "Token"

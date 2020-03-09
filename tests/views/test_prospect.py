@@ -26,6 +26,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext, gettext_lazy as _
@@ -33,6 +34,7 @@ from mock import patch
 
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
+from base.tests.factories.user import UserFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.tests.utils.api_patcher import api_create_patcher, api_start_patcher, api_add_cleanup_patcher
 from openapi_client.rest import ApiException
@@ -55,23 +57,21 @@ class ProspectTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.user =  UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
         cls.formation = ContinuingEducationTrainingDictFactory()
         api_create_patcher(cls)
 
     def test_post_prospect_with_missing_information(self):
-        prospect = self.prospect
-        prospect['name'] = ''
-        response = self.client.post(reverse('prospect_form', args=[self.formation['uuid']]), data=prospect)
+        self.prospect['name'] = ''
+        response = self.client.post(reverse('prospect_form'), data=self.prospect)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'prospect_form.html')
 
     def test_post_prospect_with_not_valid_email(self):
-        prospect = self.prospect
-        prospect['email'] = 'A'
-        response = self.client.post(reverse('prospect_form', args=[self.formation['uuid']]), data=prospect)
+        self.prospect['email'] = 'A'
+        response = self.client.post(reverse('prospect_form'), data=self.prospect)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'prospect_form.html')
 

@@ -26,15 +26,14 @@
 from collections import OrderedDict
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, logout
-from django.contrib.auth.views import LoginView
+from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import translation
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, gettext
 
-from base.models import person as person_mdl
+from base.models.person import Person
 from base.views import layout
 from base.views.layout import render
 from continuing_education.forms.account import ContinuingEducationPersonForm
@@ -42,6 +41,8 @@ from continuing_education.forms.address import StrictAddressForm
 from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
+from continuing_education.views.login import ContinuingEducationLoginView
+from osis_common.utils.models import get_object_or_none
 
 ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION = 'national_registry_number'
 
@@ -56,21 +57,32 @@ def login(request):
     if "next" in request.GET:
         formation_id = request.GET['next'].rsplit('/', 1)[-1]
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        person = person_mdl.find_by_user(user)
-        # ./manage.py createsuperuser (in local) doesn't create automatically a Person associated to User
-        if person and person.language:
-            user_language = person.language
-            translation.activate(user_language)
-            request.session[translation.LANGUAGE_SESSION_KEY] = user_language
-        LoginView.as_view()(request)
-        if not person:
+        _handle_login_view(request)
+        person, user = _retrieve_auth_info(request)
+        if user and not person:
             return redirect(reverse('admission_new'))
         return redirect(reverse('continuing_education_home'))
     else:
         return render(request, "authentication/login.html", locals())
+
+
+def _retrieve_auth_info(request):
+    user = request.user if request.user.pk else None
+    person = get_object_or_none(Person, user=user) if user else None
+    # ./manage.py createsuperuser (in local) doesn't create automatically a Person associated to User
+    if person and person.language:
+        user_language = person.language
+        translation.activate(user_language)
+        request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+    return person, user
+
+
+def _handle_login_view(request):
+    login_view = ContinuingEducationLoginView.as_view()(request)
+    if hasattr(login_view, 'context_data') and login_view.context_data['form']:
+        form = login_view.context_data['form']
+        for error, message in form.errors.items():
+            display_error_messages(request, message)
 
 
 def log_out(request):
@@ -185,30 +197,21 @@ def add_informations_message_on_submittable_file(request, title):
 
 
 def add_remaining_tasks_message(request, formation):
-    items = [
-        _("Print the completed registration form"),
-        _("Add two colour passport photos on a white background, one of which must be pasted on the document entitled "
-          "'Ordering a UCLouvain access card'."),
-        _("if you are a European citizen, add a photocopy of your identity card or passport"),
-        _("if you are a non-EU citizen, add a photocopy of your residence permit"),
-        _("Sign it and send it by post to your manager's address : %(address)s") %
-        {'address': format_formation_address(formation['postal_address'])},
-    ]
-
-    title = _("Your data has been successfully saved. Some tasks are remaining to complete the registration :")
-    message = "<strong>{}</strong><br>".format(title) + \
-              "".join(["- {}<br>".format(item) for item in items])
-
+    message = _("Your registration file has been saved. "
+                "<b>Please consider the following remaining instructions</b> to complete submission. ")
+    message += "<a id='show-instructions-button'><b>{}</b></a>".format(_("Show instructions"))
+    if not formation['postal_address']:
+        message = message.replace(' : ', '.')
     messages.add_message(
         request=request,
-        level=messages.INFO,
+        level=messages.WARNING,
         message=mark_safe(message)
     )
 
 
 def format_formation_address(address):
     if address:
-        return address['location'] + ' · ' + str(address['postal_code']) + ' ' + address['city'] + \
+        return address['location'] + '<br/>' + str(address['postal_code']) + ' ' + address['city'] + \
                (' (' + address['country'] + ')' if address['country'] else '')
     return ''
 
@@ -221,9 +224,11 @@ def add_contact_for_edit_message(request, formation=None, is_registration=False)
     else:
         message = _("If you want to edit again your admission, please contact the program manager : %(mail)s") \
                   % {'mail': mails}
+    if not mails:
+        message = message.replace(' : ', '.')
     messages.add_message(
         request=request,
-        level=messages.WARNING,
+        level=messages.INFO,
         message=mark_safe(message)
     )
 

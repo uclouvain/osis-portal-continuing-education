@@ -45,10 +45,16 @@ from continuing_education.models.enums import admission_state_choices
 from continuing_education.views.utils import sdk
 from continuing_education.views.utils.sdk import get_continuing_education_training
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
-    add_informations_message_on_submittable_file, add_contact_for_edit_message
+    add_informations_message_on_submittable_file, add_contact_for_edit_message, display_info_messages
 from continuing_education.views.file import _get_files_list
 from frontoffice.settings.base import MAX_UPLOAD_SIZE
 from osis_common.decorators.ajax import ajax_required
+
+STATES_CAN_UPLOAD_FILE = [
+    admission_state_choices.DRAFT,
+    admission_state_choices.ACCEPTED,
+    admission_state_choices.WAITING,
+]
 
 
 @login_required
@@ -68,6 +74,10 @@ def admission_detail(request, admission_uuid):
         admission['state'] = admission_state_choices.ACCEPTED
     if admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
+        display_info_messages(
+            request,
+            _("Your admission request has been correctly submitted. The program manager will get back to you shortly.")
+        )
     if admission['state'] == admission_state_choices.DRAFT:
         add_informations_message_on_submittable_file(
             request=request,
@@ -94,7 +104,9 @@ def admission_detail(request, admission_uuid):
                 'is_waiting': admission['state'] == admission_state_choices.WAITING
             },
             'MAX_UPLOAD_SIZE': MAX_UPLOAD_SIZE,
-            'registration': registration
+            'registration': registration,
+            'registration_required': registration['formation']['registration_required'],
+            'can_upload': admission['state'] in STATES_CAN_UPLOAD_FILE
         }
     )
 
@@ -103,7 +115,10 @@ def _show_save_before_submit(request):
     messages.add_message(
         request=request,
         level=messages.INFO,
-        message=_("You can save an application form and access it later until it is submitted"),
+        message=_(
+            "You can save your file, even if it is not fully completed. "
+            "You will then be able to modify it and submit it when it is complete."
+        ),
     )
 
 
@@ -136,8 +151,7 @@ def _has_instance_with_values(instance):
 def admission_form(request, admission_uuid=None):
     admission = _get_admission_or_403(admission_uuid, request)
     formation = _get_formation(request)
-    registration_required = admission['formation']['registration_required'] if admission else True
-
+    registration_required = admission['formation']['registration_required'] if admission else False
     address_form, adm_form, id_form, person_form = _fill_forms_with_existing_data(admission, formation, request)
     forms_valid = all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()])
     billing_address_form, registration, registration_form, forms_valid = _get_billing_datas(
@@ -163,6 +177,11 @@ def admission_form(request, admission_uuid=None):
 
         admission = _update_or_create_admission(adm_form, admission, request)
 
+        registration_required = sdk.get_continuing_education_training(
+            request,
+            admission['formation']
+        ).get('registration_required', registration_required)
+        registration = registration or {'uuid': admission['uuid'], 'address': admission['address']}
         _update_billing_informations(
             request, {
                 'billing': billing_address_form,
@@ -176,8 +195,7 @@ def admission_form(request, admission_uuid=None):
         )
     else:
         errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
-        if not registration_required:
-            errors += list(itertools.product(registration_form.errors, billing_address_form.errors))
+        errors += list(itertools.product(registration_form.errors, billing_address_form.errors))
         display_errors(request, errors)
 
     return render(
@@ -213,9 +231,9 @@ def _update_billing_informations(request, forms, registration, registration_requ
 
 def _get_billing_datas(request, admission_uuid, forms_valid, registration_required):
     registration = None
-    registration_form = RegistrationForm(None)
-    billing_address_form = AddressForm(None)
-    if not registration_required:
+    registration_form = RegistrationForm(request.POST or None, only_billing=True)
+    billing_address_form = AddressForm(request.POST or None, prefix='billing')
+    if not registration_required and admission_uuid:
         registration = sdk.get_registration(request, admission_uuid)
         registration_form = RegistrationForm(request.POST or None, initial=registration, only_billing=True)
         billing_address_form = AddressForm(
@@ -223,7 +241,7 @@ def _get_billing_datas(request, admission_uuid, forms_valid, registration_requir
             initial=registration['billing_address'],
             prefix='billing',
         )
-        forms_valid = forms_valid and registration_form.is_valid() and billing_address_form.is_valid()
+    forms_valid = forms_valid and registration_form.is_valid() and billing_address_form.is_valid()
     return billing_address_form, registration, registration_form, forms_valid
 
 

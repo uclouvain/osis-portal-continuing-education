@@ -26,6 +26,10 @@
 import uuid
 from unittest import mock
 
+from continuing_education.views.utils.sdk import get_token_from_osis, get_personal_token, get_admission, \
+    get_registration, get_continuing_education_training, get_continuing_education_person, get_admission_list, \
+    get_registration_list, get_continuing_education_training_list, post_prospect, post_admission, update_admission, \
+    update_registration, get_files_list, get_file, delete_file, upload_file
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
@@ -38,10 +42,6 @@ from continuing_education.models.enums.admission_state_choices import SUBMITTED
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
-from continuing_education.views.utils.sdk import get_token_from_osis, get_personal_token, get_admission, \
-    get_registration, get_continuing_education_training, get_continuing_education_person, get_admission_list, \
-    get_registration_list, get_continuing_education_training_list, post_admission, post_prospect, update_admission, \
-    update_registration, get_files_list, get_file, delete_file, upload_file
 
 
 class ApiMethodsTestCase(TestCase):

@@ -25,7 +25,6 @@
 ##############################################################################
 import uuid
 from collections import namedtuple
-from unittest.mock import patch, Mock
 
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -33,6 +32,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
+from mock import Mock
 from rest_framework import status
 
 from base.tests.factories.academic_year import AcademicYearFactory
@@ -40,16 +40,11 @@ from base.tests.factories.academic_year import create_current_academic_year
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.admission import AdmissionDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
-from continuing_education.tests.utils.api_patcher import api_start_patcher, api_add_cleanup_patcher, api_create_patcher
+from continuing_education.tests.utils.api_patcher import api_create_patcher, api_start_patcher, api_add_cleanup_patcher
 from openapi_client.rest import ApiException
 
 
 class AdmissionFileTestCase(TestCase):
-    def setUp(self):
-        self.client.force_login(self.user)
-        api_start_patcher(self)
-        api_add_cleanup_patcher(self)
-
     @classmethod
     def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
@@ -65,6 +60,11 @@ class AdmissionFileTestCase(TestCase):
             content_type="application/pdf"
         )
         api_create_patcher(cls)
+
+    def setUp(self):
+        self.client.force_login(self.user)
+        api_start_patcher(self)
+        api_add_cleanup_patcher(self)
 
     def mocked_api_exception(self, *args, **kwargs):
         raise ApiException(

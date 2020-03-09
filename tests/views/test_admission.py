@@ -30,7 +30,6 @@ from unittest import mock
 from unittest.mock import patch
 
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
@@ -38,14 +37,16 @@ from django.utils.translation import gettext_lazy as _, gettext
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.user import UserFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import SUBMITTED, ACCEPTED_NO_REGISTRATION_REQUIRED, \
-    ACCEPTED
-from continuing_education.tests.factories.admission import AdmissionDictFactory
+    ACCEPTED, STATE_CHOICES
+from continuing_education.models.enums.enums import get_enum_keys
+from continuing_education.tests.factories.admission import AdmissionDictFactory, RegistrationDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.tests.utils.api_patcher import api_create_patcher, api_start_patcher, api_add_cleanup_patcher
-from continuing_education.views.admission import admission_form
+from continuing_education.views.admission import admission_form, admission_detail
 from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
 
@@ -67,7 +68,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         current_acad_year = create_current_academic_year()
         cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
         cls.request = RequestFactory()
-        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
         cls.formation = ContinuingEducationTrainingDictFactory()
@@ -76,18 +77,35 @@ class ViewStudentAdmissionTestCase(TestCase):
 
     def test_admission_detail(self):
         self.mocked_get_admission.return_value = self.admission
-        url = reverse('admission_detail', args=[self.admission['uuid']])
+        url = reverse(admission_detail, args=[self.admission['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_detail.html')
         self.assertEqual(response.context['admission'], self.admission)
         self.assertTrue(response.context['admission_is_submittable'])
+        self.assertTrue(response.context['registration_required'])
+
+    @patch('continuing_education.views.utils.sdk.get_admission')
+    @patch('continuing_education.views.utils.sdk.get_registration')
+    def test_admission_detail_no_reg(self, mock_get_registration, mock_get_admission):
+        formation = ContinuingEducationTrainingDictFactory(registration_required=False)
+        admission = AdmissionDictFactory(self.person_information, formation=formation)
+        mock_get_admission.return_value = admission
+        mock_get_registration.return_value = RegistrationDictFactory(self.person_information, formation=formation)
+        url = reverse(admission_detail, args=[admission['uuid']])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'admission_detail.html')
+        self.assertEqual(response.context['admission'], admission)
+        self.assertTrue(response.context['admission_is_submittable'])
+        self.assertFalse(response.context['registration_required'])
 
     def test_admission_detail_not_submittable(self):
         self.mocked_get_admission.return_value = self.admission
         self.admission['last_degree_level'] = ''
 
-        url = reverse('admission_detail', args=[self.admission['uuid']])
+        url = reverse(admission_detail, args=[self.admission['uuid']])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
@@ -118,14 +136,14 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertFalse(response.context['admission_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(len(messages_list), 2, 'show both warning and info messages')
         mails = _get_managers_mails(self.admission_submitted['formation'])
         self.assertIn(
             gettext("If you want to edit again your admission, please contact the program manager : %(mail)s")
             % {'mail': mails},
             str(messages_list[0])
         )
-        self.assertEqual(messages_list[0].level, messages.WARNING)
+        self.assertEqual(messages_list[0].level, messages.INFO)
 
     def test_admission_submit(self):
         self.admission['state'] = admission_state_choices.DRAFT
@@ -237,10 +255,9 @@ class ViewStudentAdmissionTestCase(TestCase):
     def test_admission_edit_permission_denied_invalid_state(self):
         self.mocked_get_admission.return_value = self.admission_submitted
         url = reverse('admission_edit', args=[self.admission_submitted['uuid']])
-        request = self.request.get(url)
-        request.user = self.user
+        response = self.client.get(url)
         with self.assertRaises(PermissionDenied):
-            admission_form(request, self.admission_submitted['uuid'])
+            admission_form(response.wsgi_request, self.admission_submitted['uuid'])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
 
@@ -261,7 +278,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         url = reverse('admission_edit', args=[self.admission['uuid']])
         response = self.client.post(url, data={**person, **admission})
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]))
+        self.assertRedirects(response, reverse(admission_detail, args=[self.admission['uuid']]))
 
     def test_edit_post_admission_found_no_reg(self):
         admission_no_reg = AdmissionDictFactory(
@@ -286,7 +303,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         url = reverse('admission_edit', args=[admission_no_reg['uuid']])
         response = self.client.post(url, data={**person, **admission})
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('admission_detail', args=[admission_no_reg['uuid']]))
+        self.assertRedirects(response, reverse(admission_detail, args=[admission_no_reg['uuid']]))
 
     @mock.patch('continuing_education.views.admission._get_files_list')
     def test_admission_detail_files_list(self, mock_get_files_list):
@@ -304,7 +321,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'uuid': str(uuid.uuid4()),
         }
         mock_get_files_list.return_value = [file]
-        url = reverse('admission_detail', args=[self.admission['uuid']])
+        url = reverse(admission_detail, args=[self.admission['uuid']])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
@@ -312,6 +329,22 @@ class ViewStudentAdmissionTestCase(TestCase):
 
         self.assertEqual(response.context['admission'], self.admission)
         self.assertEqual(response.context['list_files'], [file])
+
+    @patch('continuing_education.views.utils.sdk.get_admission')
+    def test_admission_can_upload(self, mock_admission):
+        states_can_upload_file = [
+            admission_state_choices.DRAFT,
+            admission_state_choices.ACCEPTED,
+            admission_state_choices.WAITING,
+        ]
+        url = reverse(admission_detail, args=[self.admission['uuid']])
+
+        for state in get_enum_keys(STATE_CHOICES):
+            with self.subTest():
+                self.admission['state'] = state
+                mock_admission.return_value = self.admission
+                response = self.client.get(url)
+                self.assertEqual(response.context['can_upload'], state in states_can_upload_file, state)
 
     @mock.patch('continuing_education.views.admission.get_continuing_education_training')
     def test_ajax_get_formation_information(self, mock_get_training):
@@ -339,6 +372,12 @@ class ViewStudentAdmissionTestCase(TestCase):
 
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        current_acad_year = create_current_academic_year()
+        AcademicYearFactory(year=current_acad_year.year + 1)
+        cls.person = PersonFactory()
+
     def setUp(self):
         person_iufc = ContinuingEducationPersonDictFactory(PersonFactory().uuid)
         self.admission = AdmissionDictFactory(person_iufc, SUBMITTED)

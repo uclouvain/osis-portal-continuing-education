@@ -28,7 +28,6 @@ from unittest.mock import patch
 import mock
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
@@ -36,13 +35,13 @@ from rest_framework import status
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
-from base.tests.factories.user import SuperUserFactory
+from base.tests.factories.user import SuperUserFactory, UserFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED, ACCEPTED, REJECTED
 from continuing_education.tests.factories.admission import RegistrationDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.tests.utils.api_patcher import api_create_patcher, api_start_patcher, api_add_cleanup_patcher
-from continuing_education.views.common import get_submission_errors, _get_managers_mails, format_formation_address
+from continuing_education.views.common import get_submission_errors, _get_managers_mails
 
 
 class ViewStudentRegistrationTestCase(TestCase):
@@ -67,7 +66,7 @@ class ViewStudentRegistrationTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
         cls.admission_accepted = RegistrationDictFactory(cls.person_information, state=ACCEPTED)
@@ -163,46 +162,20 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(len(messages_list), 2)
 
         self.assertIn(
-            gettext("Your data has been successfully saved. Some tasks are remaining to complete the registration :"),
-            str(messages_list[0])
-        )
-        self.assertIn(
-            gettext("Print the completed registration form"),
-            str(messages_list[0])
-        )
-        self.assertIn(
-            gettext("Sign it and send it by post to your manager's address : %(address)s") % {
-                'address': format_formation_address(self.registration_submitted['formation']['postal_address'])
-            },
-            str(messages_list[0])
-        )
-        self.assertIn(
             gettext(
-                "Add two colour passport photos on a white background, one of which must be "
-                "pasted on the document entitled 'Ordering a UCLouvain access card'."
-            ),
-            str(messages_list[0])
-        )
-        self.assertIn(
-            gettext(
-                "if you are a European citizen, add a photocopy of your identity card or passport"
-            ),
-            str(messages_list[0])
-        )
-        self.assertIn(
-            gettext(
-                "if you are a non-EU citizen, add a photocopy of your residence permit"
+                "Your registration file has been saved. "
+                "<b>Please consider the following remaining instructions</b> to complete submission. "
             ),
             str(messages_list[0])
         )
         mails = _get_managers_mails(self.registration_submitted['formation'])
-        self.assertEqual(messages_list[0].level, messages.INFO)
+        self.assertEqual(messages_list[0].level, messages.WARNING)
         self.assertIn(
             gettext("If you want to edit again your registration, please contact the program manager : %(mail)s")
             % {'mail': mails},
             str(messages_list[1])
         )
-        self.assertEqual(messages_list[1].level, messages.WARNING)
+        self.assertEqual(messages_list[1].level, messages.INFO)
 
     def test_registration_submit(self):
         self.mocked_get_registration.return_value = self.admission_accepted
@@ -282,10 +255,15 @@ class ViewStudentRegistrationTestCase(TestCase):
 
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         ac = AcademicYearFactory()
         AcademicYearFactory(year=ac.year + 1)
-        self.admission = RegistrationDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid))
+        cls.person = PersonFactory()
+        cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
+
+    def setUp(self):
+        self.admission = RegistrationDictFactory(person_information=self.person_information)
 
     def test_registration_is_submittable(self):
         errors, errors_fields = get_submission_errors(self.admission, is_registration=True)

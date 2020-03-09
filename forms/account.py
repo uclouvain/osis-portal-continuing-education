@@ -3,14 +3,16 @@ from datetime import datetime
 from dal import autocomplete
 from django import forms
 from django.conf import settings
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, ValidationError
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
+from django_registration.forms import RegistrationFormUniqueEmail
 
 from osis_common.messaging import message_config, send_message as message_service
 from reference.models.country import Country
@@ -64,7 +66,7 @@ class ContinuingEducationPasswordResetForm(forms.Form):
     def save(self, token_generator=default_token_generator, request=None):
         """
         Generates a one-use only link for resetting password and sends to the
-        user.
+        user
         """
         email = self.cleaned_data["email"]
         try:
@@ -97,3 +99,21 @@ class ContinuingEducationPasswordResetForm(forms.Form):
                                                                 [], receivers, template_base_data, None)
         return message_service.send_messages(message_content,
                                              settings.IUFC_CONFIG.get('PASSWORD_RESET_MESSAGES_OUTSIDE_PRODUCTION'))
+
+
+def email_not_from_uclouvain(email):
+    if email.endswith('uclouvain.be'):
+        raise ValidationError(_("Your email cannot end with uclouvain.be"))
+
+
+class ContinuingEducationRegistrationForm(RegistrationFormUniqueEmail):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        email_field = User.get_email_field_name()
+        self.fields[email_field].validators.append(email_not_from_uclouvain)
+
+
+class ContinuingEducationAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.username_field.verbose_name = User.get_email_field_name()

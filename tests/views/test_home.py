@@ -25,32 +25,34 @@
 ##############################################################################
 from random import choice
 from string import ascii_lowercase
-from unittest import mock
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.user import UserFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.tests.utils.api_patcher import api_create_patcher, api_start_patcher, api_add_cleanup_patcher
 
 
 class ViewHomeTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = UserFactory()
+        PersonFactory(user=cls.user)
+        cls.cet = ContinuingEducationTrainingDictFactory(active=False)
+        api_create_patcher(cls)
+
     def setUp(self):
-        self.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        self.user = UserFactory()
         PersonFactory(user=self.user)
         self.cet = ContinuingEducationTrainingDictFactory(
             active=False
         )
         api_start_patcher(self)
         api_add_cleanup_patcher(self)
-
-    @classmethod
-    def setUpTestData(cls):
-        api_create_patcher(cls)
 
     def test_main_view(self):
         self.client.force_login(self.user)
@@ -73,7 +75,7 @@ class FormationsListTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user('demo', 'demo@demo.org', 'passtest')
+        cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_iufc = ContinuingEducationPersonDictFactory(cls.person.uuid)
         cls.an_academic_year = AcademicYearFactory(current=True)

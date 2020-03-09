@@ -34,12 +34,17 @@ from continuing_education.tests.factories.person import ContinuingEducationPerso
 
 
 class TestAdmissionForm(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        person = PersonFactory()
+        cls.iufc_person = ContinuingEducationPersonDictFactory(person.uuid)
+
     def test_valid_form(self):
-        admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid))
+        admission = AdmissionDictFactory(self.iufc_person)
         form = AdmissionForm(admission)
         self.assertTrue(form.is_valid(), form.errors)
 
     def test_invalid_student_state(self):
-        admission = AdmissionDictFactory(ContinuingEducationPersonDictFactory(PersonFactory().uuid), state=ACCEPTED)
+        admission = AdmissionDictFactory(self.iufc_person, state=ACCEPTED)
         form = AdmissionForm(admission)
         self.assertFalse(form.is_valid(), form.errors)
