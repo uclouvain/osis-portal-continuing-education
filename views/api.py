@@ -33,7 +33,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
 
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "%(object_name)s/%(object_uuid)s"
+API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "/%(object_name)s/%(object_uuid)s"
 
 
 def transform_response_to_data(response):
@@ -73,10 +73,15 @@ def get_continuing_education_training_list(**kwargs):
     return transform_response_to_data(response)
 
 
-def get_data_from_osis(request, object_name, uuid):
-
+def get_data_from_osis(request, object_name, uuid=None, filters=None):
+    url = API_URL % {'object_name': object_name, 'object_uuid': ''}
+    if uuid:
+        url = API_URL % {'object_name': object_name, 'object_uuid': str(uuid)}
+    if filters:
+        for key, value in filters.items():
+            url = url + "?{}={}".format(key, value)
     response = requests.get(
-        url=API_URL % {'object_name': object_name, 'object_uuid': str(uuid)},
+        url=url,
         headers={'Authorization': 'Token ' + get_personal_token(request)} if request.user.is_authenticated
         else REQUEST_HEADER
     )
@@ -88,10 +93,24 @@ def get_data_from_osis(request, object_name, uuid):
 
 
 def get_continuing_education_person(request):
-    return get_data_from_osis(request, "persons", "details")
+    token = get_personal_token(request)
+    response = requests.get(
+        url=API_URL % {'object_name': "persons", 'object_uuid': ''} + "details",
+        headers={'Authorization': 'Token ' + token}
+    )
+    if response.status_code == status.HTTP_404_NOT_FOUND:
+        raise Http404
+    elif response.status_code == status.HTTP_403_FORBIDDEN:
+        raise PermissionDenied(response.json()['detail'] if response.content else '')
+    return transform_response_to_data(response)
 
 
-def get_continuing_education_training(request, uuid):
+def get_continuing_education_training(request, uuid=None, acronym=None):
+    if acronym:
+        # get first filtered value when requesting training with its acronym
+        response = get_data_from_osis(request, "training", uuid, filters={'acronym': acronym})
+        if 'results' in response and response['results']:
+            return response['results'][0]
     return get_data_from_osis(request, "training", uuid)
 
 

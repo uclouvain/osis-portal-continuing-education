@@ -114,7 +114,7 @@
 
         function enableLink() {
             let url = "{% url 'continuing_education_home' %}";
-            url += selectedElem.getAttribute('uuid');
+            url += selectedElem.getAttribute('id');
             let continue_button = $("#formation-continue-button");
             continue_button.attr({
                 "href": url,

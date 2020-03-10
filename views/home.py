@@ -53,9 +53,10 @@ def formations_list(request):
     })
 
 
-def main_view(request, formation_id=None):
-    if formation_id:
-        request.session['formation_id'] = formation_id
+def main_view(request, acronym=None):
+    if acronym:
+        training = api.get_continuing_education_training(request, acronym=acronym)
+        request.session['formation_id'] = training['uuid']
     if request.user.is_authenticated:
         api.get_personal_token(request)
         person = mdl_person.find_by_user(request.user)
@@ -66,10 +67,10 @@ def main_view(request, formation_id=None):
 
         return render(request, "continuing_education/home.html", locals())
     else:
-        if formation_id:
-            is_active = api.get_continuing_education_training(request, formation_id)['active']
-            if not is_active:
-                return redirect(reverse('prospect_form', kwargs={'formation_uuid': formation_id}))
+        if acronym:
+            training = api.get_continuing_education_training(request, acronym=acronym)
+            if not training['active']:
+                return redirect(reverse('prospect_form', kwargs={'formation_uuid': training['uuid']}))
         return render(request, "authentication/login.html")
 
 

@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^$', home.formations_list, name='formations_list'),
     url(r'^set_lang/([A-Za-z-]+)/$', home.set_language, name='set_language'),
     url(r'^home/$', home.main_view, name='continuing_education_home'),
-    url(r'^home/(?P<formation_id>[0-9a-f-]+)/$', home.main_view, name='continuing_education_home'),
+    url(r'^home/(?P<acronym>[\w]+)/$', home.main_view, name='continuing_education_home'),
     url(r'^authentication/', include([
         url(r'^login$', common.login, name='continuing_education_login'),
         url(r'^logout$', common.log_out, name='continuing_education_logout'),

@@ -68,7 +68,7 @@ class ViewHomeTestCase(TestCase):
     @mock.patch('continuing_education.views.api.get_personal_token')
     def test_redirect_to_prospect_form_if_formation_not_activated_in_url(self, mock_token):
         self.client.logout()
-        url = reverse('continuing_education_home', kwargs={'formation_id': self.cet['uuid']})
+        url = reverse('continuing_education_home', kwargs={'acronym': self.cet['education_group']['acronym']})
         response = self.client.get(url)
         self.assertRedirects(response, reverse('prospect_form', kwargs={'formation_uuid': self.cet['uuid']}))
 

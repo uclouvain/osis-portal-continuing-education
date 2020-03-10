@@ -54,9 +54,9 @@ class UrlsTestCase(TestCase):
                 pattern_name='continuing_education_home',
             ),
             dict(
-                url_path='/continuing_education/home/1/',
+                url_path='/continuing_education/home/TEST2FC/',
                 pattern_name='continuing_education_home',
-                kwargs={'formation_id': 1}
+                kwargs={'acronym': 'TEST2FC'}
             ),
             dict(
                 url_path="/continuing_education/admission_new/",
