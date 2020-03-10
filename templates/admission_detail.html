@@ -319,14 +319,6 @@
             $('#delete_document_modal').modal('hide');
         });
 
-        $("#chb_registration_fees").change(function (e) {
-            if ($(this).prop('checked')) {
-                $('#btn_finalize').prop('disabled', false);
-            } else {
-                $('#btn_finalize').prop('disabled', true);
-            }
-        });
-
         $( "#invoice_condition_checkbox" ).change(function(e) {
             let boxCheched = $("#invoice_condition_checkbox:checked").length === 1;
             $('#btn_finalize').prop('disabled', !boxCheched);

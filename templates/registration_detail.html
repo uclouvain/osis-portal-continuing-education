@@ -208,13 +208,14 @@
             $('#custom-file-label').text(this.files[0].name);
             $('#btn-upload').removeAttr("disabled")
         });
-
-        $("#btn_registration_finalize").click(function (e) {
-            $('#btn_finalize').prop('disabled', false);
-        });
-
+        
         $("#show-instructions-button").click(function(){
             $("#instructions_modal").modal('show');
+        });
+
+        $( ".conditions_checkboxes" ).change(function(e) {
+            let allBoxesChecked = $(".conditions_checkboxes:checked").length === 3;
+            $('#btn_finalize').prop('disabled', !allBoxesChecked);
         });
 
     </script>
