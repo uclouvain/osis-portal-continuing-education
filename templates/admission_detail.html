@@ -327,9 +327,9 @@
             }
         });
 
-        $( ".conditions_checkboxes" ).change(function(e) {
-            let four_checks = $(".conditions_checkboxes:checked").length === 4;
-            $('#btn_finalize').prop('disabled', !four_checks);
+        $( "#invoice_condition_checkbox" ).change(function(e) {
+            let boxCheched = $("#invoice_condition_checkbox:checked").length === 1;
+            $('#btn_finalize').prop('disabled', !boxCheched);
         });
 
         $('#customFile').change(function (e) {

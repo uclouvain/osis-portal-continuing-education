@@ -41,25 +41,13 @@
             </div>
             <div class="modal-body">
                 {% if admission.state == 'Draft' %}
-                    {% trans 'It is not possible to edit an admission once submitted' %}
+                    {% trans 'It is not possible to edit an admission once submitted' %}.
                     <br>
                     <br>
                     <div class="checkbox">
                         <p><label>
-                            <input type="checkbox" class="conditions_checkboxes"/>
-                            {% trans 'By finalizing my admission, I undertake to pay the registration fees upon receipt of invoice' %}
-                        </label></p>
-                        <p><label>
-                            <input type="checkbox" class="conditions_checkboxes"/>
-                            {% blocktrans %}In accordance with the information at <a href="https://uclouvain.be/en/study/inscriptions/reglementations.html" target="_blank">https://uclouvain.be/en/study/inscriptions/reglementations.html</a>, I declare that I have read and accept the terms of the university regulations.{% endblocktrans %}
-                        </label></p>
-                        <p><label>
-                            <input type="checkbox" class="conditions_checkboxes"/>
-                            {% blocktrans %}In accordance with the information at <a href="https://uclouvain.be/en/study/inscriptions/vie-privee.html" target="_blank">https://uclouvain.be/en/study/inscriptions/vie-privee.html</a>, I declare that I have read and accept the terms of the data protection policy of the University of Louvain.{% endblocktrans %}
-                        </label></p>
-                        <p><label>
-                            <input type="checkbox" class="conditions_checkboxes"/>
-                            {% blocktrans %}In accordance with the information at <a href="https://uclouvain.be/en/study/inscriptions/acces-aux-professions-reglementees.html" target="_blank">https://uclouvain.be/en/study/inscriptions/acces-aux-professions-reglementees.html</a>, should it apply to me, I declare that I have received the information relating to the admission and graduation requirements and to the particular rules and restrictions of accreditation and professional establishment to which the professional or teacher training title is subject and I accept the terms.{% endblocktrans %}
+                            <input type="checkbox" id="invoice_condition_checkbox"/>
+                            {% trans 'By finalizing my admission, I undertake to pay the registration fees upon receipt of invoice' %}.
                         </label></p>
                     </div>
                     {% elif admission.state == 'Accepted' %}
