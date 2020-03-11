@@ -33,7 +33,34 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
 
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API + "/%(object_name)s/%(object_uuid)s"
+API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API
+API_OBJECT_URL = API_URL + "%(object_name)s/%(object_uuid)s"
+
+
+def get_data_from_osis(request, custom_path=None, **kwargs):
+    url = _build_api_request_url(custom_path, **kwargs)
+    response = requests.get(
+        url=url,
+        headers={'Authorization': 'Token ' + get_personal_token(request)} if request.user.is_authenticated
+        else REQUEST_HEADER,
+        params=kwargs.get('params')
+    )
+    if response.status_code == status.HTTP_404_NOT_FOUND:
+        raise Http404
+    elif response.status_code == status.HTTP_403_FORBIDDEN:
+        raise PermissionDenied(response.json()['detail'] if response.content else '')
+    return transform_response_to_data(response)
+
+
+def _build_api_request_url(custom_path, **kwargs):
+    url = API_URL
+    if custom_path:
+        url += custom_path
+    elif kwargs.get('object_name') and not kwargs.get('uuid'):
+        url = API_OBJECT_URL % {'object_name': kwargs.get('object_name'), 'object_uuid': ''}
+    elif kwargs.get('object_name') and kwargs.get('uuid'):
+        url = API_OBJECT_URL % {'object_name': kwargs.get('object_name'), 'object_uuid': str(kwargs.get('uuid'))}
+    return url
 
 
 def transform_response_to_data(response):
@@ -43,89 +70,44 @@ def transform_response_to_data(response):
 
 
 def get_admission_list(request, person_uuid):
-    token = get_personal_token(request)
-    response = requests.get(
-        url=API_URL % {'object_name': "persons", 'object_uuid': person_uuid} + "/admissions/",
-        headers={'Authorization': 'Token ' + token}
-    )
-    return transform_response_to_data(response)
+    return get_data_from_osis(request, custom_path="persons/{}/admissions/".format(person_uuid))
 
 
 def get_registration_list(request, person_uuid):
-    token = get_personal_token(request)
-    response = requests.get(
-        url=API_URL % {'object_name': "persons", 'object_uuid': person_uuid} + "/registrations/",
-        headers={'Authorization': 'Token ' + token}
-    )
-    return transform_response_to_data(response)
+    return get_data_from_osis(request, custom_path="persons/{}/registrations/".format(person_uuid))
 
 
-def get_continuing_education_training_list(**kwargs):
-    params = {}
-    url = API_URL % {'object_name': "training", 'object_uuid': ''}
-    for key, value in kwargs.items():
-        params.update({key: value})
-    response = requests.get(
-        url=url,
-        headers=REQUEST_HEADER,
-        params=params
-    )
-    return transform_response_to_data(response)
-
-
-def get_data_from_osis(request, object_name, uuid=None, filters=None):
-    url = API_URL % {'object_name': object_name, 'object_uuid': ''}
-    if uuid:
-        url = API_URL % {'object_name': object_name, 'object_uuid': str(uuid)}
-    if filters:
-        for key, value in filters.items():
-            url = url + "?{}={}".format(key, value)
-    response = requests.get(
-        url=url,
-        headers={'Authorization': 'Token ' + get_personal_token(request)} if request.user.is_authenticated
-        else REQUEST_HEADER
-    )
-    if response.status_code == status.HTTP_404_NOT_FOUND:
-        raise Http404
-    elif response.status_code == status.HTTP_403_FORBIDDEN:
-        raise PermissionDenied(response.json()['detail'] if response.content else '')
-    return transform_response_to_data(response)
+def get_continuing_education_training_list(request, **kwargs):
+    return get_data_from_osis(request, object_name="training", params=kwargs)
 
 
 def get_continuing_education_person(request):
-    token = get_personal_token(request)
-    response = requests.get(
-        url=API_URL % {'object_name': "persons", 'object_uuid': ''} + "details",
-        headers={'Authorization': 'Token ' + token}
-    )
-    if response.status_code == status.HTTP_404_NOT_FOUND:
-        raise Http404
-    elif response.status_code == status.HTTP_403_FORBIDDEN:
-        raise PermissionDenied(response.json()['detail'] if response.content else '')
-    return transform_response_to_data(response)
+    return get_data_from_osis(request, custom_path="persons/details")
 
 
-def get_continuing_education_training(request, uuid=None, acronym=None):
-    if acronym:
-        # get first filtered value when requesting training with its acronym
-        response = get_data_from_osis(request, "training", uuid, filters={'acronym': acronym})
-        if 'results' in response and response['results']:
-            return response['results'][0]
-    return get_data_from_osis(request, "training", uuid)
+def get_continuing_education_training_uuid(request, uuid):
+    return get_data_from_osis(request, object_name="training", object_uuid=uuid)
+
+
+def get_continuing_education_training(request, acronym):
+    # get first filtered value when requesting training with its acronym
+    response = get_continuing_education_training_list(request, acronym=acronym)
+    results = response.get('results')
+    return results[0] if results else None
 
 
 def get_admission(request, uuid):
-    return get_data_from_osis(request, "admissions", uuid)
+    return get_data_from_osis(request, object_name="admissions", uuid=uuid)
 
 
 def get_registration(request, uuid):
-    return get_data_from_osis(request, "registrations", uuid)
+    return get_data_from_osis(request, object_name="registrations", uuid=uuid)
 
 
 def post_data_to_osis(request, object_name, object_to_post):
     token = get_personal_token(request)
     response = requests.post(
-        url=API_URL % {'object_name': object_name, 'object_uuid': ''},
+        url=API_OBJECT_URL % {'object_name': object_name, 'object_uuid': ''},
         headers=REQUEST_HEADER if object_name == 'prospects' else {'Authorization': 'Token ' + token},
         json=object_to_post
     )
@@ -148,7 +130,7 @@ def post_admission(request, object_to_post):
 def update_data_to_osis(request, object_name, object_to_update):
     token = get_personal_token(request)
     response = requests.patch(
-        url=API_URL % {'object_name': object_name, 'object_uuid': object_to_update['uuid']},
+        url=API_OBJECT_URL % {'object_name': object_name, 'object_uuid': object_to_update['uuid']},
         headers={'Authorization': 'Token ' + token},
         json=object_to_update,
     )
@@ -165,15 +147,18 @@ def update_registration(request, object_to_update):
     return update_data_to_osis(request, "registrations", object_to_update)
 
 
-def prepare_admission_data(admission, username, forms):
+def prepare_admission_data(request, admission, forms):
     if admission:
         forms['admission'].cleaned_data['uuid'] = admission['uuid']
 
     forms['admission'].cleaned_data['address'] = forms['address'].cleaned_data
-    forms['id'].cleaned_data['email'] = username
+    forms['id'].cleaned_data['email'] = request.user.username
     forms['person'].cleaned_data['person'] = forms['id'].cleaned_data
     forms['person'].cleaned_data['birth_date'] = forms['person'].cleaned_data['birth_date'].__str__()
     forms['admission'].cleaned_data['person_information'] = forms['person'].cleaned_data
+    forms['admission'].cleaned_data['formation'] = get_continuing_education_training(
+        request, acronym=forms['admission'].cleaned_data['formation']
+    )['uuid']
 
 
 def prepare_registration_data(registration, address, forms, registration_required):

@@ -169,8 +169,8 @@ def admission_form(request, admission_uuid=None):
     errors_fields = _is_admission_submittable_and_show_errors(admission, errors_fields, request)
     if forms_valid:
         api.prepare_admission_data(
+            request,
             admission,
-            request.user.username,
             forms={
                 'admission': adm_form,
                 'address': address_form,
@@ -180,10 +180,8 @@ def admission_form(request, admission_uuid=None):
         )
 
         admission = _update_or_create_admission(adm_form, admission, request)
-
-        registration_required = api.get_continuing_education_training(
-            request,
-            admission['formation']
+        registration_required = api.get_continuing_education_training_uuid(
+            request, admission['formation']
         ).get('registration_required', registration_required)
         registration = registration or {'uuid': admission['uuid'], 'address': admission['address']}
         _update_billing_informations(
@@ -259,15 +257,15 @@ def _get_admission_or_403(admission_uuid, request):
 
 def _get_formation(request):
     formation = None
-    if request.session.get('formation_id'):
-        formation = api.get_continuing_education_training(request, request.session.get('formation_id'))
+    if request.session.get('acronym'):
+        formation = api.get_continuing_education_training(request, request.session.get('acronym'))
     return formation
 
 
 def _is_admission_submittable_and_show_errors(admission, errors_fields, request):
     if admission and not request.POST:
         formation_uuid, formation_acronym = admission['formation']
-        admission['formation_info'] = get_continuing_education_training(request, formation_uuid)
+        admission['formation_info'] = get_continuing_education_training(request, formation_acronym)
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
@@ -320,8 +318,8 @@ def _update_or_create_admission(adm_form, admission, request):
 @login_required
 @require_GET
 def get_formation_information(request):
-    formation_uuid = request.GET.get('formation_uuid')
-    training = get_continuing_education_training(request, formation_uuid)
+    formation_acronym = request.GET.get('formation_acronym')
+    training = get_continuing_education_training(request, acronym=formation_acronym)
     return JsonResponse(data={
         'additional_information_label': linebreaks(training.get('additional_information_label', '')),
         'registration_required': training.get('registration_required', True)

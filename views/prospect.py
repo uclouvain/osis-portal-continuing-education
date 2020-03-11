@@ -9,10 +9,10 @@ from continuing_education.views.api import post_prospect
 from continuing_education.views.common import display_success_messages
 
 
-def prospect_form(request, formation_uuid=None):
+def prospect_form(request, acronym=None):
     cet = None
-    if formation_uuid:
-        cet = api.get_continuing_education_training(request, formation_uuid)
+    if acronym:
+        cet = api.get_continuing_education_training(request, acronym)
     form = ProspectForm(request.POST or None, ce_training=cet)
 
     if form.is_valid():
@@ -22,11 +22,11 @@ def prospect_form(request, formation_uuid=None):
             'city': request.POST.get('city'),
             'postal_code': request.POST.get('postal_code'),
             'email': request.POST.get('email'),
-            'formation': formation_uuid,
+            'formation': cet['uuid'],
             'phone_number': request.POST.get('phone_number')
         }
         data, response_status_code = post_prospect(request, prospect)
         if response_status_code == status.HTTP_201_CREATED:
-            display_success_messages(request, _("Your form was correctly send."))
+            display_success_messages(request, _("Your form has been correctly sent."))
             return redirect(reverse('continuing_education_home'))
     return render(request, 'prospect_form.html', locals())

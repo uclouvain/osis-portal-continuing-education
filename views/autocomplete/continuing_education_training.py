@@ -12,10 +12,13 @@ class ContinuingEducationTrainingAutocomplete(autocomplete.Select2ListView):
         return http.HttpResponse(json.dumps({
             'results': [
                 {
-                    'id': training['uuid'], 'text': "{} - {}".format(training['education_group']['acronym'],
-                                                                     training['education_group']['title'])
+                    'id': training['education_group']['acronym'],
+                    'text': "{} - {}".format(
+                        training['education_group']['acronym'], training['education_group']['title']
+                    )
                 }
                 for training in get_continuing_education_training_list(
+                    request,
                     search=self.q,
                     active=True
                 )['results']

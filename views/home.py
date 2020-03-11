@@ -41,6 +41,7 @@ def formations_list(request):
     except TypeError:
         active_page = 1
     paginator = api.get_continuing_education_training_list(
+        request,
         limit=limit,
         offset=(active_page - 1) * limit,
     )
@@ -55,8 +56,7 @@ def formations_list(request):
 
 def main_view(request, acronym=None):
     if acronym:
-        training = api.get_continuing_education_training(request, acronym=acronym)
-        request.session['formation_id'] = training['uuid']
+        request.session['acronym'] = acronym
     if request.user.is_authenticated:
         api.get_personal_token(request)
         person = mdl_person.find_by_user(request.user)
@@ -70,7 +70,7 @@ def main_view(request, acronym=None):
         if acronym:
             training = api.get_continuing_education_training(request, acronym=acronym)
             if not training['active']:
-                return redirect(reverse('prospect_form', kwargs={'formation_uuid': training['uuid']}))
+                return redirect(reverse('prospect_form', kwargs={'acronym': acronym}))
         return render(request, "authentication/login.html")
 
 
