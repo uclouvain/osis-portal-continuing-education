@@ -274,5 +274,6 @@ class StrictAdmissionForm(AdmissionForm):
 def _has_required_additional_information(formation):
     return 'additional_information_label' in formation.keys() and formation['additional_information_label']
 
+
 def _format_training_title(training):
     return "{} - {}".format(training['education_group']['acronym'], training['education_group']['title'])
