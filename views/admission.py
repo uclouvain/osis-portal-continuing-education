@@ -180,7 +180,7 @@ def admission_form(request, admission_uuid=None):
         )
 
         admission = _update_or_create_admission(adm_form, admission, request)
-        registration_required = api.get_continuing_education_training_uuid(
+        registration_required = api.get_continuing_education_training_by_uuid(
             request, admission['formation']
         ).get('registration_required', registration_required)
         registration = registration or {'uuid': admission['uuid'], 'address': admission['address']}

@@ -85,7 +85,7 @@ def get_continuing_education_person(request):
     return get_data_from_osis(request, custom_path="persons/details")
 
 
-def get_continuing_education_training_uuid(request, uuid):
+def get_continuing_education_training_by_uuid(request, uuid):
     return get_data_from_osis(request, object_name="training", object_uuid=uuid)
 
 

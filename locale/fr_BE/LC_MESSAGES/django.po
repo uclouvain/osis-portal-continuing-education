@@ -890,6 +890,3 @@ msgstr "homme"
 
 msgid "residence address mentioned earlier"
 msgstr "l'adresse du domicile légal mentionnée précédemment"
-
-#~ msgid "Your form was correctly send."
-#~ msgstr "Votre formulaire a correctement été envoyé."
