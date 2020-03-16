@@ -212,9 +212,11 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
 
+    @patch('continuing_education.views.api.get_continuing_education_training')
     @patch('continuing_education.views.api.update_registration')
     @patch('continuing_education.views.api.post_admission')
-    def test_admission_new_save(self, mock_post, mock_update):
+    def test_admission_new_save(self, mock_post, mock_update, mock_get):
+        mock_get.return_value = self.formation
         mock_post.return_value = (self.admission, HttpResponse.status_code)
         admission = {
             'activity_sector': 'PRIVATE',
@@ -231,7 +233,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'current_occupation': 'da',
             'email': 'benjamin@daubry.be',
             'first_name': 'Benjamin',
-            'formation': self.formation['uuid'],
+            'formation': self.formation['education_group']['acronym'],
             'gender': 'M',
             'high_school_diploma': 'False',
             'high_school_graduation_year': '',
@@ -300,9 +302,10 @@ class ViewStudentAdmissionTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 401)
 
+    @patch('continuing_education.views.api.get_continuing_education_training')
     @patch('continuing_education.views.api.get_registration')
     @patch('continuing_education.views.api.update_admission')
-    def test_edit_post_admission_found(self, mock_update, mock_get_registration):
+    def test_edit_post_admission_found(self, mock_update, mock_get_registration, mock_get_training):
         mock_get_registration.return_value = RegistrationDictFactory(self.person_information, formation=self.formation)
         person_information = self.admission['person_information']
         person = {

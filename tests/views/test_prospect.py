@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import uuid
 from unittest.mock import patch
 
 from django.contrib import messages
@@ -35,6 +34,7 @@ from rest_framework import status
 
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
+from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 
 
@@ -44,6 +44,7 @@ class ProspectTestCase(TestCase):
         cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
+        cls.training = ContinuingEducationTrainingDictFactory()
 
     def setUp(self):
         self.prospect = {
@@ -53,7 +54,7 @@ class ProspectTestCase(TestCase):
             'city': 'CityTest',
             'phone_number': 1234567809,
             'email': 'a@b.com',
-            'formation': uuid.uuid4()
+            'formation': self.training['uuid']
         }
         self.client.force_login(self.user)
 
@@ -76,17 +77,22 @@ class ProspectTestCase(TestCase):
     @patch('requests.get')
     @patch('requests.post', return_value=HttpResponse(status=status.HTTP_201_CREATED))
     def test_post_valid_prospect(self, mock_post, mock_get, mock_transform):
-        response = self.client.post(reverse('prospect_form'), data=self.prospect)
+        response = self.client.post(reverse('prospect_form', args=['ACRONYM']), data=self.prospect)
         self.assertEqual(response.status_code, 302)
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertIn(
-            gettext(_("Your form was correctly send.")),
+            gettext(_("Your form has been correctly sent.")),
             messages_list
         )
         self.assertRedirects(response, reverse('continuing_education_home'))
 
+    @patch('continuing_education.views.api.get_continuing_education_training')
+    @patch('continuing_education.views.api.transform_response_to_data')
     @patch('continuing_education.views.api.post_data_to_osis', side_effect=mocked_failed_post_request)
-    def test_post_valid_prospect_but_server_error(self, mock_fail):
-        response = self.client.post(reverse('prospect_form'), data=self.prospect)
+    def test_post_valid_prospect_but_server_error(self, mock_fail, mock_transform, mock_get_training):
+        mock_get_training.return_value = self.training
+        response = self.client.post(
+            reverse('prospect_form', args=[self.training['education_group']['acronym']]), data=self.prospect
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'prospect_form.html')

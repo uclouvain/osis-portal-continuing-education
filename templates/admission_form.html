@@ -391,31 +391,31 @@
             $('.nav-tabs > .active').prev('li').find('a').trigger('click');
         });
 
-        let selected_formation_uuid = $("#id_formation").val();
+        let selected_formation_acronym = $("#id_formation").val();
 
         //trigger at first load
-        get_additional_information(selected_formation_uuid);
+        get_additional_information(selected_formation_acronym);
 
         //listen changed value from dal autocomplete
         $('#id_formation').next().bind('DOMSubtreeModified', function () {
             $("#id_additional_information").val('');
-            let formation_uuid = $("#id_formation").val();
-            if (formation_uuid !== selected_formation_uuid) {
-                selected_formation_uuid = formation_uuid;
-                if (formation_uuid) {
-                    get_additional_information(formation_uuid);
+            const formation_acronym = $("#id_formation").val();
+            if (formation_acronym !== selected_formation_acronym) {
+                selected_formation_acronym = formation_acronym;
+                if (formation_acronym) {
+                    get_additional_information(formation_acronym);
                 } else {
                     $("#additional_tab").hide();
                 }
             }
         });
 
-        function get_additional_information(formation_uuid) {
+        function get_additional_information(formation_acronym) {
             $.ajax({
                 url: '{% url 'get_formation_information' %}',
                 method: "GET",
                 data: {
-                    'formation_uuid': formation_uuid
+                    'formation_acronym': formation_acronym
                 },
                 success: (data) => {
                     if (stripTags(data.additional_information_label)){

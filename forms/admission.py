@@ -207,9 +207,7 @@ class AdmissionForm(Form):
 
         super(AdmissionForm, self).__init__(*args, **kwargs)
         if formation:
-            self.initial['formation'] = (formation['uuid'],
-                                         "{} - {}".format(formation['education_group']['acronym'],
-                                                          formation['education_group']['title']))
+            self.initial['formation'] = (formation['education_group']['acronym'], _format_training_title(formation))
             self.fields['formation'].choices = [self.initial['formation']]
         elif self.initial:
             self._set_initial_fields()
@@ -229,9 +227,9 @@ class AdmissionForm(Form):
                 elif isinstance(attribute, list):
                     self.initial[field] = (
                         self.initial[field][slug],
-                        "{} - {}".format(self.initial[field]['education_group'][attribute[0]],
-                                         self.initial[field]['education_group'][
-                                             attribute[1]]) if field == 'formation' else self.initial[field][attribute]
+                        _format_training_title(
+                            self.initial[field]
+                        ) if field == 'formation' else self.initial[field][attribute]
                     )
                 self.fields[field].choices = [self.initial[field]]
 
@@ -275,3 +273,7 @@ class StrictAdmissionForm(AdmissionForm):
 
 def _has_required_additional_information(formation):
     return 'additional_information_label' in formation.keys() and formation['additional_information_label']
+
+
+def _format_training_title(training):
+    return "{} - {}".format(training['education_group']['acronym'], training['education_group']['title'])
