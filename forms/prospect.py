@@ -45,9 +45,7 @@ class ProspectForm(Form):
         formation = kwargs.pop('ce_training', None)
         super(ProspectForm, self).__init__(*args, **kwargs)
         if formation:
-            self.fields['formation'] = forms.CharField(
-                disabled=True
-            )
+            self.fields['formation'] = forms.CharField(disabled=True)
             self.initial['formation'] = formation['education_group']['acronym']
 
     class Meta:

@@ -117,8 +117,7 @@ def registration_edit(request, admission_uuid):
     errors_fields = []
     if registration and not request.POST:
         registration_submission_errors, errors_fields = get_submission_errors(registration, is_registration=True)
-        admission_is_submittable = not registration_submission_errors
-        if not admission_is_submittable:
+        if registration_submission_errors:
             _show_submit_warning(registration_submission_errors, request)
 
     if all([form.is_valid(), billing_address_form.is_valid(), residence_address_form.is_valid()]):

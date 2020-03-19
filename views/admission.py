@@ -59,51 +59,46 @@ STATES_CAN_UPLOAD_FILE = [
 
 @login_required
 def admission_detail(request, admission_uuid):
+    admission_submission_errors = []
     try:
         admission = api.get_admission(request, admission_uuid)
         registration = api.get_registration(request, admission_uuid)
     except Http404:
         registration = api.get_registration(request, admission_uuid)
         if registration and registration['state'] == admission_state_choices.ACCEPTED:
-            return redirect(reverse('registration_detail',
-                                    kwargs={'admission_uuid': admission_uuid if registration else ''}),
-                            )
-        else:
-            return Http404
+            return redirect(reverse(
+                'registration_detail',
+                kwargs={'admission_uuid': admission_uuid if registration else ''}
+            ))
+        return Http404
     if admission['state'] == admission_state_choices.ACCEPTED_NO_REGISTRATION_REQUIRED:
-        admission['state'] = admission_state_choices.ACCEPTED
+        admission['state'] = admission_state_choices.ACCEPTED # WTF ?
     if admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
         display_info_messages(
             request,
             _("Your admission request has been correctly submitted. The program manager will get back to you shortly.")
         )
-    if admission['state'] == admission_state_choices.DRAFT:
+    is_draft = admission['state'] == admission_state_choices.DRAFT
+    if is_draft:
         add_informations_message_on_submittable_file(
             request=request,
             title=_("Your admission file has been saved. Please consider the following information :")
         )
         admission_submission_errors, errors_fields = get_submission_errors(admission)
-        admission_is_submittable = not admission_submission_errors
-        if not admission_is_submittable:
+        if admission_submission_errors:
             _show_submit_warning(admission_submission_errors, request)
-    else:
-        admission_is_submittable = False
 
-    list_files = _get_files_list(
-        request,
-        admission,
-        FILES_URL % {'admission_uuid': str(admission_uuid)}
-    )
+    list_files = _get_files_list(request, admission, FILES_URL % {'admission_uuid': str(admission_uuid)})
     return render(
         request,
         "admission_detail.html",
         {
             'admission': admission,
-            'admission_is_submittable': admission_is_submittable,
+            'admission_is_submittable': not admission_submission_errors,
             'list_files': list_files,
             'states': {
-                'is_draft': admission['state'] == admission_state_choices.DRAFT,
+                'is_draft': is_draft,
                 'is_rejected': admission['state'] == admission_state_choices.REJECTED,
                 'is_waiting': admission['state'] == admission_state_choices.WAITING
             },
@@ -287,23 +282,18 @@ def _fill_forms_with_existing_data(admission, formation, request):
         instance=base_person,
         no_first_name_checked=request.POST.get('no_first_name', False)
     )
-    admissions = api.get_admission_list(request, person_information['uuid'])['results']
-    old_admission = _get_old_admission_if_exists(admissions, person_information, request)
-    current_address = admission['address'] if admission else None
-    address = current_address if current_address else (old_admission['address'] if old_admission else None)
+    old_admission = _get_old_admission_if_exists(person_information, request)
+    current_address = admission and admission['address']
+    address = current_address or (old_admission and old_admission['address'])
     address_form = AddressForm(request.POST or None, initial=address)
     return address_form, adm_form, id_form, person_form
 
 
-def _get_old_admission_if_exists(admissions, person_information, request):
-    old_admission = admissions[0] if admissions \
-        else api.get_registration_list(request, person_information['uuid'])['results']
-    if old_admission:
-        if admissions:
-            old_admission = api.get_admission(request, old_admission['uuid'])
-        else:
-            old_admission = api.get_registration(request, old_admission[0]['uuid'])
-    return old_admission
+def _get_old_admission_if_exists(person_information, request):
+    admissions = api.get_admission_list(request, person_information['uuid'])['results']
+    if admissions and admissions[0]:
+        return admissions[0]
+    return None
 
 
 def _update_or_create_admission(adm_form, admission, request):

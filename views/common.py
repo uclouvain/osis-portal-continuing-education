@@ -123,34 +123,20 @@ def get_submission_errors(admission, is_registration=False):
     errors = OrderedDict()
 
     if is_registration:
-
-        address_form = StrictAddressForm(
-            data=admission['billing_address']
-        )
-        adm_form = StrictRegistrationForm(
-            data=admission
-        )
+        address_form = StrictAddressForm(data=admission['billing_address'])
+        adm_form = StrictRegistrationForm(data=admission)
 
         _update_errors([address_form, adm_form], errors, errors_field)
 
         if not admission['use_address_for_post']:
-            residence_address_form = StrictAddressForm(
-                data=admission['residence_address']
-            )
+            residence_address_form = StrictAddressForm(data=admission['residence_address'])
             _update_errors([residence_address_form], errors, errors_field)
     else:
-        person_form = StrictPersonForm(
-            data=admission['person_information']['person'] if 'person' in admission['person_information'] else None
-        )
-        person_information_form = ContinuingEducationPersonForm(
-            data=admission['person_information']
-        )
-        address_form = StrictAddressForm(
-            data=admission['address']
-        )
-        adm_form = StrictAdmissionForm(
-            data=admission,
-        )
+        person_information = admission.get('person_information')
+        person_form = StrictPersonForm(data=person_information.get('person'))
+        person_information_form = ContinuingEducationPersonForm(data=person_information)
+        address_form = StrictAddressForm(data=admission['address'])
+        adm_form = StrictAdmissionForm(data=admission)
         forms = [person_form, person_information_form, address_form, adm_form]
         _update_errors(forms, errors, errors_field)
 
