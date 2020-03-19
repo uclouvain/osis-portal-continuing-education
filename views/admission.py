@@ -291,9 +291,7 @@ def _fill_forms_with_existing_data(admission, formation, request):
 
 def _get_old_admission_if_exists(person_information, request):
     admissions = api.get_admission_list(request, person_information['uuid'])['results']
-    if admissions and admissions[0]:
-        return admissions[0]
-    return None
+    return admissions and admissions[0]
 
 
 def _update_or_create_admission(adm_form, admission, request):
