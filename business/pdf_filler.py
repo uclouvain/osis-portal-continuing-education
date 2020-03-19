@@ -156,6 +156,7 @@ def _update_form_field(annotation, data_dict, key):
         annotation.update(
             pdfrw.PdfDict(V='{}'.format(data_dict[key]))
         )
+    annotation.update(pdfrw.PdfDict(Ff=1))
 
 
 def _checkbox_selection_status(value, expected_value):
