@@ -204,32 +204,25 @@ class AdmissionForm(Form):
 
     def __init__(self, *args, **kwargs):
         formation = kwargs.pop('formation', None)
-
+        self.initial = kwargs.get('data', kwargs.get('initial'))
         super(AdmissionForm, self).__init__(*args, **kwargs)
         if formation:
             self.initial['formation'] = (formation['education_group']['acronym'], _format_training_title(formation))
             self.fields['formation'].choices = [self.initial['formation']]
-        elif self.initial:
+        if self.initial:
             self._set_initial_fields()
         self.fields['additional_information'].widget.attrs['placeholder'] = _(
             "Write down here the answers to further questions related to the chosen training"
         )
 
     def _set_initial_fields(self):
-        fields_to_set = [('citizenship', 'name', 'iso_code'), ('formation', ['acronym', 'title'], 'uuid')]
+        fields_to_set = [('citizenship', 'name', 'iso_code')]
         for field, attribute, slug in fields_to_set:
             if self.initial.get(field):
                 if isinstance(attribute, str):
                     self.initial[field] = (
                         self.initial[field][slug],
                         self.initial[field][attribute]
-                    )
-                elif isinstance(attribute, list):
-                    self.initial[field] = (
-                        self.initial[field][slug],
-                        _format_training_title(
-                            self.initial[field]
-                        ) if field == 'formation' else self.initial[field][attribute]
                     )
                 self.fields[field].choices = [self.initial[field]]
 
@@ -243,7 +236,7 @@ class StrictAdmissionForm(AdmissionForm):
     )
 
     def __init__(self, data, **kwargs):
-        super().__init__(data, **kwargs)
+        super().__init__(data=data, **kwargs)
 
         required_fields = [
             'citizenship',

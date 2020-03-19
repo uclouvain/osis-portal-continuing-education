@@ -154,8 +154,8 @@ def _has_instance_with_values(instance):
 @login_required
 def admission_form(request, admission_uuid=None):
     admission = _get_admission_or_403(admission_uuid, request)
-    formation = _get_formation(request)
-    registration_required = admission['formation']['registration_required'] if admission else False
+    formation = _get_formation(request, admission)
+    registration_required = formation.get('registration_required', False) if formation else True
     address_form, adm_form, id_form, person_form = _fill_forms_with_existing_data(admission, formation, request)
     forms_valid = all([adm_form.is_valid(), person_form.is_valid(), address_form.is_valid(), id_form.is_valid()])
     billing_address_form, registration, registration_form, forms_valid = _get_billing_datas(
@@ -180,9 +180,6 @@ def admission_form(request, admission_uuid=None):
         )
 
         admission = _update_or_create_admission(adm_form, admission, request)
-        registration_required = api.get_continuing_education_training_by_uuid(
-            request, admission['formation']
-        ).get('registration_required', registration_required)
         registration = registration or {'uuid': admission['uuid'], 'address': admission['address']}
         _update_billing_informations(
             request, {
@@ -255,17 +252,20 @@ def _get_admission_or_403(admission_uuid, request):
     return admission
 
 
-def _get_formation(request):
-    formation = None
-    if request.session.get('acronym'):
-        formation = api.get_continuing_education_training(request, request.session.get('acronym'))
-    return formation
+def _get_formation(request, admission=None):
+    if admission and 'education_group' in admission['formation']:
+        return admission['formation']
+    elif admission and 'formation' in admission:
+        uuid, acronym = admission['formation']
+        return api.get_continuing_education_training(request, acronym)
+    elif request.session.get('acronym'):
+        acronym = request.session.get('acronym')
+        return api.get_continuing_education_training(request, acronym)
 
 
 def _is_admission_submittable_and_show_errors(admission, errors_fields, request):
     if admission and not request.POST:
-        formation_uuid, formation_acronym = admission['formation']
-        admission['formation_info'] = get_continuing_education_training(request, formation_acronym)
+        admission['formation_info'] = _get_formation(request, admission)
         admission_submission_errors, errors_fields = get_submission_errors(admission)
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
@@ -275,6 +275,7 @@ def _is_admission_submittable_and_show_errors(admission, errors_fields, request)
 
 def _fill_forms_with_existing_data(admission, formation, request):
     person_information = api.get_continuing_education_person(request)
+    person_information.get('person').pop('uuid')
     Person.objects.filter(user=request.user).update(**person_information.get('person'))
     base_person = Person.objects.get(user=request.user)
     person_form = ContinuingEducationPersonForm(
