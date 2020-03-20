@@ -187,9 +187,7 @@ class StrictRegistrationForm(RegistrationForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        if not cleaned_data.get('national_registry_number') and \
-                not cleaned_data.get('id_card_number') and \
-                not cleaned_data.get('passport_number'):
+        datas = [cleaned_data.get(field) for field in ['national_registry_number', 'id_card_number', 'passport_number']]
+        if not any(datas):
             self.add_error('national_registry_number', 'national_registry_number')
-
         return cleaned_data
