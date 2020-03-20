@@ -59,7 +59,7 @@ STATES_CAN_UPLOAD_FILE = [
 
 @login_required
 def admission_detail(request, admission_uuid):
-    admission_submission_errors = []
+    admission_is_submittable = False
     try:
         admission = api.get_admission(request, admission_uuid)
         registration = api.get_registration(request, admission_uuid)
@@ -72,7 +72,7 @@ def admission_detail(request, admission_uuid):
             ))
         return Http404
     if admission['state'] == admission_state_choices.ACCEPTED_NO_REGISTRATION_REQUIRED:
-        admission['state'] = admission_state_choices.ACCEPTED  # WTF ?
+        admission['state'] = admission_state_choices.ACCEPTED     # WTF ?
     if admission['state'] == admission_state_choices.SUBMITTED:
         add_contact_for_edit_message(request, formation=admission['formation'])
         display_info_messages(
@@ -82,11 +82,11 @@ def admission_detail(request, admission_uuid):
     is_draft = admission['state'] == admission_state_choices.DRAFT
     if is_draft:
         add_informations_message_on_submittable_file(
-            request=request,
-            title=_("Your admission file has been saved. Please consider the following information :")
+            request=request, title=_("Your admission file has been saved. Please consider the following information :")
         )
         admission_submission_errors, errors_fields = get_submission_errors(admission)
-        if admission_submission_errors:
+        admission_is_submittable = not admission_submission_errors
+        if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
 
     list_files = _get_files_list(request, admission, FILES_URL % {'admission_uuid': str(admission_uuid)})
@@ -95,7 +95,7 @@ def admission_detail(request, admission_uuid):
         "admission_detail.html",
         {
             'admission': admission,
-            'admission_is_submittable': not admission_submission_errors,
+            'admission_is_submittable': admission_is_submittable,
             'list_files': list_files,
             'states': {
                 'is_draft': is_draft,
