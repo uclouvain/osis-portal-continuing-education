@@ -260,6 +260,8 @@ def _get_formation(request, admission=None):
         if isinstance(formation, dict) and formation.get('education_group'):
             return formation
         _, acronym = formation or (None, session_acronym)
+        if request.POST:
+            acronym = request.POST.get('formation')
         return api.get_continuing_education_training(request, acronym)
 
 
