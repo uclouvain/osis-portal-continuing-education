@@ -253,13 +253,13 @@ def _get_admission_or_403(admission_uuid, request):
 
 
 def _get_formation(request, admission=None):
-    if admission and 'education_group' in admission['formation']:
-        return admission['formation']
-    elif admission and 'formation' in admission:
-        uuid, acronym = admission['formation']
-        return api.get_continuing_education_training(request, acronym)
-    elif request.session.get('acronym'):
-        acronym = request.session.get('acronym')
+    formation = admission and admission.get('formation')
+    session_acronym = request.session.get('acronym')
+
+    if formation or session_acronym:
+        if isinstance(formation, dict) and formation.get('education_group'):
+            return formation
+        _, acronym = formation or (None, session_acronym)
         return api.get_continuing_education_training(request, acronym)
 
 
