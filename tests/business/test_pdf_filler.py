@@ -34,6 +34,14 @@ from continuing_education.models.enums.admission_state_choices import REGISTRATI
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 
+FORMATION_LOCATION = 'rue dadada'
+FORMATION_POSTAL_CODE = '5501'
+FORMATION_CITY = 'Lisogne'
+FORMATION_COUNTRY_NAME = 'Bangladesh'
+
+FIRST_MANAGER_LAST_NAME = 'De Grove'
+FIRST_MANAGER_FIRST_NAME = 'Marc'
+
 
 class PdfFillerTestCase(TestCase):
     @classmethod
@@ -58,6 +66,15 @@ class PdfFillerTestCase(TestCase):
                                         '_address_city',
                                         '_address_country'
                                         ]
+        cls.formation_data_dict = {
+            'managers': [
+                {'first_name': FIRST_MANAGER_FIRST_NAME, 'last_name': FIRST_MANAGER_LAST_NAME},
+                {'first_name': 'Ophélie', 'last_name': 'Goossens'},
+                ],
+            'postal_address': {'location': FORMATION_LOCATION,
+                               'postal_code': FORMATION_POSTAL_CODE,
+                               'city': FORMATION_CITY, 'country': {'name': FORMATION_COUNTRY_NAME}},
+            }
 
     def test_checkbox_selection_status_is_selected(self):
         checkbox_status = pdf_filler._checkbox_selection_status("juste", "juste")
@@ -115,6 +132,41 @@ class PdfFillerTestCase(TestCase):
         for key in keys_expected:
             self.assertIsNotNone(results[key])
 
+    def test_build_manager_data_mandatory_keys(self):
+        result_dict = pdf_filler._build_manager_data(self.formation_data_dict)
+
+        keys_expected = [pdf_filler.MANAGER_NAME_KEY, pdf_filler.MANAGER_LOCATION_KEY,
+                         pdf_filler.MANAGER_POSTAL_CODE_KEY, pdf_filler.MANAGER_CITY_KEY,
+                         pdf_filler.MANAGER_COUNTRY_KEY]
+        for key in keys_expected:
+            self.assertTrue(key in result_dict)
+
+    def test_build_manager_data(self):
+        result_dict = pdf_filler._build_manager_data(self.formation_data_dict)
+        self.assertEqual(result_dict[pdf_filler.MANAGER_NAME_KEY],
+                         "{} {}".format(FIRST_MANAGER_FIRST_NAME, FIRST_MANAGER_LAST_NAME))
+        self.assertEqual(result_dict[pdf_filler.MANAGER_LOCATION_KEY], FORMATION_LOCATION)
+        self.assertEqual(result_dict[pdf_filler.MANAGER_POSTAL_CODE_KEY], FORMATION_POSTAL_CODE)
+        self.assertEqual(result_dict[pdf_filler.MANAGER_COUNTRY_KEY], FORMATION_COUNTRY_NAME)
+
+    def test_build_manager_no_postal_address(self):
+        formation_input_data = self.formation_data_dict.copy()
+        formation_input_data.pop('postal_address')
+
+        result_dict = pdf_filler._build_manager_data(formation_input_data)
+
+        self.assertEqual(result_dict[pdf_filler.MANAGER_LOCATION_KEY], '')
+        self.assertEqual(result_dict[pdf_filler.MANAGER_POSTAL_CODE_KEY], '')
+        self.assertEqual(result_dict[pdf_filler.MANAGER_COUNTRY_KEY], '')
+
+    def test_build_manager_no_managers(self):
+        formation_input_data = self.formation_data_dict.copy()
+        formation_input_data.pop('managers')
+
+        result_dict = pdf_filler._build_manager_data(formation_input_data)
+
+        self.assertEqual(result_dict[pdf_filler.MANAGER_NAME_KEY], '')
+
 
 class PdfFillerFieldsValuesTestCase(TestCase):
 
@@ -125,6 +177,7 @@ class PdfFillerFieldsValuesTestCase(TestCase):
             cls.registration = RegistrationDictFactory(person_information=cls.person_information,
                                                        state=REGISTRATION_SUBMITTED)
             cls.data = pdf_filler.get_data(cls.registration)
+
 
         def test_get_data_dict_complete(self):
             keys_expected = [
