@@ -224,13 +224,13 @@ def _get_one_manager(managers):
 
 
 def _build_manager_data(formation):
-    formation_postal_address = formation.get('postal_address')
+    formation_postal_address = formation.get('postal_address', {})
     return {
         MANAGER_NAME_KEY: _get_one_manager(formation.get('managers')),
-        MANAGER_LOCATION_KEY: formation_postal_address.get('location', '') if formation_postal_address else '',
+        MANAGER_LOCATION_KEY: formation_postal_address.get('location', ''),
         MANAGER_POSTAL_CODE_KEY:
-            formation_postal_address.get('postal_code', '') if formation_postal_address else '',
-        MANAGER_CITY_KEY: formation_postal_address.get('city', '') if formation_postal_address else '',
+            formation_postal_address.get('postal_code', ''),
+        MANAGER_CITY_KEY: formation_postal_address.get('city', ''),
         MANAGER_COUNTRY_KEY:
-            formation_postal_address.get('country', '').get('name', '') if formation_postal_address else ''
+            formation_postal_address.get('country', {}).get('name', '')
     }
