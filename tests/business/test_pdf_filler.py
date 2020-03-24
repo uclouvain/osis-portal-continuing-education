@@ -34,16 +34,12 @@ from continuing_education.models.enums.admission_state_choices import REGISTRATI
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 
+FORMATION_LOCATION = 'rue dadada'
+FORMATION_POSTAL_CODE = '5501'
+FORMATION_CITY = 'Lisogne'
 FORMATION_COUNTRY_NAME = 'Bangladesh'
 
-FORMATION_CITY = 'Lisogne'
-
-FORMATION_POSTAL_CODE = '5501'
-
-FORMATION_LOCATION = 'rue dadada'
-
 FIRST_MANAGER_LAST_NAME = 'De Grove'
-
 FIRST_MANAGER_FIRST_NAME = 'Marc'
 
 
