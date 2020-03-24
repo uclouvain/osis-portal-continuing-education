@@ -47,6 +47,12 @@ EMPTY_VALUE = '-'
 
 MARITAL_STATUS = ["SINGLE", "MARRIED", "WIDOWED", "DIVORCED", "SEPARATED", "LEGAL_COHABITANT"]
 
+MANAGER_NAME_KEY = 'manager_name'
+MANAGER_LOCATION_KEY = 'manager_address_location'
+MANAGER_POSTAL_CODE_KEY = 'manager_address_postal_code'
+MANAGER_CITY_KEY = 'manager_address_city'
+MANAGER_COUNTRY_KEY = 'manager_address_country'
+
 
 def get_data(admission):
     person_information = admission['person_information']
@@ -95,7 +101,7 @@ def get_data(admission):
     data_dict.update(_build_professional_status(admission.get('professional_status')))
     data_dict.update(_build_marital_status(admission.get('marital_status')))
     data_dict.update(_build_address(admission.get('address', _build_empty_address()), 'contact'))
-    data_dict.update(_build_address(admission.get('postal_address', _build_empty_address()), 'postal'))
+    data_dict.update(_build_manager_data(admission.get('formation')))
 
     if residence_address:
         data_dict.update(_build_address(residence_address, 'residence'))
@@ -206,4 +212,25 @@ def _build_professional_status(professional_status):
         'other_check': _checkbox_selection_status(professional_status, "OTHER"),
         'seeking_job_on': seeking_job_on,
         'seeking_job_off': seeking_job_off
+    }
+
+
+def _get_one_manager(managers):
+    if managers and isinstance(managers, list):
+        for manager in managers:
+            if manager.get('first_name') and manager.get('last_name'):
+                return "{} {}".format(manager.get('first_name'), manager.get('last_name'))
+    return ''
+
+
+def _build_manager_data(formation):
+    formation_postal_address = formation.get('postal_address')
+    return {
+        MANAGER_NAME_KEY: _get_one_manager(formation.get('managers')),
+        MANAGER_LOCATION_KEY: formation_postal_address.get('location', '') if formation_postal_address else '',
+        MANAGER_POSTAL_CODE_KEY:
+            formation_postal_address.get('postal_code', '') if formation_postal_address else '',
+        MANAGER_CITY_KEY: formation_postal_address.get('city', '') if formation_postal_address else '',
+        MANAGER_COUNTRY_KEY:
+            formation_postal_address.get('country', '').get('name', '') if formation_postal_address else ''
     }
