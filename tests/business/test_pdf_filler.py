@@ -193,21 +193,3 @@ class PdfFillerFieldsValuesTestCase(TestCase):
             ]
             for key in keys_expected:
                 self.assertIsNotNone(self.data[key])
-#
-
-#
-#
-#
-#
-#
-# def _build_manager_data(formation):
-#     formation_postal_address = formation.get('postal_address')
-#     return {
-#         'manager_name': _get_one_manager(formation.get('managers')),
-#         'manager_address_location': formation_postal_address.get('location', '') if formation_postal_address else '',
-#         'manager_address_postal_code':
-#             formation_postal_address.get('postal_code', '') if formation_postal_address else '',
-#         'manager_address_city': formation_postal_address.get('city', '') if formation_postal_address else '',
-#         'manager_address_country':
-#             formation_postal_address.get('country', '').get('name', '') if formation_postal_address else ''
-#     }
