@@ -265,7 +265,16 @@
             if(selected_option){
                 selected_option.value = address.country.iso_code;
                 selected_option.innerHTML = address.country.name;
+            } else {
+                let option = $("<option selected>");
+                option.val(address.country.iso_code);
+                option.html(address.country.name);
+                $("#id_" + e + "-country").append(option);
             }
+        }
+
+        function clear_country_option(e) {
+            $("#id_" + e + "-country option")[0].remove();
         }
 
         function copy_address(e) {
@@ -279,11 +288,11 @@
 
         function empty_address(e, address) {
             ["location", "postal_code", "city"].forEach(function (field) {
-                $("#id_" + e + "-" + field).val(address[field]);
+                $("#id_" + e + "-" + field).val('');
                 $("#id_" + e + "-" + field).prop("readonly", false);
             });
             $("#id_" + e + "-country").prop("disabled", false);
-            set_country_option(e, address);
+            clear_country_option(e);
         }
 
         //show missing fields in red
