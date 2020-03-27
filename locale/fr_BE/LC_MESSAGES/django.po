@@ -625,7 +625,7 @@ msgid "Private"
 msgstr "Privé"
 
 msgid "Professional"
-msgstr "Professionel"
+msgstr "Professionnel"
 
 msgid "Professional and personal interests"
 msgstr "Intérêts professionnels et personnels"

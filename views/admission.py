@@ -255,7 +255,6 @@ def _get_admission_or_403(admission_uuid, request):
 def _get_formation(request, admission=None):
     formation = admission and admission.get('formation')
     session_acronym = request.session.get('acronym')
-
     if formation or session_acronym:
         if isinstance(formation, dict) and formation.get('education_group'):
             return formation

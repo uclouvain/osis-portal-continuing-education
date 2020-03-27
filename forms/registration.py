@@ -104,58 +104,6 @@ class RegistrationForm(forms.Form):
         label=_("Residence phone")
     )
 
-    # Student Sheet
-    ucl_registration_complete = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_("Registration complete")
-    )
-    noma = forms.CharField(
-        max_length=255,
-        required=False,
-        label=_("NOMA")
-    )
-    payment_complete = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_("Payment complete")
-    )
-    formation_spreading = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_("Formation spreading")
-    )
-    prior_experience_validation = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_("Prior experience validation")
-    )
-    assessment_presented = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_("Assessment presented")
-    )
-    assessment_succeeded = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_("Assessment succeeded")
-    )
-    registration_file_received = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_("Registration file received")
-    )
-    archived = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_("Archived")
-    )
-    diploma_produced = forms.BooleanField(
-        initial=False,
-        required=False,
-        label=_("Diploma produced")
-    )
-
     def clean_residence_phone(self):
         return self.cleaned_data['residence_phone'].replace(' ', '')
 
