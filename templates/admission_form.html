@@ -296,7 +296,6 @@
         function copy_address(address, editable) {
             editable = editable | false;
             address = address || retrieve_form_contact_address();
-            console.log(address);
             ["location", "postal_code", "city"].forEach(function (field) {
                 const field_elem = $("#id_billing-" + field);
                 field_elem.val(address[field] || $("#id_" + field).val());
