@@ -288,7 +288,7 @@
                 city: $("#id_city").val(),
                 country: {
                     "iso_code": country_elem.val(),
-                    "name": country_elem.text()
+                    "name": country_elem.text().trim()
                 }
             };
         }
@@ -301,22 +301,17 @@
                 field_elem.val(address[field] || $("#id_" + field).val());
                 field_elem.prop("readonly", !editable);
             });
-            let selected_option = $("#id_billing-country option")[0];
-            if (selected_option) {
-                selected_option.value = address.country.iso_code;
-                selected_option.innerHTML = address.country.name;
-            } else {
-                let option = $("<option selected>");
-                option.val(address.country.iso_code);
-                option.html(address.country.name);
-                $("#id_billing-country").append(option);
-            }
+
+            let option = $("<option selected>");
+            option.val(address.country.iso_code);
+            option.text(address.country.name);
+            $("#id_billing-country").append(option);
             set_billing_country_value();
             $("#id_billing-country").prop("disabled", !editable);
         }
 
         function clear_country_option() {
-            $("#id_billing-country option")[0].remove();
+            $("#id_billing-country option").remove();
         }
 
         function empty_address() {
@@ -436,6 +431,10 @@
             }
         });
 
+        function compare_values(A, B) {
+            return JSON.stringify(A) === JSON.stringify(B);
+        }
+
         function get_additional_information(formation_acronym) {
             $.ajax({
                 url: '{% url 'get_formation_information' %}',
@@ -457,6 +456,14 @@
                     } else {
                         $("#billing_info").show();
                         $("#billing_info_divider").show();
+                        contact_address = retrieve_form_contact_address()
+                        if(billing_address && !compare_values(billing_address, contact_address)){
+                            $("[name='use_address_for_billing'][value='False']:radio").prop("checked", true);
+                            copy_address(billing_address, true);
+                        } else {
+                             $("[name='use_address_for_billing'][value='True']:radio").prop("checked", true);
+                            copy_address();
+                        }
                     }
                 }
             })
