@@ -325,18 +325,20 @@
 
         function set_billing_country_value(address=null) {
             const option = $('#id_country').find('option:last');
-            const selected_country = {
-                id: option.data('select2Id'),
-                value: option.val(),
-                name: address ? address.country.name : option[0].innerHTML
-            };
-            let select_billing_country = $("#id_billing-country");
-            let select2_container = $('#select2-id_billing-country-container');
-            if (select2_container && select_billing_country[0]) {
-                select_billing_country.find('option:last').val(selected_country.value);
-                select2_container[0].title = selected_country.name;
-                select2_container[0].lastChild.textContent = selected_country.name;
-                select2_container.children()[0].setAttribute('data-select2-id', selected_country.id);
+            if(option.length > 0){
+                 const selected_country = {
+                    id: option.data('select2Id'),
+                    value: option.val(),
+                    name: address ? address.country.name : option[0].innerHTML
+                };
+                let select_billing_country = $("#id_billing-country");
+                let select2_container = $('#select2-id_billing-country-container');
+                if (select2_container && select_billing_country[0]) {
+                    select_billing_country.find('option:last').val(selected_country.value);
+                    select2_container[0].title = selected_country.name;
+                    select2_container[0].lastChild.textContent = selected_country.name;
+                    select2_container.children()[0].setAttribute('data-select2-id', selected_country.id);
+                }
             }
         }
 
@@ -415,7 +417,7 @@
         let selected_formation_acronym = $("#id_formation").val();
 
         //trigger at first load
-        get_additional_information(selected_formation_acronym);
+        getAdditionalInformation(selected_formation_acronym);
 
         //listen changed value from dal autocomplete
         $('#id_formation').next().bind('DOMSubtreeModified', function () {
@@ -424,18 +426,27 @@
             if (formation_acronym !== selected_formation_acronym) {
                 selected_formation_acronym = formation_acronym;
                 if (formation_acronym) {
-                    get_additional_information(formation_acronym);
+                    getAdditionalInformation(formation_acronym);
                 } else {
                     $("#additional_tab").hide();
                 }
             }
         });
+        
+        function isDeepEmpty(obj){
+          if(typeof obj === 'object') {
+            return Object.keys(obj).length === 0 || Object.values(obj).every(v => isDeepEmpty(v));
+          } else if(typeof obj === 'string') {
+            return !obj.length
+          }
+          return false
+        }
 
-        function compare_values(A, B) {
+        function compareValues(A, B) {
             return JSON.stringify(A) === JSON.stringify(B);
         }
 
-        function get_additional_information(formation_acronym) {
+        function getAdditionalInformation(formation_acronym) {
             $.ajax({
                 url: '{% url 'get_formation_information' %}',
                 method: "GET",
@@ -456,8 +467,8 @@
                     } else {
                         $("#billing_info").show();
                         $("#billing_info_divider").show();
-                        contact_address = retrieve_form_contact_address()
-                        if(billing_address && !compare_values(billing_address, contact_address)){
+                        contact_address = retrieve_form_contact_address();
+                        if(!isDeepEmpty(billing_address) && !compareValues(billing_address, contact_address)){
                             $("[name='use_address_for_billing'][value='False']:radio").prop("checked", true);
                             copy_address(billing_address, true);
                         } else {
