@@ -224,7 +224,7 @@ def _get_one_manager(managers):
 
 
 def _build_manager_data(formation):
-    formation_postal_address = formation.get('postal_address', {})
+    formation_postal_address = formation.get('postal_address', {}) or {}
     return {
         MANAGER_NAME_KEY: _get_one_manager(formation.get('managers')),
         MANAGER_LOCATION_KEY: formation_postal_address.get('location', ''),
