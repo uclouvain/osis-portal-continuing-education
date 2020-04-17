@@ -1,0 +1,42 @@
+[
+{
+  "model": "osis_common.messagetemplate",
+  "fields": {
+    "reference": "continuing_education_account_ativation_html",
+    "subject": "Formation Continue UCLouvain - Activation de votre compte",
+    "template": "<p>Madame, Monsieur,</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Voici le lien pour confirmer la cr&eacute;ation de votre compte pour l&#39;acc&egrave;s &agrave; la plateforme d&#39;admission Formation Continue UCLouvain.</p>\r\n\r\n<p><a href=\"{{activation_link}}\">{{activation_link}}</a></p>\r\n\r\n<p>Si vous ne parvenez pas &agrave; cliquer sur le lien, vous pouvez le copier/coller dans votre navigateur internet.</p>\r\n\r\n<p>Veuillez, Madame, Monsieur, agr&eacute;er l&rsquo;expression de nos salutations distingu&eacute;es.</p>\r\n\r\n<p>Ceci est un message g&eacute;n&eacute;r&eacute; automatiquement, merci de ne pas y r&eacute;pondre.</p>",
+    "format": "HTML",
+    "language": "fr-be"
+  }
+},
+{
+  "model": "osis_common.messagetemplate",
+  "fields": {
+    "reference": "continuing_education_account_ativation_txt",
+    "subject": "Formation Continue UCLouvain - Activation de votre compte",
+    "template": "<p>Madame, Monsieur,</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Voici le lien pour confirmer la cr&eacute;ation de votre compte pour l&#39;acc&egrave;s &agrave; la plateforme d&#39;admission Formation Continue UCLouvain.</p>\r\n\r\n<p>{{activation_link}}</p>\r\n\r\n<p>Si vous ne parvenez pas &agrave; cliquer sur le lien, vous pouvez le copier/coller dans votre navigateur internet.</p>\r\n\r\n<p>Veuillez, Madame, Monsieur, agr&eacute;er l&rsquo;expression de nos salutations distingu&eacute;es.</p>\r\n\r\n<p>Ceci est un message g&eacute;n&eacute;r&eacute; automatiquement, merci de ne pas y r&eacute;pondre.</p>",
+    "format": "PLAIN",
+    "language": "fr-be"
+  }
+},
+{
+  "model": "osis_common.messagetemplate",
+  "fields": {
+    "reference": "continuing_education_password_reset_txt",
+    "subject": "Formation Continue UCLouvain - Remplacement du mot de passe",
+    "template": "<p>Madame, Monsieur,</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Voici le lien permettant de modifier votre mot de passe pour la plateforme d&#39;admission Formation Continue UCLouvain.</p>\r\n\r\n<p>{{ change_password_url }}</p>\r\n\r\n<p>Si vous ne parvenez pas &agrave; cliquer sur le lien, vous pouvez le copier/coller dans votre navigateur internet.</p>\r\n\r\n<p>Veuillez, Madame, Monsieur, agr&eacute;er l&rsquo;expression de nos salutations distingu&eacute;es.</p>\r\n\r\n<p>Ceci est un message g&eacute;n&eacute;r&eacute; automatiquement, merci de ne pas y r&eacute;pondre.</p>",
+    "format": "PLAIN",
+    "language": "fr-be"
+  }
+},
+{
+  "model": "osis_common.messagetemplate",
+  "fields": {
+    "reference": "continuing_education_password_reset_html",
+    "subject": "Formation Continue UCLouvain - Remplacement du mot de passe",
+    "template": "<p>Madame, Monsieur,</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Voici le lien permettant de modifier votre mot de passe pour la plateforme d&#39;admission Formation Continue UCLouvain.</p>\r\n\r\n<p><a href=\"{{ change_password_url }}\">{{ change_password_url }}</a></p>\r\n\r\n<p>Si vous ne parvenez pas &agrave; cliquer sur le lien, vous pouvez le copier/coller dans votre navigateur internet.</p>\r\n\r\n<p>Veuillez, Madame, Monsieur, agr&eacute;er l&rsquo;expression de nos salutations distingu&eacute;es.</p>\r\n\r\n<p>Ceci est un message g&eacute;n&eacute;r&eacute; automatiquement, merci de ne pas y r&eacute;pondre.</p>",
+    "format": "HTML",
+    "language": "fr-be"
+  }
+}
+]
