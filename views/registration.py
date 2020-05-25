@@ -35,6 +35,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from base.models import person as mdl_person
+from base.models.person import Person
 from base.views import common
 from continuing_education.business.pdf_filler import write_fillable_pdf, get_data
 from continuing_education.forms.account import ContinuingEducationPersonForm
@@ -107,6 +108,9 @@ def registration_edit(request, admission_uuid):
         initial=registration['residence_address'],
         prefix="residence"
     )
+    person_information = api.get_continuing_education_person(request)
+    person_information.get('person').pop('uuid')
+    Person.objects.filter(user=request.user).update(**person_information.get('person'))
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)
     person_information = api.get_continuing_education_person(request)
