@@ -356,7 +356,13 @@
 
         function enableFields(fields) {
             for (let field of fields) {
-                $("#id_" + field).prop("disabled", false);
+                $(`#id_${field}`).prop("disabled", false);
+            }
+        }
+
+        function disableFields(fields) {
+            for (let field of fields) {
+                $(`#id_${field}`).prop("disabled", true);
             }
         }
 
@@ -498,5 +504,19 @@
             $("#form").remove('#no-first-name-input');
         }
     });
+
+    registration_field = $('#id_registration_type')
+
+    registration_field.change(function(){
+        const companyFields = ['head_office_name', 'company_number', 'vat_number'];
+        if(this.value === 'PRIVATE'){
+            disableFields(companyFields);
+        } else if(this.value === 'PROFESSIONAL') {
+            enableFields(companyFields);
+        }
+    });
+
+    // trigger change after view init
+    registration_field.change();
 </script>
 {% endblock %}
