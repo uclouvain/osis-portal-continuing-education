@@ -60,7 +60,7 @@ def get_data(admission):
 
     residence_address = admission.get('residence_address', None)
 
-    if residence_address and admission.get('use_address_for_post'):
+    if residence_address and not admission.get('use_address_for_post'):
         receive_letter_at_home = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
         receive_letter_at_residence = pdfrw.PdfName(CHECKBOX_SELECTED)
     else:
@@ -73,6 +73,8 @@ def get_data(admission):
         'academic_year': admission.get('academic_yr', EMPTY_VALUE),
         'last_name': person.get('last_name', EMPTY_VALUE),
         'first_name': person.get('first_name', EMPTY_VALUE),
+        'card_command_last_name': person.get('last_name', EMPTY_VALUE),
+        'card_command_first_name': person.get('first_name', EMPTY_VALUE),
         'birth_date': birth_date,
         'birth_location': _capitalize(person_information.get('birth_location')),
         'birth_country': _capitalize(person_information.get('birth_country').get('name')) if person_information.get(
@@ -95,6 +97,8 @@ def get_data(admission):
         'receive_letter_at_residence': receive_letter_at_residence,
         'last_degree_graduation_year': admission.get('last_degree_graduation_year', EMPTY_VALUE),
         'high_school_graduation_year': admission.get('high_school_graduation_year', EMPTY_VALUE),
+        'box_faculty_training_name': _get_education_group(admission).get('title', EMPTY_VALUE),
+        'box_faculty_training_code': _get_education_group(admission).get('acronym', EMPTY_VALUE),
 
         'procedure_66U': pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
     }
@@ -106,6 +110,13 @@ def get_data(admission):
     if residence_address:
         data_dict.update(_build_address(residence_address, 'residence'))
     return data_dict
+
+
+def _get_education_group(admission):
+    try:
+        return admission['formation']['education_group']
+    except KeyError:
+        return {}
 
 
 def _format_birth_date(person_information):

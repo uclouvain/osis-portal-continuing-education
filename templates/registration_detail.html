@@ -62,7 +62,7 @@
             </span>
         {% endif %}
         {% if is_registration_submitted %}
-            <a class="btn btn-default btn-space pull-right"
+            <a class="btn btn-success btn-space pull-right"
                href="{% url 'registration_pdf' admission_uuid=admission_uuid %}">
                 <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> {% trans 'Generate PDF' %}
             </a>
