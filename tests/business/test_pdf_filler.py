@@ -24,14 +24,15 @@
 #
 ##############################################################################
 
-import pdfrw
 import random
+
+import pdfrw
 from django.test import TestCase
 
-from continuing_education.business import pdf_filler
-from continuing_education.tests.factories.admission import RegistrationDictFactory
-from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
 from base.tests.factories.person import PersonFactory
+from continuing_education.business import pdf_filler
+from continuing_education.models.enums.admission_state_choices import REGISTRATION_SUBMITTED
+from continuing_education.tests.factories.admission import RegistrationDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 
 FORMATION_LOCATION = 'rue dadada'
@@ -169,27 +170,27 @@ class PdfFillerTestCase(TestCase):
 
 
 class PdfFillerFieldsValuesTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.person = PersonFactory()
+        cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
+        cls.registration = RegistrationDictFactory(person_information=cls.person_information,
+                                                   state=REGISTRATION_SUBMITTED)
+        cls.data = pdf_filler.get_data(cls.registration)
 
-        @classmethod
-        def setUpTestData(cls):
-            cls.person = PersonFactory()
-            cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
-            cls.registration = RegistrationDictFactory(person_information=cls.person_information,
-                                                       state=REGISTRATION_SUBMITTED)
-            cls.data = pdf_filler.get_data(cls.registration)
-
-
-        def test_get_data_dict_complete(self):
-            keys_expected = [
-                'last_name', 'first_name', 'birth_date','birth_location', 'birth_country', 'citizenship',
-                'national_registry_number', 'id_card_number', 'passport_number', 'gender_image_f', 'gender_image_m',
-                'marital_single_check', 'marital_married_check', 'marital_widowed_check', 'marital_divorced_check',
-                'marital_separated_check', 'marital_legal_cohabitant_check', 'spouse_name', 'children_number',
-                'previous_noma', 'mobile', 'private_email', 'contact_address_location', 'contact_address_postal_code',
-                'contact_address_city', 'contact_address_country', 'residence_address_location',
-                'residence_address_postal_code', 'residence_address_city', 'residence_address_country',
-                'residence_phone', 'receive_letter_at_home', 'receive_letter_at_residence', 'employee_check',
-                'self_employed_check', 'job_seeker_check', 'other_check', 'seeking_job_on', 'seeking_job_off'
-            ]
-            for key in keys_expected:
-                self.assertIsNotNone(self.data[key])
+    def test_get_data_dict_complete(self):
+        keys_expected = [
+            'last_name', 'first_name', 'birth_date','birth_location', 'birth_country', 'citizenship',
+            'national_registry_number', 'id_card_number', 'passport_number', 'gender_image_f', 'gender_image_m',
+            'marital_single_check', 'marital_married_check', 'marital_widowed_check', 'marital_divorced_check',
+            'marital_separated_check', 'marital_legal_cohabitant_check', 'spouse_name', 'children_number',
+            'previous_noma', 'mobile', 'private_email', 'contact_address_location', 'contact_address_postal_code',
+            'contact_address_city', 'contact_address_country', 'residence_address_location',
+            'residence_address_postal_code', 'residence_address_city', 'residence_address_country',
+            'residence_phone', 'receive_letter_at_home', 'receive_letter_at_residence', 'employee_check',
+            'self_employed_check', 'job_seeker_check', 'other_check', 'seeking_job_on', 'seeking_job_off',
+            'procedure_66U', 'box_faculty_training_manager_name', 'box_faculty_training_code',
+            'box_faculty_training_name'
+        ]
+        for key in keys_expected:
+            self.assertIsNotNone(self.data[key])
