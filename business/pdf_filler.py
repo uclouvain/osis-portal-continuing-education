@@ -99,7 +99,7 @@ def get_data(admission):
         'high_school_graduation_year': admission.get('high_school_graduation_year', EMPTY_VALUE),
         'box_faculty_training_name': _get_education_group(admission).get('title', EMPTY_VALUE),
         'box_faculty_training_code': _get_education_group(admission).get('acronym', EMPTY_VALUE),
-
+        'box_faculty_training_manager_name': _get_one_manager(admission.get('formation').get('managers')),
         'procedure_66U': pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
     }
     data_dict.update(_build_professional_status(admission.get('professional_status')))
@@ -138,6 +138,7 @@ def write_fillable_pdf(data_dict):
     template_pdf = _get_pdf_template()
     if template_pdf:
         _update_pdf_fields(data_dict, template_pdf)
+        template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
         pdfrw.PdfWriter().write(buf, template_pdf)
         return buf.getvalue()
     return None
@@ -167,13 +168,9 @@ def _check_pdf_annotations(annotations, data_dict):
 
 
 def _update_form_field(annotation, data_dict, key):
-    if annotation[ANNOT_BUTTON_KEY][1:-1] == "Bt":
-        annotation.update(pdfrw.PdfDict(AS=data_dict[key]))
-    else:
-        annotation.update(
-            pdfrw.PdfDict(V='{}'.format(data_dict[key]))
-        )
-    annotation.update(pdfrw.PdfDict(Ff=1))
+    annotation.update(
+        pdfrw.PdfDict(V='{}'.format(data_dict[key]), AS=data_dict[key], Ff=1)
+    )
 
 
 def _checkbox_selection_status(value, expected_value):
