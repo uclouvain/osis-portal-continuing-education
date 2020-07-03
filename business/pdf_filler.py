@@ -51,16 +51,18 @@ def get_data(admission):
 
     residence_address = admission.get('residence_address', None)
 
+    data_dict = {}
     if residence_address and not admission.get('use_address_for_post'):
         receive_letter_at_home = CHECKBOX_NOT_SELECTED
         receive_letter_at_residence = CHECKBOX_SELECTED
+        data_dict.update(_build_address(residence_address, 'residence'))
     else:
         receive_letter_at_home = CHECKBOX_SELECTED
         receive_letter_at_residence = CHECKBOX_NOT_SELECTED
 
     birth_date = _format_birth_date(person_information)
 
-    data_dict = {
+    data_dict.update({
         'academic_year': admission.get('academic_yr', EMPTY_VALUE),
         'last_name': person.get('last_name', EMPTY_VALUE),
         'first_name': person.get('first_name', EMPTY_VALUE),
@@ -92,14 +94,12 @@ def get_data(admission):
         'box_faculty_training_code': _get_education_group(admission).get('acronym', EMPTY_VALUE),
         'box_faculty_training_manager_name': _get_one_manager(admission.get('formation').get('managers')),
         'procedure_66U': CHECKBOX_NOT_SELECTED
-    }
+    })
     data_dict.update(_build_professional_status(admission.get('professional_status')))
     data_dict.update(_build_marital_status(admission.get('marital_status')))
     data_dict.update(_build_address(admission.get('address', _build_empty_address()), 'contact'))
     data_dict.update(_build_manager_data(admission.get('formation')))
 
-    if residence_address and not admission.get('use_address_for_post'):
-        data_dict.update(_build_address(residence_address, 'residence'))
     return data_dict
 
 
