@@ -89,12 +89,13 @@ def get_data(admission):
         'receive_letter_at_home': receive_letter_at_home,
         'receive_letter_at_residence': receive_letter_at_residence,
         'last_degree_graduation_year': admission.get('last_degree_graduation_year', EMPTY_VALUE) or EMPTY_VALUE,
-        'high_school_graduation_year': admission.get('high_school_graduation_year', EMPTY_VALUE),
+        'high_school_graduation_year': admission.get('high_school_graduation_year', EMPTY_VALUE) or EMPTY_VALUE,
         'box_faculty_training_name': _get_education_group(admission).get('title', EMPTY_VALUE),
         'box_faculty_training_code': _get_education_group(admission).get('acronym', EMPTY_VALUE),
         'box_faculty_training_manager_name': _get_one_manager(admission.get('formation').get('managers')),
         'procedure_66U': CHECKBOX_NOT_SELECTED
     })
+
     data_dict.update(_build_professional_status(admission.get('professional_status')))
     data_dict.update(_build_marital_status(admission.get('marital_status')))
     data_dict.update(_build_address(admission.get('address', _build_empty_address()), 'contact'))
