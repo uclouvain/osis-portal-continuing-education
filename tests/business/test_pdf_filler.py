@@ -180,7 +180,7 @@ class PdfFillerFieldsValuesTestCase(TestCase):
 
     def test_get_data_dict_complete(self):
         keys_expected = [
-            'last_name', 'first_name', 'birth_date','birth_location', 'birth_country', 'citizenship',
+            'last_name', 'first_name', 'birth_date', 'birth_location', 'birth_country', 'citizenship',
             'national_registry_number', 'id_card_number', 'passport_number', 'gender_image_f', 'gender_image_m',
             'marital_single_check', 'marital_married_check', 'marital_widowed_check', 'marital_divorced_check',
             'marital_separated_check', 'marital_legal_cohabitant_check', 'spouse_name', 'children_number',

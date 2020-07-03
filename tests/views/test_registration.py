@@ -250,11 +250,10 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertEqual(post_response.status_code, 401)
         self.assertTemplateUsed(post_response, 'access_denied.html')
 
-    @mock.patch('continuing_education.business.pdf_filler._get_pdf_template')
-    def test_pdf_content(self, mock_pdf_template):
-        mock_pdf_template = self.mock_pdf_template_return()
+    @mock.patch('continuing_education.views.registration.write_fillable_pdf', return_value='test')
+    def test_pdf_content(self, mock_pdf):
         self.mocked_called_api_function_get.return_value = self.registration_submitted
-        self.mocked_called_api_function_get.return_value['person_information']['birth_date']="2019-10-17"
+        self.mocked_called_api_function_get.return_value['person_information']['birth_date'] = "2019-10-17"
         a_superuser = SuperUserFactory()
         self.client.force_login(a_superuser)
         url = reverse('registration_pdf', args=[self.registration_submitted['uuid']])
