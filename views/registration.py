@@ -159,7 +159,6 @@ def generate_pdf_registration(request, admission_uuid):
     )
 
     result = write_fillable_pdf(get_data(admission))
-    # print(result)
     if result:
         # Creating http response
         response = HttpResponse(content_type='application/pdf;')
