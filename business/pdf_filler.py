@@ -26,22 +26,13 @@
 import datetime
 import io
 
-import pdfrw
+import pypdftk
 from django.conf import settings
 
 CHECKBOX_NOT_SELECTED = 'Off'
 CHECKBOX_SELECTED = 'Yes'
-CHECK_SIZE = 3
 
 REGISTRATION_TEMPLATE_PATH = '/continuing_education/business/templates/form_SIC_times.pdf'
-
-ANNOT_KEY = '/Annots'
-ANNOT_FIELD_KEY = '/T'
-ANNOT_BUTTON_KEY = '/FT'
-ANNOT_VAL_KEY = '/V'
-ANNOT_RECT_KEY = '/Rect'
-SUBTYPE_KEY = '/Subtype'
-WIDGET_SUBTYPE_KEY = '/Widget'
 
 EMPTY_VALUE = '-'
 
@@ -61,11 +52,11 @@ def get_data(admission):
     residence_address = admission.get('residence_address', None)
 
     if residence_address and not admission.get('use_address_for_post'):
-        receive_letter_at_home = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
-        receive_letter_at_residence = pdfrw.PdfName(CHECKBOX_SELECTED)
+        receive_letter_at_home = CHECKBOX_NOT_SELECTED
+        receive_letter_at_residence = CHECKBOX_SELECTED
     else:
-        receive_letter_at_home = pdfrw.PdfName(CHECKBOX_SELECTED)
-        receive_letter_at_residence = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+        receive_letter_at_home = CHECKBOX_SELECTED
+        receive_letter_at_residence = CHECKBOX_NOT_SELECTED
 
     birth_date = _format_birth_date(person_information)
 
@@ -95,19 +86,19 @@ def get_data(admission):
         'residence_phone': admission.get('residence_phone', EMPTY_VALUE),
         'receive_letter_at_home': receive_letter_at_home,
         'receive_letter_at_residence': receive_letter_at_residence,
-        'last_degree_graduation_year': admission.get('last_degree_graduation_year', EMPTY_VALUE),
+        'last_degree_graduation_year': admission.get('last_degree_graduation_year', EMPTY_VALUE) or EMPTY_VALUE,
         'high_school_graduation_year': admission.get('high_school_graduation_year', EMPTY_VALUE),
         'box_faculty_training_name': _get_education_group(admission).get('title', EMPTY_VALUE),
         'box_faculty_training_code': _get_education_group(admission).get('acronym', EMPTY_VALUE),
         'box_faculty_training_manager_name': _get_one_manager(admission.get('formation').get('managers')),
-        'procedure_66U': pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+        'procedure_66U': CHECKBOX_NOT_SELECTED
     }
     data_dict.update(_build_professional_status(admission.get('professional_status')))
     data_dict.update(_build_marital_status(admission.get('marital_status')))
     data_dict.update(_build_address(admission.get('address', _build_empty_address()), 'contact'))
     data_dict.update(_build_manager_data(admission.get('formation')))
 
-    if residence_address:
+    if residence_address and not admission.get('use_address_for_post'):
         data_dict.update(_build_address(residence_address, 'residence'))
     return data_dict
 
@@ -135,47 +126,16 @@ def _build_empty_address():
 
 def write_fillable_pdf(data_dict):
     buf = io.BytesIO()
-    template_pdf = _get_pdf_template()
-    if template_pdf:
-        _update_pdf_fields(data_dict, template_pdf)
-        template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
-        pdfrw.PdfWriter().write(buf, template_pdf)
-        return buf.getvalue()
-    return None
-
-
-def _get_pdf_template():
     input_pdf_path = "{}{}".format(settings.BASE_DIR, REGISTRATION_TEMPLATE_PATH)
-    try:
-        template_pdf = pdfrw.PdfReader(input_pdf_path)
-    except pdfrw.errors.PdfParseError:
-        return None
-    return template_pdf
-
-
-def _update_pdf_fields(data_dict, template_pdf):
-    for page in template_pdf.pages:
-        annotations = page[ANNOT_KEY]
-        _check_pdf_annotations(annotations, data_dict)
-
-
-def _check_pdf_annotations(annotations, data_dict):
-    for annotation in annotations:
-        if annotation[SUBTYPE_KEY] == WIDGET_SUBTYPE_KEY and annotation[ANNOT_FIELD_KEY]:
-            key = annotation[ANNOT_FIELD_KEY][1:-1]
-            if key in data_dict.keys():
-                _update_form_field(annotation, data_dict, key)
-
-
-def _update_form_field(annotation, data_dict, key):
-    annotation.update(
-        pdfrw.PdfDict(V='{}'.format(data_dict[key]), AS=data_dict[key], Ff=1)
-    )
+    pdf = pypdftk.fill_form(input_pdf_path, datas=data_dict, flatten=True)
+    with open(pdf, mode='rb') as f:
+        buf.write(f.read())
+        return buf.getvalue()
 
 
 def _checkbox_selection_status(value, expected_value):
     return \
-        pdfrw.PdfName(CHECKBOX_SELECTED) if value and value == expected_value else pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+        CHECKBOX_SELECTED if value and value == expected_value else CHECKBOX_NOT_SELECTED
 
 
 def _capitalize(value):
@@ -184,7 +144,7 @@ def _capitalize(value):
 
 def _build_address(data_dict, type):
     if type and data_dict:
-        return{
+        return {
             '{}_address_location'.format(type): data_dict.get('location'),
             '{}_address_postal_code'.format(type): data_dict.get('postal_code'),
             '{}_address_city'.format(type): _capitalize(data_dict.get('city')),
@@ -205,18 +165,18 @@ def _build_marital_status(marital_status):
 
 
 def _build_professional_status(professional_status):
-    seeking_job_on = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
-    seeking_job_off = pdfrw.PdfName(CHECKBOX_NOT_SELECTED)
+    seeking_job_on = CHECKBOX_NOT_SELECTED
+    seeking_job_off = CHECKBOX_NOT_SELECTED
 
     if professional_status:
         if professional_status == 'JOB_SEEKER':
-            seeking_job_on = pdfrw.PdfName(CHECKBOX_SELECTED)
+            seeking_job_on = CHECKBOX_SELECTED
         else:
-            seeking_job_off = pdfrw.PdfName(CHECKBOX_SELECTED)
+            seeking_job_off = CHECKBOX_SELECTED
     return {
         'employee_check': _checkbox_selection_status(professional_status, "EMPLOYEE"),
         'self_employed_check': _checkbox_selection_status(professional_status, "SELF_EMPLOYED"),
-        'job_seeker_check': pdfrw.PdfName(CHECKBOX_NOT_SELECTED),
+        'job_seeker_check': CHECKBOX_SELECTED,
         'other_check': _checkbox_selection_status(professional_status, "OTHER"),
         'seeking_job_on': seeking_job_on,
         'seeking_job_off': seeking_job_off
