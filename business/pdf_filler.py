@@ -177,7 +177,7 @@ def _build_professional_status(professional_status):
     return {
         'employee_check': _checkbox_selection_status(professional_status, "EMPLOYEE"),
         'self_employed_check': _checkbox_selection_status(professional_status, "SELF_EMPLOYED"),
-        'job_seeker_check': CHECKBOX_SELECTED,
+        'job_seeker_check': _checkbox_selection_status(professional_status, "JOB_SEEKER"),
         'other_check': _checkbox_selection_status(professional_status, "OTHER"),
         'seeking_job_on': seeking_job_on,
         'seeking_job_off': seeking_job_off
