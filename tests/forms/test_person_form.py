@@ -35,6 +35,8 @@ class TestPersonForm(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.person = PersonFactory()
+        cls.person.gender = 'F'
+        cls.person.save()
 
     def test_valid_form(self):
         person = PersonDictFactory(self.person)
