@@ -34,7 +34,7 @@ from continuing_education.tests.factories.person import PersonDictFactory
 class TestPersonForm(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.person = PersonFactory()
+        cls.person = PersonFactory(gender='F')
 
     def test_valid_form(self):
         person = PersonDictFactory(self.person)

@@ -57,7 +57,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         current_acad_year = create_current_academic_year()
         cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
         cls.user = UserFactory()
-        cls.person = PersonFactory(user=cls.user)
+        cls.person = PersonFactory(user=cls.user, gender='F')
         cls.formation = ContinuingEducationTrainingDictFactory()
 
     def setUp(self):
@@ -420,7 +420,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
         AcademicYearFactory(year=current_acad_year.year + 1)
-        cls.person = PersonFactory()
+        cls.person = PersonFactory(gender='M')
 
     def setUp(self):
         self.person_iufc = ContinuingEducationPersonDictFactory(self.person.uuid)
