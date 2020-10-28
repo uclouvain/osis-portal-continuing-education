@@ -95,7 +95,6 @@ class ViewStudentRegistrationTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration_detail.html')
-
         self.assertEqual(response.context['admission'], self.admission_accepted)
         self.assertTrue(response.context['registration_is_submittable'])
 
@@ -347,8 +346,9 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
         for field, label in cases.items():
             with self.subTest():
                 for wrong_format in wrong_formats:
-                    self.admission[field] = wrong_format
-                    errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
+                    admission = self.admission.copy()
+                    admission[field] = wrong_format
+                    errors, errors_fields = get_submission_errors(admission, is_registration=True)
                     self.assertDictEqual(
                         errors,
                         {
