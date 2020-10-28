@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-11 13:42+0100\n"
+"POT-Creation-Date: 2020-10-28 09:55+0100\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -80,17 +80,8 @@ msgstr ""
 msgid "An unexpected error occurred"
 msgstr "Une erreur innatendue s'est produite."
 
-msgid "Archived"
-msgstr "Archivé"
-
 msgid "Are you sure you want to delete this file?"
 msgstr "Etes-vous sûr.e de vouloir supprimer ce document?"
-
-msgid "Assessment presented"
-msgstr "A présenté l'épreuve d'évaluation"
-
-msgid "Assessment succeeded"
-msgstr "A réussi l'épreuve d'évaluation"
 
 msgid "Associative"
 msgstr "Associatif"
@@ -258,9 +249,6 @@ msgstr "Curriculum"
 msgid "Data"
 msgstr ""
 
-msgid "Diploma produced"
-msgstr "Diplôme produit"
-
 msgid "Divorced"
 msgstr "Divorcé"
 
@@ -321,9 +309,6 @@ msgstr "Mot de passe oublié ?"
 
 msgid "Formation"
 msgstr "Formation"
-
-msgid "Formation spreading"
-msgstr "Etalement de la formation"
 
 msgid "Formation title"
 msgstr "Intitulé de la formation"
@@ -501,9 +486,6 @@ msgstr "Mes admissions"
 msgid "My registrations"
 msgstr "Mes inscriptions"
 
-msgid "NOMA"
-msgstr "NOMA"
-
 msgid "Name"
 msgstr "Nom"
 
@@ -539,6 +521,9 @@ msgstr ""
 msgid "Not submitted"
 msgstr "Non-soumise"
 
+msgid "Only alphanumeric characters are allowed."
+msgstr "Uniquement des caractères alphanumériques sont autorisés."
+
 msgid "Other"
 msgstr "Autre"
 
@@ -559,9 +544,6 @@ msgstr "Réinitialisation du mot de passe échouée"
 
 msgid "Past professional activities"
 msgstr "Expériences professionnelles passées"
-
-msgid "Payment complete"
-msgstr "En ordre de paiement"
 
 msgid "Phone mobile"
 msgstr "Mobile"
@@ -615,9 +597,6 @@ msgstr "Avez-vous déjà été inscrit(e) à l'UCLouvain ?"
 msgid "Print the completed registration form"
 msgstr "Imprimer le formulaire d'inscription complété"
 
-msgid "Prior experience validation"
-msgstr "Valorisation des Acquis d'Experience"
-
 msgid "Privacy."
 msgstr "Vie privée"
 
@@ -654,14 +633,8 @@ msgstr "Motif d'état de refus"
 msgid "Registration"
 msgstr "Inscription"
 
-msgid "Registration complete"
-msgstr "En ordre d'inscription"
-
 msgid "Registration completed"
 msgstr "Inscription à la plateforme complétée"
-
-msgid "Registration file received"
-msgstr "Fichier d'inscription reçu"
 
 msgid "Registration submitted"
 msgstr "Inscription soumise"

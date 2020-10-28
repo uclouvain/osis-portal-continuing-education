@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import random
+import string
 import uuid
 
 import factory
@@ -92,9 +93,9 @@ def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
         'head_office_name': factory.Faker('company'),
         'company_number': factory.Faker('isbn10'),
         'vat_number': factory.Faker('ssn'),
-        'national_registry_number': factory.Faker('ssn'),
-        'id_card_number': factory.Faker('ssn'),
-        'passport_number': factory.Faker('isbn13'),
+        'national_registry_number': factory.fuzzy.FuzzyText(length=8, chars=string.digits).fuzz(),
+        'id_card_number': factory.fuzzy.FuzzyText(length=8, chars=string.digits).fuzz(),
+        'passport_number': factory.fuzzy.FuzzyText(length=8, chars=string.digits).fuzz(),
         'marital_status': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.MARITAL_STATUS_CHOICES)).fuzz(),
         'spouse_name': factory.Faker('name'),
         'children_number': random.randint(0, 10),

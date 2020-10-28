@@ -1,9 +1,12 @@
 from django import forms
+from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
 from continuing_education.forms.admission import phone_regex
 from continuing_education.models.enums import enums
 from continuing_education.models.enums.enums import YES_NO_CHOICES
+
+alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', _('Only alphanumeric characters are allowed.'))
 
 
 class RegistrationForm(forms.Form):
@@ -49,17 +52,20 @@ class RegistrationForm(forms.Form):
     national_registry_number = forms.CharField(
         max_length=255,
         required=False,
-        label=_("National registry number")
+        label=_("National registry number"),
+        validators=[alphanumeric]
     )
     id_card_number = forms.CharField(
         max_length=255,
         required=False,
-        label=_("ID card number")
+        label=_("ID card number"),
+        validators=[alphanumeric]
     )
     passport_number = forms.CharField(
         max_length=255,
         required=False,
-        label=_("Passport number")
+        label=_("Passport number"),
+        validators=[alphanumeric]
     )
     marital_status = forms.ChoiceField(
         required=False,
