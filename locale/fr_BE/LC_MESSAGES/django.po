@@ -863,33 +863,3 @@ msgstr "homme"
 
 msgid "residence address mentioned earlier"
 msgstr "l'adresse du domicile légal mentionnée précédemment"
-
-#~ msgid "Archived"
-#~ msgstr "Archivé"
-
-#~ msgid "Assessment presented"
-#~ msgstr "A présenté l'épreuve d'évaluation"
-
-#~ msgid "Assessment succeeded"
-#~ msgstr "A réussi l'épreuve d'évaluation"
-
-#~ msgid "Diploma produced"
-#~ msgstr "Diplôme produit"
-
-#~ msgid "Formation spreading"
-#~ msgstr "Etalement de la formation"
-
-#~ msgid "NOMA"
-#~ msgstr "NOMA"
-
-#~ msgid "Payment complete"
-#~ msgstr "En ordre de paiement"
-
-#~ msgid "Prior experience validation"
-#~ msgstr "Valorisation des Acquis d'Experience"
-
-#~ msgid "Registration complete"
-#~ msgstr "En ordre d'inscription"
-
-#~ msgid "Registration file received"
-#~ msgstr "Fichier d'inscription reçu"
