@@ -9,12 +9,6 @@ from continuing_education.views.api import get_continuing_education_training_lis
 class ContinuingEducationTrainingAutocomplete(autocomplete.Select2ListView):
 
     def get(self, request, *args, **kwargs):
-        for e in get_continuing_education_training_list(
-                    request,
-                    search=self.q,
-                    active=True
-                )['results']:
-            print(e['education_group'])
         return http.HttpResponse(json.dumps({
             'results': [
                 {
