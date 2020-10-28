@@ -336,3 +336,22 @@ class RegistrationSubmissionErrorsTestCase(TestCase):
                                            ],
                 }
             )
+
+    def test_registration_is_not_submittable_wrong_id_card_or_passport_or_national_registry_format(self):
+        wrong_formats = ['123-456-789', '456.789']
+        cases = {
+            'id_card_number': _("ID card number"),
+            'passport_number': _("Passport number"),
+            'national_registry_number': _("National registry number")
+        }
+        for field, label in cases.items():
+            with self.subTest():
+                for wrong_format in wrong_formats:
+                    self.admission[field] = wrong_format
+                    errors, errors_fields = get_submission_errors(self.admission, is_registration=True)
+                    self.assertDictEqual(
+                        errors,
+                        {
+                            label: [_('Only alphanumeric characters are allowed.')],
+                        }
+                    )

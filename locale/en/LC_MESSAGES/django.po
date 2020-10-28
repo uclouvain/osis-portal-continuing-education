@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-11 13:42+0100\n"
+"POT-Creation-Date: 2020-10-28 09:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,16 +73,7 @@ msgstr ""
 msgid "An unexpected error occurred"
 msgstr ""
 
-msgid "Archived"
-msgstr ""
-
 msgid "Are you sure you want to delete this file?"
-msgstr ""
-
-msgid "Assessment presented"
-msgstr ""
-
-msgid "Assessment succeeded"
 msgstr ""
 
 msgid "Associative"
@@ -236,9 +227,6 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-msgid "Diploma produced"
-msgstr ""
-
 msgid "Divorced"
 msgstr ""
 
@@ -294,9 +282,6 @@ msgid "Forgot your password ?"
 msgstr ""
 
 msgid "Formation"
-msgstr ""
-
-msgid "Formation spreading"
 msgstr ""
 
 msgid "Formation title"
@@ -453,9 +438,6 @@ msgstr ""
 msgid "My registrations"
 msgstr ""
 
-msgid "NOMA"
-msgstr ""
-
 msgid "Name"
 msgstr ""
 
@@ -489,6 +471,9 @@ msgstr ""
 msgid "Not submitted"
 msgstr ""
 
+msgid "Only alphanumeric characters are allowed."
+msgstr ""
+
 msgid "Other"
 msgstr ""
 
@@ -508,9 +493,6 @@ msgid "Password reset unsuccessful"
 msgstr ""
 
 msgid "Past professional activities"
-msgstr ""
-
-msgid "Payment complete"
 msgstr ""
 
 msgid "Phone mobile"
@@ -557,9 +539,6 @@ msgstr ""
 msgid "Print the completed registration form"
 msgstr ""
 
-msgid "Prior experience validation"
-msgstr ""
-
 msgid "Privacy."
 msgstr ""
 
@@ -596,13 +575,7 @@ msgstr ""
 msgid "Registration"
 msgstr ""
 
-msgid "Registration complete"
-msgstr ""
-
 msgid "Registration completed"
-msgstr ""
-
-msgid "Registration file received"
 msgstr ""
 
 msgid "Registration submitted"
