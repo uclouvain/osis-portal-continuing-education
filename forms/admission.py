@@ -50,7 +50,7 @@ class AdmissionForm(Form):
 
     email = forms.EmailField(
         max_length=255,
-        required=False,
+        required=True,
         label=_("Additional email")
     )
 
@@ -204,6 +204,7 @@ class AdmissionForm(Form):
 
     def __init__(self, *args, **kwargs):
         formation = kwargs.pop('formation', None)
+        user = kwargs.pop('user', None)
         self.initial = kwargs.get('data', kwargs.get('initial'))
         super(AdmissionForm, self).__init__(*args, **kwargs)
         if formation:
@@ -214,6 +215,7 @@ class AdmissionForm(Form):
         self.fields['additional_information'].widget.attrs['placeholder'] = _(
             "Write down here the answers to further questions related to the chosen training"
         )
+        self.fields['email'].initial = user.email if user else ''
 
     def _set_initial_fields(self):
         fields_to_set = [('citizenship', 'name', 'iso_code')]
