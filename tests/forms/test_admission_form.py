@@ -36,8 +36,8 @@ from continuing_education.tests.factories.person import ContinuingEducationPerso
 class TestAdmissionForm(TestCase):
     @classmethod
     def setUpTestData(cls):
-        person = PersonFactory()
-        cls.iufc_person = ContinuingEducationPersonDictFactory(person.uuid)
+        cls.person = PersonFactory()
+        cls.iufc_person = ContinuingEducationPersonDictFactory(cls.person.uuid)
 
     def test_valid_form(self):
         admission = AdmissionDictFactory(self.iufc_person)
@@ -48,3 +48,16 @@ class TestAdmissionForm(TestCase):
         admission = AdmissionDictFactory(self.iufc_person, state=ACCEPTED)
         form = AdmissionForm(admission)
         self.assertFalse(form.is_valid(), form.errors)
+
+    def test_valid_form_email_field(self):
+        self.person.user.email = "test@osis.be"
+        self.person.user.save()
+        admission = AdmissionDictFactory(self.iufc_person)
+        form = AdmissionForm(admission, user=self.person.user)
+        self.assertEquals(
+            form.fields['email'].initial,
+            "test@osis.be"
+        )
+        self.assertTrue(
+            form.fields['email'].required
+        )

@@ -283,7 +283,7 @@ def _fill_forms_with_existing_data(admission, formation, request):
         request.POST or None,
         initial=person_information if _has_instance_with_values(person_information) else None
     )
-    adm_form = AdmissionForm(request.POST or None, initial=admission, formation=formation)
+    adm_form = AdmissionForm(request.POST or None, initial=admission, formation=formation, user=request.user)
     id_form = PersonForm(
         data=request.POST or None,
         instance=base_person,

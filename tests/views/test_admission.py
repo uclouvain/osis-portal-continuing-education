@@ -318,6 +318,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         }
         admission = {
             'formation': self.formation['uuid'],
+            'email': 'test@osis.be',
         }
         url = reverse('admission_edit', args=[self.admission['uuid']])
         response = self.client.post(url, data={**person, **admission})
@@ -346,6 +347,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         }
         admission = {
             'formation': admission_no_reg['formation']['uuid'],
+            'email': 'test@osis.be',
         }
         url = reverse('admission_edit', args=[admission_no_reg['uuid']])
         response = self.client.post(url, data={**person, **admission})
