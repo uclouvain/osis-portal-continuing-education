@@ -32,6 +32,7 @@ from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.html import linebreaks
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods, require_GET
 
@@ -78,7 +79,7 @@ def admission_detail(request, admission_uuid):
             request,
             _("Your admission request has been correctly submitted. The program manager will get back to you shortly.")
         )
-    if admission['state'] == admission_state_choices.DRAFT:
+    if admission['state'] == admission_state_choices.DRAFT and admission['formation']['active']:
         add_informations_message_on_submittable_file(
             request=request,
             title=_("Your admission file has been saved. Please consider the following information :")
@@ -87,6 +88,23 @@ def admission_detail(request, admission_uuid):
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
+    if admission['state'] == admission_state_choices.DRAFT and not admission['formation']['active']:
+        formation_acronym = admission['formation']['education_group']['acronym']
+        managers_emails = ', '.join(manager['email'] for manager in admission['formation']['managers'])
+        form_url = reverse('prospect_form', kwargs={'acronym': formation_acronym})
+        msg = _("It is not possible to submit your admission file because the formation %(formation)s is now "
+                "closed.<br>You can fill the <a href=\"%(form_url)s \">interest form</a> or reach the formation "
+                "managers : %(emails)s.") % {
+                    'formation': formation_acronym,
+                    'form_url': form_url,
+                    'emails': managers_emails,
+                }
+        messages.add_message(
+            request=request,
+            level=messages.WARNING,
+            message=mark_safe(msg)
+        )
+        admission_is_submittable = False
     else:
         admission_is_submittable = False
 

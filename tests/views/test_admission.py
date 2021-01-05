@@ -42,7 +42,7 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from continuing_education.models.enums import admission_state_choices
 from continuing_education.models.enums.admission_state_choices import SUBMITTED, ACCEPTED_NO_REGISTRATION_REQUIRED, \
-    ACCEPTED, STATE_CHOICES
+    ACCEPTED, STATE_CHOICES, DRAFT
 from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionDictFactory, RegistrationDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
@@ -415,6 +415,27 @@ class ViewStudentAdmissionTestCase(TestCase):
         url = reverse(admission_detail, args=[self.admission['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.context['admission']['state'], ACCEPTED)
+
+    def test_admission_draft_not_submitable_if_formation_not_active(self):
+        self.admission['state'] = DRAFT
+        self.admission['formation']['active'] = False
+        url = reverse(admission_detail, args=[self.admission['uuid']])
+        response = self.client.get(url)
+        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
+        self.assertEquals(len(messages_list), 1)
+        formation_acronym = self.admission['formation']['education_group']['acronym']
+        expected_msg = _(
+            "It is not possible to submit your admission file because the formation %(formation)s is now "
+            "closed.<br>You can fill the <a href=\"%(form_url)s \">interest form</a> or reach the formation "
+            "managers : %(emails)s.") % {
+                'formation': formation_acronym,
+                'form_url': reverse('prospect_form', kwargs={'acronym': formation_acronym}),
+                'emails': ', '.join(manager['email'] for manager in self.admission['formation']['managers']),
+            }
+        self.assertEquals(
+            messages_list[0],
+            expected_msg
+        )
 
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
