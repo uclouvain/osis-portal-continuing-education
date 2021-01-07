@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 09:55+0100\n"
+"POT-Creation-Date: 2021-01-05 15:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -379,6 +379,13 @@ msgid "It is not possible to edit an admission once submitted"
 msgstr ""
 
 msgid "It is not possible to edit an registration once submitted"
+msgstr ""
+
+#, python-format
+msgid ""
+"It is not possible to submit your admission file because the formation "
+"%(formation)s is now closed.<br>You can fill the <a href=\"%(form_url)s "
+"\">interest form</a> or reach the formation managers : %(emails)s."
 msgstr ""
 
 msgid "Job seeker"

@@ -207,7 +207,7 @@ class AdmissionForm(Form):
         user = kwargs.pop('user', None)
         self.initial = kwargs.get('data', kwargs.get('initial'))
         super(AdmissionForm, self).__init__(*args, **kwargs)
-        if formation:
+        if formation and formation['active']:
             self.initial['formation'] = (formation['education_group']['acronym'], _format_training_title(formation))
             self.fields['formation'].choices = [self.initial['formation']]
         if self.initial:
