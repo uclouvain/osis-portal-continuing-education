@@ -323,7 +323,11 @@ class ViewStudentAdmissionTestCase(TestCase):
         url = reverse('admission_edit', args=[self.admission['uuid']])
         response = self.client.post(url, data={**person, **admission})
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse(admission_detail, args=[self.admission['uuid']]))
+        self.assertRedirects(
+            response,
+            reverse(admission_detail, args=[self.admission['uuid']]),
+            fetch_redirect_response=False
+        )
 
     @patch('continuing_education.views.api.get_admission')
     @patch('continuing_education.views.api.get_continuing_education_training')
@@ -352,7 +356,11 @@ class ViewStudentAdmissionTestCase(TestCase):
         url = reverse('admission_edit', args=[admission_no_reg['uuid']])
         response = self.client.post(url, data={**person, **admission})
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse(admission_detail, args=[admission_no_reg['uuid']]))
+        self.assertRedirects(
+            response,
+            reverse(admission_detail, args=[admission_no_reg['uuid']]),
+            fetch_redirect_response=False
+        )
 
     @mock.patch('continuing_education.views.admission._get_files_list')
     def test_admission_detail_files_list(self, mock_get_files_list):
