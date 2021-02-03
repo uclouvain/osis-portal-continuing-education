@@ -93,7 +93,7 @@ def RegistrationDictFactory(person_information, state=ACCEPTED, formation=None):
         'head_office_name': factory.Faker('company'),
         'company_number': factory.Faker('isbn10'),
         'vat_number': factory.Faker('ssn'),
-        'national_registry_number': factory.fuzzy.FuzzyText(length=8, chars=string.digits).fuzz(),
+        'national_registry_number': '91121012320',
         'id_card_number': factory.fuzzy.FuzzyText(length=8, chars=string.digits).fuzz(),
         'passport_number': factory.fuzzy.FuzzyText(length=8, chars=string.digits).fuzz(),
         'marital_status': factory.fuzzy.FuzzyChoice(get_enum_keys(enums.MARITAL_STATUS_CHOICES)).fuzz(),
