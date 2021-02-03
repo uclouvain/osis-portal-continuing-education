@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-28 16:14+0100\n"
+"POT-Creation-Date: 2021-02-03 14:28+0100\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -537,6 +537,9 @@ msgstr "Uniquement des caractères alphanumériques sont autorisés."
 
 msgid "Only numeric characters are allowed."
 msgstr "Uniquement des caractères numériques sont autorisés."
+
+msgid "Only the first letter uppercase."
+msgstr "Seulement la première lettre en majuscule."
 
 msgid "Other"
 msgstr "Autre"

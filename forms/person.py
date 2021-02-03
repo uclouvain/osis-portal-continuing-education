@@ -9,6 +9,7 @@ GENDER_CHOICES = (
     ('F', _('female')),
     ('M', _('male'))
 )
+HELP_MSG_FIRST_LETTER_UPPERCASE = _("Only the first letter uppercase.")
 
 
 def _capitalize_choices(choices):
@@ -18,12 +19,14 @@ def _capitalize_choices(choices):
 class PersonForm(ModelForm):
     first_name = forms.CharField(
         required=True,
-        label=_("First name")
+        label=_("First name"),
+        help_text=HELP_MSG_FIRST_LETTER_UPPERCASE
     )
 
     last_name = forms.CharField(
         required=True,
-        label=_("Last name")
+        label=_("Last name"),
+        help_text=HELP_MSG_FIRST_LETTER_UPPERCASE
     )
 
     gender = forms.ChoiceField(
