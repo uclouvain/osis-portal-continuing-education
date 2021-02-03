@@ -5,8 +5,10 @@ from django.utils.translation import gettext_lazy as _
 from continuing_education.forms.admission import phone_regex
 from continuing_education.models.enums import enums
 from continuing_education.models.enums.enums import YES_NO_CHOICES
+from osis_common.utils.validators import belgium_national_register_number_validator
 
 alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', _('Only alphanumeric characters are allowed.'))
+numeric = RegexValidator(r'^[0-9]*$', _('Only numeric characters are allowed.'))
 
 
 class RegistrationForm(forms.Form):
@@ -53,7 +55,7 @@ class RegistrationForm(forms.Form):
         max_length=255,
         required=False,
         label=_("National registry number"),
-        validators=[alphanumeric]
+        validators=[numeric, belgium_national_register_number_validator]
     )
     id_card_number = forms.CharField(
         max_length=255,
