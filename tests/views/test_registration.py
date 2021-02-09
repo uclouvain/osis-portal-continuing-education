@@ -99,24 +99,28 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertTrue(response.context['registration_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 1)
+
+        message_list_info = [msg for msg in messages_list if msg.level == messages.INFO]
+        self.assertEqual(len(message_list_info), 1)
         self.assertIn(
             gettext("Your registration file has been saved. Please consider the following information :"),
-            str(messages_list[0])
+            str(message_list_info[0])
         )
         self.assertIn(
             gettext("You are still able to edit the form, via the 'Edit' button"),
-            str(messages_list[0])
+            str(message_list_info[0])
         )
         self.assertIn(
             gettext("You can upload documents via the 'Documents'"),
-            str(messages_list[0])
+            str(message_list_info[0])
         )
+
+        message_list_warning = [msg for msg in messages_list if msg.level == messages.WARNING]
+        self.assertEqual(len(message_list_warning), 1)
         self.assertIn(
             gettext("Do not forget to submit your file when it is complete"),
-            str(messages_list[0])
+            str(message_list_warning[0])
         )
-        self.assertEqual(messages_list[0].level, messages.INFO)
 
     def test_registration_detail_not_submittable(self):
         self.admission_accepted['marital_status'] = ''
@@ -131,7 +135,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.assertFalse(response.context['registration_is_submittable'])
 
         messages_list = list(messages.get_messages(response.wsgi_request))
-        self.assertEqual(len(messages_list), 2)
+        self.assertEqual(len(messages_list), 3)
 
         self.assertIn(
             gettext("Your registration file has been saved. Please consider the following information :"),
@@ -145,21 +149,23 @@ class ViewStudentRegistrationTestCase(TestCase):
             gettext("You can upload documents via the 'Documents'"),
             str(messages_list[0])
         )
-        self.assertIn(
-            gettext("Do not forget to submit your file when it is complete"),
-            str(messages_list[0])
-        )
         self.assertEqual(messages_list[0].level, messages.INFO)
 
         self.assertIn(
-            gettext("Your file is not submittable because you did not provide the following data : "),
-            str(messages_list[1])
-        )
-        self.assertIn(
-            gettext("Marital status"),
+            gettext("Do not forget to submit your file when it is complete"),
             str(messages_list[1])
         )
         self.assertEqual(messages_list[1].level, messages.WARNING)
+
+        self.assertIn(
+            gettext("Your file is not submittable because you did not provide the following data : "),
+            str(messages_list[2])
+        )
+        self.assertIn(
+            gettext("Marital status"),
+            str(messages_list[2])
+        )
+        self.assertEqual(messages_list[2].level, messages.WARNING)
 
     def test_registration_submitted_detail(self):
         self.mocked_called_api_function_get.return_value = self.registration_submitted
