@@ -191,7 +191,6 @@ def add_informations_message_on_submittable_file(request, title):
         items = [
             _("You are still able to edit the form, via the 'Edit' button"),
             _("You can upload documents via the 'Documents'"),
-            _("Do not forget to submit your file when it is complete"),
         ]
         message = "<strong>{}</strong><br>".format(title) + \
                   "".join(["- {}<br>".format(item) for item in items])
@@ -200,6 +199,15 @@ def add_informations_message_on_submittable_file(request, title):
             request=request,
             level=messages.INFO,
             message=mark_safe(message)
+        )
+
+        message_warning = "<strong>" + \
+                          str(_("Do not forget to submit your file when it is complete")) + \
+                          "</strong>"
+        messages.add_message(
+            request=request,
+            level=messages.WARNING,
+            message=mark_safe(message_warning)
         )
 
 

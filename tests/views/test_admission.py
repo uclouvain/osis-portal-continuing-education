@@ -131,7 +131,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertFalse(response.context['admission_is_submittable'])
         self.assertEqual(list(messages.get_messages(response.wsgi_request))[1].level, messages.WARNING)
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
-        self.assertEqual(len(messages_list), 2)
+        self.assertEqual(len(messages_list), 3)
         self.assertIn(
             gettext("Your file is not submittable because you did not provide the following data : "),
             str(messages_list)
