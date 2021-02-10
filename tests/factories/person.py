@@ -50,5 +50,6 @@ def PersonDictFactory(person):
         'email': person.email,
         'first_name': person.first_name,
         'last_name': person.last_name,
-        'gender': person.gender
+        'gender': person.gender,
+        'birth_date': '2020-02-01',
     }

@@ -110,6 +110,8 @@ def registration_edit(request, admission_uuid):
     )
     person_information = api.get_continuing_education_person(request)
     person_information.get('person').pop('uuid')
+    # exclude person birth_date field as it is not in osis-portal Person model
+    person_information.get('person').pop('birth_date')
     Person.objects.filter(user=request.user).update(**person_information.get('person'))
     base_person = mdl_person.find_by_user(user=request.user)
     id_form = PersonForm(request.POST or None, instance=base_person)

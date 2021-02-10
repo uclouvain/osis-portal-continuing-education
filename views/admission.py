@@ -295,6 +295,8 @@ def _is_admission_submittable_and_show_errors(admission, errors_fields, request)
 def _fill_forms_with_existing_data(admission, formation, request):
     person_information = api.get_continuing_education_person(request)
     person_information.get('person').pop('uuid')
+    # exclude person birth_date field as it is not in osis-portal Person model
+    person_information.get('person').pop('birth_date')
     Person.objects.filter(user=request.user).update(**person_information.get('person'))
     base_person = Person.objects.get(user=request.user)
     person_form = ContinuingEducationPersonForm(
