@@ -66,8 +66,6 @@ def get_data(admission):
         'academic_year': admission.get('academic_yr', EMPTY_VALUE),
         'last_name': person.get('last_name', EMPTY_VALUE),
         'first_name': person.get('first_name', EMPTY_VALUE),
-        'card_command_last_name': person.get('last_name', EMPTY_VALUE),
-        'card_command_first_name': person.get('first_name', EMPTY_VALUE),
         'birth_date': birth_date,
         'birth_location': _capitalize(person_information.get('birth_location')),
         'birth_country': _capitalize(person_information.get('birth_country').get('name')) if person_information.get(
