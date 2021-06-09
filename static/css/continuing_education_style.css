@@ -181,6 +181,6 @@ select#id_birth_date_month {
     overflow: hidden;
 }
 
-.register_form_error, .register_form_error .help-block{
-    color: red;
+.text-danger .help-block{
+    color: #a94442;
 }
