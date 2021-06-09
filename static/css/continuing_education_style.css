@@ -180,3 +180,7 @@ select#id_birth_date_month {
 .list-row{
     overflow: hidden;
 }
+
+.register_form_error, .register_form_error .help-block{
+    color: red;
+}
