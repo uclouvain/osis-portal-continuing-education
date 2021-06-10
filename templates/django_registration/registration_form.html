@@ -39,9 +39,9 @@
         <form id="form" method="POST" class="post-form">
             {% csrf_token %}
             <div class="panel panel-body">
-                {% bootstrap_field form.email %}
-                {% bootstrap_field form.password1 %}
-                {% bootstrap_field form.password2 %}
+                {% bootstrap_field form.email error_css_class="text-danger" %}
+                {% bootstrap_field form.password1 error_css_class="text-danger" %}
+                {% bootstrap_field form.password2 error_css_class="text-danger" %}
                 <input type="hidden" name="username" id="id_username" value="{{ form.username.value }}"/>
                 <input type="checkbox" id="chbx_rgpd" required/>
                 {% trans 'By checking the checkbox, I accept that my data are used by IUFC.' %}&nbsp;
