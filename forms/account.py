@@ -101,7 +101,7 @@ class ContinuingEducationPasswordResetForm(forms.Form):
 
 def email_not_from_uclouvain(email):
     if email.endswith('uclouvain.be'):
-        raise ValidationError(_("Your email cannot end with uclouvain.be"))
+        raise ValidationError(_("Please use an email address not ending with uclouvain.be to create your account."))
 
 
 class ContinuingEducationRegistrationForm(RegistrationFormUniqueEmail):
