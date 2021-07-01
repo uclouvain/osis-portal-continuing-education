@@ -180,3 +180,7 @@ select#id_birth_date_month {
 .list-row{
     overflow: hidden;
 }
+
+.text-danger .help-block{
+    color: #a94442;
+}

@@ -48,6 +48,6 @@ class TestContinuingEducationRegistrationForm(TestCase):
         })
         self.assertFalse(form.is_valid(), form.errors)
         self.assertEqual(
-            {'email': [_("Your email cannot end with uclouvain.be")]},
+            {'email': [_("Please use an email address not ending with uclouvain.be to create your account.")]},
             form.errors
         )
