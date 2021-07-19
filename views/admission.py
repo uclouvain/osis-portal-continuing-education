@@ -50,6 +50,7 @@ from continuing_education.views.common import display_errors, get_submission_err
 from continuing_education.views.file import _get_files_list, FILES_URL
 from frontoffice.settings.base import MAX_UPLOAD_SIZE
 from osis_common.decorators.ajax import ajax_required
+from reference.models.country import Country
 
 STATES_CAN_UPLOAD_FILE = [
     admission_state_choices.DRAFT,
@@ -304,6 +305,9 @@ def _fill_forms_with_existing_data(admission, formation, request):
         initial=person_information if _has_instance_with_values(person_information) else None
     )
     adm_form = AdmissionForm(request.POST or None, initial=admission, formation=formation, user=request.user)
+
+    _keep_posted_data_in_form(adm_form, person_form, request)
+
     id_form = PersonForm(
         data=request.POST or None,
         instance=base_person,
@@ -315,6 +319,23 @@ def _fill_forms_with_existing_data(admission, formation, request):
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
     address_form = AddressForm(request.POST or None, initial=address)
     return address_form, adm_form, id_form, person_form
+
+
+def _keep_posted_data_in_form(adm_form, person_form, request):
+    birth_country = request.POST.get('birth_country')
+    if birth_country:
+        country = Country.objects.get(iso_code=birth_country)
+        person_form.fields['birth_country'].initial = birth_country
+        person_form.fields['birth_country'].choices = [
+            (country.iso_code, country.name)
+        ]
+    citizenship = request.POST.get('citizenship')
+    if citizenship:
+        country = Country.objects.get(iso_code=citizenship)
+        adm_form.fields['citizenship'].initial = citizenship
+        adm_form.fields['citizenship'].choices = [
+            (country.iso_code, country.name)
+        ]
 
 
 def _get_old_admission_if_exists(admissions, person_information, request):
