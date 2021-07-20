@@ -49,6 +49,7 @@ from continuing_education.tests.factories.continuing_education_training import C
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.views.admission import admission_form, admission_detail
 from continuing_education.views.common import get_submission_errors, _get_managers_mails
+from reference.tests.factories.country import CountryFactory
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -59,6 +60,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user, gender='F')
         cls.formation = ContinuingEducationTrainingDictFactory()
+        cls.country = CountryFactory(iso_code="BE")
 
     def setUp(self):
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
@@ -226,7 +228,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'birth_date_month': '4',
             'birth_date_year': '1992',
             'birth_location': 'Bruxelles',
-            'citizenship': 'DZ',
+            'citizenship': 'BE',
             'city': 'Roux',
             'country': 'ZA',
             'current_employer': 'da',
@@ -259,6 +261,8 @@ class ViewStudentAdmissionTestCase(TestCase):
     def test_admission_save_with_error(self):
         admission = AdmissionDictFactory(self.person_information)
         admission['person_information'] = "no valid pk"
+        admission['birth_country'] = self.country.iso_code
+        admission['citizenship'] = self.country.iso_code
         response = self.client.post(reverse('admission_new'), data=admission)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_form.html')
@@ -312,7 +316,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'first_name': self.person.first_name,
             'last_name': self.person.last_name,
             'gender': self.person.gender,
-            'birth_country': person_information['birth_country'],
+            'birth_country': self.country.iso_code,
             'birth_location': person_information['birth_location'],
             'birth_date': person_information['birth_date'],
         }
@@ -345,7 +349,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'first_name': self.person.first_name,
             'last_name': self.person.last_name,
             'gender': self.person.gender,
-            'birth_country': person_information['birth_country'],
+            'birth_country': self.country.iso_code,
             'birth_location': person_information['birth_location'],
             'birth_date': person_information['birth_date'],
         }
