@@ -336,6 +336,12 @@ def _keep_posted_data_in_form(adm_form, person_form, request):
         adm_form.fields['citizenship'].choices = [
             (country.iso_code, country.name)
         ]
+    training = request.POST.get('formation')
+    if training:
+        adm_form.fields['formation'].initial = training
+        adm_form.fields['formation'].choices = [
+            (training, training)
+        ]
 
 
 def _get_old_admission_if_exists(admissions, person_information, request):
