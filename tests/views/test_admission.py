@@ -236,7 +236,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'email': 'benjamin@daubry.be',
             'first_name': 'Benjamin',
             'formation': self.formation['education_group']['acronym'],
-            'gender': 'M',
+            'gender': 'H',
             'high_school_diploma': 'False',
             'high_school_graduation_year': '',
             'last_degree_field': 'da',

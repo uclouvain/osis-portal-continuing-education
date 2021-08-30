@@ -7,7 +7,7 @@ from base.models.person import Person
 GENDER_CHOICES = (
     ('', '---------'),
     ('F', _('female')),
-    ('M', _('male'))
+    ('H', _('male'))
 )
 HELP_MSG_FIRST_LETTER_UPPERCASE = _("Only the first letter uppercase.")
 
