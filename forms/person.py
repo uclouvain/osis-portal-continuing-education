@@ -50,7 +50,7 @@ class PersonForm(ModelForm):
             if attr and attr != 'X':
                 self.fields[field].initial = attr
                 self.fields[field].widget.attrs['readonly'] = True
-                if field is "gender":
+                if field == "gender":
                     self.fields[field].widget.attrs['disabled'] = True
 
     def _disable_first_name_field(self):
