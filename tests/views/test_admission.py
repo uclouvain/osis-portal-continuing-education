@@ -236,7 +236,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'email': 'benjamin@daubry.be',
             'first_name': 'Benjamin',
             'formation': self.formation['education_group']['acronym'],
-            'gender': 'M',
+            'gender': 'H',
             'high_school_diploma': 'False',
             'high_school_graduation_year': '',
             'last_degree_field': 'da',
@@ -455,7 +455,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
         AcademicYearFactory(year=current_acad_year.year + 1)
-        cls.person = PersonFactory(gender='M')
+        cls.person = PersonFactory(gender='H')
 
     def setUp(self):
         self.person_iufc = ContinuingEducationPersonDictFactory(self.person.uuid)
