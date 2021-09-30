@@ -482,7 +482,6 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
                 _("Last degree level"): [_("This field is required.")]
             }
         )
-        print('test')
 
     def test_admission_is_not_submittable_missing_admission_data(self):
         self.admission['last_degree_level'] = ''
