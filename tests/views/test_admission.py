@@ -26,6 +26,7 @@
 import datetime
 import json
 import uuid
+from collections import OrderedDict
 from unittest import mock
 from unittest.mock import patch
 
@@ -475,11 +476,12 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         errors, errors_fields = get_submission_errors(self.admission)
         self.assertDictEqual(
             errors,
-            {
+            OrderedDict({
+                _("Email"): [_("This field is required.")],
                 _("Birth country"): [_("This field is required.")],
                 _("Postal code"): [_("This field is required.")],
                 _("Last degree level"): [_("This field is required.")]
-            }
+            })
         )
 
     def test_admission_is_not_submittable_missing_admission_data(self):
