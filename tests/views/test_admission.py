@@ -26,6 +26,7 @@
 import datetime
 import json
 import uuid
+from collections import OrderedDict
 from unittest import mock
 from unittest.mock import patch
 
@@ -236,7 +237,7 @@ class ViewStudentAdmissionTestCase(TestCase):
             'email': 'benjamin@daubry.be',
             'first_name': 'Benjamin',
             'formation': self.formation['education_group']['acronym'],
-            'gender': 'M',
+            'gender': 'H',
             'high_school_diploma': 'False',
             'high_school_graduation_year': '',
             'last_degree_field': 'da',
@@ -455,7 +456,7 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
     def setUpTestData(cls):
         current_acad_year = create_current_academic_year()
         AcademicYearFactory(year=current_acad_year.year + 1)
-        cls.person = PersonFactory(gender='M')
+        cls.person = PersonFactory(gender='H')
 
     def setUp(self):
         self.person_iufc = ContinuingEducationPersonDictFactory(self.person.uuid)
@@ -475,11 +476,12 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         errors, errors_fields = get_submission_errors(self.admission)
         self.assertDictEqual(
             errors,
-            {
+            OrderedDict({
+                _("Email"): [_("This field is required.")],
                 _("Birth country"): [_("This field is required.")],
                 _("Postal code"): [_("This field is required.")],
                 _("Last degree level"): [_("This field is required.")]
-            }
+            })
         )
 
     def test_admission_is_not_submittable_missing_admission_data(self):
