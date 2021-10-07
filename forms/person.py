@@ -7,7 +7,7 @@ from base.models.person import Person
 GENDER_CHOICES = (
     ('', '---------'),
     ('F', _('female')),
-    ('M', _('male'))
+    ('H', _('male'))
 )
 HELP_MSG_FIRST_LETTER_UPPERCASE = _("Only the first letter uppercase.")
 
@@ -47,10 +47,10 @@ class PersonForm(ModelForm):
     def _disable_existing_person_fields(self):
         for field in self.fields.keys():
             attr = getattr(self.instance, field)
-            if attr and attr != 'U':
+            if attr and attr != 'X':
                 self.fields[field].initial = attr
                 self.fields[field].widget.attrs['readonly'] = True
-                if field is "gender":
+                if field == "gender":
                     self.fields[field].widget.attrs['disabled'] = True
 
     def _disable_first_name_field(self):

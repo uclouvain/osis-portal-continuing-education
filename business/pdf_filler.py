@@ -76,7 +76,7 @@ def get_data(admission):
         'id_card_number': admission.get('id_card_number', EMPTY_VALUE),
         'passport_number': admission.get('passport_number', EMPTY_VALUE),
         'gender_image_f': _checkbox_selection_status(person.get('gender'), "F"),
-        'gender_image_m': _checkbox_selection_status(person.get('gender'), "M"),
+        'gender_image_m': _checkbox_selection_status(person.get('gender'), "H"),
         'spouse_name': admission.get('spouse_name', EMPTY_VALUE),
         'children_number': admission.get('children_number', EMPTY_VALUE),
         'previous_noma': admission.get('previous_noma', "-") if admission.get('previous_noma') and admission.get(
