@@ -467,6 +467,68 @@ class ViewStudentAdmissionTestCase(TestCase):
             expected_msg
         )
 
+        @mock.patch('continuing_education.views.api.get_registration_list')
+        @mock.patch('continuing_education.views.api.get_admission_list')
+        @mock.patch('continuing_education.views.api.get_continuing_education_person')
+        def test_participant_has_another_submitted_admission_or_registration_for_formation(
+                self, mock_person, mock_adm, mock_reg):
+            input_output = [
+                ([
+                     {
+                         'uuid': self.admission['uuid'],
+                         'state': DRAFT,
+                         'formation': {'uuid': self.admission['formation']['uuid']}
+                     },
+                 ], False),
+                ([
+                     {
+                         'uuid': self.admission['uuid'],
+                         'state': DRAFT,
+                         'formation': {'uuid': self.admission['formation']['uuid']}
+                     },
+                     {
+                         'uuid': 'fakeuuid',
+                         'state': DRAFT,
+                         'formation': {'uuid': self.admission['formation']['uuid']}
+                     },
+                 ], False),
+                ([
+                     {
+                         'uuid': self.admission['uuid'],
+                         'state': DRAFT,
+                         'formation': {'uuid': self.admission['formation']['uuid']}
+                     },
+                     {
+                         'uuid': 'fakeuuid',
+                         'state': SUBMITTED,
+                         'formation': {'uuid': self.admission['formation']['uuid']}
+                     },
+                 ], True),
+                ([
+                     {
+                         'uuid': self.admission['uuid'],
+                         'state': DRAFT,
+                         'formation': {'uuid': self.admission['formation']['uuid']}
+                     },
+                     {
+                         'uuid': 'fake-uuid',
+                         'state': SUBMITTED,
+                         'formation': {'uuid': 'fakeuuid-2'}
+                     },
+                 ], False),
+            ]
+            for (inp, outp) in input_output:
+                with self.subTest(inp=inp, outp=outp):
+                    mock_adm.return_value = {'results': inp}
+                    mock_reg.return_value = {'results': []}
+                    self.assertEqual(
+                        _participant_has_another_submitted_admission_or_registration_for_formation(
+                            None,
+                            self.admission
+                        ),
+                        outp
+                    )
+
 
 class AdmissionSubmissionErrorsTestCase(TestCase):
     @classmethod
@@ -564,63 +626,3 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
                     ],
                 }
             )
-
-    @mock.patch('continuing_education.views.api.get_registration_list')
-    @mock.patch('continuing_education.views.api.get_admission_list')
-    @mock.patch('continuing_education.views.api.get_continuing_education_person')
-    def test_participant_has_another_submitted_admission_or_registration_for_formation(
-            self, mock_person, mock_adm, mock_reg):
-
-        input_output = [
-            ([
-                 {
-                     'uuid': self.admission.uuid,
-                     'state': DRAFT,
-                     'formation': {'uuid': self.admission.formation.uuid}
-                 },
-             ], False),
-            ([
-                 {
-                    'uuid': self.admission.uuid,
-                    'state': DRAFT,
-                    'formation': {'uuid': self.admission.formation.uuid}
-                 },
-                 {
-                     'uuid': 'fakeuuid',
-                     'state': DRAFT,
-                     'formation': {'uuid': self.admission.formation.uuid}
-                 },
-             ], False),
-            ([
-                 {
-                     'uuid': self.admission.uuid,
-                     'state': DRAFT,
-                     'formation': {'uuid': self.admission.formation.uuid}
-                 },
-                 {
-                     'uuid': 'fakeuuid',
-                     'state': SUBMITTED,
-                     'formation': {'uuid': self.admission.formation.uuid}
-                 },
-             ], True),
-            ([
-                 {
-                     'uuid': self.admission.uuid,
-                     'state': DRAFT,
-                     'formation': {'uuid': self.admission.formation.uuid}
-                 },
-                 {
-                     'uuid': 'fake-uuid',
-                     'state': SUBMITTED,
-                     'formation': {'uuid': 'fakeuuid-2'}
-                 },
-             ], False),
-        ]
-        for (inp, outp) in input_output:
-            with self.subTest(inp=inp, outp=outp):
-                mock_adm.return_value = {'results': inp}
-                mock_reg.return_value = {'results': []}
-                self.assertEqual(
-                    _participant_has_another_submitted_admission_or_registration_for_formation(None, self.admission),
-                    outp
-                )
