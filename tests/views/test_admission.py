@@ -392,7 +392,9 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.context['admission'], self.admission)
         self.assertEqual(response.context['list_files'], [file])
 
-    def test_admission_can_upload(self):
+    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
+                'registration_for_formation', return_value=False)
+    def test_admission_can_upload(self, _):
         states_can_upload_file = [
             admission_state_choices.DRAFT,
             admission_state_choices.ACCEPTED,
