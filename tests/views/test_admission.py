@@ -48,7 +48,8 @@ from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionDictFactory, RegistrationDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
-from continuing_education.views.admission import admission_form, admission_detail
+from continuing_education.views.admission import admission_form, admission_detail, \
+    _participant_has_another_submitted_admission_or_registration_for_formation
 from continuing_education.views.common import get_submission_errors, _get_managers_mails
 from reference.tests.factories.country import CountryFactory
 
@@ -547,3 +548,12 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
                     ],
                 }
             )
+
+    @mock.patch('continuing_education.views.api.get_registration_list', return_value=[])
+    @mock.patch('continuing_education.views.api.get_admission_list', return_value=[])
+    @mock.patch('continuing_education.views.api.get_continuing_education_person', return_value=None)
+    def test_participant_has_another_submitted_admission_or_registration_for_formation(self, _, __, ___):
+        self.assertEqual(
+            _participant_has_another_submitted_admission_or_registration_for_formation(None, self.admission),
+            False
+        )
