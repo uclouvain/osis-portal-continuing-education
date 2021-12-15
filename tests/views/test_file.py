@@ -33,7 +33,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext_lazy as _, gettext, gettext_lazy
 from requests import Response
 from rest_framework import status
 
@@ -104,7 +104,7 @@ class AdmissionFileTestCase(TestCase):
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
         self.assertIn(
-            gettext(_("The document is uploaded correctly")),
+            gettext_lazy(_("The document is uploaded correctly")),
             messages_list
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
@@ -163,7 +163,7 @@ class AdmissionFileTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 302)
         self.assertIn(
-            gettext(_("File correctly deleted")),
+            gettext_lazy(_("File correctly deleted")),
             str(messages_list[0])
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
@@ -184,7 +184,7 @@ class AdmissionFileTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         # an error should raise as the admission is not retrieved from test
         self.assertIn(
-            gettext(_("A problem occured during delete")),
+            gettext_lazy(_("A problem occured during delete")),
             str(messages_list[0])
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
