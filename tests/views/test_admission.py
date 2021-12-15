@@ -574,43 +574,43 @@ class AdmissionSubmissionErrorsTestCase(TestCase):
         input_output = [
             ([
                  {
-                     uuid: self.admission.uuid,
+                     'uuid': self.admission.uuid,
                      'state': DRAFT,
                      'formation': {'uuid': self.admission.formation.uuid}
                  },
              ], False),
             ([
                  {
-                    uuid: self.admission.uuid,
+                    'uuid': self.admission.uuid,
                     'state': DRAFT,
                     'formation': {'uuid': self.admission.formation.uuid}
                  },
                  {
-                     uuid: 'fakeuuid',
+                     'uuid': 'fakeuuid',
                      'state': DRAFT,
                      'formation': {'uuid': self.admission.formation.uuid}
                  },
              ], False),
             ([
                  {
-                     uuid: self.admission.uuid,
+                     'uuid': self.admission.uuid,
                      'state': DRAFT,
                      'formation': {'uuid': self.admission.formation.uuid}
                  },
                  {
-                     uuid: 'fakeuuid',
+                     'uuid': 'fakeuuid',
                      'state': SUBMITTED,
                      'formation': {'uuid': self.admission.formation.uuid}
                  },
              ], True),
             ([
                  {
-                     uuid: self.admission.uuid,
+                     'uuid': self.admission.uuid,
                      'state': DRAFT,
                      'formation': {'uuid': self.admission.formation.uuid}
                  },
                  {
-                     uuid: 'fake-uuid',
+                     'uuid': 'fake-uuid',
                      'state': SUBMITTED,
                      'formation': {'uuid': 'fakeuuid-2'}
                  },
