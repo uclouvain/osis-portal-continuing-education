@@ -94,8 +94,10 @@ class AdmissionFileTestCase(TestCase):
         response.json = lambda *args, **kwargs: "NAME TOO LONG"
         return response
 
+    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
+                'registration_for_formation', return_value=False)
     @mock.patch('requests.post', side_effect=mocked_success_post_request)
-    def test_upload_file_success(self, mock_post):
+    def test_upload_file_success(self, mock_post, _):
         url = reverse('upload_file', args=[self.admission['uuid']])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
         response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
@@ -107,8 +109,10 @@ class AdmissionFileTestCase(TestCase):
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
 
+    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
+                'registration_for_formation', return_value=False)
     @mock.patch('requests.post', side_effect=mocked_failed_post_request)
-    def test_upload_file_error(self, mock_post):
+    def test_upload_file_error(self, mock_post, _):
         url = reverse('upload_file', args=[self.admission['uuid']])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
         response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
@@ -144,8 +148,10 @@ class AdmissionFileTestCase(TestCase):
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return response
 
+    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
+                'registration_for_formation', return_value=False)
     @mock.patch('requests.delete', side_effect=mocked_success_delete_request)
-    def test_delete_file_success(self, mock_delete):
+    def test_delete_file_success(self, mock_delete, _):
         url = reverse('remove_file', args=[self.admission['uuid'], "1452"])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
         response = self.client.delete(
@@ -162,8 +168,10 @@ class AdmissionFileTestCase(TestCase):
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
 
+    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
+                'registration_for_formation', return_value=False)
     @mock.patch('requests.delete', side_effect=mocked_failed_delete_request)
-    def test_delete_file_error(self, mock_delete):
+    def test_delete_file_error(self, mock_delete, _):
         url = reverse('remove_file', args=[self.admission['uuid'], "5478"])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
 
