@@ -33,7 +33,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _, gettext, gettext_lazy
+from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
 from rest_framework import status
 
@@ -104,7 +104,7 @@ class AdmissionFileTestCase(TestCase):
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
         self.assertIn(
-            gettext_lazy(_("The document is uploaded correctly")),
+            gettext(_("The document is uploaded correctly")),
             messages_list
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
@@ -148,10 +148,11 @@ class AdmissionFileTestCase(TestCase):
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return response
 
-    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
-                'registration_for_formation', return_value=False)
+    @mock.patch('continuing_education.views.api.get_registration_list', return_value={'results': []})
+    @mock.patch('continuing_education.views.api.get_admission_list', return_value={'results': []})
+    @mock.patch('continuing_education.views.api.get_continuing_education_person', return_value=None)
     @mock.patch('requests.delete', side_effect=mocked_success_delete_request)
-    def test_delete_file_success(self, mock_delete, _):
+    def test_delete_file_success(self, mock_delete, _, __, ___):
         url = reverse('remove_file', args=[self.admission['uuid'], "1452"])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
         response = self.client.delete(
@@ -163,7 +164,7 @@ class AdmissionFileTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 302)
         self.assertIn(
-            gettext_lazy(_("File correctly deleted")),
+            gettext(_("File correctly deleted")),
             str(messages_list[0])
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
@@ -184,7 +185,7 @@ class AdmissionFileTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         # an error should raise as the admission is not retrieved from test
         self.assertIn(
-            gettext_lazy(_("A problem occured during delete")),
+            gettext(_("A problem occured during delete")),
             str(messages_list[0])
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
