@@ -77,6 +77,15 @@ class AdmissionFileTestCase(TestCase):
         self.mocked_called_api_function_get = self.get_patcher.start()
         self.addCleanup(self.get_patcher.stop)
 
+        self.participant_has_another_submitted_admission_patcher = patch(
+            "continuing_education.views.admission._participant_has_another_submitted_admission_or_registration_for_"
+            "formation",
+            return_value=False
+        )
+        self.mocked_participant_has_another_submitted_admission = \
+            self.participant_has_another_submitted_admission_patcher.start()
+        self.addCleanup(self.participant_has_another_submitted_admission_patcher.stop)
+
     def mocked_success_post_request(self, **kwargs):
         response = Response()
         response.status_code = status.HTTP_201_CREATED
@@ -102,7 +111,7 @@ class AdmissionFileTestCase(TestCase):
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
         self.assertIn(
-            gettext(_("The document is uploaded correctly")),
+            gettext("The document is uploaded correctly"),
             messages_list
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
@@ -157,7 +166,7 @@ class AdmissionFileTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 302)
         self.assertIn(
-            gettext(_("File correctly deleted")),
+            gettext("File correctly deleted"),
             str(messages_list[0])
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')
@@ -176,7 +185,7 @@ class AdmissionFileTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         # an error should raise as the admission is not retrieved from test
         self.assertIn(
-            gettext(_("A problem occured during delete")),
+            gettext("A problem occured during delete"),
             str(messages_list[0])
         )
         self.assertRedirects(response, reverse('admission_detail', args=[self.admission['uuid']]) + '#documents')

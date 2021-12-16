@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-14 11:01+0200\n"
+"POT-Creation-Date: 2021-12-14 16:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -375,6 +375,11 @@ msgid "It is not possible to edit an admission once submitted"
 msgstr ""
 
 msgid "It is not possible to edit an registration once submitted"
+msgstr ""
+
+msgid ""
+"It is not possible to submit this admission file because you already "
+"submitted an admission file for this training."
 msgstr ""
 
 #, python-format
