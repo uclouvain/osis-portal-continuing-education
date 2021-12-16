@@ -85,20 +85,26 @@ class ViewStudentAdmissionTestCase(TestCase):
             "continuing_education.views.api.get_continuing_education_person",
             return_value=self.person_information
         )
+        self.participant_has_another_submitted_admission_patcher = patch(
+            "continuing_education.views.admission._participant_has_another_submitted_admission_or_registration_for_"
+            "formation",
+            return_value=False
+        )
 
         self.mocked_called_api_function = self.patcher.start()
         self.mocked_called_api_function_get = self.get_patcher.start()
         self.mocked_called_api_function_get_list = self.get_list_patcher.start()
         self.mocked_called_api_function_get_persons = self.get_list_person_patcher.start()
+        self.mocked_participant_has_another_submitted_admission = \
+            self.participant_has_another_submitted_admission_patcher.start()
 
         self.addCleanup(self.patcher.stop)
         self.addCleanup(self.get_patcher.stop)
         self.addCleanup(self.get_list_patcher.stop)
         self.addCleanup(self.get_list_person_patcher.stop)
+        self.addCleanup(self.participant_has_another_submitted_admission_patcher.stop)
 
-    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
-                'registration_for_formation', return_value=False)
-    def test_admission_detail(self, _):
+    def test_admission_detail(self):
         url = reverse(admission_detail, args=[self.admission['uuid']])
         response = self.client.get(url)
 
@@ -108,11 +114,9 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertTrue(response.context['admission_is_submittable'])
         self.assertTrue(response.context['registration_required'])
 
-    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
-                'registration_for_formation', return_value=False)
     @patch('continuing_education.views.api.get_admission')
     @patch('continuing_education.views.api.get_registration')
-    def test_admission_detail_no_reg(self, mock_get_registration, mock_get_admission, _):
+    def test_admission_detail_no_reg(self, mock_get_registration, mock_get_admission):
         formation = ContinuingEducationTrainingDictFactory(registration_required=False)
         admission = AdmissionDictFactory(self.person_information, formation=formation)
         mock_get_admission.return_value = admission
@@ -126,9 +130,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertTrue(response.context['admission_is_submittable'])
         self.assertFalse(response.context['registration_required'])
 
-    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
-                'registration_for_formation', return_value=False)
-    def test_admission_detail_not_submittable(self, _):
+    def test_admission_detail_not_submittable(self):
         self.admission['last_degree_level'] = ''
 
         url = reverse(admission_detail, args=[self.admission['uuid']])
@@ -171,10 +173,8 @@ class ViewStudentAdmissionTestCase(TestCase):
         )
         self.assertEqual(messages_list[0].level, messages.INFO)
 
-    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
-                'registration_for_formation', return_value=False)
     @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
-    def test_admission_submit(self, mock_update, _):
+    def test_admission_submit(self, mock_update):
         self.admission['state'] = admission_state_choices.DRAFT
         url = reverse('admission_submit')
         response = self.client.post(
@@ -188,10 +188,8 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admission_detail.html')
 
-    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
-                'registration_for_formation', return_value=False)
     @mock.patch('continuing_education.views.api.update_data_to_osis', return_value=Response())
-    def test_admission_submit_not_draft(self, mock_update, _):
+    def test_admission_submit_not_draft(self, mock_update):
         self.mocked_called_api_function_get.return_value = self.admission_submitted
         url = reverse('admission_submit')
         response = self.client.post(
@@ -226,12 +224,10 @@ class ViewStudentAdmissionTestCase(TestCase):
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(len(messages_list), 1)
 
-    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
-                'registration_for_formation', return_value=False)
     @patch('continuing_education.views.api.get_continuing_education_training')
     @patch('continuing_education.views.api.update_registration')
     @patch('continuing_education.views.api.post_admission')
-    def test_admission_new_save(self, mock_post, mock_update, mock_get, _):
+    def test_admission_new_save(self, mock_post, mock_update, mock_get):
         mock_get.return_value = self.formation
         mock_post.return_value = (self.admission, HttpResponse.status_code)
         admission = {
@@ -380,10 +376,8 @@ class ViewStudentAdmissionTestCase(TestCase):
             fetch_redirect_response=False
         )
 
-    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
-                'registration_for_formation', return_value=False)
     @mock.patch('continuing_education.views.admission._get_files_list')
-    def test_admission_detail_files_list(self, mock_get_files_list, _):
+    def test_admission_detail_files_list(self, mock_get_files_list):
         file = {
             'name': 'file.txt',
             'size': 123000,
@@ -406,9 +400,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.assertEqual(response.context['admission'], self.admission)
         self.assertEqual(response.context['list_files'], [file])
 
-    @mock.patch('continuing_education.views.admission._participant_has_another_submitted_admission_or_'
-                'registration_for_formation', return_value=False)
-    def test_admission_can_upload(self, _):
+    def test_admission_can_upload(self):
         states_can_upload_file = [
             admission_state_choices.DRAFT,
             admission_state_choices.ACCEPTED,
@@ -472,6 +464,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         @mock.patch('continuing_education.views.api.get_continuing_education_person')
         def test_participant_has_another_submitted_admission_or_registration_for_formation(
                 self, mock_person, mock_adm, mock_reg):
+            self.participant_has_another_submitted_admission_patcher.stop()
             input_output = [
                 ([
                      {
