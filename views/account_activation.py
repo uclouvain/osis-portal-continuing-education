@@ -30,7 +30,7 @@ from django.contrib.auth.backends import UserModel
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import PasswordContextMixin, INTERNAL_RESET_URL_TOKEN, INTERNAL_RESET_SESSION_TOKEN
+from django.contrib.auth.views import PasswordContextMixin, INTERNAL_RESET_SESSION_TOKEN
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
 from django.http import HttpResponseRedirect
@@ -325,6 +325,7 @@ class ContinuingEducationPasswordResetConfirmView(PasswordContextMixin, FormView
     template_name = 'registration/continuing_education_password_reset_confirm.html'
     title = _('Enter a new password')
     token_generator = default_token_generator
+    reset_url_token = 'set-password'
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
@@ -336,7 +337,7 @@ class ContinuingEducationPasswordResetConfirmView(PasswordContextMixin, FormView
 
         if self.user is not None:
             token = kwargs['token']
-            if token == INTERNAL_RESET_URL_TOKEN:
+            if token == self.reset_url_token:
                 session_token = self.request.session.get(INTERNAL_RESET_SESSION_TOKEN)
                 if self.token_generator.check_token(self.user, session_token):
                     # If the token is valid, display the password reset form.
@@ -349,7 +350,7 @@ class ContinuingEducationPasswordResetConfirmView(PasswordContextMixin, FormView
                     # avoids the possibility of leaking the token in the
                     # HTTP Referer header.
                     self.request.session[INTERNAL_RESET_SESSION_TOKEN] = token
-                    redirect_url = self.request.path.replace(token, INTERNAL_RESET_URL_TOKEN)
+                    redirect_url = self.request.path.replace(token, self.reset_url_token)
                     return HttpResponseRedirect(redirect_url)
 
         # Display the "Password reset unsuccessful" page.
