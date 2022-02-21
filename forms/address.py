@@ -11,17 +11,17 @@ class AddressForm(forms.Form):
     )
 
     location = forms.CharField(
-        max_length=255,
+        max_length=50,
         required=False,
         label=_("Location")
     )
     postal_code = forms.CharField(
-        max_length=20,
+        max_length=12,
         required=False,
         label=_("Postal code")
     )
     city = forms.CharField(
-        max_length=255,
+        max_length=40,
         required=False,
         label=_("City")
     )
