@@ -23,7 +23,7 @@ class AddressForm(forms.Form):
     city = forms.CharField(
         max_length=40,
         required=False,
-        label=_("Cityy")
+        label=_("City")
     )
 
     def __init__(self, *args, **kwargs):
