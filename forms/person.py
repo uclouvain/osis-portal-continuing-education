@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.utils.translation import gettext_lazy as _
 
@@ -15,6 +16,12 @@ HELP_MSG_FIRST_LETTER_UPPERCASE = _("Only the first letter uppercase.")
 def _capitalize_choices(choices):
     return ((choice[0], choice[1].capitalize()) for choice in choices)
 
+def validate_no_all_uppercase_characters(value):
+    if value.isupper():
+        raise ValidationError(
+            _("Last name and first name can't be encoded only in capital letters")
+        )
+
 
 class PersonForm(ModelForm):
     first_name = forms.CharField(
@@ -22,6 +29,7 @@ class PersonForm(ModelForm):
         label=_("First name"),
         help_text=HELP_MSG_FIRST_LETTER_UPPERCASE,
         max_length=20,
+        validators=[validate_no_all_uppercase_characters]
     )
 
     last_name = forms.CharField(
@@ -29,6 +37,7 @@ class PersonForm(ModelForm):
         label=_("Last name"),
         help_text=HELP_MSG_FIRST_LETTER_UPPERCASE,
         max_length=40,
+        validators=[validate_no_all_uppercase_characters]
     )
 
     gender = forms.ChoiceField(
