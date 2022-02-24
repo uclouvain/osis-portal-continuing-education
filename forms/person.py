@@ -20,13 +20,15 @@ class PersonForm(ModelForm):
     first_name = forms.CharField(
         required=True,
         label=_("First name"),
-        help_text=HELP_MSG_FIRST_LETTER_UPPERCASE
+        help_text=HELP_MSG_FIRST_LETTER_UPPERCASE,
+        max_length=20,
     )
 
     last_name = forms.CharField(
         required=True,
         label=_("Last name"),
-        help_text=HELP_MSG_FIRST_LETTER_UPPERCASE
+        help_text=HELP_MSG_FIRST_LETTER_UPPERCASE,
+        max_length=40,
     )
 
     gender = forms.ChoiceField(
