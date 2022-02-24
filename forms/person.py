@@ -16,6 +16,7 @@ HELP_MSG_FIRST_LETTER_UPPERCASE = _("Only the first letter uppercase.")
 def _capitalize_choices(choices):
     return ((choice[0], choice[1].capitalize()) for choice in choices)
 
+
 def validate_no_all_uppercase_characters(value):
     if value.isupper():
         raise ValidationError(
