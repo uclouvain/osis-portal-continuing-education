@@ -57,7 +57,7 @@ class ProspectForm(Form):
             'name',
             'first_name',
             'postal_code',
-            'city'
+            'city',
             'email',
             'phone_number',
             'formation',
