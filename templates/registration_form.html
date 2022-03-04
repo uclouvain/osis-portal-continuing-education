@@ -116,7 +116,7 @@
                 <div id="billing" role="tabpanel" class="panel-body tab-pane">
                     {% bootstrap_field form.registration_type %}
                     {% bootstrap_field form.use_address_for_billing %}
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" id="div_billing_address">
                         <div class="panel panel-body">
                             {% bootstrap_field billing_address_form.location form_group_class="form-group" label=_("Location") %}
                             <div class="row">
@@ -242,24 +242,28 @@
         let post_radio = $("[name='use_address_for_post']:radio");
 
         billing_radio.change(function () {
+            var address_type = 'billing';
             if (this.value === "True") {
-                copy_address("billing", address);
+                reset_error_in_address(address_type);
+                copy_address(address_type, address);
             } else {
-                empty_address("billing");
+                empty_address(address_type);
             }
         });
         //check when page is loaded
-        billing_radio.prop('checked') ? copy_address("billing", address) : copy_address("billing", billing_address, true);
+        {#billing_radio.prop('checked') ? copy_address("billing", address) : copy_address("billing", billing_address, true);#}
 
         post_radio.change(function () {
+            var address_type = 'residence';
             if (this.value === "True") {
-                copy_address("residence", address);
+                reset_error_in_address(address_type);
+                copy_address(address_type, address);
             } else {
-                empty_address("residence");
+                empty_address(address_type);
             }
         });
         //check when page is loaded
-        post_radio.prop('checked') ? copy_address("residence", address) : copy_address("residence", residence_address, true);
+        {#post_radio.prop('checked') ? copy_address("residence", address) : copy_address("residence", residence_address, true);#}
 
         //re-enable disabled field on form submit
         $("#form").submit(function (event) {
@@ -348,5 +352,23 @@
         // trigger change after view init
         registration_field.change();
 
+        function reset_error_in_address(address_type){
+            const classToRemove = 'has-error';
+            const classOfDivToBeRemoved = 'help-block';
+            var divAddress = document.getElementById('div_'+address_type+'_address');
+            var divChildren = divAddress.getElementsByTagName("DIV");
+            for (var i=0;i<divChildren.length;i++) {
+                if (divChildren[i].classList.contains(classToRemove)) {
+                    divChildren[i].classList.remove(classToRemove);
+                    var elt_help_block = divChildren[i].getElementsByTagName("DIV");
+                    for (var j = 0; j < elt_help_block.length; j++) {
+                        if (elt_help_block[j].classList.contains(classOfDivToBeRemoved)) {
+                            elt_help_block[j].remove();
+                        }
+                    }
+
+                }
+            }
+        }
     </script>
 {% endblock %}
