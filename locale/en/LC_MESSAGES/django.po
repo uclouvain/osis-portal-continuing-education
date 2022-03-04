@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-14 16:04+0100\n"
+"POT-Creation-Date: 2022-03-04 12:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,6 +173,12 @@ msgid "Change my password"
 msgstr ""
 
 msgid "Children number"
+msgstr ""
+
+#, python-format
+msgid ""
+"Cities available for this belgian postal code %(postal_code)s are : "
+"%(possible_cities)s"
 msgstr ""
 
 msgid "Citizenship"
@@ -696,6 +702,10 @@ msgid "This email does not exist in our database: %(mail)s"
 msgstr ""
 
 msgid "This field is required."
+msgstr ""
+
+#, python-format
+msgid "This postal code (%(postal_code)s) is not a belgian one!"
 msgstr ""
 
 msgid "Upload"
