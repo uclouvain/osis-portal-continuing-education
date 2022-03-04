@@ -48,4 +48,3 @@ class CitiesService:
             logger.error(e)
             cities = {'results': [], 'count': 0}
         return cities
-
