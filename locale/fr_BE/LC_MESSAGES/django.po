@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-14 16:04+0100\n"
+"POT-Creation-Date: 2022-03-07 08:06+0100\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -194,6 +194,14 @@ msgstr "Changer mon mot de passe"
 
 msgid "Children number"
 msgstr "Nombre d'enfants"
+
+#, python-format
+msgid ""
+"Cities available for this belgian postal code %(postal_code)s are : "
+"%(possible_cities)s"
+msgstr ""
+"Les localités possibles pour ce code postal %(postal_code)s sont les "
+"suivantes : %(possible_cities)s"
 
 msgid "Citizenship"
 msgstr "Nationalité"
@@ -460,7 +468,8 @@ msgid "Last name"
 msgstr "Nom"
 
 msgid "Last name and first name can't be encoded only in capital letters"
-msgstr "Les nom/prénom ne peuvent pas être encodés uniquement en lettres majuscules"
+msgstr ""
+"Les nom/prénom ne peuvent pas être encodés uniquement en lettres majuscules"
 
 msgid "Last update"
 msgstr "Dernière modification"
@@ -612,6 +621,10 @@ msgstr "Courrier"
 
 msgid "Postal code"
 msgstr "Code postal"
+
+#, python-format
+msgid "Postal code (%(postal_code)s) not found in Belgium"
+msgstr "Ce code postal %(postal_code)s n'est pas belge!"
 
 msgid "Previous"
 msgstr "Précédent"
