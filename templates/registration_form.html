@@ -250,8 +250,7 @@
                 empty_address(address_type);
             }
         });
-        //check when page is loaded
-        {#billing_radio.prop('checked') ? copy_address("billing", address) : copy_address("billing", billing_address, true);#}
+
 
         post_radio.change(function () {
             var address_type = 'residence';
@@ -262,8 +261,7 @@
                 empty_address(address_type);
             }
         });
-        //check when page is loaded
-        {#post_radio.prop('checked') ? copy_address("residence", address) : copy_address("residence", residence_address, true);#}
+
 
         //re-enable disabled field on form submit
         $("#form").submit(function (event) {
@@ -353,22 +351,25 @@
         registration_field.change();
 
         function reset_error_in_address(address_type){
-            const classToRemove = 'has-error';
-            const classOfDivToBeRemoved = 'help-block';
-            var divAddress = document.getElementById('div_'+address_type+'_address');
-            var divChildren = divAddress.getElementsByTagName("DIV");
-            for (var i=0;i<divChildren.length;i++) {
-                if (divChildren[i].classList.contains(classToRemove)) {
-                    divChildren[i].classList.remove(classToRemove);
-                    var elt_help_block = divChildren[i].getElementsByTagName("DIV");
-                    for (var j = 0; j < elt_help_block.length; j++) {
-                        if (elt_help_block[j].classList.contains(classOfDivToBeRemoved)) {
-                            elt_help_block[j].remove();
-                        }
-                    }
+            const help_block = document.querySelectorAll(`#div_${address_type}_address .has-error .help-block`);
+            help_block.forEach((el) => el.remove());
 
-                }
-            }
+            const with_error = document.querySelectorAll(`#div_${address_type}_address .has-error`);
+            with_error.forEach((el) => el.classList.remove('has-error'));
+
         }
+        $(document).ready(function () {
+            //check when page is loaded
+            const billing_with_error = document.querySelectorAll(`#div_billing_address .has-error`);
+
+            if(! billing_with_error){
+                billing_radio.prop('checked') ? copy_address("billing", address) : copy_address("billing", billing_address, true);
+            }
+            const residence_with_error = document.querySelectorAll(`#div_residence_address .has-error`);
+            //check when page is loaded
+             if(residence_with_error){
+                post_radio.prop('checked') ? copy_address("residence", address) : copy_address("residence", residence_address, true);
+             }
+        });
     </script>
 {% endblock %}

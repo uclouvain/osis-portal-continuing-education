@@ -35,7 +35,7 @@ class AddressForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        if cleaned_data.get('country') and cleaned_data.get('country') == BELGIUM_ISO_CODE:
+        if cleaned_data.get('country') == BELGIUM_ISO_CODE:
             if cleaned_data.get('postal_code') and cleaned_data.get('city'):
                 api_results = CitiesService.get_cities(
                     person=self.person,
@@ -54,7 +54,7 @@ class AddressForm(forms.Form):
 
                 else:
                     self.add_error('postal_code',
-                                   _('This postal code (%(postal_code)s) is not a belgian one!') % {
+                                   _('Postal code (%(postal_code)s) not found in Belgium') % {
                                        'postal_code': str(cleaned_data.get('postal_code'))
                                    }
                                    )
