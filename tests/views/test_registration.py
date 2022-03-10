@@ -28,6 +28,7 @@ from unittest.mock import patch
 import mock
 from django.conf import settings
 from django.contrib import messages
+from django.http import HttpResponseForbidden
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
@@ -248,11 +249,11 @@ class ViewStudentRegistrationTestCase(TestCase):
         self.admission_accepted['state'] = REGISTRATION_SUBMITTED
         url = reverse('registration_edit', args=[self.admission_accepted['uuid']])
         get_response = self.client.get(url)
-        self.assertEqual(get_response.status_code, 401)
+        self.assertEqual(get_response.status_code, HttpResponseForbidden.status_code)
         self.assertTemplateUsed(get_response, 'access_denied.html')
 
         post_response = self.client.post(url)
-        self.assertEqual(post_response.status_code, 401)
+        self.assertEqual(post_response.status_code, HttpResponseForbidden.status_code)
         self.assertTemplateUsed(post_response, 'access_denied.html')
 
     @mock.patch('continuing_education.views.registration.write_fillable_pdf', return_value='test')
