@@ -175,6 +175,12 @@ msgstr ""
 msgid "Children number"
 msgstr ""
 
+#, python-format
+msgid ""
+"Cities available for this belgian postal code %(postal_code)s are : "
+"%(possible_cities)s"
+msgstr ""
+
 msgid "Citizenship"
 msgstr ""
 
@@ -550,6 +556,10 @@ msgid "Post"
 msgstr ""
 
 msgid "Postal code"
+msgstr ""
+
+#, python-format
+msgid "Postal code (%(postal_code)s) not found in Belgium"
 msgstr ""
 
 msgid "Previous"

@@ -195,6 +195,14 @@ msgstr "Changer mon mot de passe"
 msgid "Children number"
 msgstr "Nombre d'enfants"
 
+#, python-format
+msgid ""
+"Cities available for this belgian postal code %(postal_code)s are : "
+"%(possible_cities)s"
+msgstr ""
+"Les localités possibles pour ce code postal %(postal_code)s sont les "
+"suivantes : %(possible_cities)s"
+
 msgid "Citizenship"
 msgstr "Nationalité"
 
@@ -616,6 +624,10 @@ msgstr "Courrier"
 
 msgid "Postal code"
 msgstr "Code postal"
+
+#, python-format
+msgid "Postal code (%(postal_code)s) not found in Belgium"
+msgstr "Ce code postal %(postal_code)s n'est pas belge!"
 
 msgid "Previous"
 msgstr "Précédent"
