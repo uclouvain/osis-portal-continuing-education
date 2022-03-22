@@ -32,7 +32,7 @@ from unittest.mock import patch
 
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
@@ -305,7 +305,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         with self.assertRaises(PermissionDenied):
             admission_form(response.wsgi_request, self.admission_submitted['uuid'])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, HttpResponseForbidden.status_code)
 
     @patch('continuing_education.views.api.get_continuing_education_training')
     @patch('continuing_education.views.api.get_registration')
