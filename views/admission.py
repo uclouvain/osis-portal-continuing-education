@@ -344,7 +344,7 @@ def _fill_forms_with_existing_data(admission, formation, request):
     old_admission = _get_old_admission_if_exists(admissions, person_information, request)
     current_address = admission['address'] if admission else None
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
-    address_form = AddressForm(request.POST or None, initial=address)
+    address_form = AddressForm(request.POST or None, initial=address, person=request.user.person)
     return address_form, adm_form, id_form, person_form
 
 

@@ -7,12 +7,14 @@ from django.utils.translation import gettext_lazy as _
 class ProspectForm(Form):
     first_name = forms.CharField(
         required=True,
-        label=_("First name")
+        label=_("First name"),
+        max_length=20,
     )
 
     name = forms.CharField(
         required=True,
-        label=_("Name")
+        label=_("Name"),
+        max_length=40,
     )
 
     postal_code = forms.CharField(
@@ -55,7 +57,7 @@ class ProspectForm(Form):
             'name',
             'first_name',
             'postal_code',
-            'city'
+            'city',
             'email',
             'phone_number',
             'formation',

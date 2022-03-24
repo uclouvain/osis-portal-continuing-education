@@ -444,7 +444,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         url = reverse(admission_detail, args=[self.admission['uuid']])
         response = self.client.get(url)
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
-        self.assertEquals(len(messages_list), 1)
+        self.assertEqual(len(messages_list), 1)
         formation_acronym = self.admission['formation']['education_group']['acronym']
         expected_msg = _(
             "It is not possible to submit your admission file because the formation %(formation)s is now "
@@ -454,7 +454,7 @@ class ViewStudentAdmissionTestCase(TestCase):
                 'form_url': reverse('prospect_form', kwargs={'acronym': formation_acronym}),
                 'emails': ', '.join(manager['email'] for manager in self.admission['formation']['managers']),
             }
-        self.assertEquals(
+        self.assertEqual(
             messages_list[0],
             expected_msg
         )

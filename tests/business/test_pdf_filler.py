@@ -140,7 +140,7 @@ class PdfFillerTestCase(TestCase):
                          pdf_filler.MANAGER_POSTAL_CODE_KEY, pdf_filler.MANAGER_CITY_KEY,
                          pdf_filler.MANAGER_COUNTRY_KEY]
         for key in keys_expected:
-            self.assertTrue(key in result_dict)
+            self.assertIn(key, result_dict)
 
     def test_build_manager_data(self):
         result_dict = pdf_filler._build_manager_data(self.formation_data_dict)
