@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-14 11:01+0200\n"
+"POT-Creation-Date: 2022-03-14 09:28+0100\n"
 "PO-Revision-Date: 2019-02-25 16:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -148,7 +148,9 @@ msgid ""
 "receipt of the invoice (if my application is accepted) and I am free to "
 "cancel it at any time."
 msgstr ""
-"En finalisant ma demande d'admission, je m'engage à payer les droits d'inscription dès réception de la facture (pour autant que ma demande d'admission soit acceptée) et je suis libre d'annuler celle-ci à tout moment."
+"En finalisant ma demande d'admission, je m'engage à payer les droits "
+"d'inscription dès réception de la facture (pour autant que ma demande "
+"d'admission soit acceptée) et je suis libre d'annuler celle-ci à tout moment."
 
 msgid "By formation website"
 msgstr "Par le site web de la formation continue"
@@ -193,6 +195,14 @@ msgstr "Changer mon mot de passe"
 msgid "Children number"
 msgstr "Nombre d'enfants"
 
+#, python-format
+msgid ""
+"Cities available for this belgian postal code %(postal_code)s are : "
+"%(possible_cities)s"
+msgstr ""
+"Les localités possibles pour ce code postal %(postal_code)s sont les "
+"suivantes : %(possible_cities)s"
+
 msgid "Citizenship"
 msgstr "Nationalité"
 
@@ -204,6 +214,9 @@ msgstr "Fermer"
 
 msgid "Company number"
 msgstr "Numéro unique d'entreprise"
+
+msgid "Complete my application"
+msgstr "Compléter ma demande"
 
 msgid "Conditionally accepted"
 msgstr "Accepté sous condition"
@@ -421,6 +434,13 @@ msgid "It is not possible to edit an registration once submitted"
 msgstr ""
 "Il est impossible de modifier une inscription une fois celle-ci soumise"
 
+msgid ""
+"It is not possible to submit this admission file because you already "
+"submitted an admission file for this training."
+msgstr ""
+"Il n'est pas possible de soumettre ce dossier d'admission car vous avez déjà "
+"soumis un dossier d'admission pour la même formation."
+
 #, python-format
 msgid ""
 "It is not possible to submit your admission file because the formation "
@@ -449,6 +469,10 @@ msgstr "Niveau du dernier diplôme"
 
 msgid "Last name"
 msgstr "Nom"
+
+msgid "Last name and first name can't be encoded only in capital letters"
+msgstr ""
+"Les nom/prénom ne peuvent pas être encodés uniquement en lettres majuscules"
 
 msgid "Last update"
 msgstr "Dernière modification"
@@ -600,6 +624,10 @@ msgstr "Courrier"
 
 msgid "Postal code"
 msgstr "Code postal"
+
+#, python-format
+msgid "Postal code (%(postal_code)s) not found in Belgium"
+msgstr "Ce code postal %(postal_code)s n'est pas belge!"
 
 msgid "Previous"
 msgstr "Précédent"

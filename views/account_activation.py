@@ -146,7 +146,7 @@ def __post_complete_account_registration(request):
     admission_form = AdmissionForm(request.POST)
     forms = [root_person_form, ce_person_form, address_form, admission_form]
     errors = []
-    if all([f.is_valid() for f in forms]):
+    if all(f.is_valid() for f in forms):
         address = address_form.save()
         person = root_person_form.save(commit=False)
         person.user = request.user
