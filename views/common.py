@@ -151,6 +151,10 @@ def get_submission_errors(admission, is_registration=False):
         adm_form = StrictAdmissionForm(
             data=admission,
         )
+        print('------a')
+        for e in address_form.errors:
+            print(e)
+        print('------b')
         forms = [person_form, person_information_form, address_form, adm_form]
         _update_errors(forms, errors, errors_field)
 
@@ -160,6 +164,7 @@ def get_submission_errors(admission, is_registration=False):
 def _update_errors(forms, errors, errors_field):
     for form in forms:
         for field in form.errors:
+            print('field {}'.format(field))
             errors.update({form[field].label: form.errors[field]})
             errors_field.append(field)
 

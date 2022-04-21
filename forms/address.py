@@ -2,6 +2,7 @@ import unicodedata
 
 from dal import autocomplete
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from continuing_education.services.reference import CitiesService
@@ -32,7 +33,11 @@ class AddressForm(forms.Form):
         label=_("City")
     )
 
+
+
+
     def clean(self):
+        print('clean')
         cleaned_data = super().clean()
 
         if cleaned_data.get('country') == BELGIUM_ISO_CODE:
@@ -45,19 +50,22 @@ class AddressForm(forms.Form):
 
                 if cities:
                     if not are_postal_code_and_city_compatible(cities, cleaned_data.get('city').lower()):
-                        self.add_error('postal_code',
-                                       _('Cities available for this belgian postal code %(postal_code)s are : '
-                                         '%(possible_cities)s') % {
-                                           'postal_code': str(cleaned_data.get('postal_code')),
-                                           'possible_cities': ', '.join(city.name for city in cities),
-                                       })
-
+                        print('erreur pc1')
+                        raise ValidationError(
+                            'postal_code',
+                            _('Cities available for this belgian postal code %(postal_code)s are : '
+                              '%(possible_cities)s') % {
+                                'postal_code': str(cleaned_data.get('postal_code')),
+                                'possible_cities': ', '.join(city.name for city in cities),
+                            })
                 else:
-                    self.add_error('postal_code',
-                                   _('Postal code (%(postal_code)s) not found in Belgium') % {
-                                       'postal_code': str(cleaned_data.get('postal_code'))
-                                   }
-                                   )
+                    print('erreur pc2')
+                    raise ValidationError(
+                        'postal_code',
+                        _('Postal code (%(postal_code)s) not found in Belgium') % {
+                            'postal_code': str(cleaned_data.get('postal_code'))
+                        }
+                    )
         return cleaned_data
 
     def __init__(self, *args, person=None, **kwargs):

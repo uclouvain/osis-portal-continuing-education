@@ -314,6 +314,8 @@ def _is_admission_submittable_and_show_errors(admission, errors_fields, request)
     if admission and not request.POST:
         admission['formation_info'] = _get_formation(request, admission)
         admission_submission_errors, errors_fields = get_submission_errors(admission)
+        for e in admission_submission_errors:
+            print("* {}".format(e))
         admission_is_submittable = not admission_submission_errors
         if not admission_is_submittable:
             _show_submit_warning(admission_submission_errors, request)
