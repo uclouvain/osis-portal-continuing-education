@@ -43,7 +43,6 @@ from continuing_education.forms.admission import AdmissionForm
 from continuing_education.forms.person import PersonForm
 from continuing_education.forms.registration import RegistrationForm
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.models.enums.admission_state_choices import DRAFT
 from continuing_education.views import api
 from continuing_education.views.api import get_continuing_education_training
 from continuing_education.views.common import display_errors, get_submission_errors, _show_submit_warning, \
@@ -85,26 +84,14 @@ def admission_detail(request, admission_uuid):
             _("Your admission request has been correctly submitted. The program manager will get back to you shortly.")
         )
     elif admission['state'] == admission_state_choices.DRAFT and admission['formation']['active']:
-        if _participant_has_another_submitted_admission_or_registration_for_formation(request, admission):
-            message_warning = "<strong>" + \
-                              str(_("It is not possible to submit this admission file because you already submitted "
-                                    "an admission file for this training.")) + \
-                              "</strong>"
-            messages.add_message(
-                request=request,
-                level=messages.WARNING,
-                message=mark_safe(message_warning),
-            )
-            admission_is_submittable = False
-        else:
-            add_informations_message_on_submittable_file(
-                request=request,
-                title=_("Your admission file has been saved. Please consider the following information :")
-            )
-            admission_submission_errors, errors_fields = get_submission_errors(admission)
-            admission_is_submittable = not admission_submission_errors
-            if not admission_is_submittable:
-                _show_submit_warning(admission_submission_errors, request)
+        add_informations_message_on_submittable_file(
+            request=request,
+            title=_("Your admission file has been saved. Please consider the following information :")
+        )
+        admission_submission_errors, errors_fields = get_submission_errors(admission)
+        admission_is_submittable = not admission_submission_errors
+        if not admission_is_submittable:
+            _show_submit_warning(admission_submission_errors, request)
     elif admission['state'] == admission_state_choices.DRAFT and not admission['formation']['active']:
         formation_acronym = admission['formation']['education_group']['acronym']
         managers_emails = ', '.join(manager['email'] for manager in admission['formation']['managers'])
@@ -147,18 +134,6 @@ def admission_detail(request, admission_uuid):
     )
 
 
-def _participant_has_another_submitted_admission_or_registration_for_formation(request, current_admission):
-    person_information = api.get_continuing_education_person(request)
-    admissions = api.get_admission_list(request, person_information['uuid'])['results']
-    registrations = api.get_registration_list(request, person_information['uuid'])['results']
-    return any(
-        adm['formation']['uuid'] == current_admission['formation']['uuid']
-        and adm['uuid'] != current_admission['uuid']
-        and adm['state'] != DRAFT
-        for adm in admissions + registrations
-    )
-
-
 def _show_save_before_submit(request):
     messages.add_message(
         request=request,
@@ -176,8 +151,7 @@ def admission_submit(request):
     admission = api.get_admission(request, request.POST.get('admission_uuid'))
     admission_submission_errors, errors_fields = get_submission_errors(admission)
     if request.POST.get("submit") \
-            and not admission_submission_errors \
-            and not _participant_has_another_submitted_admission_or_registration_for_formation(request, admission):
+            and not admission_submission_errors:
         _update_admission_state(request, admission)
     return redirect('admission_detail', admission['uuid'])
 

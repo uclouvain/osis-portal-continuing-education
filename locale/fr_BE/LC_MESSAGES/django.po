@@ -434,13 +434,6 @@ msgid "It is not possible to edit an registration once submitted"
 msgstr ""
 "Il est impossible de modifier une inscription une fois celle-ci soumise"
 
-msgid ""
-"It is not possible to submit this admission file because you already "
-"submitted an admission file for this training."
-msgstr ""
-"Il n'est pas possible de soumettre ce dossier d'admission car vous avez déjà "
-"soumis un dossier d'admission pour la même formation."
-
 #, python-format
 msgid ""
 "It is not possible to submit your admission file because the formation "
