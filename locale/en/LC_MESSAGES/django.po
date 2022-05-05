@@ -386,11 +386,6 @@ msgstr ""
 msgid "It is not possible to edit an registration once submitted"
 msgstr ""
 
-msgid ""
-"It is not possible to submit this admission file because you already "
-"submitted an admission file for this training."
-msgstr ""
-
 #, python-format
 msgid ""
 "It is not possible to submit your admission file because the formation "
