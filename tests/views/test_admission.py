@@ -94,7 +94,6 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.addCleanup(self.get_patcher.stop)
         self.addCleanup(self.get_list_patcher.stop)
         self.addCleanup(self.get_list_person_patcher.stop)
-        self.addCleanup(self.participant_has_another_submitted_admission_patcher.stop)
 
     def test_admission_detail(self):
         url = reverse(admission_detail, args=[self.admission['uuid']])
