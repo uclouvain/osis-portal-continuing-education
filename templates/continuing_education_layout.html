@@ -50,6 +50,8 @@
         <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/continuing_education_style.css' %}">
     {% endblock %}
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+
     {% analytical_head_bottom %}
 </head>
 <body {% if environment == 'DEV' %} class="devmode" {% elif environment == 'LOCAL' %}
@@ -177,7 +179,6 @@
             href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
 </div>
 
-<script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/osis-portal.js' %}"></script>
 <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
