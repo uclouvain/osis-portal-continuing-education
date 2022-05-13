@@ -33,7 +33,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext
 from requests import Response
 from rest_framework import status
 
@@ -76,15 +76,6 @@ class AdmissionFileTestCase(TestCase):
         )
         self.mocked_called_api_function_get = self.get_patcher.start()
         self.addCleanup(self.get_patcher.stop)
-
-        self.participant_has_another_submitted_admission_patcher = patch(
-            "continuing_education.views.admission._participant_has_another_submitted_admission_or_registration_for_"
-            "formation",
-            return_value=False
-        )
-        self.mocked_participant_has_another_submitted_admission = \
-            self.participant_has_another_submitted_admission_patcher.start()
-        self.addCleanup(self.participant_has_another_submitted_admission_patcher.stop)
 
     def mocked_success_post_request(self, **kwargs):
         response = Response()
