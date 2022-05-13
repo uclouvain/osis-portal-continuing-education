@@ -400,7 +400,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         url = reverse(admission_detail, args=[self.admission['uuid']])
 
         for state in get_enum_keys(STATE_CHOICES):
-            with self.subTest():
+            with self.subTest(msg=state):
                 self.admission['state'] = state
                 response = self.client.get(url)
                 self.assertEqual(response.context['can_upload'], state in states_can_upload_file)
