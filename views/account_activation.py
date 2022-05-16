@@ -326,6 +326,7 @@ class ContinuingEducationPasswordResetConfirmView(PasswordContextMixin, FormView
     template_name = 'registration/continuing_education_password_reset_confirm.html'
     title = _('Enter a new password')
     token_generator = default_token_generator
+    reset_url_token = "set-password"
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(never_cache)
