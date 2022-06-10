@@ -60,7 +60,7 @@ urlpatterns = [
             account_activation.ContinuingEducationActivationView.as_view(),
             name='django_registration_activate'),
         url(r'^password_reset/$', ContinuingEducationPasswordResetView.as_view(), name='password_reset'),
-        url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$',
             ContinuingEducationPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
         url(r'^', include('django_registration.backends.activation.urls'))])),
     url(r'^admission_new/', admission.admission_form, name='admission_new'),

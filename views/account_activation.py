@@ -297,6 +297,7 @@ class ContinuingEducationPasswordResetView(PasswordContextMixin, FormView):
     template_name = 'registration/continuing_education_password_reset_form.html'
     token_generator = default_token_generator
     title = _('Password reset')
+    reset_url_token = "set-password"
 
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
