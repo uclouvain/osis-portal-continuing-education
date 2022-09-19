@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-14 11:01+0200\n"
+"POT-Creation-Date: 2022-03-14 09:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,6 +175,12 @@ msgstr ""
 msgid "Children number"
 msgstr ""
 
+#, python-format
+msgid ""
+"Cities available for this belgian postal code %(postal_code)s are : "
+"%(possible_cities)s"
+msgstr ""
+
 msgid "Citizenship"
 msgstr ""
 
@@ -185,6 +191,9 @@ msgid "Close"
 msgstr ""
 
 msgid "Company number"
+msgstr ""
+
+msgid "Complete my application"
 msgstr ""
 
 msgid "Conditionally accepted"
@@ -402,6 +411,9 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
+msgid "Last name and first name can't be encoded only in capital letters"
+msgstr ""
+
 msgid "Last update"
 msgstr ""
 
@@ -539,6 +551,10 @@ msgid "Post"
 msgstr ""
 
 msgid "Postal code"
+msgstr ""
+
+#, python-format
+msgid "Postal code (%(postal_code)s) not found in Belgium"
 msgstr ""
 
 msgid "Previous"
