@@ -214,8 +214,19 @@ def admission_form(request, admission_uuid=None):
             reverse('admission_detail', kwargs={'admission_uuid': admission['uuid'] if admission else ''}),
         )
     else:
-        errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
-        errors += list(itertools.product(registration_form.errors, billing_address_form.errors))
+        errors = []
+        if adm_form.errors:
+            errors.append(adm_form.errors)
+        if person_form.errors:
+            errors.append(person_form.errors)
+        if address_form.errors:
+            errors.append(address_form.errors)
+        if id_form.errors:
+            errors.append(id_form.errors)
+        if registration_form.errors:
+            errors.append(registration_form.errors)
+        if billing_address_form.errors:
+            errors.append(billing_address_form.errors)
         display_errors(request, errors)
 
     return render(
