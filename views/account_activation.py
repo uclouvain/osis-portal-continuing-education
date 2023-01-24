@@ -296,6 +296,7 @@ class ContinuingEducationPasswordResetView(PasswordContextMixin, FormView):
     success_url = reverse_lazy('continuing_education_login')
     template_name = 'registration/continuing_education_password_reset_form.html'
     token_generator = default_token_generator
+    reset_url_token = "set-password"
     title = _('Password reset')
     reset_url_token = "set-password"
 
