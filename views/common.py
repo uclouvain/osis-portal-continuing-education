@@ -189,7 +189,7 @@ def _show_submit_warning(admission_submission_errors, request):
 def add_informations_message_on_submittable_file(request, title):
     if request.method == 'GET':
         items = [
-            _("You are still able to edit the form, via the 'Edit' button"),
+            _("You are still able to edit the form, via the 'Complete my application' button"),
             _("You can upload documents via the 'Documents'"),
         ]
         message = "<strong>{}</strong><br>".format(title) + \
