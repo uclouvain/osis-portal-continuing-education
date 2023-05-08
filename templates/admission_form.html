@@ -221,7 +221,6 @@
         </form>
     </div>
 
-    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 
     {{ admission_form.media }}
 {% endblock %}
@@ -406,9 +405,10 @@
         $('.tab-pane').each(function () {
             const tabId = $(this)[0].id;
             const countWarning = $(this).find('.has-warning').length;
-            if (countWarning > 0) {
+            const countErrors = $(this).find('.has-error').length;
+            if (countWarning > 0 || countErrors > 0) {
                 const tabBadge = $('a[href="#' + tabId + '"]').find('.badge')[0];
-                tabBadge.innerText = countWarning;
+                tabBadge.innerText = countWarning + countErrors;
             }
         });
 

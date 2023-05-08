@@ -82,7 +82,7 @@ class TestRegistration(FunctionalTestCase, UserMixin):
         activation_url = self.get_link_href_by_url_name('django_registration_activate',
                                                         {'activation_key': self.__get_activation_key(username)})
         mail_body = mail.outbox[0].body
-        self.assertTrue(activation_url in mail_body)
+        self.assertIn(activation_url, mail_body)
 
     @can_be_reported
     def test_registered_user_not_activated_account(self):

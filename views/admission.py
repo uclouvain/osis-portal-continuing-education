@@ -150,7 +150,8 @@ def _show_save_before_submit(request):
 def admission_submit(request):
     admission = api.get_admission(request, request.POST.get('admission_uuid'))
     admission_submission_errors, errors_fields = get_submission_errors(admission)
-    if request.POST.get("submit") and not admission_submission_errors:
+    if request.POST.get("submit") \
+            and not admission_submission_errors:
         _update_admission_state(request, admission)
     return redirect('admission_detail', admission['uuid'])
 
@@ -213,8 +214,19 @@ def admission_form(request, admission_uuid=None):
             reverse('admission_detail', kwargs={'admission_uuid': admission['uuid'] if admission else ''}),
         )
     else:
-        errors = list(itertools.product(adm_form.errors, person_form.errors, address_form.errors, id_form.errors))
-        errors += list(itertools.product(registration_form.errors, billing_address_form.errors))
+        errors = []
+        if adm_form.errors:
+            errors.append(adm_form.errors)
+        if person_form.errors:
+            errors.append(person_form.errors)
+        if address_form.errors:
+            errors.append(address_form.errors)
+        if id_form.errors:
+            errors.append(id_form.errors)
+        if registration_form.errors:
+            errors.append(registration_form.errors)
+        if billing_address_form.errors:
+            errors.append(billing_address_form.errors)
         display_errors(request, errors)
 
     return render(
@@ -317,7 +329,7 @@ def _fill_forms_with_existing_data(admission, formation, request):
     old_admission = _get_old_admission_if_exists(admissions, person_information, request)
     current_address = admission['address'] if admission else None
     address = current_address if current_address else (old_admission['address'] if old_admission else None)
-    address_form = AddressForm(request.POST or None, initial=address)
+    address_form = AddressForm(request.POST or None, initial=address, person=request.user.person)
     return address_form, adm_form, id_form, person_form
 
 

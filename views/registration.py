@@ -143,7 +143,12 @@ def registration_edit(request, admission_uuid):
             reverse('registration_detail', kwargs={'admission_uuid': admission_uuid})
         )
     else:
-        errors = list(itertools.product(form.errors, residence_address_form.errors, billing_address_form.errors))
+        if form.errors:
+            errors.append(form.errors)
+        if residence_address_form.errors:
+            errors.append(residence_address_form.errors)
+        if billing_address_form.errors:
+            errors.append(billing_address_form.errors)
         display_errors(request, errors)
     return render(request, 'registration_form.html', locals())
 

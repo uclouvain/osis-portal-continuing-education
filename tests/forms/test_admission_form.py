@@ -54,7 +54,7 @@ class TestAdmissionForm(TestCase):
         self.person.user.save()
         admission = AdmissionDictFactory(self.iufc_person)
         form = AdmissionForm(admission, user=self.person.user)
-        self.assertEquals(
+        self.assertEqual(
             form.fields['email'].initial,
             "test@osis.be"
         )
