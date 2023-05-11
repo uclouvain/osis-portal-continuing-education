@@ -27,6 +27,7 @@ import logging
 from typing import List
 
 import urllib3
+import osis_reference_sdk
 from django.conf import settings
 from osis_reference_sdk import ApiClient
 from osis_reference_sdk.api import cities_api
@@ -44,7 +45,7 @@ class CitiesService:
         api_instance = cities_api.CitiesApi(ApiClient(configuration=configuration))
         try:
             cities = api_instance.cities_list(**kwargs)
-        except (reference_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+        except (osis_reference_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
             logger.error(e)
             cities = {'results': [], 'count': 0}
         return cities
