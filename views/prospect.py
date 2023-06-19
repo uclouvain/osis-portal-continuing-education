@@ -1,5 +1,4 @@
-from django.shortcuts import redirect, render
-from django.urls import reverse
+from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
@@ -28,5 +27,4 @@ def prospect_form(request, acronym=None):
         data, response_status_code = post_prospect(request, prospect)
         if response_status_code == status.HTTP_201_CREATED:
             display_success_messages(request, _("Your form has been correctly sent."))
-            return redirect(reverse('continuing_education_home'))
     return render(request, 'prospect_form.html', locals())
