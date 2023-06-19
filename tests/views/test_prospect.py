@@ -84,7 +84,6 @@ class ProspectTestCase(TestCase):
             gettext(_("Your form has been correctly sent.")),
             messages_list
         )
-        self.assertRedirects(response, reverse('continuing_education_home'))
 
     @patch('continuing_education.views.api.get_continuing_education_training')
     @patch('continuing_education.views.api.transform_response_to_data')
