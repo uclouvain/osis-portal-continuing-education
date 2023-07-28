@@ -34,6 +34,9 @@
 {% endblock %}
 
 {% block content %}
+
+    {% include "template_messages.html" %}
+
     <form id="form" method="POST" class="post-form">
         {% csrf_token %}
         <div class="page-header">

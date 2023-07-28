@@ -78,13 +78,12 @@ class ProspectTestCase(TestCase):
     @patch('requests.post', return_value=HttpResponse(status=status.HTTP_201_CREATED))
     def test_post_valid_prospect(self, mock_post, mock_get, mock_transform):
         response = self.client.post(reverse('prospect_form', args=['ACRONYM']), data=self.prospect)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertIn(
             gettext(_("Your form has been correctly sent.")),
             messages_list
         )
-        self.assertRedirects(response, reverse('continuing_education_home'))
 
     @patch('continuing_education.views.api.get_continuing_education_training')
     @patch('continuing_education.views.api.transform_response_to_data')
