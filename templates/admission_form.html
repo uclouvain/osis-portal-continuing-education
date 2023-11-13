@@ -267,7 +267,7 @@
             }
         });
         //check when page is loaded
-        billing_radio.prop('checked') ? copy_address() : copy_address(billing_address, true);
+        setTimeout(()=>billing_radio.prop('checked') ? copy_address() : copy_address(billing_address, true), 500);
         $("#id_country, #id_location, #id_city, #id_postal_code").change(function () {
             const billing_checked = $("[name='use_address_for_billing']:checked").val();
             if (billing_checked === "True") {
@@ -463,7 +463,6 @@
                     } else {
                         $("#additional_tab").hide();
                     }
-
                     if(data.registration_required){
                         $("#billing_info").hide();
                         $("#billing_info_divider").hide();
