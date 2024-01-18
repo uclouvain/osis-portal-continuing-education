@@ -195,7 +195,14 @@ class ContinuingEducationActivationView(ActivationView):
         user = self.get_user(username)
         user.is_active = True
         user.save()
-        Person.objects.get_or_create(user=user, email=user.username, defaults={'language': 'fr-be'})
+        Person.objects.get_or_create(
+            user=user,
+            defaults={
+                'language': 'fr-be',
+                'email': user.username,
+                'global_id': "CE"+str(user.id)
+            }
+        )
         self.request.session['formation_id'] = formation_id
         return user
 
