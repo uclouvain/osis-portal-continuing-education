@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
-from rest_framework import status
 
 from continuing_education.forms.prospect import ProspectForm
 from continuing_education.views import api
@@ -25,6 +24,6 @@ def prospect_form(request, acronym=None):
             'phone_number': request.POST.get('phone_number')
         }
         data, response_status_code = post_prospect(request, prospect)
-        if response_status_code == status.HTTP_201_CREATED:
+        if response_status_code == 201:
             display_success_messages(request, _("Your form has been correctly sent."))
     return render(request, 'prospect_form.html', locals())
