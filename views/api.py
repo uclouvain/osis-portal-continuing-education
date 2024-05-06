@@ -24,13 +24,12 @@
 #
 ##############################################################################
 import io
+import json
 
 import requests
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import Http404
-from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.parsers import JSONParser
 
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
 API_URL = settings.URL_CONTINUING_EDUCATION_FILE_API
@@ -45,9 +44,9 @@ def get_data_from_osis(request, custom_path=None, **kwargs):
         else REQUEST_HEADER,
         params=kwargs.get('params')
     )
-    if response.status_code == status.HTTP_404_NOT_FOUND:
+    if response.status_code == 404:
         raise Http404
-    elif response.status_code == status.HTTP_403_FORBIDDEN:
+    elif response.status_code == 403:
         raise PermissionDenied(response.json()['detail'] if response.content else '')
     return transform_response_to_data(response)
 
@@ -65,7 +64,7 @@ def _build_api_request_url(custom_path, **kwargs):
 
 def transform_response_to_data(response):
     stream = io.BytesIO(response.content)
-    data = JSONParser().parse(stream)
+    data = json.load(stream)
     return data
 
 
@@ -111,7 +110,7 @@ def post_data_to_osis(request, object_name, object_to_post):
         headers=REQUEST_HEADER if object_name == 'prospects' else {'Authorization': 'Token ' + token},
         json=object_to_post
     )
-    if response.status_code != status.HTTP_201_CREATED:
+    if response.status_code != 201:
         data = {}
     else:
         data = transform_response_to_data(response)
@@ -134,7 +133,7 @@ def update_data_to_osis(request, object_name, object_to_update):
         headers={'Authorization': 'Token ' + token},
         json=object_to_update,
     )
-    if response.status_code == status.HTTP_403_FORBIDDEN:
+    if response.status_code == 403:
         raise PermissionDenied(response.json()['detail'] if response.content else '')
     return response
 
@@ -203,7 +202,7 @@ def get_token_from_osis(username, force_user_creation=False):
             'force_user_creation': force_user_creation
         }
     )
-    if response.status_code == status.HTTP_200_OK:
+    if response.status_code == 200:
         return response.json()['token']
     else:
         return ""

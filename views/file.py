@@ -25,6 +25,7 @@
 ##############################################################################
 import base64
 import io
+import json
 from mimetypes import MimeTypes
 
 import requests
@@ -36,8 +37,6 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
-from rest_framework import status
-from rest_framework.parsers import JSONParser
 
 from continuing_education.views.api import REQUEST_HEADER, get_admission, get_registration
 from continuing_education.views.common import display_error_messages, display_success_messages
@@ -63,7 +62,7 @@ def upload_file(request, admission_uuid):
         data=data
     )
 
-    if request_to_upload.status_code == status.HTTP_201_CREATED:
+    if request_to_upload.status_code == 201:
         display_success_messages(request, _("The document is uploaded correctly"))
     else:
         display_error_messages(request, request_to_upload.json())
@@ -77,9 +76,9 @@ def download_file(request, file_uuid, admission_uuid):
         FILES_URL % {'admission_uuid': str(admission_uuid)} + str(file_uuid),
         headers=REQUEST_HEADER
     )
-    if request_to_get.status_code == status.HTTP_200_OK:
+    if request_to_get.status_code == 200:
         stream = io.BytesIO(request_to_get.content)
-        admission_file = JSONParser().parse(stream)
+        admission_file = json.load(stream)
         name = get_valid_filename(admission_file['name'])
         mime_type = MimeTypes().guess_type(admission_file['name'])
         response_file = base64.b64decode(admission_file['content'])
@@ -97,7 +96,7 @@ def remove_file(request, file_uuid, admission_uuid):
         headers=REQUEST_HEADER
     )
 
-    if request_to_delete.status_code == status.HTTP_204_NO_CONTENT:
+    if request_to_delete.status_code == 204:
         display_success_messages(request, _("File correctly deleted"))
     else:
         display_error_messages(request, _("A problem occured during delete"))
@@ -114,7 +113,7 @@ def _get_files_list(request, admission, url_continuing_education_file_api):
             url=url_continuing_education_file_api,
             headers=REQUEST_HEADER,
         )
-        if response.status_code == status.HTTP_200_OK:
+        if response.status_code == 200:
             stream = io.BytesIO(response.content)
             files_list = JSONParser().parse(stream)['results']
             for file in files_list:
