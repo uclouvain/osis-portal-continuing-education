@@ -115,7 +115,7 @@ def _get_files_list(request, admission, url_continuing_education_file_api):
         )
         if response.status_code == 200:
             stream = io.BytesIO(response.content)
-            files_list = JSONParser().parse(stream)['results']
+            files_list = json.load(stream)['results']
             for file in files_list:
                 file['created_date'] = parser.parse(
                     file['created_date']
