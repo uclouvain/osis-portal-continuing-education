@@ -30,7 +30,6 @@ from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext, gettext_lazy as _
-from rest_framework import status
 
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
@@ -71,11 +70,11 @@ class ProspectTestCase(TestCase):
         self.assertTemplateUsed(response, 'prospect_form.html')
 
     def mocked_failed_post_request(*args, **kwargs):
-        return {}, status.HTTP_400_BAD_REQUEST
+        return {}, 400
 
     @patch('continuing_education.views.api.transform_response_to_data')
     @patch('requests.get')
-    @patch('requests.post', return_value=HttpResponse(status=status.HTTP_201_CREATED))
+    @patch('requests.post', return_value=HttpResponse(status=201))
     def test_post_valid_prospect(self, mock_post, mock_get, mock_transform):
         response = self.client.post(reverse('prospect_form', args=['ACRONYM']), data=self.prospect)
         self.assertEqual(response.status_code, 200)

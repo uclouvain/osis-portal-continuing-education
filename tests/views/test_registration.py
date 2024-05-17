@@ -33,7 +33,6 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, gettext
 from requests import Response
-from rest_framework import status
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
@@ -265,7 +264,7 @@ class ViewStudentRegistrationTestCase(TestCase):
         url = reverse('registration_pdf', args=[self.registration_submitted['uuid']])
         response = self.client.get(url)
         self.assertEqual(response.__getitem__('content-type'), 'application/pdf;')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
 
 
 class RegistrationSubmissionErrorsTestCase(TestCase):
