@@ -97,7 +97,7 @@ class AdmissionFileTestCase(TestCase):
     def test_upload_file_success(self, mock_post):
         url = reverse('upload_file', args=[self.admission['uuid']])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
-        response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
+        response = self.client.post(url, {'myfile': self.admission_file}, headers={"referer": redirect_url})
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEqual(response.status_code, 302)
         self.assertIn(
@@ -110,7 +110,7 @@ class AdmissionFileTestCase(TestCase):
     def test_upload_file_error(self, mock_post):
         url = reverse('upload_file', args=[self.admission['uuid']])
         redirect_url = reverse('admission_detail', kwargs={'admission_uuid': self.admission['uuid']})
-        response = self.client.post(url, {'myfile': self.admission_file}, HTTP_REFERER=redirect_url)
+        response = self.client.post(url, {'myfile': self.admission_file}, headers={"referer": redirect_url})
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEqual(response.status_code, 302)
         # an error should raise as the admission is not retrieved from test
@@ -127,7 +127,7 @@ class AdmissionFileTestCase(TestCase):
             content=str.encode("test_content"),
             content_type="application/pdf"
         )
-        response = self.client.post(url, {'myfile': file}, HTTP_REFERER=redirect_url)
+        response = self.client.post(url, {'myfile': file}, headers={"referer": redirect_url})
         messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
         self.assertEqual(response.status_code, 302)
         # an error should raise as the admission is not retrieved from test
@@ -150,7 +150,7 @@ class AdmissionFileTestCase(TestCase):
         response = self.client.delete(
             url,
             {'myfile': self.admission_file},
-            HTTP_REFERER=redirect_url
+            headers={"referer": redirect_url}
         )
 
         messages_list = list(messages.get_messages(response.wsgi_request))
@@ -169,7 +169,7 @@ class AdmissionFileTestCase(TestCase):
         response = self.client.delete(
             url,
             {'myfile': self.admission_file},
-            HTTP_REFERER=redirect_url
+            headers={"referer": redirect_url}
         )
         messages_list = list(messages.get_messages(response.wsgi_request))
         self.assertEqual(response.status_code, 302)

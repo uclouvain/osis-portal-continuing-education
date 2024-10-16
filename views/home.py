@@ -77,4 +77,4 @@ def main_view(request, acronym=None):
 def set_language(request, ui_language):
     translation.activate(ui_language)
     request.session[translation.LANGUAGE_SESSION_KEY] = ui_language
-    return redirect(request.META['HTTP_REFERER'])
+    return redirect(request.headers['referer'])
