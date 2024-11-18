@@ -35,15 +35,17 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseForbidden
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext, gettext_lazy as _
 from requests import Response
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from continuing_education.models.enums import admission_state_choices
-from continuing_education.models.enums.admission_state_choices import SUBMITTED, ACCEPTED_NO_REGISTRATION_REQUIRED, \
-    ACCEPTED, STATE_CHOICES, DRAFT
+from continuing_education.models.enums.admission_state_choices import (
+    SUBMITTED, ACCEPTED_NO_REGISTRATION_REQUIRED,
+    ACCEPTED, STATE_CHOICES, DRAFT,
+)
 from continuing_education.models.enums.enums import get_enum_keys
 from continuing_education.tests.factories.admission import AdmissionDictFactory, RegistrationDictFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
@@ -413,7 +415,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         }
         response = self.client.get(reverse('get_formation_information'), data={
             'formation_uuid': self.formation['uuid']
-        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        }, headers={"x-requested-with": 'XMLHttpRequest'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             json.loads(response.content.decode('utf-8')),

@@ -76,7 +76,7 @@ def AdmissionDictFactory(person_information, state=DRAFT, formation=None):
 
 def _get_fake_phone_number():
     fake = factory.Faker('phone_number').evaluate(None, None, {'locale': None})
-    for c in [" ", "(", ")", "-"]:
+    for c in [" ", "(", ")", "-", "/"]:
         fake = fake.replace(c, "")
     return fake
 
