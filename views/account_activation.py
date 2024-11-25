@@ -37,7 +37,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
@@ -280,7 +280,7 @@ class ContinuingEducationActivationView(ActivationView):
             )
             login(self.request, activated_user, backend='django.contrib.auth.backends.ModelBackend')
             return HttpResponseRedirect(
-                force_text(
+                force_str(
                     self.get_success_url(activated_user)
                 )
             )
@@ -294,7 +294,7 @@ class ContinuingEducationActivationView(ActivationView):
                 self.BAD_USERNAME_MESSAGE,
                 code='bad_username'
             )
-        return force_text(reverse("complete_account_registration"))
+        return force_str(reverse("complete_account_registration"))
 
 
 class ContinuingEducationPasswordResetView(PasswordContextMixin, FormView):
@@ -368,7 +368,7 @@ class ContinuingEducationPasswordResetConfirmView(PasswordContextMixin, FormView
     def get_user(self, uidb64):
         try:
             # urlsafe_base64_decode() decodes to bytestring on Python 3
-            uid = force_text(urlsafe_base64_decode(uidb64))
+            uid = force_str(urlsafe_base64_decode(uidb64))
             user = UserModel._default_manager.get(pk=uid)
         except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
             user = None

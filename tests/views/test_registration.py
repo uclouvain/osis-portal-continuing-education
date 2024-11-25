@@ -31,7 +31,7 @@ from django.contrib import messages
 from django.http import HttpResponseForbidden
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext, gettext_lazy as _
 from requests import Response
 
 from base.tests.factories.academic_year import AcademicYearFactory
