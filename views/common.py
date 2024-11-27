@@ -42,6 +42,7 @@ from continuing_education.forms.admission import StrictAdmissionForm
 from continuing_education.forms.person import StrictPersonForm
 from continuing_education.forms.registration import StrictRegistrationForm
 from continuing_education.views.login import ContinuingEducationLoginView
+from osis_common.middlewares.locale import LANGUAGE_SESSION_KEY
 from osis_common.utils.models import get_object_or_none
 
 ONE_OF_THE_NEEDED_FIELD_BEFORE_SUBMISSION = 'national_registry_number'
@@ -73,7 +74,7 @@ def _retrieve_auth_info(request):
     if person and person.language:
         user_language = person.language
         translation.activate(user_language)
-        request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+        request.session[LANGUAGE_SESSION_KEY] = user_language
     return person, user
 
 
