@@ -30,6 +30,7 @@ from django.utils import translation
 
 from base.models import person as mdl_person
 from continuing_education.views import api
+from osis_common.middlewares.locale import LANGUAGE_SESSION_KEY
 
 
 def formations_list(request):
@@ -76,5 +77,5 @@ def main_view(request, acronym=None):
 
 def set_language(request, ui_language):
     translation.activate(ui_language)
-    request.session[translation.LANGUAGE_SESSION_KEY] = ui_language
+    request.session[LANGUAGE_SESSION_KEY] = ui_language
     return redirect(request.headers['referer'])
