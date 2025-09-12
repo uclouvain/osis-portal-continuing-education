@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import itertools
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -50,7 +49,7 @@ from continuing_education.views.common import display_errors, get_submission_err
 from continuing_education.views.file import _get_files_list, FILES_URL
 from frontoffice.settings.base import MAX_UPLOAD_SIZE
 from osis_common.decorators.ajax import ajax_required
-from reference.models.country import Country
+from reference.services.country import CountryService
 
 STATES_CAN_UPLOAD_FILE = [
     admission_state_choices.DRAFT,
@@ -336,14 +335,14 @@ def _fill_forms_with_existing_data(admission, formation, request):
 def _keep_posted_data_in_form(adm_form, person_form, request):
     birth_country = request.POST.get('birth_country')
     if birth_country:
-        country = Country.objects.get(iso_code=birth_country)
+        country = CountryService.get_countries(person=request.user.person, iso_code=birth_country)[0]
         person_form.fields['birth_country'].initial = birth_country
         person_form.fields['birth_country'].choices = [
             (country.iso_code, country.name)
         ]
     citizenship = request.POST.get('citizenship')
     if citizenship:
-        country = Country.objects.get(iso_code=citizenship)
+        country = CountryService.get_countries(person=request.user.person, iso_code=citizenship)[0]
         adm_form.fields['citizenship'].initial = citizenship
         adm_form.fields['citizenship'].choices = [
             (country.iso_code, country.name)
