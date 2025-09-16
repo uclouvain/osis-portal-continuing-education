@@ -32,7 +32,6 @@ from django.test import TestCase
 from django.urls import reverse
 from mock import patch
 
-from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from continuing_education.tests.factories.continuing_education_training import ContinuingEducationTrainingDictFactory
@@ -80,7 +79,6 @@ class FormationsListTestCase(TestCase):
         cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_iufc = ContinuingEducationPersonDictFactory(cls.person.uuid)
-        cls.an_academic_year = AcademicYearFactory(current=True)
 
     @mock.patch('continuing_education.views.api.get_continuing_education_training_list')
     def test_formations_list(self, mock_get_training_list):

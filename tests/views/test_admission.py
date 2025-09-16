@@ -39,7 +39,6 @@ from django.utils.translation import gettext, gettext_lazy as _
 from osis_reference_sdk.model.country import Country
 from requests import Response
 
-from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from continuing_education.models.enums import admission_state_choices
@@ -58,8 +57,6 @@ from continuing_education.views.common import get_submission_errors, _get_manage
 class ViewStudentAdmissionTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        current_acad_year = create_current_academic_year()
-        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
         cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user, gender='F')
         cls.formation = ContinuingEducationTrainingDictFactory()
@@ -459,8 +456,6 @@ class ViewStudentAdmissionTestCase(TestCase):
 class AdmissionSubmissionErrorsTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        current_acad_year = create_current_academic_year()
-        AcademicYearFactory(year=current_acad_year.year + 1)
         cls.person = PersonFactory(gender='H')
 
     def setUp(self):
