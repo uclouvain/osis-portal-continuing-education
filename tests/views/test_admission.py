@@ -36,6 +36,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext, gettext_lazy as _
+from osis_reference_sdk.model.country import Country
 from requests import Response
 
 from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
@@ -52,7 +53,6 @@ from continuing_education.tests.factories.continuing_education_training import C
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.views.admission import admission_form, admission_detail
 from continuing_education.views.common import get_submission_errors, _get_managers_mails
-from reference.tests.factories.country import CountryFactory
 
 
 class ViewStudentAdmissionTestCase(TestCase):
@@ -63,7 +63,7 @@ class ViewStudentAdmissionTestCase(TestCase):
         cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user, gender='F')
         cls.formation = ContinuingEducationTrainingDictFactory()
-        cls.country = CountryFactory(iso_code="BE")
+        cls.country = Country(iso_code="BE")
 
     def setUp(self):
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)

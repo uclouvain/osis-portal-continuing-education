@@ -335,14 +335,14 @@ def _fill_forms_with_existing_data(admission, formation, request):
 def _keep_posted_data_in_form(adm_form, person_form, request):
     birth_country = request.POST.get('birth_country')
     if birth_country:
-        country = CountryService.get_countries(person=request.user.person, iso_code=birth_country)[0]
+        country = CountryService.get_countries(person=request.user.person, iso_code=birth_country).results[0]
         person_form.fields['birth_country'].initial = birth_country
         person_form.fields['birth_country'].choices = [
             (country.iso_code, country.name)
         ]
     citizenship = request.POST.get('citizenship')
     if citizenship:
-        country = CountryService.get_countries(person=request.user.person, iso_code=citizenship)[0]
+        country = CountryService.get_countries(person=request.user.person, iso_code=citizenship).results[0]
         adm_form.fields['citizenship'].initial = citizenship
         adm_form.fields['citizenship'].choices = [
             (country.iso_code, country.name)
