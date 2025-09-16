@@ -30,7 +30,6 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, Http404
 from django.test import TestCase, RequestFactory
 
-from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from continuing_education.models.enums.admission_state_choices import SUBMITTED
@@ -46,8 +45,6 @@ from continuing_education.views.api import (
 class ApiMethodsTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        current_acad_year = create_current_academic_year()
-        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
         cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)

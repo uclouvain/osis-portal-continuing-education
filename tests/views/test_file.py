@@ -36,8 +36,6 @@ from django.urls import reverse
 from django.utils.translation import gettext
 from requests import Response
 
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.academic_year import create_current_academic_year
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from continuing_education.tests.factories.admission import AdmissionDictFactory
@@ -47,9 +45,6 @@ from continuing_education.tests.factories.person import ContinuingEducationPerso
 class AdmissionFileTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        current_acad_year = create_current_academic_year()
-        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
-
         cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user)
         cls.person_information = ContinuingEducationPersonDictFactory(cls.person.uuid)
