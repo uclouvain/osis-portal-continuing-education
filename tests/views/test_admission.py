@@ -96,6 +96,9 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.addCleanup(self.get_patcher.stop)
         self.addCleanup(self.get_list_patcher.stop)
         self.addCleanup(self.get_list_person_patcher.stop)
+        api_patcher = patch("osis_reference_sdk.api.countries_api.CountriesApi")
+        self.mock_api = api_patcher.start()
+        self.addCleanup(api_patcher.stop)
 
     def test_admission_detail(self):
         url = reverse(admission_detail, args=[self.admission['uuid']])
