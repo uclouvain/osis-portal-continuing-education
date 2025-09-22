@@ -36,9 +36,9 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext, gettext_lazy as _
+from osis_reference_sdk.model.country import Country
 from requests import Response
 
-from base.tests.factories.academic_year import create_current_academic_year, AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from continuing_education.models.enums import admission_state_choices
@@ -52,18 +52,15 @@ from continuing_education.tests.factories.continuing_education_training import C
 from continuing_education.tests.factories.person import ContinuingEducationPersonDictFactory
 from continuing_education.views.admission import admission_form, admission_detail
 from continuing_education.views.common import get_submission_errors, _get_managers_mails
-from reference.tests.factories.country import CountryFactory
 
 
 class ViewStudentAdmissionTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        current_acad_year = create_current_academic_year()
-        cls.next_acad_year = AcademicYearFactory(year=current_acad_year.year + 1)
         cls.user = UserFactory()
         cls.person = PersonFactory(user=cls.user, gender='F')
         cls.formation = ContinuingEducationTrainingDictFactory()
-        cls.country = CountryFactory(iso_code="BE")
+        cls.country = Country(iso_code="BE")
 
     def setUp(self):
         self.person_information = ContinuingEducationPersonDictFactory(self.person.uuid)
@@ -96,6 +93,9 @@ class ViewStudentAdmissionTestCase(TestCase):
         self.addCleanup(self.get_patcher.stop)
         self.addCleanup(self.get_list_patcher.stop)
         self.addCleanup(self.get_list_person_patcher.stop)
+        api_patcher = patch("osis_reference_sdk.api.countries_api.CountriesApi")
+        self.mock_api = api_patcher.start()
+        self.addCleanup(api_patcher.stop)
 
     def test_admission_detail(self):
         url = reverse(admission_detail, args=[self.admission['uuid']])
@@ -456,8 +456,6 @@ class ViewStudentAdmissionTestCase(TestCase):
 class AdmissionSubmissionErrorsTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        current_acad_year = create_current_academic_year()
-        AcademicYearFactory(year=current_acad_year.year + 1)
         cls.person = PersonFactory(gender='H')
 
     def setUp(self):
