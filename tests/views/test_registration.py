@@ -34,7 +34,6 @@ from django.urls import reverse
 from django.utils.translation import gettext, gettext_lazy as _
 from requests import Response
 
-from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import SuperUserFactory, UserFactory
 from continuing_education.models.enums import admission_state_choices
@@ -270,8 +269,6 @@ class ViewStudentRegistrationTestCase(TestCase):
 class RegistrationSubmissionErrorsTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        ac = AcademicYearFactory()
-        AcademicYearFactory(year=ac.year + 1)
         cls.person = PersonFactory()
 
     def setUp(self):

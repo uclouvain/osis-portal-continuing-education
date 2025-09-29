@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
                 ('active', models.BooleanField(default=False, verbose_name='Active')),
-                ('education_group', models.OneToOneField(default=None, on_delete=django.db.models.deletion.CASCADE, to='base.EducationGroup')),
+                ('education_group', models.IntegerField(blank=True, null=True)),
             ],
             options={
                 'abstract': False,

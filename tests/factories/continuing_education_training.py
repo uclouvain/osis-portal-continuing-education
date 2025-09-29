@@ -25,23 +25,19 @@
 ##############################################################################
 import uuid
 
-from base.tests.factories.education_group import EducationGroupFactory
-from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
 from continuing_education.tests.factories.address import AddressDictFactory
 
 
 def ContinuingEducationTrainingDictFactory(active=True, registration_required=True):
-    ed = EducationGroupFactory()
-    edy = EducationGroupYearFactory(education_group=ed)
     manager = PersonFactory()
     cet = {
         'uuid': str(uuid.uuid4()),
         'active': active,
         'education_group': {
-            'uuid': ed.uuid,
-            'acronym': edy.acronym,
-            'title': edy.title,
+            'uuid': str(uuid.uuid4()),
+            'acronym': 'ACRONYM',
+            'title': 'TITLE',
         },
         'managers': [
             {
